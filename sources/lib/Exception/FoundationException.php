@@ -12,7 +12,7 @@ namespace PommProject\Foundation\Exception;
 /**
  * FoundationException
  *
- * Base Exception of the PommProject/Foundation package.
+ * Base Exception for Pomm's Foundation package.
  *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT

@@ -1,14 +1,28 @@
 <?php
-namespace Pomm\Converter;
+/*
+ * This file is part of Pomm's Foundation package.
+ *
+ * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace PommProject\Foundation\Converter;
+
+use PommProject\Foundation\Converter\ConverterHolder;
+use PommProject\Foundation\Exception\ConverterException;
+use PommProject\Foundation\Converter\ConverterInterface;
 
 /**
- * Pomm\Converter\pgArray - Array converter
+ * PgArray
  *
- * @package Pomm
- * @version $id$
- * @copyright 2011 - 2013 Grégoire HUBERT
- * @author Grégoire HUBERT <hubert.greg@gmail.com>
+ * Converter for arrays.
+ *
+ * @package Foundation
+ * @copyright 2014 Grégoire HUBERT
+ * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see ConverterInterface
  */
 class PgArray implements ConverterInterface
 {
@@ -17,15 +31,19 @@ class PgArray implements ConverterInterface
     /**
      * __construct
      *
-     * @param \Pomm\Connection\Database $database
+     * Constructor
+     *
+     * @access public
+     * @param  ConverterHolder $converter_holder
+     * @return void
      */
-    public function __construct(\Pomm\Converter\ConverterHolder $converter_holder)
+    public function __construct(ConverterHolder $converter_holder)
     {
         $this->converter_holder = $converter_holder;
     }
 
     /**
-     * @see Pomm\Converter\ConverterInterface
+     * @see ConverterInterface
      */
     public function fromPg($data, $type)
     {
@@ -44,7 +62,7 @@ class PgArray implements ConverterInterface
     }
 
     /**
-     * @see Pomm\Converter\ConverterInterface
+     * @see ConverterInterface
      */
     public function toPg($data, $type)
     {
@@ -53,7 +71,7 @@ class PgArray implements ConverterInterface
                 return 'NULL';
             }
 
-            throw new Exception(sprintf("Array converter toPg() data must be an array ('%s' given).", gettype($data)));
+            throw new ConverterException(sprintf("Array converter toPg() data must be an array ('%s' given).", gettype($data)));
         }
 
         $converter = $this->converter_holder

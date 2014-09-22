@@ -1,4 +1,4 @@
-*Foundation*
+# Foundation
 
 This is the foundation component for the Pomm database framework.
 

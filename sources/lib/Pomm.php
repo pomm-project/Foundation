@@ -30,9 +30,9 @@ class Pomm implements \ArrayAccess
     /**
      * __construct
      *
-     * Instanciate a new Pomm Service class. It takes an array of configuration
-     * as parameter. Following configurations settings are supported by this
-     * service:
+     * Instanciate a new Pomm Service class. It takes an array of
+     * configurations as parameter. Following configurations settings are
+     * supported by this service for each configuration:
      *
      * class_name   name of the DatabaseConfiguration class to instanciate.
      *
@@ -45,6 +45,15 @@ class Pomm implements \ArrayAccess
         $this->configurations = $configurations;
     }
 
+    /**
+     * setSessionClassName
+     *
+     * Override Session class name.
+     *
+     * @access public
+     * @param  string $class_name
+     * @return Pomm  $this
+     */
     public function setSessionClassName($class_name)
     {
         try {
@@ -62,6 +71,15 @@ class Pomm implements \ArrayAccess
         return $this;
     }
 
+    /**
+     * setConfiguration
+     *
+     * Add or replace a database configuration.
+     *
+     * @access public
+     * @param  DatabaseConfiguration $configuration
+     * @return Pomm                  $this
+     */
     public function setConfiguration(DatabaseConfiguration $configuration)
     {
         $this->configurations[$configuration->getName()] = $configuration;
@@ -69,6 +87,15 @@ class Pomm implements \ArrayAccess
         return $this;
     }
 
+    /**
+     * getConfiguration
+     *
+     * Get a configuration.
+     *
+     * @access public
+     * @param  string $name
+     * @return DatabaseConfiguration
+     */
     public function getConfiguration($name)
     {
         return $this
@@ -77,6 +104,16 @@ class Pomm implements \ArrayAccess
             ->configurations[$name];
     }
 
+    /**
+     * getSession
+     *
+     * Return a session from the pool. If no session exists, an attempt is made
+     * to create one.
+     *
+     * @access public
+     * @param  string $name
+     * @return Session
+     */
     public function getSession($name)
     {
         if (!$this->hasSession($name)) {
@@ -86,6 +123,16 @@ class Pomm implements \ArrayAccess
         return $this->sessions[$name];
     }
 
+    /**
+     * createSession
+     *
+     * Create a new session using a configuration and set it to the pool. Any
+     * previous session for this name is overrided.
+     *
+     * @access public
+     * @param  string $name
+     * @return Session
+     */
     public function createSession($name)
     {
         $this->sessions[$name] = new Session($this->getConfiguration($name));
@@ -93,16 +140,43 @@ class Pomm implements \ArrayAccess
         return $this;
     }
 
+    /**
+     * hasConfiguration
+     *
+     * Does a given configuration exist ?
+     *
+     * @access public
+     * @param  string $name
+     * @return bool
+     */
     public function hasConfiguration($name)
     {
         return (bool) (isset($this->configurations[$name]));
     }
 
+    /**
+     * hasSession
+     *
+     * Does a given session exists in the pool ?
+     *
+     * @access public
+     * @param  string $name
+     * @return bool
+     */
     public function hasSession($name)
     {
         return (bool) isset($this->sessions[$name]);
     }
 
+    /**
+     * checkExistConfiguration
+     *
+     * Throw an exception if a given configuration does not exist.
+     *
+     * @access public
+     * @param  string $name
+     * @return Pomm   $this
+     */
     public function checkExistConfiguration($name)
     {
         if (!$this->hasConfiguration($name)) {
@@ -112,38 +186,78 @@ class Pomm implements \ArrayAccess
         return $this;
     }
 
-    public function clear($name)
+    /**
+     * clearConfiguration
+     *
+     * Remove a configuration definition.
+     *
+     * @access public
+     * @param  string $name
+     * @return Pomm   $this
+     */
+    public function clearConfiguration($name)
     {
         unset($this->checkExistConfiguration($name)->configurations[$name]);
 
         return $this;
     }
 
+    /**
+     * getConfigurations
+     *
+     * Return the configuration holder. This is mainly done for testing
+     * purposes.
+     *
+     * @access public
+     * @return array
+     */
     public function getConfigurations()
     {
         return $this->configurations;
     }
 
+    /**
+     * @see ArrayAccess
+     */
     public function offsetGet($offset)
     {
         return $this->getSession($offset);
     }
 
+    /**
+     * @see ArrayAccess
+     */
     public function offsetSet($offset, $value)
     {
         $this->set($values);
     }
 
+    /**
+     * @see ArrayAccess
+     */
     public function offsetUnset($offset)
     {
         $this->clear($offset);
     }
 
+    /**
+     * @see ArrayAccess
+     */
     public function offsetExists($offset)
     {
         return $this->has($offset);
     }
 
+    /**
+     * expandConfiguration
+     *
+     * Ensure a given configuration is a DatabaseConfiguration instance. If
+     * not, it spawns one.
+     *
+     * @access private
+     * @param  string $name
+     * @return Pomm   $this
+     */
     private function expandConfiguration($name)
     {
         if (!is_object($this->configurations[$name])) {
@@ -153,6 +267,16 @@ class Pomm implements \ArrayAccess
         return $this;
     }
 
+    /**
+     * buildDatabaseConfiguration
+     *
+     * Create a DatabaseConfiguration instance from configuration definition.
+     *
+     * @access private
+     * @param  string $name
+     * @param  array  $configuration
+     * @return DatabaseConfiguration
+     */
     private function buildDatabaseConfiguration($name, $configuration)
     {
         if (!isset($configuration['class_name'])) {

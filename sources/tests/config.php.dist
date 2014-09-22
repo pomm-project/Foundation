@@ -1,0 +1,6 @@
+<?php
+
+$GLOBALS['pomm_db1']  = [
+    'dsn'  => 'pgsql://user:pass@host:port/db_name',
+    'name' => 'pomm_test'
+];

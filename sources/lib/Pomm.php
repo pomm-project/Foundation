@@ -229,7 +229,7 @@ class Pomm implements \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        $this->set($values);
+        $this->setConfiguration($value);
     }
 
     /**
@@ -237,7 +237,7 @@ class Pomm implements \ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        $this->clear($offset);
+        $this->clearConfiguration($offset);
     }
 
     /**
@@ -245,7 +245,7 @@ class Pomm implements \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return $this->has($offset);
+        return $this->hasConfiguration($offset);
     }
 
     /**

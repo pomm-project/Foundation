@@ -121,7 +121,7 @@ class DatabaseConfiguration
      * Register the converters for postgresql's built-in types
      *
      * @access protected
-     * @return DatabaseConfig $this
+     * @return DatabaseConfiguration $this
      */
     protected function registerBaseConverters()
     {

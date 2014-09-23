@@ -9,6 +9,8 @@
  */
 namespace PommProject\Foundation\Client;
 
+use PommProject\Foundation\Session;
+
 /**
  * ClientPoolerInterface
  *

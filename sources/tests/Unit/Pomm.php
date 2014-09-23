@@ -13,17 +13,6 @@ use Mock\PommProject\Foundation\DatabaseConfiguration;
 use PommProject\Foundation\Session;
 use Atoum;
 
-/**
- * Pomm
- *
- * Test class for the Pomm service manager.
- *
- * @package Foundation
- * @copyright 2014 Grégoire HUBERT
- * @author Grégoire HUBERT
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- */
-
 class Pomm extends Atoum
 {
     protected function getDatabaseConfiguration($name)

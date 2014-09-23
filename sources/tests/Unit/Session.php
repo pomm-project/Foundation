@@ -177,4 +177,19 @@ class Session extends Atoum
             ->once()
             ;
     }
+
+    public function testExecuteAnonymousQuery()
+    {
+        $session = $this->getSession();
+        $this
+            ->boolean(is_resource($session->executeAnonymousQuery('select true')))
+            ->isTrue()
+            ->string(get_resource_type($session->executeAnonymousQuery('select true')))
+            ->isEqualTo('pgsql result')
+            ->exception(function() use ($session) {
+                    $session->executeAnonymousQuery('zesdflxcv');
+                })
+            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
+            ;
+    }
 }

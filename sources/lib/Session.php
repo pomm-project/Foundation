@@ -286,9 +286,7 @@ class Session
      *
      * Escape database object's names. This is different from value escaping
      * as objects names are surrounded by double quotes. API function does
-     * provide a nice escaping with -- hopefully -- UTF8 support. This function
-     * is only available from PHP 5.4.4, a simplistic fallback is provided but
-     * it only cares about double quotes escaping.
+     * provide a nice escaping with -- hopefully -- UTF8 support.
      *
      * @see http://www.postgresql.org/docs/current/static/sql-syntax-lexical.html
      * @access public

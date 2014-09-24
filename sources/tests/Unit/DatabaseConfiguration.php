@@ -15,7 +15,7 @@ class DatabaseConfiguration extends Atoum
 {
     protected function getDatabase(array $extra_options = [])
     {
-        return $this->newTestedInstance('test', array_merge([
+        return $this->newTestedInstance(array_merge([
             'dsn'  =>  'pgsql://user:pass@host:port/db_name',
             'name' => 'db_name',
         ], $extra_options));

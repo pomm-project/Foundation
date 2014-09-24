@@ -9,40 +9,39 @@
  */
 namespace PommProject\Foundation\Test\Unit;
 
-use Mock\PommProject\Foundation\DatabaseConfiguration;
+use PommProject\Foundation\DatabaseConfiguration;
 use PommProject\Foundation\Session;
 use Atoum;
 
 class Pomm extends Atoum
 {
-    protected function getDatabaseConfiguration($name)
+    protected function getDatabaseConfiguration(array $config = [])
     {
-        $controller = new \Atoum\Mock\Controller();
-        $controller->__construct = function($name) {};
-        $controller->getName     = function() use ($name) { return $name; };
+        //$controller = new \Atoum\Mock\Controller();
+       // $controller->__construct = function($config) {};
 
-        return new DatabaseConfiguration($controller);
+        return new DatabaseConfiguration($config);
     }
 
     protected function getPomm(array $configuration = null)
     {
         if ($configuration === null) {
             $configuration = [
-                "db_one"   => ["dsn" => "whatever"],
-                "db_two"   => ["dsn" => "whatever", "class" => "PommTestDatabaseConfiguration"],
+                "db_one"   => ["dsn" => "pgsql://user:pass@host:port/db_name"],
+                "db_two"   => [
+                    "dsn" => "pgsql://user:pass@host:port/db_name",
+                    "config_class_name" => "PommProject\Foundation\Test\Unit\PommTestDatabaseConfiguration",
+                ],
+                "db_three"   => [
+                    "dsn" => "pgsql://user:pass@host:port/db_name",
+                    "config_class_name" => "\\Whatever\\Unexistent\\Class",
+                ],
             ];
         }
 
         return $this->newTestedInstance($configuration);
     }
 
-    /**
-     * testConstructor
-     *
-     * Test constructor calls.
-     * Pomm service can be called with no configurations since they can be
-     * added later.
-     */
     public function testConstructor()
     {
         $pomm = $this->getPomm([]);
@@ -66,20 +65,14 @@ class Pomm extends Atoum
                 ;
     }
 
-    /**
-     * testSet
-     *
-     * DatabaseConfiguration can be set manually.
-     *
-     */
     public function testSetConfiguration()
     {
         $pomm = $this->getPomm([]);
         $this
             ->assert("Set new database configuration.")
-            ->object($pomm->setConfiguration($this->getDatabaseConfiguration('pika')))
+            ->object($pomm->setConfiguration('pika', $this->getDatabaseConfiguration()))
             ->isInstanceOf('\PommProject\Foundation\Pomm')
-            ->array(array_keys($pomm->setConfiguration($this->getDatabaseConfiguration('pika'))->getConfigurations()))
+            ->array(array_keys($pomm->setConfiguration('pika', $this->getDatabaseConfiguration())->getConfigurations()))
             ->isIdenticalTo(['pika'])
             ;
     }
@@ -107,27 +100,33 @@ class Pomm extends Atoum
         $this
             ->object($pomm->getSession('db_one'))
             ->isInstanceOf('\PommProject\Foundation\Session')
-            ->object($pomm->setSessionClassName('\PommProject\Test\Unit\PommTestSession')->getSesssion('db_one'))
-            ->isInstanceOf('\PommProject\Foundation\Session')
             ->object($pomm->getSession('db_two'))
-            ->isInstanceOf('\PommProject\Test\Unit\PommTestSession')
+            ->isInstanceOf('\PommProject\Foundation\Test\Unit\PommTestSession')
             ;
     }
 
     public function testCreateSession()
     {
-        $pomm = $this->newTestedInstance();
+        $pomm = $this->getPomm();
         $this
             ->object($pomm->getSession('db_one'))
             ->isInstanceOf('\PommProject\Foundation\Session')
-            ->object($pomm->setSessionClassName('\PommProject\Test\Unit\PommTestSession')->getSesssion('db_one'))
-            ->isInstanceOf('\PommProject\Test\Unit\PommTestSession')
+            ->object($pomm->getSession('db_two'))
+            ->isInstanceOf('\PommProject\Foundation\Test\Unit\PommTestSession')
             ;
     }
 }
 
 class PommTestDatabaseConfiguration extends \PommProject\Foundation\DatabaseConfiguration
 {
+    public function __construct(array $configuration)
+    {
+        parent::__construct($configuration);
+        $this
+            ->getParameterHolder()
+            ->setDefaultValue('session_class_name', '\PommProject\Foundation\Test\Unit\PommTestSession')
+            ;
+    }
 }
 
 class PommTestSession extends \PommProject\Foundation\Session

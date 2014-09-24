@@ -25,7 +25,6 @@ class Pomm implements \ArrayAccess
 {
     protected $configurations = [];
     protected $sessions       = [];
-    protected $session_class_name = '\PommProject\Foundation\Session';
 
     /**
      * __construct
@@ -46,32 +45,6 @@ class Pomm implements \ArrayAccess
     }
 
     /**
-     * setSessionClassName
-     *
-     * Override Session class name.
-     *
-     * @access public
-     * @param  string $class_name
-     * @return Pomm  $this
-     */
-    public function setSessionClassName($class_name)
-    {
-        try {
-            $reflection = new \ReflectionClass($class_name);
-
-            if (!$reflection->isSubClassOf('\PommProject\Foundation\Session')) {
-                throw new FoundationException(sprintf("Class '%s' must extend Session", $reflection->getName()));
-            }
-
-            $this->session_class_name = $class_name;
-        } catch (\ReflectionException $e) {
-            throw new FoundationException(sprintf("Invalid class name '%s'. Reason:\n%s", $class_name, $e->getMessage()));
-        }
-
-        return $this;
-    }
-
-    /**
      * setConfiguration
      *
      * Add or replace a database configuration.
@@ -80,9 +53,9 @@ class Pomm implements \ArrayAccess
      * @param  DatabaseConfiguration $configuration
      * @return Pomm                  $this
      */
-    public function setConfiguration(DatabaseConfiguration $configuration)
+    public function setConfiguration($name, DatabaseConfiguration $configuration)
     {
-        $this->configurations[$configuration->name()] = $configuration;
+        $this->configurations[$name] = $configuration;
 
         return $this;
     }
@@ -135,7 +108,17 @@ class Pomm implements \ArrayAccess
      */
     public function createSession($name)
     {
-        $this->sessions[$name] = new Session($this->getConfiguration($name));
+        $class_name = $this
+            ->checkExistConfiguration($name)
+            ->expandConfiguration($name)
+            ->configurations[$name]
+            ->getParameterHolder()
+            ->getParameter('session_class_name', '\PommProject\Foundation\Session');
+
+        $this
+            ->checkSubClassOf($class_name, '\PommProject\Foundation\Session')
+            ->sessions[$name] = new $class_name($this->getConfiguration($name))
+            ;
 
         return $this;
     }
@@ -175,6 +158,7 @@ class Pomm implements \ArrayAccess
      *
      * @access public
      * @param  string $name
+     * throw   FoundationException if exists.
      * @return Pomm   $this
      */
     public function checkExistConfiguration($name)
@@ -261,7 +245,7 @@ class Pomm implements \ArrayAccess
     private function expandConfiguration($name)
     {
         if (!is_object($this->configurations[$name])) {
-            $this->configurations[$name] = $this->buildDatabaseConfiguration($name, $this->configurations[$name]);
+            $this->configurations[$name] = $this->buildDatabaseConfiguration($this->configurations[$name]);
         }
 
         return $this;
@@ -273,29 +257,44 @@ class Pomm implements \ArrayAccess
      * Create a DatabaseConfiguration instance from configuration definition.
      *
      * @access private
-     * @param  string $name
      * @param  array  $configuration
      * @return DatabaseConfiguration
      */
-    private function buildDatabaseConfiguration($name, $configuration)
+    private function buildDatabaseConfiguration(array $configuration)
     {
-        if (!isset($configuration['class_name'])) {
-            return new DatabaseConfiguration($name, $configuration);
+        if (!isset($configuration['config_class_name'])) {
+            return new DatabaseConfiguration($configuration);
         }
 
-        $class_name = $configuration['class_name'];
+        $class_name = $configuration['config_class_name'];
+        $this->checkSubClassOf($class_name, '\PommProject\Foundation\DatabaseConfiguration');
 
+        return new $class_name($configuration);
+
+    }
+
+    /**
+     * checkSubClassOf
+     *
+     * Check if a class exists and if it is a subclass of another.
+     *
+     * @access private
+     * @param  string $class
+     * @param  string $super_class
+     * @return Pomm   $this
+     */
+    private function checkSubClassOf($class, $super_class)
+    {
         try {
-            $reflection = new \ReflectionClass($class_name);
+            $reflection = new \ReflectionClass($class);
 
-            if (!$reflection->isSubClassOf('\PommProject\Foundation\DatabaseConfiguration')) {
-                throw new FoundationException(sprintf("Class '%s' must extend DatabaseConfiguration", $reflection->getName()));
+            if (!(trim($class, "\\") === trim($super_class, "\\") || $reflection->isSubClassOf($super_class))) {
+                throw new FoundationException(sprintf("Class '%s' must extend '%s'.", $reflection->getName(), $super_class));
             }
-
-            return new $class_name($name, $configuration);
-
         } catch (\ReflectionException $e) {
-            throw new FoundationException(sprintf("Class '%s' could not be loaded. Reason given:\n%s", $class_name, $e->getMessage()));
+            throw new FoundationException(sprintf("Class '%s' could not be loaded. Reason given:\n%s", $class, $e->getMessage()));
         }
+
+        return $this;
     }
 }

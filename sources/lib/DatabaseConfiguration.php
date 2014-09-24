@@ -116,7 +116,7 @@ class DatabaseConfiguration
         $this->parameter_holder
             ->setDefaultValue('configuration', [])
             ->setDefaultValue('default_client_poolers', [
-                'query' => '\PommProject\Foundation\Query\QueryPooler'
+                'prepared_statement' => '\PommProject\Foundation\PreparedQuery\PreparedQueryPooler'
             ])
             ;
 

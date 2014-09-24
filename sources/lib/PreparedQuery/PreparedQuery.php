@@ -25,7 +25,6 @@ use PommProject\Foundation\Exception\ConnectionException;
  */
 class PreparedQuery extends Client
 {
-    protected $session;
     protected $sql;
     private   $is_prepared = false;
     private   $identifier;
@@ -70,15 +69,6 @@ class PreparedQuery extends Client
     }
 
     /**
-     * @see ClientPoolerInterface
-     */
-    public function initialize(Session $session)
-    {
-        $this->session = $session;
-
-    }
-
-    /**
      * getClientIdentifier
      *
      * Return the query identifier.
@@ -100,10 +90,10 @@ class PreparedQuery extends Client
      */
     public function shutdown()
     {
-        $res = @pg_execute($this->session->getHandler(), sprintf("DEALLOCATE %s", $this->session->escapeIdentifier($this->getName())));
+        $res = @pg_execute($this->session->getHandler(), sprintf("DEALLOCATE %s", $this->session->escapeIdentifier($this->getClientIdentifier())));
 
         if ($res === false) {
-            throw new PommException(sprintf("Could not deallocate statement «%s».", $this->getName()));
+            throw new PommException(sprintf("Could not deallocate statement «%s».", $this->getClientIdentifier()));
         }
 
         $this->is_prepared = false;
@@ -118,14 +108,14 @@ class PreparedQuery extends Client
      * @param  Array    $values Query parameters
      * @return Resource
      */
-    public function execute(array $values = array())
+    public function execute(array $values = [])
     {
         if ($this->is_prepared === false) {
             $this->prepare();
         }
 
-        if (pg_send_execute($this->session->getHandler(), $this->name, $this->prepareValues($values)) === false) {
-            throw new ConnectionException(sprintf("Connection error while executing query '%s'.", $this->name));
+        if (pg_send_execute($this->session->getHandler(), $this->getClientIdentifier(), $this->prepareValues($values)) === false) {
+            throw new ConnectionException(sprintf("Connection error while executing query '%s'.", $this->getClientIdentifier()));
         }
 
         return $this->session->getQueryResult($this->sql);
@@ -141,8 +131,8 @@ class PreparedQuery extends Client
      */
     protected function prepare()
     {
-        if (pg_prepare($this->session->getHandler(), $this->name, QueryParameterExpander::order($sql)) === false) {
-            throw new PommException(sprintf("Could not prepare statement «%s».", $sql));
+        if (pg_prepare($this->session->getHandler(), $this->getClientIdentifier(), QueryParameterExpander::order($this->sql)) === false) {
+            throw new PommException(sprintf("Could not prepare statement «%s».", $this->sql));
         }
 
         $this->is_prepared = true;

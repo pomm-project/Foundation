@@ -120,6 +120,13 @@ class Pomm implements \ArrayAccess
             ->sessions[$name] = new $class_name($this->getConfiguration($name))
             ;
 
+        foreach($this->configurations[$name]
+            ->getParameterHolder()
+            ->getParameter('default_client_poolers')
+            as $pooler) {
+                $this->sessions[$name]->registerClientPooler(new $pooler());
+            }
+
         return $this;
     }
 

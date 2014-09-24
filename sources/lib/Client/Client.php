@@ -9,36 +9,30 @@
  */
 namespace PommProject\Foundation\Client;
 
-use PommProject\Foundation\Client\ClientPoolerInterface;
+use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Session;
 
 /**
- * ClientPooler
+ * Client
  *
- * Base class for client poolers. ClientPooler instances are factories for
- * Session's Client.
+ * Abstract class for Session clients.
  *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- * @see ClientPoolerInterface
+ * @see ClientInterface
  * @abstract
  */
-abstract class ClientPooler implements ClientPoolerInterface
+abstract class Client implements ClientInterface
 {
     protected $session;
 
     /**
-     * register
-     *
-     * @see ClientPoolerInterface
+     * @see ClientInterface
      */
-    public function register(Session $session)
+    public function initialize(Session $session)
     {
         $this->session = $session;
-
-        return $this;
     }
 }
-

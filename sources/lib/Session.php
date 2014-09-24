@@ -16,8 +16,8 @@ use PommProject\Foundation\Inflector;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Client\ClientInterface;
-use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Client\ClientPoolerInterface;
+use PommProject\Foundation\QueryManager\SimpleQueryManager;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Exception\SqlException;
 use PommProject\Foundation\Exception\ConnectionException;
@@ -39,6 +39,7 @@ class Session
     protected $database_configuration;
     protected $client_holder;
     protected $client_poolers = [];
+    protected $query_manager;
 
     /**
      * __construct
@@ -58,6 +59,7 @@ class Session
         $this->connection             = new Connection(
             $this->database_configuration->getParameterHolder()->mustHave('dsn')->getParameter('dsn')
             );
+        $this->query_manager          = new SimpleQueryManager();
     }
 
     /**
@@ -87,6 +89,22 @@ class Session
     public function getHandler()
     {
         return $this->connection->getHandler();
+    }
+
+    /**
+     * setQueryManager
+     *
+     * Replace the current query manager.
+     *
+     * @access public
+     * @param  QueryManagerInterface $query_manager
+     * @return Session               $this
+     */
+    public function setQueryManager(QueryManagerInterface $query_manager)
+    {
+        $this->query_manager = $query_manager;
+
+        return $this;
     }
 
     /**
@@ -221,16 +239,31 @@ class Session
     }
 
     /**
-     * getDatabaseConfig
+     * getDatabaseConfiguration
      *
      * Returns the connection's database configuration.
      *
      * @access public
      * @return Database
      */
-    public function getDatabaseConfig()
+    public function getDatabaseConfiguration()
     {
         return $this->database_configuration;
+    }
+
+    /**
+     * query
+     *
+     * Send a query to the query manager.
+     *
+     * @access public
+     * @param  string $sql
+     * @param  array  $values
+     * @return ResultIterator
+     */
+    public function query($sql, array $values = [])
+    {
+        return $this->query_manager->query($sql, $values);
     }
 
     /**
@@ -266,19 +299,19 @@ class Session
      */
     public function getQueryResult($sql = null)
     {
-        $res = pg_get_result($this->getHandler());
+        $result = pg_get_result($this->getHandler());
 
-        if ($res === false) {
+        if ($result === false) {
             throw new ConnectionException(sprintf("Query result stack is empty."));
         }
 
-        $status = pg_result_status($res, \PGSQL_STATUS_LONG);
+        $status = pg_result_status($result, \PGSQL_STATUS_LONG);
 
         if ($status !== \PGSQL_COMMAND_OK && $status !== \PGSQL_TUPLES_OK) {
-            throw new SqlException($res, $sql);
+            throw new SqlException($result, $sql);
         }
 
-        return $res;
+        return $result;
     }
 
     /**

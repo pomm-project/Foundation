@@ -82,7 +82,7 @@ class Pomm implements \ArrayAccess
      */
     public function setConfiguration(DatabaseConfiguration $configuration)
     {
-        $this->configurations[$configuration->getName()] = $configuration;
+        $this->configurations[$configuration->name()] = $configuration;
 
         return $this;
     }

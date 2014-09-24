@@ -30,9 +30,9 @@ use PommProject\Foundation\Converter;
  */
 class DatabaseConfiguration
 {
-    protected $name;
     protected $parameter_holder = [];
     protected $converter_holder;
+    protected $name;
 
     /**
      * __construct
@@ -44,27 +44,37 @@ class DatabaseConfiguration
      * @param  array $configuration
      * @return void
      */
-    public function __construct($name, array $configuration = [])
+    public function __construct(array $configuration = [])
     {
         $this->parameter_holder = new ParameterHolder($configuration);
         $this->converter_holder = new ConverterHolder();
-        $this->name             = $name;
 
         $this->initialize();
     }
 
     /**
-     * getName
+     * name
      *
-     * Return the name of this configuration setting.
-     * This name is used to generate the namespaces for the Model files.
+     * Set or get the current configuration name.
+     * If no parameters are passed it acts like a get. Otherwise the given name
+     * is set. When no name have been set, it checks in the parameter holder or
+     * simply the class name.
      *
-     * @access public
-     * @return string
+     * @param string $name (null)
+     * @return mixed name it this
      */
-    public function getName()
+    public function name($name = null)
     {
-        return $this->name;
+        if ($name === null) {
+            return $this->name === null
+                ? $this->parameter_holder->getParameter('name', get_class($this))
+                : $this->name
+                ;
+        }
+
+        $this->name = $name;
+
+        return $this;
     }
 
     /**

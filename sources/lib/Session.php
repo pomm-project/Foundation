@@ -52,14 +52,20 @@ class Session
      * @param  DatabaseConfiguration $configuration
      * @return void
      */
-    public function __construct(DatabaseConfiguration $configuration)
+    public function __construct(
+        DatabaseConfiguration $configuration,
+        ClientHolder          $client_holder = null,
+        Connection            $connection    = null,
+        QueryManager          $query_manager = null
+    )
     {
         $this->database_configuration = $configuration;
-        $this->client_holder          = new ClientHolder();
-        $this->connection             = new Connection(
-            $this->database_configuration->getParameterHolder()->mustHave('dsn')->getParameter('dsn')
-            );
-        $this->query_manager          = new SimpleQueryManager();
+
+        $this->client_holder = $client_holder === null ? new ClientHolder() : $client_holder;
+        $this->connection    = $connection === null ? new Connection(
+            $configuration->getParameterHolder()->mustHave('dsn')->getParameter('dsn')
+        ) : $connection;
+        $this->query_manager = $query_manager === null ? new SimpleQueryManager() : $query_manager;
     }
 
     /**

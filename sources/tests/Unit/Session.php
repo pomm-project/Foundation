@@ -22,7 +22,7 @@ class Session extends Atoum
             $config = array_merge($GLOBALS['pomm_db1'], $config);
         }
 
-        return $this->newTestedInstance(new DatabaseConfiguration('test', $config));
+        return $this->newTestedInstance(new DatabaseConfiguration($config));
     }
 
     protected function getClientInterfaceMock($identifier)

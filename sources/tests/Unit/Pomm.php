@@ -124,7 +124,7 @@ class PommTestDatabaseConfiguration extends \PommProject\Foundation\DatabaseConf
         parent::__construct($configuration);
         $this
             ->getParameterHolder()
-            ->setDefaultValue('session_class_name', '\PommProject\Foundation\Test\Unit\PommTestSession')
+            ->setDefaultValue('class:session', '\PommProject\Foundation\Test\Unit\PommTestSession')
             ;
     }
 }

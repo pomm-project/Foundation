@@ -44,10 +44,14 @@ class DatabaseConfiguration
      * @param  array $configuration
      * @return void
      */
-    public function __construct(array $configuration = [])
+    public function __construct(
+        array $configuration = [],
+        ParameterHolder $parameter_holder = null,
+        ConverterHolder $converter_holder = null
+    )
     {
-        $this->parameter_holder = new ParameterHolder($configuration);
-        $this->converter_holder = new ConverterHolder();
+        $this->parameter_holder = $parameter_holder === null ? new ParameterHolder($configuration) : $parameter_holder;
+        $this->converter_holder = $converter_holder === null ? new ConverterHolder() : $converter_holder;
 
         $this->initialize();
     }

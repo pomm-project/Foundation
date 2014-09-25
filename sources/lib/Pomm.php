@@ -113,19 +113,83 @@ class Pomm implements \ArrayAccess
             ->expandConfiguration($name)
             ->configurations[$name]
             ->getParameterHolder()
-            ->getParameter('session_class_name', '\PommProject\Foundation\Session');
-
-        $this
-            ->checkSubClassOf($class_name, '\PommProject\Foundation\Session')
-            ->sessions[$name] = new $class_name($this->getConfiguration($name))
+            ->getParameter('class:session', '\PommProject\Foundation\Session')
             ;
+        $session = $this->createNewSession($name, $class_name);
 
-        foreach($this->configurations[$name]
+        foreach($session
+            ->configurations[$name]
             ->getParameterHolder()
-            ->getParameter('default_client_poolers')
+            ->getParameter('default:client_poolers', [])
             as $pooler) {
                 $this->sessions[$name]->registerClientPooler(new $pooler());
             }
+
+        return $session;
+    }
+
+    /**
+     * createNewSession
+     *
+     * Create a new session from class name.
+     *
+     * @access protected
+     * @param  string $name
+     * @param  string $class_name
+     * @return Pomm  $this
+     */
+    protected function createNewSession($name, $class_name)
+    {
+        $parameter_holder = $this
+            ->checkExistConfiguration($name)
+            ->getConfiguration($name)
+            ->getParameterHolder()
+            ;
+        $client_holder_class= $parameter_holder
+            ->getParameter('class:client_holder')
+            ;
+        $connection_class= $parameter_holder
+            ->getParameter('class:connection')
+            ;
+        $query_manager_class= $parameter_holder
+            ->getParameter('class:query_manager')
+            ;
+
+        $this
+            ->checkSubClassOf($class_name, '\PommProject\Foundation\Session')
+            ->sessions[$name] = new $class_name(
+                $this->getConfiguration($name),
+                $client_holder_class !== null ? new $client_holder_class() : null,
+                $connection_class !== null
+                    ? new $connection_class($parameter_holder
+                        ->mustHave('connection:dsn')
+                        ->getParameter('connection:dsn')
+                        )
+                    : null,
+                $query_manager_class !== null ? new $query_manager_class() : null
+            );
+
+        return $this;
+    }
+
+    /**
+     * registerSession
+     *
+     * Add a session to the pool.
+     *
+     * @access public
+     * @param  string  $name
+     * @param  Session $session
+     * @return Pomm    $this
+     */
+    public function registerSession($name, Session $session)
+    {
+        if ($this->hasConfiguration($name)) {
+            throw new FoundationException(sprintf("Configuration name '%s' is already used.", $name));
+        }
+
+        $this->sessions[$name] = $session;
+        $this->configurations[$name] = $session->getDatabaseConfiguration();
 
         return $this;
     }

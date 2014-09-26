@@ -63,7 +63,8 @@ class Where
 
                 foreach($values as $value) {
                     if (is_array($value)) {
-                        $escaped_values[] = sprintf("(%s)", join(', ', $escape($value)));
+                        $escaped_values[] =
+                            sprintf("(%s)", join(', ', $escape($value)));
                     } else {
                         $escaped_values[] = '$*';
                     }
@@ -82,7 +83,11 @@ class Where
                 return $array;
             };
 
-        return new self(sprintf("%s IN (%s)", $element, join(", ", $escape($values))), $get_values($values));
+        return new self(sprintf(
+            "%s IN (%s)",
+            $element, join(", ", $escape($values))),
+            $get_values($values)
+        );
     }
 
     /**
@@ -124,7 +129,7 @@ class Where
      * is it a fresh brand new object ?
      *
      * @access public
-     * @return Boolean
+     * @return boolean
      */
     public function isEmpty()
     {
@@ -246,18 +251,14 @@ class Where
      */
     public function __toString()
     {
-        if ($this->isEmpty()) {
-            return 'true';
-        } else {
-            return $this->parse();
-        }
+        return $this->isEmpty() ? 'true' : $this->parse();
     }
 
     /**
      * hasElement
      *
      * @access public
-     * @return Boolean
+     * @return boolean
      */
     public function hasElement()
     {

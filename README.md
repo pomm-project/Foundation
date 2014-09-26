@@ -78,16 +78,77 @@ The `QueryManager` is the class that handles the way the `Session` class perform
 
 ```php
 <?php
-//...
+//…
 $pomm = new \PommProject\Foundation\Pomm(['my_db' => ['dsn' => 'pgsql://greg/greg']]);
 $iterator = $pomm['my_db']
     ->query('select * from student where age > $*', [20]);
 
-foreach($iterator as $r) {
-    printf("Student id = '%d', age = '%d', name = '%s'.\n",, $r['id'], $r['age'], $r['name']);
+foreach($iterator as $student) {
+    printf("Student id = '%d', age = '%d', name = '%s'.\n",
+        $student['id'],
+        $student['age'],
+        $student['name']
+        );
 }
 ```
 
-All values are **converted** using Foundation converter system.
+The `query` method returns an iterator on results. Data can then be fetched on demand from the database. All values are **converted** using Foundation converter system. It is also possible to fetch column oriented results instead of row oriented using the `slice()` method:
+
+```php
+<?php
+//…
+$pomm = new \PommProject\Foundation\Pomm(['my_db' => ['dsn' => 'pgsql://greg/greg']]);
+$iterator = $pomm['my_db']
+    ->query('select * from student where age > $*', [20]);
+
+printf("Names are: %s.\n", join(', ', $iterator->slice('name')));
+```
 
 It is possible to override the default query manager with your own as soon as it implements `QueryManagerInterface`.
+
+## Tests and project structure
+
+This package uses Atoum as unit test framework. The tests are located in `sources/tests`. The test suite needs to access the database to ensure read and write operations are made in a consistent manner. You need to set up a database for that and fill the `sources/tests/config.php` file with the according DSN.
+
+```
+sources/
+├── lib
+│   ├── Connection.php
+│   ├── Inflector.php
+│   ├── ParameterHolder.php
+│   ├── Pomm.php
+│   ├── QueryParameterExpander.php
+│   ├── ResultIterator.php
+│   ├── Session.php
+│   ├── Where.php
+│   ├── Client
+│   │   ├── ClientHolder.php
+│   │   ├── ClientInterface.php
+│   │   ├── Client.php
+│   │   ├── ClientPoolerInterface.php
+│   │   └── ClientPooler.php
+│   ├── Converter
+│   │   ├── ConverterHolder.php
+│   │   ├── ConverterInterface.php
+│   │   └── …
+│   ├── DatabaseConfiguration.php
+│   ├── Exception
+│   │   ├── ConnectionException.php
+│   │   ├── ConverterException.php
+│   │   ├── FoundationException.php
+│   │   └── SqlException.php
+│   ├── PreparedQuery
+│   │   ├── PreparedQuery.php
+│   │   └── PreparedQueryPooler.php
+│   └── QueryManager
+│       ├── QueryManagerInterface.php
+│       └── SimpleQueryManager.php
+└── tests
+    ├── config.php
+    ├── config.php.dist
+    └── Unit
+        │
+        …
+
+11 directories, 40 files
+```

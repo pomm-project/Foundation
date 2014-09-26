@@ -10,8 +10,9 @@
 namespace PommProject\Foundation\QueryManager;
 
 use PommProject\Foundation\QueryManager\QueryManagerInterface;
-use PommProject\Foundation\Session;
 use PommProject\Foundation\QueryParameterExpander;
+use PommProject\Foundation\Session;
+use PommProject\Foundation\ResultIterator;
 
 /**
  * SimpleQueryManager
@@ -36,6 +37,8 @@ class SimpleQueryManager implements QueryManagerInterface
     public function initialize(Session $session)
     {
         $this->session = $session;
+
+        return $this;
     }
 
     /**

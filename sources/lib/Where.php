@@ -141,11 +141,11 @@ class Where
      *
      * Absorbing another Where instance.
      *
-     * @access public
+     * @access private
      * @param  Where $where
      * @return Where $this
      */
-    public function transmute(Where $where)
+    private function transmute(Where $where)
     {
         $this->stack    = $where->stack;
         $this->element  = $where->element;
@@ -171,6 +171,7 @@ class Where
         }
 
         if ($element->isEmpty()) return $this;
+
         if ($this->isEmpty()) {
             $this->transmute($element);
 

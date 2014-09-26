@@ -28,10 +28,12 @@ class PgBoolean implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type = null)
+    public function fromPg($data, $type)
     {
-        if (!preg_match('/(t|f)/', $data)) {
-            if ($data === null || $data === '') {
+        $data = trim($data);
+
+        if (!preg_match('/^(t|f)$/', $data)) {
+            if ($data === '') {
                 return null;
             }
 
@@ -44,8 +46,10 @@ class PgBoolean implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type = null)
+    public function toPg($data, $type)
     {
+        if ($data === null) return "null::bool";
+
         return $data ? "true" : "false";
     }
 }

@@ -99,7 +99,7 @@ SQL;
 
     public function testGetWithArray()
     {
-        $sql = "select array[1, 2, 3, 4]::int4[] as my_array";
+        $sql = "select array[1, 2, 3, 4]::int4[] as array_one, array[null, null]::int4[] as array_two";
 
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
@@ -108,8 +108,29 @@ SQL;
 
         $this->integer($iterator->count())
             ->isEqualTo(1)
-            ->array($iterator->current()['my_array'])
+            ->array($iterator->current()['array_one'])
             ->isIdenticalTo([1, 2, 3, 4])
+            ->array($iterator->current()['array_two'])
+            ->isIdenticalTo([null, null])
+            ;
+    }
+
+    public function testGetWithNoType()
+    {
+        $sql = 'select null as one, array[null, null] as two';
+
+        $iterator = $this->newTestedInstance(
+            $this->getResultResource($sql),
+            $this->getConverterHolder()
+        );
+
+        $this
+            ->integer($iterator->count())
+            ->isEqualTo(1)
+            ->variable($iterator->current()['one'])
+            ->isNull()
+            ->array($iterator->current()['two'])
+            ->isIdenticalTo([null, null])
             ;
     }
 

@@ -124,6 +124,10 @@ class ResultIterator implements \Iterator, \Countable
                 ->fromPg($value, $matchs[1])
             ;
         } else {
+            if ($type === 'unknown') {
+                $type = 'text';
+            }
+
             return $this
                 ->converter_holder
                 ->getConverterForType($type)

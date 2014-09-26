@@ -36,12 +36,14 @@ class SimpleQueryManager extends Atoum
 
     public function testSimpleQuery()
     {
-        $iterator = $this->getQueryManager()->query('select true as one');
+        $iterator = $this->getQueryManager()->query('select true as one, null::int4 as two');
         $this
             ->object($iterator)
             ->isInstanceOf('\PommProject\Foundation\ResultIterator')
             ->boolean($iterator->current()['one'])
             ->isTrue()
+            ->variable($iterator->current()['two'])
+            ->isNull()
             ;
     }
 

@@ -114,11 +114,22 @@ class ResultIterator implements \Iterator, \Countable
      */
     protected function convertField($field_no, $value)
     {
-        return $this
-            ->converter_holder
-            ->getConverterForType($this->types[$field_no])
-            ->fromPg($value)
+        $type = pg_field_type($this->result_resource, $field_no);
+
+        if (preg_match('/^_(.+)$/', $type, $matchs)) {
+
+            return $this
+                ->converter_holder
+                ->getConverter('Array')
+                ->fromPg($value, $matchs[1])
             ;
+        } else {
+            return $this
+                ->converter_holder
+                ->getConverterForType($type)
+                ->fromPg($value, $type)
+                ;
+        }
     }
 
     /**

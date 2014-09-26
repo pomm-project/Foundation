@@ -11,8 +11,8 @@ namespace PommProject\Foundation\QueryManager;
 
 use PommProject\Foundation\QueryManager\QueryManagerInterface;
 use PommProject\Foundation\QueryParameterExpander;
-use PommProject\Foundation\Session;
 use PommProject\Foundation\ResultIterator;
+use PommProject\Foundation\Session;
 
 /**
  * SimpleQueryManager

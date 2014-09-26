@@ -97,6 +97,22 @@ SQL;
             ;
     }
 
+    public function testGetWithArray()
+    {
+        $sql = "select array[1, 2, 3, 4]::int4[] as my_array";
+
+        $iterator = $this->newTestedInstance(
+            $this->getResultResource($sql),
+            $this->getConverterHolder()
+        );
+
+        $this->integer($iterator->count())
+            ->isEqualTo(1)
+            ->array($iterator->current()['my_array'])
+            ->isIdenticalTo([1, 2, 3, 4])
+            ;
+    }
+
     public function testHasAndCount()
     {
         $sql = $this->getPikaSql();

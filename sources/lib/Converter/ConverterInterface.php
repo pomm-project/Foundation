@@ -15,6 +15,19 @@ namespace PommProject\Foundation\Converter;
  *
  * Interface for converters.
  *
+ * NOTE: Here is the coding convention for value conversion TO postgres:
+ * Values are always surrounded by simple quotes with the type prefixed.
+ * Example: int4 '8', bool 'true', varchar 'a b c d'
+ *
+ * Null values must be type cast inline and be uppercase.
+ * Example: NULL::int4, NULL::timestamp, NULL::circle
+ *
+ * Arrays are just declared with 'array[…]' and type cast inline.
+ * Example: array[int4 '8',int4 '12']::int4[]
+ *
+ * Complex types with an existing constructor must use it.
+ * Exemple: circle(point(1.23,2.34), 5.67), hstore('"a" => "b"')
+ *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT <hubert.greg@gmail.com>

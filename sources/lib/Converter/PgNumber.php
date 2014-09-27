@@ -27,9 +27,11 @@ class PgNumber implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type = null)
+    public function fromPg($data, $type)
     {
-        if ($data === null || $data === '') {
+        $data = trim($data);
+
+        if ($data === '') {
             return null;
         }
 
@@ -39,8 +41,12 @@ class PgNumber implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type = null)
+    public function toPg($data, $type)
     {
-        return $data + 0;
+        if ($data != null) {
+            return sprintf("%s '%s'", $type, $data + 0);
+        } else {
+            return sprintf("NULL::%s", $type);
+        }
     }
 }

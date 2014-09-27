@@ -30,11 +30,11 @@ class PgBoolean extends Atoum
     {
         $this
             ->string($this->newTestedInstance()->toPg(true, 'bool'))
-            ->isEqualTo("true")
+            ->isEqualTo("bool 'true'")
             ->string($this->newTestedInstance()->toPg(false, 'bool'))
-            ->isEqualTo("false")
+            ->isEqualTo("bool 'false'")
             ->string($this->newTestedInstance()->toPg(null, 'bool'))
-            ->isEqualTo("null::bool")
+            ->isEqualTo("NULL::bool")
             ;
     }
 }

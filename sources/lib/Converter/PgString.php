@@ -27,11 +27,12 @@ class PgString implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type = null)
+    public function toPg($data, $type)
     {
-        $data = pg_escape_string($data);
-        $type = is_null($type) ? '' : sprintf("%s ", $type);
-        $data = sprintf("%s'%s'",  $type, $data);
+        return $data !== null
+            ? sprintf("%s '%s'",  $type, pg_escape_string($data))
+            : sprintf("NULL::%s", $type)
+            ;
 
         return $data;
     }
@@ -39,7 +40,7 @@ class PgString implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type = null)
+    public function fromPg($data, $type)
     {
         return $data;
     }

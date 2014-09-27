@@ -78,7 +78,7 @@ class PgArray implements ConverterInterface
             ->getConverterForType($type);
 
         return sprintf('ARRAY[%s]::%s[]', join(',', array_map(function ($val) use ($converter, $type) {
-                    return !is_null($val) ? $converter->toPg($val, $type) : 'NULL';
+                    return $converter->toPg($val, $type);
                 }, $data)), $type);
     }
 }

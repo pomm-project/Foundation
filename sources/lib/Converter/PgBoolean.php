@@ -48,8 +48,8 @@ class PgBoolean implements ConverterInterface
      */
     public function toPg($data, $type)
     {
-        if ($data === null) return "null::bool";
+        if ($data === null) return sprintf("NULL::%s", $type);
 
-        return $data ? "true" : "false";
+        return sprintf("%s '%s'", $type, $data === true ? "true" : "false");
     }
 }

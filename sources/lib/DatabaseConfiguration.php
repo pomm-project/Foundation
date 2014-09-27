@@ -144,7 +144,7 @@ class DatabaseConfiguration
             ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool'])
             ->registerConverter('Number', new Converter\PgNumber(), ['int2', 'int4', 'int8', 'numeric', 'float4', 'float8'])
             ->registerConverter('String', new Converter\PgString(), ['varchar', 'char', 'text', 'uuid', 'tsvector', 'xml', 'bpchar', 'name'])
-            //->registerConverter('Timestamp', new Converter\PgTimestamp(), ['timestamp', 'date', 'time', 'timestamptz'])
+            ->registerConverter('Timestamp', new Converter\PgTimestamp(), ['timestamp', 'date', 'time', 'timestamptz'])
             //->registerConverter('Interval', new Converter\PgIntervalISO8601(), ['interval'])
             //->registerConverter('Binary', new Converter\PgBytea(), ['bytea'])
             //->registerConverter('NumberRange', new Converter\PgNumberRange(), ['int4range', 'int8range', 'numrange'])

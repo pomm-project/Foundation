@@ -118,11 +118,20 @@ class DatabaseConfiguration
     protected function initialize()
     {
         $this->parameter_holder
-            ->setDefaultValue('configuration', [])
-            ->setDefaultValue('default_client_poolers', [
-                'prepared_statement' => '\PommProject\Foundation\PreparedQuery\PreparedQueryPooler'
-            ])
-            ;
+            ->setDefaultValue(
+                'configuration',
+                [
+                    'bytea_output'  => 'escape',
+                    'intervalstyle' => 'ISO_8601',
+                    'datestyle'     => 'ISO',
+                ]
+            )
+            ->setDefaultValue(
+                'default_client_poolers',
+                [
+                    'prepared_statement' => '\PommProject\Foundation\PreparedQuery\PreparedQueryPooler',
+                ]
+            );
 
         return $this
             ->registerBaseConverters()
@@ -142,10 +151,18 @@ class DatabaseConfiguration
         $this->getConverterHolder()
             ->registerConverter('Array', new Converter\PgArray($this->getConverterHolder()), [])
             ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool'])
-            ->registerConverter('Number', new Converter\PgNumber(), ['int2', 'int4', 'int8', 'numeric', 'float4', 'float8'])
-            ->registerConverter('String', new Converter\PgString(), ['varchar', 'char', 'text', 'uuid', 'tsvector', 'xml', 'bpchar', 'name'])
+            ->registerConverter(
+                'Number',
+                new Converter\PgNumber(),
+                ['int2', 'int4', 'int8', 'numeric', 'float4', 'float8']
+            )
+            ->registerConverter(
+                'String',
+                new Converter\PgString(),
+                ['varchar', 'char', 'text', 'uuid', 'tsvector', 'xml', 'bpchar', 'name']
+            )
             ->registerConverter('Timestamp', new Converter\PgTimestamp(), ['timestamp', 'date', 'time', 'timestamptz'])
-            //->registerConverter('Interval', new Converter\PgIntervalISO8601(), ['interval'])
+            ->registerConverter('Interval', new Converter\PgInterval(), ['interval'])
             //->registerConverter('Binary', new Converter\PgBytea(), ['bytea'])
             //->registerConverter('NumberRange', new Converter\PgNumberRange(), ['int4range', 'int8range', 'numrange'])
             //->registerConverter('TsRange', new Converter\PgTsRange(), ['tsrange', 'daterange'])

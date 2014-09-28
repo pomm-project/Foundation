@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\QueryManager;
 
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\QueryManager\QueryManagerInterface;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\ResultIterator;
@@ -46,6 +47,10 @@ class SimpleQueryManager implements QueryManagerInterface
      */
     public function query($sql, $values = [])
     {
+        if ($this->session === null) {
+            throw new FoundationException(sprintf("Query manager is not initialized !"));
+        }
+
         if (pg_send_query_params(
                 $this->session->getHandler(),
                 QueryParameterExpander::order($sql),

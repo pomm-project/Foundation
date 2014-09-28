@@ -66,6 +66,7 @@ class Session
             $configuration->getParameterHolder()->mustHave('dsn')->getParameter('dsn')
         ) : $connection;
         $this->query_manager = $query_manager === null ? new SimpleQueryManager() : $query_manager;
+        $this->query_manager->initialize($this);
     }
 
     /**

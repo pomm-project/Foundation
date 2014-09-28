@@ -121,7 +121,7 @@ class DatabaseConfiguration
             ->setDefaultValue(
                 'configuration',
                 [
-                    'bytea_output'  => 'escape',
+                    'bytea_output'  => 'hex',
                     'intervalstyle' => 'ISO_8601',
                     'datestyle'     => 'ISO',
                 ]

@@ -90,11 +90,13 @@ class PreparedQuery extends Client
      */
     public function shutdown()
     {
-        $res = @pg_execute($this->session->getHandler(), sprintf("DEALLOCATE %s", $this->session->escapeIdentifier($this->getClientIdentifier())));
-
-        if ($res === false) {
-            throw new PommException(sprintf("Could not deallocate statement «%s».", $this->getClientIdentifier()));
-        }
+        $this
+            ->session
+            ->getConnection()
+            ->executeAnonymousQuery(sprintf(
+                "DEALLOCATE %s",
+                $this->session->getConnection()->escapeIdentifier($this->getClientIdentifier())
+            ));
 
         $this->is_prepared = false;
     }
@@ -114,11 +116,7 @@ class PreparedQuery extends Client
             $this->prepare();
         }
 
-        if (pg_send_execute($this->session->getHandler(), $this->getClientIdentifier(), $this->prepareValues($values)) === false) {
-            throw new ConnectionException(sprintf("Connection error while executing query '%s'.", $this->getClientIdentifier()));
-        }
-
-        return $this->session->getQueryResult($this->sql);
+        return $this->session->getConnection()->sendExecuteQuery($this->getClientIdentifier(), $values);
     }
 
     /**
@@ -131,10 +129,7 @@ class PreparedQuery extends Client
      */
     protected function prepare()
     {
-        if (pg_prepare($this->session->getHandler(), $this->getClientIdentifier(), QueryParameterExpander::order($this->sql)) === false) {
-            throw new PommException(sprintf("Could not prepare statement «%s».", $this->sql));
-        }
-
+        $this->session->getConnection()->sendPrepareQuery($this->getClientIdentifier(), QueryParameterExpander::order($this->sql));
         $this->is_prepared = true;
 
         return $this;

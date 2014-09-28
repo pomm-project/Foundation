@@ -51,16 +51,13 @@ class SimpleQueryManager implements QueryManagerInterface
             throw new FoundationException(sprintf("Query manager is not initialized !"));
         }
 
-        if (pg_send_query_params(
-                $this->session->getHandler(),
-                QueryParameterExpander::order($sql),
-                $values
-            ) === false) {
-            throw new ConnectionException(sprintf("Error while sending query '%s'.", $sql));
-        }
+        $resource = $this->session->getConnection()->sendQueryWithParameters(
+            QueryParameterExpander::order($sql),
+            $values
+        );
 
         return new ResultIterator(
-            $this->session->getQueryResult($sql),
+            $resource,
             $this->session->getDatabaseConfiguration()->getConverterHolder()
         );
     }

@@ -10,6 +10,7 @@
 namespace PommProject\Foundation;
 
 use PommProject\Foundation\Exception\ConnectionException;
+use PommProject\Foundation\Exception\SqlException;
 
 /**
  * Connection
@@ -118,11 +119,11 @@ class Connection
      *
      * Return the connection handler. If no connection are open, it opens one.
      *
-     * @access public
+     * @access protected
      * @throw  ConnectionException if connection is open in a bad state.
      * @return resource
      */
-    public function getHandler()
+    protected function getHandler()
     {
         switch ($this->getConnectionStatus()) {
             case static::CONNECTION_STATUS_NONE:
@@ -311,5 +312,177 @@ class Connection
         }
 
         return $this;
+    }
+
+    /**
+     * executeAnonymousQuery
+     *
+     * Performs a raw SQL query
+     *
+     * @access public
+     * @param  string   $sql The sql statement to execute.
+     * @return resource
+     */
+    public function executeAnonymousQuery($sql)
+    {
+        $ret = @pg_send_query($this->getHandler(), $sql);
+
+        if ($ret === false) {
+            throw new ConnectionException(sprintf("Anonymous query « %s » failed.", $sql));
+        }
+
+        return $this->getQueryResult($sql);
+    }
+
+    /**
+     * getQueryResult
+     *
+     * Get an asynchronous query result.
+     *
+     * @param  string (default null) the SQL query to make informative error
+     * message.
+     * @throw  ConnectionException if no response are available.
+     * @throw  SqlException if the result is an error.
+     * @return resource query result.
+     */
+    public function getQueryResult($sql = null)
+    {
+        $result = pg_get_result($this->getHandler());
+
+        if ($result === false) {
+            throw new ConnectionException(sprintf("Query result stack is empty."));
+        }
+
+        $status = pg_result_status($result, \PGSQL_STATUS_LONG);
+
+        if ($status !== \PGSQL_COMMAND_OK && $status !== \PGSQL_TUPLES_OK) {
+            throw new SqlException($result, $sql);
+        }
+
+        return $result;
+    }
+
+    /**
+     * escapeIdentifier
+     *
+     * Escape database object's names. This is different from value escaping
+     * as objects names are surrounded by double quotes. API function does
+     * provide a nice escaping with -- hopefully -- UTF8 support.
+     *
+     * @see http://www.postgresql.org/docs/current/static/sql-syntax-lexical.html
+     * @access public
+     * @param  string $name The string to be escaped.
+     * @return string the escaped string.
+     */
+    public function escapeIdentifier($name)
+    {
+        return \pg_escape_identifier($this->getHandler(), $name);
+    }
+
+    /**
+     * escapeLiteral
+     *
+     * Escape a text value.
+     *
+     * @access public
+     * @param  string The string to be escaped
+     * @return string the escaped string.
+     */
+    public function escapeLiteral($var)
+    {
+        return \pg_escape_literal($this->getHandler(), $var);
+    }
+
+    /**
+     * escapeBytea
+     *
+     * Wrap pg_escape_bytea
+     *
+     * @access public
+     * @param  string $word
+     * @return string
+     */
+    public function escapeBytea($word)
+    {
+        return pg_escape_bytea($this->getHandler(), $word);
+    }
+
+    /**
+     * unescapeBytea
+     *
+     * Unescape postgresql bytea.
+     *
+     * @access public
+     * @param  string $bytea
+     * @return string
+     */
+    public function unescapeBytea($bytea)
+    {
+        return pg_unescape_bytea($this->getHandler(), $bytea);
+    }
+
+    /**
+     * sendQueryWithParameters
+     *
+     * Execute a asynchronous query with parameters and send the results.
+     *
+     * @access public
+     * @param  string $query
+     * @param  array $parameters
+     * @return resource
+     */
+    public function sendQueryWithParameters($query, array $parameters = [])
+    {
+        $query_ok = pg_send_query_params(
+            $this->getHandler(),
+            $query,
+            $parameters
+        );
+
+        if ($query_ok === false) {
+            throw new ConnectionException(sprintf("Error, could not send query ===\n%s\n===.", $sql));
+        }
+
+        return $this->getQueryResult($query);
+    }
+
+    /**
+     * sendPrepareQuery
+     *
+     * Send a prepare query statement to the server.
+     *
+     * @access publci
+     * @param  string     $identifier
+     * @param  string     $sql
+     * @return Connection $this
+     */
+    public function sendPrepareQuery($identifier, $sql)
+    {
+        if (pg_send_prepare($this->getHandler(), $identifier, $sql) === false) {
+            throw new ConnectionException(sprintf("Could not send prepare statement «%s».", $this->sql));
+        }
+
+        $this->getQueryResult($sql);
+
+        return $this;
+    }
+
+    /**
+     * sendExecuteQuery
+     *
+     * Execute a prepared statement.
+     *
+     * @access public
+     * @param  string $identifier
+     * @param  array  $parameters
+     * @return resource
+     */
+    public function sendExecuteQuery($identifier, array $parameters = [])
+    {
+        if (pg_send_execute($this->getHandler(), $identifier, $parameters) === false) {
+            throw new ConnectionException(sprintf("Connection error while executing prepared query '%s'.", $identifier));
+        }
+
+        return $this->getQueryResult(sprintf("prepared query id = '%s'.", $identifier));
     }
 }

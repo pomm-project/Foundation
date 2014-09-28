@@ -67,22 +67,25 @@ class Connection extends Atoum
      */
     public function testGoodConstructor($dsn)
     {
-        $handler_manager = $this->getConnection($dsn);
-        $this->object($handler_manager)
-            ->integer($handler_manager->getConnectionStatus())
+        $connection = $this->getConnection($dsn);
+        $this->object($connection)
+            ->integer($connection->getConnectionStatus())
             ->isEqualTo(PommConnection::CONNECTION_STATUS_NONE)
             ;
     }
 
-    public function testGetHandler()
+    public function testExecuteAnonymousQuery()
     {
-        $handler_manager = $this->getConnection($this->getDsn());
+        $connection = $this->getConnection($this->getDsn());
         $this
-            ->boolean(is_resource($handler_manager->getHandler()))
+            ->boolean(is_resource($connection->executeAnonymousQuery('select true')))
             ->isTrue()
-            ->integer($handler_manager->getConnectionStatus())
-            ->isEqualTo(PommConnection::CONNECTION_STATUS_GOOD)
-            ->boolean(is_resource($handler_manager->getHandler()))
+            ->string(get_resource_type($connection->executeAnonymousQuery('select true')))
+            ->isEqualTo('pgsql result')
+            ->exception(function() use ($connection) {
+                    $connection->executeAnonymousQuery('zesdflxcv');
+                })
+            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
             ;
     }
 }

@@ -17,7 +17,7 @@ use PommProject\Foundation\Converter;
 
 class ResultIterator extends Atoum
 {
-    protected $connection;
+    protected $session;
 
     protected function getPikaSql()
     {
@@ -50,15 +50,11 @@ SQL;
 
     protected function getResultResource($sql, array $params = [])
     {
-        if ($this->connection === null) {
-            $this->connection = new Session(new DatabaseConfiguration($GLOBALS['pomm_db1']));
+        if ($this->session === null) {
+            $this->session = new Session(new DatabaseConfiguration($GLOBALS['pomm_db1']));
         }
 
-        if (pg_send_query_params($this->connection->getHandler(), $sql, $params) === false) {
-            throw new \RunTimeException(sprintf("Error while querying '%s'", $sql));
-        }
-
-        return pg_get_result($this->connection->getHandler());
+        return $this->session->getConnection()->sendQueryWithParameters($sql, $params);
     }
 
     public function testConstructor()

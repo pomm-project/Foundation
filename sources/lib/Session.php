@@ -86,16 +86,16 @@ class Session
     }
 
     /**
-     * getHandler
+     * getConnection
      *
-     * Return the database connection handler.
+     * Return the database connection.
      *
      * @access public
-     * @return resource
+     * @return Connection
      */
-    public function getHandler()
+    public function getConnection()
     {
-        return $this->connection->getHandler();
+        return $this->connection;
     }
 
     /**
@@ -271,84 +271,5 @@ class Session
     public function query($sql, array $values = [])
     {
         return $this->query_manager->query($sql, $values);
-    }
-
-    /**
-     * executeAnonymousQuery
-     *
-     * Performs a raw SQL query
-     *
-     * @access public
-     * @param  string   $sql The sql statement to execute.
-     * @return resource
-     */
-    public function executeAnonymousQuery($sql)
-    {
-        $ret = @pg_send_query($this->getHandler(), $sql);
-
-        if ($ret === false) {
-            throw new ConnectionException(sprintf("Anonymous query « %s » failed.", $sql));
-        }
-
-        return $this->getQueryResult($sql);
-    }
-
-    /**
-     * getQueryResult
-     *
-     * Get an asynchronous query result.
-     *
-     * @param  string (default null) the SQL query to make informative error
-     * message.
-     * @throw  ConnectionException if no response are available.
-     * @throw  SqlException if the result is an error.
-     * @return resource query result.
-     */
-    public function getQueryResult($sql = null)
-    {
-        $result = pg_get_result($this->getHandler());
-
-        if ($result === false) {
-            throw new ConnectionException(sprintf("Query result stack is empty."));
-        }
-
-        $status = pg_result_status($result, \PGSQL_STATUS_LONG);
-
-        if ($status !== \PGSQL_COMMAND_OK && $status !== \PGSQL_TUPLES_OK) {
-            throw new SqlException($result, $sql);
-        }
-
-        return $result;
-    }
-
-    /**
-     * escapeIdentifier
-     *
-     * Escape database object's names. This is different from value escaping
-     * as objects names are surrounded by double quotes. API function does
-     * provide a nice escaping with -- hopefully -- UTF8 support.
-     *
-     * @see http://www.postgresql.org/docs/current/static/sql-syntax-lexical.html
-     * @access public
-     * @param  string $name The string to be escaped.
-     * @return string the escaped string.
-     */
-    public function escapeIdentifier($name)
-    {
-        return \pg_escape_identifier($this->getHandler(), $name);
-    }
-
-    /**
-     * escapeLiteral
-     *
-     * Escape a text value.
-     *
-     * @access public
-     * @param  string The string to be escaped
-     * @return string the escaped string.
-     */
-    public function escapeLiteral($var)
-    {
-        return \pg_escape_literal($this->getHandler(), $var);
     }
 }

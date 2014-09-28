@@ -54,15 +54,13 @@ class Session extends Atoum
             ;
     }
 
-    public function testGetHandler()
+    public function testGetConnection()
     {
         $session = $this->getSession();
 
         $this
-            ->boolean(is_resource($session->getHandler()))
-            ->isTrue()
-            ->string(get_resource_type($session->getHandler()))
-            ->isEqualTo('pgsql link')
+            ->object($session->getConnection())
+            ->isInstanceOf('\PommProject\Foundation\Connection')
             ;
     }
 
@@ -175,21 +173,6 @@ class Session extends Atoum
             ->call('getClient')
             ->withArguments('ok')
             ->once()
-            ;
-    }
-
-    public function testExecuteAnonymousQuery()
-    {
-        $session = $this->getSession();
-        $this
-            ->boolean(is_resource($session->executeAnonymousQuery('select true')))
-            ->isTrue()
-            ->string(get_resource_type($session->executeAnonymousQuery('select true')))
-            ->isEqualTo('pgsql result')
-            ->exception(function() use ($session) {
-                    $session->executeAnonymousQuery('zesdflxcv');
-                })
-            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
             ;
     }
 }

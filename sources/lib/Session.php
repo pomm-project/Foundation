@@ -17,7 +17,6 @@ use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Client\ClientPoolerInterface;
-use PommProject\Foundation\QueryManager\SimpleQueryManager;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Exception\SqlException;
 use PommProject\Foundation\Exception\ConnectionException;
@@ -39,7 +38,6 @@ class Session
     protected $database_configuration;
     protected $client_holder;
     protected $client_poolers = [];
-    protected $query_manager;
 
     /**
      * __construct
@@ -55,8 +53,7 @@ class Session
     public function __construct(
         DatabaseConfiguration $configuration,
         ClientHolder          $client_holder = null,
-        Connection            $connection    = null,
-        QueryManager          $query_manager = null
+        Connection            $connection    = null
     )
     {
         $this->database_configuration = $configuration;
@@ -65,8 +62,6 @@ class Session
         $this->connection    = $connection === null ? new Connection(
             $configuration->getParameterHolder()->mustHave('dsn')->getParameter('dsn')
         ) : $connection;
-        $this->query_manager = $query_manager === null ? new SimpleQueryManager() : $query_manager;
-        $this->query_manager->initialize($this);
     }
 
     /**
@@ -96,22 +91,6 @@ class Session
     public function getConnection()
     {
         return $this->connection;
-    }
-
-    /**
-     * setQueryManager
-     *
-     * Replace the current query manager.
-     *
-     * @access public
-     * @param  QueryManagerInterface $query_manager
-     * @return Session               $this
-     */
-    public function setQueryManager(QueryManagerInterface $query_manager)
-    {
-        $this->query_manager = $query_manager;
-
-        return $this;
     }
 
     /**
@@ -256,20 +235,5 @@ class Session
     public function getDatabaseConfiguration()
     {
         return $this->database_configuration;
-    }
-
-    /**
-     * query
-     *
-     * Send a query to the query manager.
-     *
-     * @access public
-     * @param  string $sql
-     * @param  array  $values
-     * @return ResultIterator
-     */
-    public function query($sql, array $values = [])
-    {
-        return $this->query_manager->query($sql, $values);
     }
 }

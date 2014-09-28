@@ -485,4 +485,43 @@ class Connection
 
         return $this->getQueryResult(sprintf("prepared query id = '%s'.", $identifier));
     }
+
+    /**
+     * getClientEncoding
+     *
+     * Return the actual client encoding.
+     *
+     * @access public
+     * @return string
+     */
+    public function getClientEncoding()
+    {
+        $encoding = pg_client_encoding($this->getHandler());
+
+        if ($encoding === false) {
+            throw new ConnectionException(sprintf("Could not get client encoding."));
+        }
+
+        return $encoding;
+    }
+
+    /**
+     * setClientEncoding
+     *
+     * Set client encoding.
+     *
+     * @access public
+     * @param  string     $encoding
+     * @return Connection $this;
+     */
+    public function setClientEncoding($encoding)
+    {
+        $result = pg_set_client_encoding($this->getHandler(), $encoding);
+
+        if ($result === -1) {
+            throw new ConnectionException(sprintf("Could not set client encoding '%s'.", $encoding));
+        }
+
+        return $this;
+    }
 }

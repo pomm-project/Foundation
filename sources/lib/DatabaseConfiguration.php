@@ -30,7 +30,7 @@ use PommProject\Foundation\Converter;
  */
 class DatabaseConfiguration
 {
-    protected $parameter_holder = [];
+    protected $parameter_holder;
     protected $converter_holder;
     protected $name;
 

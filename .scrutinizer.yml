@@ -1,6 +1,6 @@
 build:
     environment:
-        php: "5.4.30"
+        php: "5.4.28"
 filter:
     excluded_paths:
         - sources/tests/*

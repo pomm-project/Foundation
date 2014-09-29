@@ -4,7 +4,7 @@ This is the foundation component for the Pomm database framework. It works only 
 
 This is experimental software and it may be broken or not non functional. If you are looking for a stable library, look at [Pomm 1.x](http://www.pomm-project.org).
 
-[<https://scrutinizer-ci.com/g/PommProject/Foundation/badges/quality-score.png?s=5766ac7091629c3af205bbcca8623bd2e8cfe85e>](https://scrutinizer-ci.com/g/PommProject/Foundation/)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/pomm-project/Foundation/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pomm-project/Foundation/?branch=master)
 
 ## What is that ?
 

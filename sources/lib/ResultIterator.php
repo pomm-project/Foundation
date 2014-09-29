@@ -28,8 +28,8 @@ class ResultIterator implements \Iterator, \Countable
 {
     private   $position;
     protected $result_resource;
-    protected $converter_holder;
     protected $types = [];
+    protected $session;
 
     /**
      * __construct
@@ -37,14 +37,14 @@ class ResultIterator implements \Iterator, \Countable
      * Constructor
      *
      * @access public
-     * @param  resuource       $result_resource
-     * @param  ConverterHolder $converter_holder
+     * @param  resource $result_resource
+     * @param  Session  $session
      * @return void
      */
-    public function __construct($result_resource, ConverterHolder $converter_holder)
+    public function __construct($result_resource, Session $session)
     {
         $this->result_resource  = $result_resource;
-        $this->converter_holder = $converter_holder;
+        $this->session          = $session;
         $this->position         = $this->result_resource === false ? null : 0;
         $this->getTypes();
     }
@@ -119,7 +119,7 @@ class ResultIterator implements \Iterator, \Countable
         if (preg_match('/^_(.+)$/', $type, $matchs)) {
 
             return $this
-                ->converter_holder
+                ->session
                 ->getConverter('Array')
                 ->fromPg($value, $matchs[1])
             ;
@@ -129,7 +129,8 @@ class ResultIterator implements \Iterator, \Countable
             }
 
             return $this
-                ->converter_holder
+                ->session
+                ->getPoolerForType('converter')
                 ->getConverterForType($type)
                 ->fromPg($value, $type)
                 ;

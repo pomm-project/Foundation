@@ -7,18 +7,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PommProject\Foundation\QueryManager;
+namespace PommProject\Foundation\Query;
 
 use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\QueryManager\QueryManagerInterface;
+use PommProject\Foundation\Query\QueryInterface;
+use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\ResultIterator;
 use PommProject\Foundation\Session;
 
 /**
- * SimpleQueryManager
+ * SimpleQuery
  *
- * The simplest way to run parametrized queries.
+ * Query system as a client.
  *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT
@@ -26,35 +27,26 @@ use PommProject\Foundation\Session;
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  *
  *
- * @see QueryManagerInterface
+ * @see ClientInterface
  */
-class SimpleQueryManager implements QueryManagerInterface
+class SimpleQuery extends Client implements QueryInterface
 {
-    protected $session;
-
     /**
-     * @see QueryManagerInterface
-     */
-    public function initialize(Session $session)
-    {
-        $this->session = $session;
-
-        return $this;
-    }
-
-    /**
-     * @see QueryManagerInterface
+     * query
+     *
+     * @see QueryInterface
      */
     public function query($sql, $values = [])
     {
         if ($this->session === null) {
-            throw new FoundationException(sprintf("Query manager is not initialized !"));
+            throw new FoundationException(sprintf("Query client is not initialized !"));
         }
 
-        $resource = $this->session->getConnection()->sendQueryWithParameters(
-            QueryParameterExpander::order($sql),
-            $values
-        );
+        $resource = $this
+            ->session
+            ->getConnection()
+            ->sendQueryWithParameters(QueryParameterExpander::order($sql), $values)
+            ;
 
         return new ResultIterator(
             $resource,

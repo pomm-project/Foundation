@@ -151,10 +151,6 @@ class Pomm implements \ArrayAccess
         $connection_class= $parameter_holder
             ->getParameter('class:connection')
             ;
-        $query_manager_class= $parameter_holder
-            ->getParameter('class:query_manager')
-            ;
-
         $this
             ->checkSubClassOf($class_name, '\PommProject\Foundation\Session')
             ->sessions[$name] = new $class_name(
@@ -165,8 +161,7 @@ class Pomm implements \ArrayAccess
                         ->mustHave('connection:dsn')
                         ->getParameter('connection:dsn')
                         )
-                    : null,
-                $query_manager_class !== null ? new $query_manager_class() : null
+                    : null
             );
 
         return $this;

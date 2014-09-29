@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Converter\ConverterInterface;
+use PommProject\Foundation\Session;
 
 /**
  * PgNumber
@@ -27,7 +28,7 @@ class PgNumber implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type)
+    public function fromPg($data, $type, Session $session)
     {
         $data = trim($data);
 
@@ -41,7 +42,7 @@ class PgNumber implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type)
+    public function toPg($data, $type, Session $session)
     {
         if ($data != null) {
             return sprintf("%s '%s'", $type, $data + 0);

@@ -9,16 +9,17 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
-use Atoum;
 
-class PgNumber extends Atoum
+use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
+
+class PgNumber extends BaseConverter
 {
     public function testFromPg()
     {
         $this
-            ->integer($this->newTestedInstance()->fromPg('2014', 'int4'))
-            ->isEqualTo(2014)
-            ->float($this->newTestedInstance()->fromPg('3.141596', 'float4'))
+            ->integer($this->newTestedInstance()->fromPg('2015', 'int4', $this->getSession()))
+            ->isEqualTo(2015)
+            ->float($this->newTestedInstance()->fromPg('3.141596', 'float4', $this->getSession()))
             ->isEqualTo(3.141596)
             ;
     }
@@ -26,9 +27,9 @@ class PgNumber extends Atoum
     public function testToPg()
     {
         $this
-            ->string($this->newTestedInstance()->toPg(2014, 'int4'))
+            ->string($this->newTestedInstance()->toPg(2014, 'int4', $this->getSession()))
             ->isEqualTo("int4 '2014'")
-            ->string($this->newTestedInstance()->toPg(1.6180339887499, 'float8'))
+            ->string($this->newTestedInstance()->toPg(1.6180339887499, 'float8', $this->getSession()))
             ->isEqualTo("float8 '1.6180339887499'")
             ;
     }

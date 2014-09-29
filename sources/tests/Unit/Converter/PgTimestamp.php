@@ -9,16 +9,16 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
-use Atoum;
+use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
-class PgTimestamp extends Atoum
+class PgTimestamp extends BaseConverter
 {
     public function testFromPg()
     {
         $this
-            ->datetime($this->newTestedInstance()->fromPg('2014-09-27 18:51:35.678406+00', 'timestamptz'))
+            ->datetime($this->newTestedInstance()->fromPg('2014-09-27 18:51:35.678406+00', 'timestamptz', $this->getSession()))
             ->hasDateAndTime(2014, 9, 27, 18, 51, 35.678406)
-            ->variable($this->newTestedInstance()->fromPg('NULL', 'timestamptz'))
+            ->variable($this->newTestedInstance()->fromPg('NULL', 'timestamptz', $this->getSession()))
             ->isNull()
             ;
     }
@@ -26,9 +26,9 @@ class PgTimestamp extends Atoum
     public function testToPg()
     {
         $this
-            ->string($this->newTestedInstance()->toPg(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz'))
+            ->string($this->newTestedInstance()->toPg(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz', $this->getSession()))
             ->isEqualTo("timestamptz '2014-09-27 18:51:35.678406+00:00'")
-            ->string($this->newTestedInstance()->toPg(null, 'timestamptz'))
+            ->string($this->newTestedInstance()->toPg(null, 'timestamptz', $this->getSession()))
             ->isEqualTo("NULL::timestamptz")
             ;
     }

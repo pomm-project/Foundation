@@ -9,8 +9,8 @@
  */
 namespace PommProject\Foundation\Converter;
 
-
 use PommProject\Foundation\Converter\ConverterInterface;
+use PommProject\Foundation\Session;
 
 /**
  * PgTimestamp
@@ -27,7 +27,7 @@ class PgTimestamp implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type)
+    public function fromPg($data, $type, Session $session)
     {
         $data = trim($data);
 
@@ -37,7 +37,7 @@ class PgTimestamp implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type = null)
+    public function toPg($data, $type, Session $session = null)
     {
         if ($data === null) return sprintf("NULL::%s", $type);
 

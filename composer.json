@@ -1,5 +1,5 @@
 {
-    "name": "pomm_project/foundation",
+    "name": "pomm-project/foundation",
     "type": "library",
     "description":  "Pomm connection manager for Postgresql",
     "keywords": ["framework", "postgresql", "database"],

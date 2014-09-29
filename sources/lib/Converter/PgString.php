@@ -34,8 +34,6 @@ class PgString implements ConverterInterface
             ? sprintf("%s %s",  $type, $session->getConnection()->escapeLiteral($data))
             : sprintf("NULL::%s", $type)
             ;
-
-        return $data;
     }
 
     /**

@@ -10,10 +10,10 @@
 namespace PommProject\Foundation\Test\Unit;
 
 use Atoum;
-use PommProject\Foundation\Converter\ConverterHolder;
 use PommProject\Foundation\DatabaseConfiguration;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Converter\ConverterPooler;
 use PommProject\Foundation\Converter;
+use PommProject\Foundation\Session;
 
 class ResultIterator extends Atoum
 {
@@ -35,33 +35,26 @@ from
 SQL;
     }
 
-    protected function getConverterHolder()
+    protected function getSession()
     {
-        $holder = (new ConverterHolder())
-            ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool'])
-            ->registerConverter('Number', new Converter\PgNumber(), ['int2', 'int4', 'int8', 'numeric', 'float4', 'float8'])
-            ->registerConverter('String', new Converter\PgString(), ['varchar', 'char', 'text'])
-            ;
+        if ($this->session === null) {
+            $this->session = new Session(new DatabaseConfiguration($GLOBALS['pomm_db1']));
+            $this->session->registerClientPooler(new ConverterPooler());
+        }
 
-        $holder->registerConverter('Array', new Converter\PgArray($holder), []);
-
-        return $holder;
+        return $this->session;
     }
 
     protected function getResultResource($sql, array $params = [])
     {
-        if ($this->session === null) {
-            $this->session = new Session(new DatabaseConfiguration($GLOBALS['pomm_db1']));
-        }
-
-        return $this->session->getConnection()->sendQueryWithParameters($sql, $params);
+        return $this->getSession()->getConnection()->sendQueryWithParameters($sql, $params);
     }
 
     public function testConstructor()
     {
         $iterator = $this->newTestedInstance(
             $this->getResultResource("select true::boolean"),
-            $this->getConverterHolder()
+            $this->getSession()
         );
 
         $this
@@ -77,7 +70,7 @@ SQL;
         $sql = $this->getPikaSql();
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
-            $this->getConverterHolder()
+            $this->getSession()
         );
 
         $this
@@ -99,7 +92,7 @@ SQL;
 
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
-            $this->getConverterHolder()
+            $this->getSession()
         );
 
         $this->integer($iterator->count())
@@ -117,7 +110,7 @@ SQL;
 
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
-            $this->getConverterHolder()
+            $this->getSession()
         );
 
         $this
@@ -135,7 +128,7 @@ SQL;
         $sql = $this->getPikaSql();
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
-            $this->getConverterHolder()
+            $this->getSession()
         );
 
         $this
@@ -153,7 +146,7 @@ SQL;
         $sql = $this->getPikaSql();
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
-            $this->getConverterHolder()
+            $this->getSession()
         );
 
         foreach($iterator as $index => $element) {
@@ -185,7 +178,7 @@ SQL;
         $sql = $this->getPikaSql();
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
-            $this->getConverterHolder()
+            $this->getSession()
         );
 
         $this

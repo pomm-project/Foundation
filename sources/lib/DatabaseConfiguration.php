@@ -151,7 +151,7 @@ class DatabaseConfiguration
     protected function registerBaseConverters()
     {
         $this->getConverterHolder()
-            ->registerConverter('Array', new Converter\PgArray($this->getConverterHolder()), [])
+            ->registerConverter('Array', new Converter\PgArray($this->getConverterHolder()), ['array'])
             ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool'])
             ->registerConverter(
                 'Number',

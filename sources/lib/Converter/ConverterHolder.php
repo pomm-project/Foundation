@@ -132,7 +132,7 @@ class ConverterHolder
             throw new ConverterException(sprintf("No such converter name '%s'. Registered converters are {%s}.", $name, join(', ', $this->getConverterNames())));
         }
 
-        $this->types[$type] = $this->converters[$name];
+        $this->types[$type] = $name;
 
         return $this;
     }
@@ -153,7 +153,7 @@ class ConverterHolder
             throw new ConverterException(sprintf("No converters associated with type '%s'. Handled types are {%s}.", $type, join(', ', $this->getTypes())));
         }
 
-        return $this->types[$type];
+        return $this->converters[$this->types[$type]];
     }
 
     /**
@@ -181,5 +181,18 @@ class ConverterHolder
     public function getTypes()
     {
         return array_keys($this->types);
+    }
+
+    /**
+     * getTypesWithConverterName
+     *
+     * Return the list of types with the related converter name.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTypesWithConverterName()
+    {
+        return $this->types;
     }
 }

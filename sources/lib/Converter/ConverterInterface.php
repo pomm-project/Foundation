@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
+use PommProject\Foundation\Session;
 
 /**
  * ConverterInterface
@@ -41,20 +42,22 @@ interface ConverterInterface
      * Parse the output string from Postgresql and returns the converted value
      * into an according PHP representation.
      *
-     * @param  string $data Input string from Pg row result.
-     * @param  string $type Optional type.
-     * @return mixed  PHP representation of the data.
+     * @param  string  $data Input string from Pg row result.
+     * @param  string  $type
+     * @param  Session $session
+     * @return mixed   PHP representation of the data.
      */
-    public function fromPg($data, $type);
+    public function fromPg($data, $type, Session $session);
 
     /**
      * toPg
      *
      * Convert a PHP representation into the according Pg formatted string.
      *
-     * @param  mixed  $data PHP representation.
-     * @param  string $type Optional type.
-     * @return string Pg converted string for input.
+     * @param  mixed   $data PHP representation.
+     * @param  string  $type
+     * @param  Session $session
+     * @return string  Pg converted string for input.
      */
-    public function toPg($data, $type);
+    public function toPg($data, $type, Session $session);
 }

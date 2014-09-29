@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Converter\ConverterInterface;
+use PommProject\Foundation\Session;
 
 /**
  * PgString
@@ -27,10 +28,10 @@ class PgString implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type)
+    public function toPg($data, $type, Session $session)
     {
         return $data !== null
-            ? sprintf("%s '%s'",  $type, pg_escape_string($data))
+            ? sprintf("%s %s",  $type, $session->getConnection()->escapeLiteral($data))
             : sprintf("NULL::%s", $type)
             ;
 
@@ -40,8 +41,8 @@ class PgString implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type)
+    public function fromPg($data, $type, Session $session)
     {
-        return $data;
+        return $data !== 'NULL' ? (string) $data : null;
     }
 }

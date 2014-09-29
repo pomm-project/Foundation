@@ -9,16 +9,16 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
-use Atoum;
+use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
-class PgInterval extends Atoum
+class PgInterval extends BaseConverter
 {
     public function testFromPg()
     {
         $this
-            ->variable($this->newTestedInstance()->fromPg('NULL', 'interval'))
+            ->variable($this->newTestedInstance()->fromPg('NULL', 'interval', $this->getSession()))
             ->isNull()
-            ->dateInterval($this->newTestedInstance()->fromPg('P14346DT22H47M3.138892S', 'interval'))
+            ->dateInterval($this->newTestedInstance()->fromPg('P14346DT22H47M3.138892S', 'interval', $this->getSession()))
             ->isEqualTo(new \DateInterval('P14346DT22H47M3S')) // <- truncated to second precision
             ;
     }
@@ -26,9 +26,9 @@ class PgInterval extends Atoum
     public function testToPg()
     {
         $this
-            ->string($this->newTestedInstance()->toPg(null, 'interval'))
+            ->string($this->newTestedInstance()->toPg(null, 'interval', $this->getSession()))
             ->isEqualTo('NULL::interval')
-            ->string($this->newTestedInstance()->toPg(new \DateInterval('P14346DT22H47M3S'), 'interval'))
+            ->string($this->newTestedInstance()->toPg(new \DateInterval('P14346DT22H47M3S'), 'interval', $this->getSession()))
             ->isEqualTo("interval '00 years 00 months 14346 days 22:47:03'")
             ;
     }

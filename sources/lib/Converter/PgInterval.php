@@ -11,6 +11,7 @@ namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Exception\ConverterException;
+use PommProject\Foundation\Session;
 
 /**
  * PgInterval
@@ -26,7 +27,7 @@ class PgInterval implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type)
+    public function fromPg($data, $type, Session $session)
     {
         if (trim($data) === 'NULL') {
             return null;
@@ -42,7 +43,7 @@ class PgInterval implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type)
+    public function toPg($data, $type, Session $session)
     {
         if (!$data instanceOf \DateInterval) {
             if ($data === null) {

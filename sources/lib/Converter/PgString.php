@@ -43,6 +43,6 @@ class PgString implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
-        return $data !== 'NULL' ? (string) $data : null;
+        return $data !== null && $data !== 'NULL' ? (string) $data : null;
     }
 }

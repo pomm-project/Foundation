@@ -9,13 +9,9 @@
  */
 namespace PommProject\Foundation\Test\Unit;
 
-use Atoum;
-use PommProject\Foundation\DatabaseConfiguration;
-use PommProject\Foundation\Converter\ConverterPooler;
-use PommProject\Foundation\Converter;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
-class ResultIterator extends Atoum
+class ResultIterator extends BaseConverter
 {
     protected $session;
 
@@ -33,16 +29,6 @@ from
     (4, 'd')
   ) p (id, pika)
 SQL;
-    }
-
-    protected function getSession()
-    {
-        if ($this->session === null) {
-            $this->session = new Session(new DatabaseConfiguration($GLOBALS['pomm_db1']));
-            $this->session->registerClientPooler(new ConverterPooler());
-        }
-
-        return $this->session;
     }
 
     protected function getResultResource($sql, array $params = [])
@@ -88,7 +74,7 @@ SQL;
 
     public function testGetWithArray()
     {
-        $sql = "select array[1, 2, 3, 4]::int4[] as array_one, array[null, null]::int4[] as array_two";
+        $sql = "select array[1, 2, 3, null]::int4[] as array_one, array[null, null]::int4[] as array_two";
 
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
@@ -98,7 +84,7 @@ SQL;
         $this->integer($iterator->count())
             ->isEqualTo(1)
             ->array($iterator->current()['array_one'])
-            ->isIdenticalTo([1, 2, 3, 4])
+            ->isIdenticalTo([1, 2, 3, null])
             ->array($iterator->current()['array_two'])
             ->isIdenticalTo([null, null])
             ;

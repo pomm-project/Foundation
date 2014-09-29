@@ -9,48 +9,57 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
+use PommProject\Foundation\Converter\ConverterPooler;
 use PommProject\Foundation\DatabaseConfiguration;
+use PommProject\Foundation\Session;
 use Atoum;
 
 class PgArray extends Atoum
 {
+    protected $session;
+
     protected function getDatabaseConfiguration()
     {
         return new DatabaseConfiguration($GLOBALS['pomm_db1']);
     }
 
+    protected function getSession()
+    {
+        if ($this->session === null) {
+            $this->session = new Session($this->getDatabaseConfiguration());
+            $this->session->registerClientPooler(new ConverterPooler());
+        }
+
+        return $this->session;
+    }
+
     public function testFromPg()
     {
-        $converter = $this->newTestedInstance(
-            $this->getDatabaseConfiguration()->getConverterHolder()
-        );
+        $converter = $this->newTestedInstance();
 
         $this
-            ->array($converter->fromPg('{1,2,3,NULL}', 'int4', 'int4'))
+            ->array($converter->fromPg('{1,2,3,NULL}', 'int4', $this->getSession()))
             ->isIdenticalTo([1, 2, 3, null])
-            ->array($converter->fromPg('{1.634,2.00001,3.99999,NULL}', 'float4'))
+            ->array($converter->fromPg('{1.634,2.00001,3.99999,NULL}', 'float4', $this->getSession()))
             ->isIdenticalTo([1.634, 2.00001, 3.99999, null])
-            ->array($converter->fromPg('{"ab a",aba,"a b a",NULL}', 'varchar'))
+            ->array($converter->fromPg('{"ab a",aba,"a b a",NULL}', 'varchar', $this->getSession()))
             ->isIdenticalTo(['ab a', 'aba', 'a b a', null])
-            ->array($converter->fromPg('{t,t,f,NULL}', 'bool'))
+            ->array($converter->fromPg('{t,t,f,NULL}', 'bool', $this->getSession()))
             ->isIdenticalTo([true, true, false, null])
             ;
     }
 
     public function testToPg()
     {
-        $converter = $this->newTestedInstance(
-            $this->getDatabaseConfiguration()->getConverterHolder()
-        );
-
+        $converter = $this->newTestedInstance();
         $this
-            ->string($converter->toPg([1, 2, 3, null], 'int4'))
+            ->string($converter->toPg([1, 2, 3, null], 'int4', $this->getSession()))
             ->isEqualTo("ARRAY[int4 '1',int4 '2',int4 '3',NULL::int4]::int4[]")
-            ->string($converter->toPg([1.634, 2.000, 3.99999, null], 'float4'))
+            ->string($converter->toPg([1.634, 2.000, 3.99999, null], 'float4', $this->getSession()))
             ->isEqualTo("ARRAY[float4 '1.634',float4 '2',float4 '3.99999',NULL::float4]::float4[]")
-            ->string($converter->toPg(['ab a', 'aba', 'a b a', null], 'varchar'))
+            ->string($converter->toPg(['ab a', 'aba', 'a b a', null], 'varchar', $this->getSession()))
             ->isEqualTo("ARRAY[varchar 'ab a',varchar 'aba',varchar 'a b a',NULL::varchar]::varchar[]")
-            ->string($converter->toPg([true, true, false, null], 'bool'))
+            ->string($converter->toPg([true, true, false, null], 'bool', $this->getSession()))
             ->isEqualTo("ARRAY[bool 'true',bool 'true',bool 'false',NULL::bool]::bool[]")
             ;
     }

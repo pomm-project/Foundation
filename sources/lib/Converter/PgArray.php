@@ -9,9 +9,9 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Converter\ConverterHolder;
 use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Converter\ConverterInterface;
+use PommProject\Foundation\Session;
 
 /**
  * PgArray
@@ -26,35 +26,21 @@ use PommProject\Foundation\Converter\ConverterInterface;
  */
 class PgArray implements ConverterInterface
 {
-    protected $converter_holder;
-
-    /**
-     * __construct
-     *
-     * Constructor
-     *
-     * @access public
-     * @param  ConverterHolder $converter_holder
-     * @return void
-     */
-    public function __construct(ConverterHolder $converter_holder)
-    {
-        $this->converter_holder = $converter_holder;
-    }
-
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type)
+    public function fromPg($data, $type, Session $session)
     {
         if ($data === '') return null;
 
         if ($data !== "{NULL}" && $data !== "{}") {
-            $converter = $this->converter_holder
-                ->getConverterForType($type);
+            $converter = $session
+                ->getPoolerForType('converter')
+                ->getConverterForType($type)
+                ;
 
             return array_map(function ($val) use ($converter, $type) {
-                    return $val !== "NULL" ? $converter->fromPg(str_replace(array('\\\\', '\\"'), array('\\', '"'), $val), $type) : null;
+                    return $val !== "NULL" ? $converter->fromPg($val, $type) : null;
                 }, str_getcsv(trim($data, "{}")));
         } else {
             return array();
@@ -64,7 +50,7 @@ class PgArray implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type)
+    public function toPg($data, $type, Session $session)
     {
         if (!is_array($data)) {
             if (is_null($data)) {
@@ -74,8 +60,10 @@ class PgArray implements ConverterInterface
             throw new ConverterException(sprintf("Array converter toPg() data must be an array ('%s' given).", gettype($data)));
         }
 
-        $converter = $this->converter_holder
-            ->getConverterForType($type);
+        $converter = $session
+            ->getPoolerForType('converter')
+            ->getConverterForType($type)
+            ;
 
         return sprintf('ARRAY[%s]::%s[]', join(',', array_map(function ($val) use ($converter, $type) {
                     return $converter->toPg($val, $type);

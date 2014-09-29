@@ -37,7 +37,7 @@ class PgTimestamp implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session = null)
+    public function toPg($data, $type, Session $session)
     {
         if ($data === null) return sprintf("NULL::%s", $type);
 

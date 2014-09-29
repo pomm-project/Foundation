@@ -26,6 +26,16 @@ class PgArray extends BaseConverter
             ->isIdenticalTo(['ab a', 'aba', 'a b a', null])
             ->array($converter->fromPg('{t,t,f,NULL}', 'bool', $this->getSession()))
             ->isIdenticalTo([true, true, false, null])
+            ->array($converter->fromPg(
+                '{"2014-09-29 18:24:54.591767","2014-07-29 14:50:01","2012-12-14 04:17:09.063948"}',
+                'timestamp',
+                $this->getSession()
+            ))
+            ->isEqualTo([
+                new \DateTime('2014-09-29 18:24:54.591767'),
+                new \DateTime('2014-07-29 14:50:01'),
+                new \DateTime('2012-12-14 04:17:09.063948'),
+            ])
             ;
     }
 
@@ -41,6 +51,11 @@ class PgArray extends BaseConverter
             ->isEqualTo("ARRAY[varchar 'ab a',varchar 'aba',varchar 'a b a',NULL::varchar]::varchar[]")
             ->string($converter->toPg([true, true, false, null], 'bool', $this->getSession()))
             ->isEqualTo("ARRAY[bool 'true',bool 'true',bool 'false',NULL::bool]::bool[]")
+            ->string($converter->toPg([
+                new \DateTime('2014-09-29 18:24:54.591767'),
+                new \DateTime('2014-07-29 14:50:01'),
+                new \DateTime('2012-12-14 04:17:09.063948'),
+            ], 'timestamp', $this->getSession()))
             ;
     }
 }

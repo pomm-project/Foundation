@@ -74,16 +74,18 @@ In most cases you are interested in using structures and entities from a databas
 
 It is easy to develop client classes and poolers to interact with the session, it is just a matter of implementing the `ClientInterface` or `ClientPoolerInterface` and register them in the session.
 
-## QueryManager and converter system.
+## Querying and converter system.
 
-The `QueryManager` is the class that handles the way the `Session` class performs queries. By default, it uses the `SimpleQueryManager` which is just a wrapper around a parametrized query:
+In foundation, performing a query and return a result as an iterator is a Client too:
 
 ```php
 <?php
 //…
 $pomm = new \PommProject\Foundation\Pomm(['my_db' => ['dsn' => 'pgsql://greg/greg']]);
 $iterator = $pomm['my_db']
-    ->query('select * from student where age > $*', [20]);
+    ->getQuery()
+    ->query('select * from student where age > $*', [20])
+    ;
 
 foreach($iterator as $student) {
     printf("Student id = '%d', age = '%d', name = '%s'.\n",
@@ -106,7 +108,14 @@ $iterator = $pomm['my_db']
 printf("Names are: %s.\n", join(', ', $iterator->slice('name')));
 ```
 
-It is possible to override the default query manager with your own as soon as it implements `QueryManagerInterface`.
+It is possible to use your own Query class as soon as it implements `QueryInterface`:
+
+```php
+$result = $pomm['my_db']
+    ->getQuery(`My\Query\Class')
+    ->query('select * from student where age > $*', [20])
+    ;
+```
 
 ## Tests and project structure
 

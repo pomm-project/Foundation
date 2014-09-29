@@ -151,7 +151,7 @@ class DatabaseConfiguration
     protected function registerBaseConverters()
     {
         $this->getConverterHolder()
-            ->registerConverter('Array', new Converter\PgArray($this->getConverterHolder()), ['array'])
+            ->registerConverter('Array', new Converter\PgArray(), ['array'])
             ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool'])
             ->registerConverter(
                 'Number',
@@ -165,7 +165,7 @@ class DatabaseConfiguration
             )
             ->registerConverter('Timestamp', new Converter\PgTimestamp(), ['timestamp', 'date', 'time', 'timestamptz'])
             ->registerConverter('Interval', new Converter\PgInterval(), ['interval'])
-            //->registerConverter('Binary', new Converter\PgBytea(), ['bytea'])
+            ->registerConverter('Binary', new Converter\PgBytea(), ['bytea'])
             //->registerConverter('NumberRange', new Converter\PgNumberRange(), ['int4range', 'int8range', 'numrange'])
             //->registerConverter('TsRange', new Converter\PgTsRange(), ['tsrange', 'daterange'])
             //->registerConverter('JSON', new Converter\PgJSON(), ['json', 'jsonb'])

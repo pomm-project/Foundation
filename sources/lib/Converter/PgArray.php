@@ -34,10 +34,7 @@ class PgArray implements ConverterInterface
         if ($data === '') return null;
 
         if ($data !== "{NULL}" && $data !== "{}") {
-            $converter = $session
-                ->getPoolerForType('converter')
-                ->getConverterForType($type)
-                ;
+            $converter = $session->getClientUsingPooler('converter', $type);
 
             return array_map(function ($val) use ($converter, $type) {
                     return $val !== "NULL" ? $converter->fromPg($val, $type) : null;
@@ -60,10 +57,7 @@ class PgArray implements ConverterInterface
             throw new ConverterException(sprintf("Array converter toPg() data must be an array ('%s' given).", gettype($data)));
         }
 
-        $converter = $session
-            ->getPoolerForType('converter')
-            ->getConverterForType($type)
-            ;
+        $converter = $session->getClientUsingPooler('converter', $type);
 
         return sprintf('ARRAY[%s]::%s[]', join(',', array_map(function ($val) use ($converter, $type) {
                     return $converter->toPg($val, $type);

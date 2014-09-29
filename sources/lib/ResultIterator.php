@@ -10,7 +10,6 @@
 namespace PommProject\Foundation;
 
 use PommProject\Foundation\Exception\ConnectionException;
-use PommProject\Foundation\Converter\ConverterHolder;
 
 /**
  * ResultIterator
@@ -120,7 +119,7 @@ class ResultIterator implements \Iterator, \Countable
 
             return $this
                 ->session
-                ->getConverter('Array')
+                ->getClientUsingPooler('converter', 'array')
                 ->fromPg($value, $matchs[1])
             ;
         } else {
@@ -130,8 +129,7 @@ class ResultIterator implements \Iterator, \Countable
 
             return $this
                 ->session
-                ->getPoolerForType('converter')
-                ->getConverterForType($type)
+                ->getClientUsingPooler('converter', $type)
                 ->fromPg($value, $type)
                 ;
         }

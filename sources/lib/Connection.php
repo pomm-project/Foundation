@@ -97,7 +97,7 @@ class Connection
     public function addConfigurationSetting($name, $value)
     {
         $this->checkConnectionUp("Cannot set configuration once a connection is made with the server.")
-            ->confguration[$name] = $value;
+            ->configuration[$name] = $value;
 
         return $this;
     }
@@ -112,7 +112,7 @@ class Connection
      */
     public function getConfiguration()
     {
-        return $this->confguration;
+        return $this->configuration;
     }
 
     /**
@@ -464,7 +464,7 @@ class Connection
     public function sendPrepareQuery($identifier, $sql)
     {
         if (pg_send_prepare($this->getHandler(), $identifier, $sql) === false) {
-            throw new ConnectionException(sprintf("Could not send prepare statement «%s».", $this->sql));
+            throw new ConnectionException(sprintf("Could not send prepare statement «%s».", $sql));
         }
 
         $this->getQueryResult($sql);

@@ -27,7 +27,6 @@ use PommProject\Foundation\Session;
  */
 class ConverterPooler implements ClientPoolerInterface
 {
-    protected $types = [];
     protected $session;
 
     /**
@@ -49,10 +48,10 @@ class ConverterPooler implements ClientPoolerInterface
     {
         $this->session = $session;
         $converter_holder = $session->getDatabaseConfiguration()->getConverterHolder();
-        $this->types = $converter_holder->getTypesWithConverterName();
+        $types = $converter_holder->getTypesWithConverterName();
 
-        foreach($this->types as $type => $name) {
-            $this->session->registerClient(new ConverterClient($name, $converter_holder->getConverter($name)));
+        foreach($types as $type => $name) {
+            $this->session->registerClient(new ConverterClient($type, $converter_holder->getConverter($name)));
         }
     }
 
@@ -68,30 +67,6 @@ class ConverterPooler implements ClientPoolerInterface
 
         if ($client === null) {
             throw new ConverterException(sprintf("No converter registered as '%s'.", $name));
-        }
-
-        return $client;
-    }
-
-    /**
-     * getConverterForType
-     *
-     * Return the converter client associated with the given type.
-     *
-     * @access public
-     * @param  string $type
-     * @return ConverterClient
-     */
-    public function getConverterForType($type)
-    {
-        if (!isset($this->types[$type])) {
-            throw new ConverterException(sprintf("Type '%s' is not registered.", $type));
-        }
-
-        $client = $this->session->getClient($this->getPoolerType(), $this->types[$type]);
-
-        if ($client === null) {
-            throw new ConverterException(sprintf("No converter for type '%s'.", $type));
         }
 
         return $client;

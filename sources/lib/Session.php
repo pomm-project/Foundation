@@ -59,9 +59,12 @@ class Session
         $this->database_configuration = $configuration;
 
         $this->client_holder = $client_holder === null ? new ClientHolder() : $client_holder;
-        $this->connection    = $connection === null ? new Connection(
-            $configuration->getParameterHolder()->mustHave('dsn')->getParameter('dsn')
-        ) : $connection;
+        $this->connection    = $connection === null
+            ? new Connection(
+                $configuration->getParameterHolder()->mustHave('dsn')->getParameter('dsn'),
+                $configuration->getParameterHolder()->getParameter('configuration')
+            )
+            : $connection;
     }
 
     /**
@@ -124,6 +127,21 @@ class Session
     public function getClient($type, $identifier)
     {
         return $this->client_holder->get($type, $identifier);
+    }
+
+    /**
+     * hasClient
+     *
+     * Tell if a client exist or not.
+     *
+     * @access public
+     * @param  string $type
+     * @param  string $name
+     * @return bool
+     */
+    public function hasClient($type, $name)
+    {
+        return $this->client_holder->has($type, $name);
     }
 
     /**
@@ -221,7 +239,10 @@ class Session
             throw new \BadFunctionCallException(sprintf("Unknown method 'Session::%s()'.", $method));
         }
 
-        return $this->getClientUsingPooler(Inflector::underscore($matchs[1]), $arguments[0]);
+        return $this->getClientUsingPooler(
+            Inflector::underscore($matchs[1]),
+            count($arguments) > 0 ? $arguments[0] : null
+        );
     }
 
     /**

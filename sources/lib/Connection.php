@@ -41,9 +41,10 @@ class Connection
      * @param  string $dsn
      * @return void
      */
-    public function __construct($dsn)
+    public function __construct($dsn, array $configuration = [])
     {
         $this->parameter_holder = new ParameterHolder();
+        $this->configuration    = $configuration;
         $this->parseDsn($dsn);
     }
 
@@ -76,7 +77,7 @@ class Connection
     public function addConfiguration(array $configuration)
     {
         $this
-            ->checkConnection()
+            ->checkConnectionUp()
             ->configuration = array_merge($this->configuration, $configuration)
             ;
 
@@ -141,10 +142,10 @@ class Connection
      *
      * Tell if a handler is set or not.
      *
-     * @access public
+     * @access protected
      * @return bool
      */
-    public function hasHandler()
+    protected function hasHandler()
     {
         return (bool) ($this->handler !== null);
     }
@@ -268,6 +269,8 @@ class Connection
             );
         }
 
+        $this->sendConfiguration();
+
         return $this;
     }
 
@@ -287,8 +290,10 @@ class Connection
             $sql[] = sprintf("SET %s = %s", pg_escape_identifier($this->handler, $setting), pg_escape_literal($this->handler, $value));
         }
 
-        if (pg_query($this->getHandler(), join('; ', $sql)) === false) {
-            throw new ConnectionException(sprintf("Error while applying settings '%s'.", join('; ', $sql)));
+        if (count($sql) > 0) {
+            if (pg_query($this->getHandler(), join('; ', $sql)) === false) {
+                throw new ConnectionException(sprintf("Error while applying settings '%s'.", join('; ', $sql)));
+            }
         }
 
         return $this;
@@ -418,7 +423,7 @@ class Connection
      */
     public function unescapeBytea($bytea)
     {
-        return pg_unescape_bytea($this->getHandler(), $bytea);
+        return pg_unescape_bytea($bytea);
     }
 
     /**

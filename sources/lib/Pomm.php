@@ -145,7 +145,7 @@ class Pomm implements \ArrayAccess
             ->getConfiguration($name)
             ->getParameterHolder()
             ;
-        $client_holder_class= $parameter_holder
+        $client_holder_class = $parameter_holder
             ->getParameter('class:client_holder')
             ;
         $connection_class= $parameter_holder
@@ -279,7 +279,7 @@ class Pomm implements \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        $this->setConfiguration($value);
+        $this->setConfiguration($offset, $value);
     }
 
     /**

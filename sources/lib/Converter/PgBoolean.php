@@ -11,6 +11,7 @@ namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Converter\ConverterInterface;
+use PommProject\Foundation\Session;
 
 /**
  * PgBoolean
@@ -28,7 +29,7 @@ class PgBoolean implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type)
+    public function fromPg($data, $type, Session $session)
     {
         $data = trim($data);
 
@@ -46,7 +47,7 @@ class PgBoolean implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type)
+    public function toPg($data, $type, Session $session)
     {
         if ($data === null) return sprintf("NULL::%s", $type);
 

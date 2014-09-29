@@ -9,18 +9,18 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
-use Atoum;
+use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
-class PgBoolean extends Atoum
+class PgBoolean extends BaseConverter
 {
     public function testFromPg()
     {
         $this
-            ->boolean($this->newTestedInstance()->fromPg('t', 'bool'))
+            ->boolean($this->newTestedInstance()->fromPg('t', 'bool', $this->getSession()))
             ->isTrue()
-            ->boolean($this->newTestedInstance()->fromPg('f', 'bool'))
+            ->boolean($this->newTestedInstance()->fromPg('f', 'bool', $this->getSession()))
             ->isFalse()
-            ->exception(function() { $this->newTestedInstance()->fromPg('whatever', 'bool'); })
+            ->exception(function() { $this->newTestedInstance()->fromPg('whatever', 'bool', $this->getSession()); })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
             ->message->contains('Unknown boolean data')
             ;
@@ -29,11 +29,11 @@ class PgBoolean extends Atoum
     public function testToPg()
     {
         $this
-            ->string($this->newTestedInstance()->toPg(true, 'bool'))
+            ->string($this->newTestedInstance()->toPg(true, 'bool', $this->getSession()))
             ->isEqualTo("bool 'true'")
-            ->string($this->newTestedInstance()->toPg(false, 'bool'))
+            ->string($this->newTestedInstance()->toPg(false, 'bool', $this->getSession()))
             ->isEqualTo("bool 'false'")
-            ->string($this->newTestedInstance()->toPg(null, 'bool'))
+            ->string($this->newTestedInstance()->toPg(null, 'bool', $this->getSession()))
             ->isEqualTo("NULL::bool")
             ;
     }

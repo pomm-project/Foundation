@@ -9,30 +9,10 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
-use PommProject\Foundation\Converter\ConverterPooler;
-use PommProject\Foundation\DatabaseConfiguration;
-use PommProject\Foundation\Session;
-use Atoum;
+use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
-class PgArray extends Atoum
+class PgArray extends BaseConverter
 {
-    protected $session;
-
-    protected function getDatabaseConfiguration()
-    {
-        return new DatabaseConfiguration($GLOBALS['pomm_db1']);
-    }
-
-    protected function getSession()
-    {
-        if ($this->session === null) {
-            $this->session = new Session($this->getDatabaseConfiguration());
-            $this->session->registerClientPooler(new ConverterPooler());
-        }
-
-        return $this->session;
-    }
-
     public function testFromPg()
     {
         $converter = $this->newTestedInstance();

@@ -287,7 +287,7 @@ class Connection
         $sql=[];
 
         foreach ($this->configuration as $setting => $value) {
-            $sql[] = sprintf("SET %s = %s", pg_escape_identifier($this->handler, $setting), pg_escape_literal($this->handler, $value));
+            $sql[] = sprintf("set %s = %s", pg_escape_identifier($this->handler, $setting), pg_escape_literal($this->handler, $value));
         }
 
         if (count($sql) > 0) {

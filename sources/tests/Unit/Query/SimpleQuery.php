@@ -7,31 +7,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PommProject\Foundation\Test\Unit\QueryManager;
+namespace PommProject\Foundation\Test\Unit\Query;
 
-use PommProject\Foundation\Session;
-use PommProject\Foundation\DatabaseConfiguration;
-use Atoum;
+use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
-class SimpleQueryManager extends Atoum
+class SimpleQuery extends BaseConverter
 {
-    protected $session;
-
-    protected function getSession()
-    {
-        if ($this->session === null) {
-            $this->session = new Session(new DatabaseConfiguration($GLOBALS['pomm_db1']));
-        }
-
-        return $this->session;
-    }
-
     protected function getQueryManager()
     {
-        return $this
-            ->newTestedInstance()
-            ->initialize($this->getSession())
-            ;
+        $query_manager = $this->newTestedInstance();
+        $query_manager->initialize($this->getSession());
+
+        return $query_manager;
     }
 
     public function testSimpleQuery()

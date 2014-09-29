@@ -36,7 +36,7 @@ class SimpleQuery extends Client implements QueryInterface
      *
      * @see QueryInterface
      */
-    public function query($sql, $values = [])
+    public function query($sql, array $parameters = [])
     {
         if ($this->session === null) {
             throw new FoundationException(sprintf("Query client is not initialized !"));
@@ -45,12 +45,41 @@ class SimpleQuery extends Client implements QueryInterface
         $resource = $this
             ->session
             ->getConnection()
-            ->sendQueryWithParameters(QueryParameterExpander::order($sql), $values)
+            ->sendQueryWithParameters(QueryParameterExpander::order($sql), $parameters)
             ;
 
         return new ResultIterator(
             $resource,
-            $this->session->getDatabaseConfiguration()->getConverterHolder()
+            $this->session
         );
+    }
+
+    /**
+     * getClientType
+     *
+     * @see ClientInterface
+     */
+    public function getClientType()
+    {
+        return 'query';
+    }
+
+    /**
+     * getClientIdentifier
+     *
+     * @see ClientInterface
+     */
+    public function getClientIdentifier()
+    {
+        return get_class($this);
+    }
+
+    /**
+     * shutdown
+     *
+     * @see ClientInterface
+     */
+    public function shutdown()
+    {
     }
 }

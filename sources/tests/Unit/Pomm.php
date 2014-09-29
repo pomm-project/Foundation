@@ -17,9 +17,6 @@ class Pomm extends Atoum
 {
     protected function getDatabaseConfiguration(array $config = [])
     {
-        //$controller = new \Atoum\Mock\Controller();
-       // $controller->__construct = function($config) {};
-
         return new DatabaseConfiguration($config);
     }
 

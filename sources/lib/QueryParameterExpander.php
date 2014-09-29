@@ -28,7 +28,7 @@ class QueryParameterExpander
      *
      * @static
      * @access public
-     * @param  mixed $string
+     * @param  string $string
      * @return string
      */
     public static function unorder($string)
@@ -43,7 +43,7 @@ class QueryParameterExpander
      *
      * @static
      * @access public
-     * @param  mixed $string
+     * @param  string $string
      * @return string
      */
     public static function order($string)

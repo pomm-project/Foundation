@@ -50,7 +50,6 @@ class PreparedQuery extends Client
      * Build the prepared query.
      *
      * @access public
-     * @param  Session $session
      * @param  string     $sql        SQL query
      * @return void
      */
@@ -107,7 +106,7 @@ class PreparedQuery extends Client
      * Launch the query with the given parameters.
      *
      * @access public
-     * @param  Array    $values Query parameters
+     * @param  array    $values Query parameters
      * @return Resource
      */
     public function execute(array $values = [])

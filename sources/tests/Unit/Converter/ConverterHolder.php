@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Test\Unit\Converter;
 
 use PommProject\Foundation\Converter\ConverterInterface;
+use PommProject\Foundation\Session;
 use Atoum;
 
 class ConverterHolder extends Atoum
@@ -131,12 +132,12 @@ class ConverterHolder extends Atoum
 
 class DumbConverter implements ConverterInterface
 {
-    public function toPg($value, $type)
+    public function toPg($value, $type, Session $session)
     {
         return $value;
     }
 
-    public function fromPg($value, $type)
+    public function fromPg($value, $type, Session $session)
     {
         return $value;
     }

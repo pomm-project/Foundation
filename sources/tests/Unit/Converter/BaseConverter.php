@@ -9,27 +9,14 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
+use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 use PommProject\Foundation\Converter\ConverterPooler;
-use PommProject\Foundation\DatabaseConfiguration;
-use PommProject\Foundation\Session;
-use Atoum;
 
-abstract class BaseConverter extends Atoum
+class BaseConverter extends SessionAwareAtoum
 {
-    protected $session;
-
-    protected function getDatabaseConfiguration()
+    protected function registerClientPoolers()
     {
-        return new DatabaseConfiguration($GLOBALS['pomm_db1']);
-    }
-
-    protected function getSession()
-    {
-        if ($this->session === null) {
-            $this->session = new Session($this->getDatabaseConfiguration());
-            $this->session->registerClientPooler(new ConverterPooler());
-        }
-
-        return $this->session;
+        parent::registerClientPoolers();
+        $this->session->registerClientPooler(new ConverterPooler());
     }
 }

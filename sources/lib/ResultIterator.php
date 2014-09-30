@@ -113,7 +113,7 @@ class ResultIterator implements \Iterator, \Countable
      */
     protected function convertField($field_no, $value)
     {
-        $type = pg_field_type($this->result_resource, $field_no);
+        $type = $this->getFieldType($field_no);
 
         if (preg_match('/^_(.+)$/', $type, $matchs)) {
 
@@ -123,7 +123,7 @@ class ResultIterator implements \Iterator, \Countable
                 ->fromPg($value, $matchs[1])
             ;
         } else {
-            if ($type === 'unknown') {
+            if ($type === null) {
                 $type = 'text';
             }
 
@@ -133,6 +133,36 @@ class ResultIterator implements \Iterator, \Countable
                 ->fromPg($value, $type)
                 ;
         }
+    }
+
+    /**
+     * getFieldType
+     *
+     * Return the associated type of a field.
+     *
+     * @access protected
+     * @param  int       $field_no
+     * @return string
+     */
+    protected function getFieldType($field_no)
+    {
+        $type = pg_field_type($this->result_resource, $field_no);
+
+        return $type !== 'unknown' ? $type : null;
+    }
+
+    /**
+     * getFieldName
+     *
+     * Return the name from a field number.
+     *
+     * @access protected
+     * @param  int       $field_no
+     * @return string
+     */
+    protected function getFieldName($field_no)
+    {
+        return pg_field_name($this->result_resource, $field_no);
     }
 
     /**

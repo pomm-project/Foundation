@@ -125,7 +125,7 @@ class ResultIterator implements \Iterator, \Countable
             return $this
                 ->session
                 ->getClientUsingPooler('converter', $type)
-                ->fromPg($value, $type)
+                ->fromPg($value)
                 ;
         }
     }

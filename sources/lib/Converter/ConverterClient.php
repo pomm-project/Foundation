@@ -97,11 +97,13 @@ class ConverterClient implements ClientInterface
      * @return string
      * @see ConverterInterface
      */
-    public function toPg($value, $type)
+    public function toPg($value, $type = null)
     {
-        $this->checkInitialized();
-
-        return $this->converter->toPg($value, $type, $this->session);
+        return $this->converter->toPg(
+            $value,
+            $type === null ? $this->getClientIdentifier() : $type,
+            $this->getSession()
+        );
     }
 
     /**
@@ -115,11 +117,13 @@ class ConverterClient implements ClientInterface
      * @return mixed
      * @see ConverterInterface
      */
-    public function fromPg($value, $type)
+    public function fromPg($value, $type = null)
     {
-        $this->checkInitialized();
-
-        return $this->converter->fromPg($value, $type, $this->session);
+        return $this->converter->fromPg(
+            $value,
+            $type === null ? $this->getClientIdentifier() : $type,
+            $this->getSession()
+        );
     }
 
     /**
@@ -130,12 +134,12 @@ class ConverterClient implements ClientInterface
      * @access private
      * @return ConverterClient $this
      */
-    private function checkInitialized()
+    private function getSession()
     {
         if ($this->session === null) {
             throw new ConverterException(sprintf("Converter client '%s' is not initialized.", get_class($this)));
         }
 
-        return $this;
+        return $this->session;
     }
 }

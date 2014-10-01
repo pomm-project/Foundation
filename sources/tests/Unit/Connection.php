@@ -78,10 +78,8 @@ class Connection extends Atoum
     {
         $connection = $this->getConnection($this->getDsn());
         $this
-            ->boolean(is_resource($connection->executeAnonymousQuery('select true')))
-            ->isTrue()
-            ->string(get_resource_type($connection->executeAnonymousQuery('select true')))
-            ->isEqualTo('pgsql result')
+            ->object($connection->executeAnonymousQuery('select true'))
+            ->isInstanceOf('\PommProject\Foundation\ResultHandler')
             ->exception(function() use ($connection) {
                     $connection->executeAnonymousQuery('zesdflxcv');
                 })

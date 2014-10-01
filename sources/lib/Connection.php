@@ -11,6 +11,7 @@ namespace PommProject\Foundation;
 
 use PommProject\Foundation\Exception\ConnectionException;
 use PommProject\Foundation\Exception\SqlException;
+use PommProject\Foundation\ResultHandler;
 
 /**
  * Connection
@@ -325,8 +326,8 @@ class Connection
      * Performs a raw SQL query
      *
      * @access public
-     * @param  string   $sql The sql statement to execute.
-     * @return resource
+     * @param  string        $sql The sql statement to execute.
+     * @return ResultHandler
      */
     public function executeAnonymousQuery($sql)
     {
@@ -348,7 +349,7 @@ class Connection
      * message.
      * @throw  ConnectionException if no response are available.
      * @throw  SqlException if the result is an error.
-     * @return resource query result.
+     * @return ResultHandler
      */
     public function getQueryResult($sql = null)
     {
@@ -364,7 +365,7 @@ class Connection
             throw new SqlException($result, $sql);
         }
 
-        return $result;
+        return new ResultHandler($result);
     }
 
     /**
@@ -434,7 +435,7 @@ class Connection
      * @access public
      * @param  string $query
      * @param  array $parameters
-     * @return resource
+     * @return ResultHandler     query result wrapper
      */
     public function sendQueryWithParameters($query, array $parameters = [])
     {
@@ -480,7 +481,7 @@ class Connection
      * @access public
      * @param  string $identifier
      * @param  array  $parameters
-     * @return resource
+     * @return ResultHandler
      */
     public function sendExecuteQuery($identifier, array $parameters = [])
     {

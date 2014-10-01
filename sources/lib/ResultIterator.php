@@ -10,6 +10,7 @@
 namespace PommProject\Foundation;
 
 use PommProject\Foundation\Exception\ConnectionException;
+use PommProject\Foundation\Exception\FoundationException;
 
 /**
  * ResultIterator
@@ -26,7 +27,7 @@ use PommProject\Foundation\Exception\ConnectionException;
 class ResultIterator implements \Iterator, \Countable
 {
     private   $position;
-    protected $result_resource;
+    protected $result;
     protected $types = [];
     protected $session;
 
@@ -36,15 +37,15 @@ class ResultIterator implements \Iterator, \Countable
      * Constructor
      *
      * @access public
-     * @param  resource $result_resource
-     * @param  Session  $session
+     * @param  ResultHandler $result
+     * @param  Session       $session
      * @return void
      */
-    public function __construct($result_resource, Session $session)
+    public function __construct(ResultHandler $result, Session $session)
     {
-        $this->result_resource  = $result_resource;
-        $this->session          = $session;
-        $this->position         = $this->result_resource === false ? null : 0;
+        $this->result   = $result;
+        $this->session  = $session;
+        $this->position = 0;
         $this->getTypes();
     }
 
@@ -55,7 +56,7 @@ class ResultIterator implements \Iterator, \Countable
      */
     public function __destruct()
     {
-        @pg_free_result($this->result_resource);
+        $this->result->free();
     }
 
     /**
@@ -71,13 +72,7 @@ class ResultIterator implements \Iterator, \Countable
      */
     public function get($index)
     {
-        $values = @pg_fetch_array($this->result_resource, $index, \PGSQL_NUM);
-
-        if ($values === false) {
-            throw new \OutOfBoundsException(sprintf("Cannot jump to non existing row %d.", $index));
-        }
-
-        return $this->parseRow($values);
+        return $this->parseRow($this->result->fetchRow($index));
     }
 
     /**
@@ -93,9 +88,9 @@ class ResultIterator implements \Iterator, \Countable
     {
         $output_values = [];
 
-        foreach($values as $index => $value) {
-            $output_values[pg_field_name($this->result_resource, $index)] =
-                $this->convertField($index, $value) ;
+        foreach($values as $name => $value) {
+            $output_values[$name] =
+                $this->convertField($name, $value) ;
         }
 
         return $output_values;
@@ -111,9 +106,9 @@ class ResultIterator implements \Iterator, \Countable
      * @param string $value
      * @return mixed
      */
-    protected function convertField($field_no, $value)
+    protected function convertField($name, $value)
     {
-        $type = $this->getFieldType($field_no);
+        $type = $this->result->getFieldType($name);
 
         if (preg_match('/^_(.+)$/', $type, $matchs)) {
 
@@ -136,36 +131,6 @@ class ResultIterator implements \Iterator, \Countable
     }
 
     /**
-     * getFieldType
-     *
-     * Return the associated type of a field.
-     *
-     * @access protected
-     * @param  int       $field_no
-     * @return string
-     */
-    protected function getFieldType($field_no)
-    {
-        $type = pg_field_type($this->result_resource, $field_no);
-
-        return $type !== 'unknown' ? $type : null;
-    }
-
-    /**
-     * getFieldName
-     *
-     * Return the name from a field number.
-     *
-     * @access protected
-     * @param  int       $field_no
-     * @return string
-     */
-    protected function getFieldName($field_no)
-    {
-        return pg_field_name($this->result_resource, $field_no);
-    }
-
-    /**
      * getTypes
      *
      * Get the result types from the result handler.
@@ -175,8 +140,8 @@ class ResultIterator implements \Iterator, \Countable
      */
     protected function getTypes()
     {
-        for($i = 0; $i < pg_num_fields($this->result_resource); $i++) {
-            $this->types[$i] = pg_field_type($this->result_resource, $i);
+        foreach($this->result->getFieldNames() as $index => $name) {
+            $this->types[$index] = $this->result->getFieldType($name);
         }
 
         return $this;
@@ -203,7 +168,7 @@ class ResultIterator implements \Iterator, \Countable
      */
     public function count()
     {
-        return pg_num_rows($this->result_resource);
+        return $this->result->countRows();
     }
 
     /**
@@ -289,7 +254,7 @@ class ResultIterator implements \Iterator, \Countable
      */
     public function isEmpty()
     {
-        return pg_num_rows($this->result_resource) === 0;
+        return $this->result->countRows() === 0;
     }
 
     /**
@@ -344,16 +309,10 @@ class ResultIterator implements \Iterator, \Countable
             return [];
         }
 
-        $field_no = pg_field_num($this->result_resource, $field);
-
-        if ($field_no === -1) {
-            throw new \InvalidArgumentException(sprintf("No such field '%s' in result set.", $field));
-        }
-
         $values = [];
 
-        foreach(pg_fetch_all_columns($this->result_resource, $field_no) as $incoming_value) {
-            $values[] = $this->convertField($field_no, $incoming_value);
+        foreach($this->result->fetchColumn($field) as $incoming_value) {
+            $values[] = $this->convertField($field, $incoming_value);
         }
 
         return $values;

@@ -174,7 +174,7 @@ SQL;
             ->isIdenticalTo([1, 2, 3, 4])
             ->exception(function() use ($iterator) { return $iterator->slice('no_such_key'); })
             ->isInstanceOf('\InvalidArgumentException')
-            ->message->contains('No such field')
+            ->message->contains('Cound not find field')
             ;
     }
 }

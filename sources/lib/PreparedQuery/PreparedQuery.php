@@ -93,7 +93,7 @@ class PreparedQuery extends Client
             ->session
             ->getConnection()
             ->executeAnonymousQuery(sprintf(
-                "DEALLOCATE %s",
+                "deallocate %s",
                 $this->session->getConnection()->escapeIdentifier($this->getClientIdentifier())
             ));
 
@@ -115,7 +115,13 @@ class PreparedQuery extends Client
             $this->prepare();
         }
 
-        return $this->session->getConnection()->sendExecuteQuery($this->getClientIdentifier(), $values);
+        return $this
+            ->session
+            ->getConnection()
+            ->sendExecuteQuery(
+                $this->getClientIdentifier(),
+                $this->prepareValues($values)
+            );
     }
 
     /**
@@ -128,7 +134,13 @@ class PreparedQuery extends Client
      */
     protected function prepare()
     {
-        $this->session->getConnection()->sendPrepareQuery($this->getClientIdentifier(), QueryParameterExpander::order($this->sql));
+        $this
+            ->session
+            ->getConnection()
+            ->sendPrepareQuery(
+                $this->getClientIdentifier(),
+                QueryParameterExpander::order($this->sql)
+            );
         $this->is_prepared = true;
 
         return $this;

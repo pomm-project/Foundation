@@ -82,7 +82,7 @@ class ResultIterator implements \Iterator, \Countable
      *
      * @access protected
      * @param  array $values
-     * @return array
+     * @return array|mixed
      */
     protected function parseRow(array $values)
     {

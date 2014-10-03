@@ -46,7 +46,7 @@ class ResultIterator implements \Iterator, \Countable
         $this->result   = $result;
         $this->session  = $session;
         $this->position = 0;
-        $this->getTypes();
+        $this->initTypes();
     }
 
     /**
@@ -136,24 +136,24 @@ class ResultIterator implements \Iterator, \Countable
      * Method that can be overrided to determine field's type.
      *
      * @access protected
-     * @param  int    $field_no
+     * @param  string    $name
      * @return string
      */
-    protected function getFieldType($field_no)
+    protected function getFieldType($name)
     {
-        return $this->result->getFieldType($field_no);
+        return $this->result->getFieldType($name);
     }
 
 
     /**
-     * getTypes
+     * initTypes
      *
      * Get the result types from the result handler.
      *
      * @access protectd
      * @return ResultIterator $this
      */
-    protected function getTypes()
+    protected function initTypes()
     {
         foreach($this->result->getFieldNames() as $index => $name) {
             $this->types[$index] = $this->getFieldType($name);

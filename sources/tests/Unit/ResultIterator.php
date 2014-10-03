@@ -72,6 +72,22 @@ SQL;
             ;
     }
 
+    public function testGetOnEmptyResult()
+    {
+        $iterator = $this->newTestedInstance(
+            $this->getResultResource('select true where false'),
+            $this->getSession()
+        );
+        $this
+            ->integer($iterator->count())
+            ->isEqualTo(0)
+            ->boolean($iterator->isEmpty())
+            ->isTrue()
+            ->variable($iterator->current())
+            ->isNull()
+            ;
+    }
+
     public function testGetWithArray()
     {
         $sql = "select array[1, 2, 3, null]::int4[] as array_one, array[null, null]::int4[] as array_two";

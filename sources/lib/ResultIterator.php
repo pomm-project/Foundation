@@ -62,8 +62,7 @@ class ResultIterator implements \Iterator, \Countable
     /**
      * get
      *
-     * Return a particular result. If the result cannot be read, false is
-     * returned, otherwise, the according FlexibleEntity is returned.
+     * Return a particular result. An array with converted values is returned.
      * pg_fetch_array is muted because it produces untrappable warnings on
      * errors.
      *
@@ -203,7 +202,7 @@ class ResultIterator implements \Iterator, \Countable
      */
     public function current()
     {
-        return $this->get($this->position);
+        return $this->isEmpty() ? null : $this->get($this->position);
     }
 
     /**

@@ -82,7 +82,7 @@ class ResultIterator implements \Iterator, \Countable
      *
      * @access protected
      * @param  array $values
-     * @return array|mixed
+     * @return mixed
      */
     protected function parseRow(array $values)
     {
@@ -108,7 +108,7 @@ class ResultIterator implements \Iterator, \Countable
      */
     protected function convertField($name, $value)
     {
-        $type = $this->result->getFieldType($name);
+        $type = $this->getFieldType($name);
 
         if (preg_match('/^_(.+)$/', $type, $matchs)) {
 
@@ -131,6 +131,21 @@ class ResultIterator implements \Iterator, \Countable
     }
 
     /**
+     * getFieldType
+     *
+     * Method that can be overrided to determine field's type.
+     *
+     * @access protected
+     * @param  int    $field_no
+     * @return string
+     */
+    protected function getFieldType($field_no)
+    {
+        return $this->result->getFieldType($field_no);
+    }
+
+
+    /**
      * getTypes
      *
      * Get the result types from the result handler.
@@ -141,7 +156,7 @@ class ResultIterator implements \Iterator, \Countable
     protected function getTypes()
     {
         foreach($this->result->getFieldNames() as $index => $name) {
-            $this->types[$index] = $this->result->getFieldType($name);
+            $this->types[$index] = $this->getFieldType($name);
         }
 
         return $this;

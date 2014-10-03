@@ -18,7 +18,7 @@ use PommProject\Foundation\ResultHandler;
  *
  * Manage connection through a resource handler.
  *
- * @package Pomm
+ * @package Foundation
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
@@ -377,12 +377,12 @@ class Connection
      *
      * @see http://www.postgresql.org/docs/current/static/sql-syntax-lexical.html
      * @access public
-     * @param  string $name The string to be escaped.
+     * @param  string $string The string to be escaped.
      * @return string the escaped string.
      */
-    public function escapeIdentifier($name)
+    public function escapeIdentifier($string)
     {
-        return \pg_escape_identifier($this->getHandler(), $name);
+        return \pg_escape_identifier($this->getHandler(), $string);
     }
 
     /**
@@ -394,9 +394,9 @@ class Connection
      * @param  string The string to be escaped
      * @return string the escaped string.
      */
-    public function escapeLiteral($var)
+    public function escapeLiteral($string)
     {
-        return \pg_escape_literal($this->getHandler(), $var);
+        return \pg_escape_literal($this->getHandler(), $string);
     }
 
     /**

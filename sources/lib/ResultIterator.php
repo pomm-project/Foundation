@@ -28,8 +28,6 @@ class ResultIterator implements \Iterator, \Countable
 {
     private   $position;
     protected $result;
-    protected $types = [];
-    protected $session;
 
     /**
      * __construct
@@ -41,12 +39,10 @@ class ResultIterator implements \Iterator, \Countable
      * @param  Session       $session
      * @return void
      */
-    public function __construct(ResultHandler $result, Session $session)
+    public function __construct(ResultHandler $result)
     {
         $this->result   = $result;
-        $this->session  = $session;
         $this->position = 0;
-        $this->initTypes();
     }
 
     /**
@@ -71,94 +67,7 @@ class ResultIterator implements \Iterator, \Countable
      */
     public function get($index)
     {
-        return $this->parseRow($this->result->fetchRow($index));
-    }
-
-    /**
-     * parseRow
-     *
-     * Convert values from Pg.
-     *
-     * @access protected
-     * @param  array $values
-     * @return mixed
-     */
-    protected function parseRow(array $values)
-    {
-        $output_values = [];
-
-        foreach($values as $name => $value) {
-            $output_values[$name] =
-                $this->convertField($name, $value) ;
-        }
-
-        return $output_values;
-    }
-
-    /**
-     * convertField
-     *
-     * Return converted value for a result field.
-     *
-     * @access protected
-     * @param int    $field_no
-     * @param string $value
-     * @return mixed
-     */
-    protected function convertField($name, $value)
-    {
-        $type = $this->getFieldType($name);
-
-        if (preg_match('/^_(.+)$/', $type, $matchs)) {
-
-            return $this
-                ->session
-                ->getClientUsingPooler('converter', 'array')
-                ->fromPg($value, $matchs[1])
-            ;
-        } else {
-            if ($type === null) {
-                $type = 'text';
-            }
-
-            return $this
-                ->session
-                ->getClientUsingPooler('converter', $type)
-                ->fromPg($value)
-                ;
-        }
-    }
-
-    /**
-     * getFieldType
-     *
-     * Method that can be overrided to determine field's type.
-     *
-     * @access protected
-     * @param  string    $name
-     * @return string
-     */
-    protected function getFieldType($name)
-    {
-        return $this->result->getFieldType($name);
-    }
-
-
-    /**
-     * initTypes
-     *
-     * Get the result types from the result handler.
-     *
-     * @access protectd
-     * @return ResultIterator $this
-     */
-    protected function initTypes()
-    {
-        foreach($this->result->getFieldNames() as $index => $name) {
-            $this->types[$index] = $this->getFieldType($name);
-        }
-
-        return $this;
+        return $this->result->fetchRow($index);
     }
 
     /**
@@ -323,12 +232,6 @@ class ResultIterator implements \Iterator, \Countable
             return [];
         }
 
-        $values = [];
-
-        foreach($this->result->fetchColumn($field) as $incoming_value) {
-            $values[] = $this->convertField($field, $incoming_value);
-        }
-
-        return $values;
+        return $this->result->fetchColumn($field);
     }
 }

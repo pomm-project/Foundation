@@ -13,7 +13,7 @@ use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Query\QueryInterface;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\QueryParameterExpander;
-use PommProject\Foundation\ResultIterator;
+use PommProject\Foundation\ConvertedResultIterator;
 use PommProject\Foundation\Session;
 
 /**
@@ -48,7 +48,7 @@ class SimpleQuery extends Client implements QueryInterface
             ->sendQueryWithParameters(QueryParameterExpander::order($sql), $parameters)
             ;
 
-        return new ResultIterator(
+        return new ConvertedResultIterator(
             $resource,
             $this->session
         );

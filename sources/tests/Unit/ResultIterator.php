@@ -13,8 +13,6 @@ use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
 class ResultIterator extends BaseConverter
 {
-    protected $session;
-
     protected function getPikaSql()
     {
         return <<<SQL
@@ -39,8 +37,7 @@ SQL;
     public function testConstructor()
     {
         $iterator = $this->newTestedInstance(
-            $this->getResultResource("select true::boolean"),
-            $this->getSession()
+            $this->getResultResource("select true::boolean")
         );
 
         $this
@@ -55,17 +52,16 @@ SQL;
     {
         $sql = $this->getPikaSql();
         $iterator = $this->newTestedInstance(
-            $this->getResultResource($sql),
-            $this->getSession()
+            $this->getResultResource($sql)
         );
 
         $this
             ->array($iterator->get(0))
-            ->isIdenticalTo(['id' => 1, 'pika' => 'a'])
+            ->isIdenticalTo(['id' => '1', 'pika' => 'a'])
             ->array($iterator->get(2))
-            ->isIdenticalTo(['id' => 3, 'pika' => 'c'])
+            ->isIdenticalTo(['id' => '3', 'pika' => 'c'])
             ->array($iterator->get(1))
-            ->isIdenticalTo(['id' => 2, 'pika' => 'b'])
+            ->isIdenticalTo(['id' => '2', 'pika' => 'b'])
             ->exception(function() use ($iterator) { return $iterator->get(5); })
             ->isInstanceOf('\OutOfBoundsException')
             ->message->contains('Cannot jump to non existing row')
@@ -75,8 +71,7 @@ SQL;
     public function testGetOnEmptyResult()
     {
         $iterator = $this->newTestedInstance(
-            $this->getResultResource('select true where false'),
-            $this->getSession()
+            $this->getResultResource('select true where false')
         );
         $this
             ->integer($iterator->count())
@@ -88,49 +83,11 @@ SQL;
             ;
     }
 
-    public function testGetWithArray()
-    {
-        $sql = "select array[1, 2, 3, null]::int4[] as array_one, array[null, null]::int4[] as array_two";
-
-        $iterator = $this->newTestedInstance(
-            $this->getResultResource($sql),
-            $this->getSession()
-        );
-
-        $this->integer($iterator->count())
-            ->isEqualTo(1)
-            ->array($iterator->current()['array_one'])
-            ->isIdenticalTo([1, 2, 3, null])
-            ->array($iterator->current()['array_two'])
-            ->isIdenticalTo([null, null])
-            ;
-    }
-
-    public function testGetWithNoType()
-    {
-        $sql = 'select null as one, array[null, null] as two';
-
-        $iterator = $this->newTestedInstance(
-            $this->getResultResource($sql),
-            $this->getSession()
-        );
-
-        $this
-            ->integer($iterator->count())
-            ->isEqualTo(1)
-            ->variable($iterator->current()['one'])
-            ->isNull()
-            ->array($iterator->current()['two'])
-            ->isIdenticalTo([null, null])
-            ;
-    }
-
     public function testHasAndCount()
     {
         $sql = $this->getPikaSql();
         $iterator = $this->newTestedInstance(
-            $this->getResultResource($sql),
-            $this->getSession()
+            $this->getResultResource($sql)
         );
 
         $this
@@ -147,8 +104,7 @@ SQL;
     {
         $sql = $this->getPikaSql();
         $iterator = $this->newTestedInstance(
-            $this->getResultResource($sql),
-            $this->getSession()
+            $this->getResultResource($sql)
         );
 
         foreach($iterator as $index => $element) {
@@ -169,7 +125,7 @@ SQL;
                     ;
             }
             $this
-                ->integer($element['id'])
+                ->string($element['id'])
                 ->isEqualTo($index + 1)
                 ;
         }
@@ -179,15 +135,14 @@ SQL;
     {
         $sql = $this->getPikaSql();
         $iterator = $this->newTestedInstance(
-            $this->getResultResource($sql),
-            $this->getSession()
+            $this->getResultResource($sql)
         );
 
         $this
             ->array($iterator->slice('pika'))
             ->isIdenticalTo(['a', 'b', 'c', 'd'])
             ->array($iterator->slice('id'))
-            ->isIdenticalTo([1, 2, 3, 4])
+            ->isIdenticalTo(['1', '2', '3', '4'])
             ->exception(function() use ($iterator) { return $iterator->slice('no_such_key'); })
             ->isInstanceOf('\InvalidArgumentException')
             ->message->contains('Cound not find field')

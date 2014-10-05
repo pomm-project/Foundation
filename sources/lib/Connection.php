@@ -349,12 +349,8 @@ class Connection
     {
         $ret = @pg_send_query($this->getHandler(), $sql);
 
-        if ($ret === false) {
-            throw new ConnectionException();
-        }
-
         return $this
-            ->testQuery('Anonymous query failed.', $sql)
+            ->testQuery($ret, sprintf("Anonymous query failed '%s'.", $sql))
             ->getQueryResult($sql)
             ;
     }
@@ -495,7 +491,7 @@ class Connection
      * Factor method to test query return and summon getQueryResult().
      *
      * @access protected
-     * @param  bool       $query_return
+     * @param  mixed      $query_return
      * @param  string     $sql
      * @return Connection $this
      */

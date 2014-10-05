@@ -454,17 +454,13 @@ class Connection
      */
     public function sendQueryWithParameters($query, array $parameters = [])
     {
-        $query_ok = pg_send_query_params(
+        $res = pg_send_query_params(
             $this->getHandler(),
             $query,
             $parameters
         );
 
-        if ($query_ok === false) {
-            throw new ConnectionException(sprintf("Error, could not send query ===\n%s\n===.", $sql));
-        }
-
-        return $this->getQueryResult($query);
+        return $this->testQueryAndGetResult($res, $query);
     }
 
     /**
@@ -489,6 +485,24 @@ class Connection
     }
 
     /**
+     * testQueryAndGetResult
+     *
+     * Factor method to test query return and summon getQueryResult().
+     *
+     * @access protected
+     * @param  bool   $query_return
+     * @param  string $sql
+     * @return ResultHandler
+     */
+    protected function testQueryAndGetResult($query_return, $sql)
+    {
+        if ($query_return === false) {
+            throw new ConnectionException(sprintf("Query Error : '%s'.", $sql));
+        }
+
+        return $this->getQueryResult($sql);
+    }
+    /**
      * sendExecuteQuery
      *
      * Execute a prepared statement.
@@ -500,11 +514,9 @@ class Connection
      */
     public function sendExecuteQuery($identifier, array $parameters = [])
     {
-        if (pg_send_execute($this->getHandler(), $identifier, $parameters) === false) {
-            throw new ConnectionException(sprintf("Connection error while executing prepared query '%s'.", $identifier));
-        }
+        $ret = pg_send_execute($this->getHandler(), $identifier, $parameters);
 
-        return $this->getQueryResult(sprintf("prepared query id = '%s'.", $identifier));
+        return $this->testQueryAndGetResult($ret, sprintf("Prepared query '%s'.", $identifier));
     }
 
     /**

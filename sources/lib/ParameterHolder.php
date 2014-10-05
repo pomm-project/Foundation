@@ -43,7 +43,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @access public
      * @param  string          $name
-     * @param  string          $value
+     * @param  string|array    $value
      * @return ParameterHolder $this
      */
     public function setParameter($name, $value)
@@ -73,9 +73,9 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * Returns the parameter "name" or "default" if not set.
      *
      * @access public
-     * @param  string $name
-     * @param  string $default Optional default value if name not set.
-     * @return string Parameter's value or default.
+     * @param  string       $name
+     * @param  string       $default Optional default value if name not set.
+     * @return string|array Parameter's value or default.
      */
     public function getParameter($name, $default = null)
     {

@@ -38,7 +38,10 @@ class PreparedQueryPooler extends ClientPooler
     /**
      * getPoolerType
      *
-     * @see ClientPoolerInterface
+     * @access public
+     * @param  string  SQL query
+     * @return PreparedQuery
+     * @see    ClientPoolerInterface
      */
     public function getClient($sql)
     {

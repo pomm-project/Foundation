@@ -25,9 +25,16 @@ use PommProject\Foundation\ResultHandler;
  */
 class Connection
 {
-    const CONNECTION_STATUS_NONE = 0;
-    const CONNECTION_STATUS_GOOD = 1;
-    const CONNECTION_STATUS_BAD  = 2;
+    const CONNECTION_STATUS_NONE    = 0;
+    const CONNECTION_STATUS_GOOD    = 1;
+    const CONNECTION_STATUS_BAD     = 2;
+    const ISOLATION_READ_COMMITTED  = "READ COMMITTED";  // default
+    const ISOLATION_READ_REPEATABLE = "READ REPEATABLE"; // from Pg 9.1
+    const ISOLATION_SERIALIZABLE    = "SERIALIZABLE";    // changes in 9.1
+    const CONSTRAINTS_DEFERRED      = "DEFERRED";
+    const CONSTRAINTS_IMMEDIATE     = "IMMEDIATE";       // default
+    const ACCESS_MODE_READ_ONLY     = "READ ONLY";
+    const ACCESS_MODE_READ_WRITE    = "READ WRITE";      // default
 
     protected $handler = null;
     protected $parameter_holder;

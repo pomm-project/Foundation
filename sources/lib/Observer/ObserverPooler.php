@@ -44,6 +44,7 @@ class ObserverPooler extends ClientPooler
      * @access public
      * @param  string $channel
      * @return Observer
+     * @see    ClientPoolerInterface
      */
     public function getClient($channel)
     {

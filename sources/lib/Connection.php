@@ -307,9 +307,10 @@ class Connection
         }
 
         if (count($sql) > 0) {
-            if (pg_query($this->getHandler(), join('; ', $sql)) === false) {
-                throw new ConnectionException(sprintf("Error while applying settings '%s'.", join('; ', $sql)));
-            }
+            $this->testQuery(
+                pg_query($this->getHandler(), join('; ', $sql)),
+                sprintf("Error while applying settings '%s'.", join('; ', $sql))
+            );
         }
 
         return $this;
@@ -349,10 +350,13 @@ class Connection
         $ret = @pg_send_query($this->getHandler(), $sql);
 
         if ($ret === false) {
-            throw new ConnectionException(sprintf("Anonymous query « %s » failed.", $sql));
+            throw new ConnectionException();
         }
 
-        return $this->getQueryResult($sql);
+        return $this
+            ->testQuery('Anonymous query failed.', $sql)
+            ->getQueryResult($sql)
+            ;
     }
 
     /**
@@ -369,11 +373,7 @@ class Connection
     public function getQueryResult($sql = null)
     {
         $result = pg_get_result($this->getHandler());
-
-        if ($result === false) {
-            throw new ConnectionException(sprintf("Query result stack is empty."));
-        }
-
+        $this->testQuery($result, 'Query result stack is empty.');
         $status = pg_result_status($result, \PGSQL_STATUS_LONG);
 
         if ($status !== \PGSQL_COMMAND_OK && $status !== \PGSQL_TUPLES_OK) {
@@ -460,7 +460,10 @@ class Connection
             $parameters
         );
 
-        return $this->testQueryAndGetResult($res, $query);
+        return $this
+            ->testQuery($res, $query)
+            ->getQueryResult($query)
+            ;
     }
 
     /**
@@ -475,11 +478,13 @@ class Connection
      */
     public function sendPrepareQuery($identifier, $sql)
     {
-        if (pg_send_prepare($this->getHandler(), $identifier, $sql) === false) {
-            throw new ConnectionException(sprintf("Could not send prepare statement «%s».", $sql));
-        }
-
-        $this->getQueryResult($sql);
+        $this
+            ->testQuery(
+                pg_send_prepare($this->getHandler(), $identifier, $sql),
+                sprintf("Could not send prepare statement «%s».", $sql)
+            )
+            ->getQueryResult($sql)
+            ;
 
         return $this;
     }
@@ -490,17 +495,17 @@ class Connection
      * Factor method to test query return and summon getQueryResult().
      *
      * @access protected
-     * @param  bool   $query_return
-     * @param  string $sql
-     * @return ResultHandler
+     * @param  bool       $query_return
+     * @param  string     $sql
+     * @return Connection $this
      */
-    protected function testQueryAndGetResult($query_return, $sql)
+    protected function testQuery($query_return, $sql)
     {
         if ($query_return === false) {
             throw new ConnectionException(sprintf("Query Error : '%s'.", $sql));
         }
 
-        return $this->getQueryResult($sql);
+        return $this;
     }
     /**
      * sendExecuteQuery
@@ -516,7 +521,10 @@ class Connection
     {
         $ret = pg_send_execute($this->getHandler(), $identifier, $parameters);
 
-        return $this->testQueryAndGetResult($ret, sprintf("Prepared query '%s'.", $identifier));
+        return $this
+            ->testQuery($ret, sprintf("Prepared query '%s'.", $identifier))
+            ->getQueryResult($identifier)
+            ;
     }
 
     /**
@@ -530,10 +538,7 @@ class Connection
     public function getClientEncoding()
     {
         $encoding = pg_client_encoding($this->getHandler());
-
-        if ($encoding === false) {
-            throw new ConnectionException(sprintf("Could not get client encoding."));
-        }
+        $this->testQuery($encoding, 'get client encoding');
 
         return $encoding;
     }
@@ -551,10 +556,8 @@ class Connection
     {
         $result = pg_set_client_encoding($this->getHandler(), $encoding);
 
-        if ($result === -1) {
-            throw new ConnectionException(sprintf("Could not set client encoding '%s'.", $encoding));
-        }
-
-        return $this;
+        return $this
+            ->testQuery((bool) ($result <> -1), sprintf("Set client encoding to '%s'.", $encoding))
+            ;
     }
 }

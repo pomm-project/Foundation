@@ -11,8 +11,7 @@ namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Converter\ConverterInterface;
-use PommProject\Foundation\Client\ClientInterface;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Client\Client;
 
 /**
  * ConverterClient
@@ -25,11 +24,10 @@ use PommProject\Foundation\Session;
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see Client
  */
-class ConverterClient implements ClientInterface
+class ConverterClient extends Client
 {
     protected $converter;
     protected $name;
-    private   $session;
 
     /**
      * __construct
@@ -65,25 +63,6 @@ class ConverterClient implements ClientInterface
     public function getClientIdentifier()
     {
         return $this->name;
-    }
-
-    /**
-     * initialize
-     *
-     * @see ClientInterface
-     */
-    public function initialize(Session $session)
-    {
-        $this->session = $session;
-    }
-
-    /**
-     * shutdown
-     *
-     * @see ClientInterface
-     */
-    public function shutdown()
-    {
     }
 
     /**
@@ -124,22 +103,5 @@ class ConverterClient implements ClientInterface
             $type === null ? $this->getClientIdentifier() : $type,
             $this->getSession()
         );
-    }
-
-    /**
-     * checkInitialized
-     *
-     * Throw an exception if session is not set.
-     *
-     * @access private
-     * @return ConverterClient $this
-     */
-    protected function getSession()
-    {
-        if ($this->session === null) {
-            throw new ConverterException(sprintf("Converter client '%s' is not initialized.", get_class($this)));
-        }
-
-        return $this->session;
     }
 }

@@ -556,4 +556,22 @@ class Connection
             ->testQuery((bool) ($result <> -1), sprintf("Set client encoding to '%s'.", $encoding))
             ;
     }
+
+    /**
+     * getNotification
+     *
+     * Get pending notifications. If no notifications are waiting, NULL is
+     * returned. Otherwise an associative array containing the optional data
+     * and de backend's PID is returned.
+     *
+     * @access public
+     * @param  string $channel
+     * @return array
+     */
+    public function getNotification($channel)
+    {
+        $data = pg_get_notify($this->handler, \PGSQL_ASSOC);
+
+        return $data === false ? null : $data;
+    }
 }

@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\PreparedQuery;
 
-use PommProject\Foundation\Session;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Exception\FoundationException;
@@ -90,11 +89,11 @@ class PreparedQuery extends Client
     public function shutdown()
     {
         $this
-            ->session
+            ->getSession()
             ->getConnection()
             ->executeAnonymousQuery(sprintf(
                 "deallocate %s",
-                $this->session->getConnection()->escapeIdentifier($this->getClientIdentifier())
+                $this->getSession()->getConnection()->escapeIdentifier($this->getClientIdentifier())
             ));
 
         $this->is_prepared = false;
@@ -116,7 +115,7 @@ class PreparedQuery extends Client
         }
 
         return $this
-            ->session
+            ->getSession()
             ->getConnection()
             ->sendExecuteQuery(
                 $this->getClientIdentifier(),
@@ -135,7 +134,7 @@ class PreparedQuery extends Client
     protected function prepare()
     {
         $this
-            ->session
+            ->getSession()
             ->getConnection()
             ->sendPrepareQuery(
                 $this->getClientIdentifier(),

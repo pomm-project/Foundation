@@ -174,6 +174,21 @@ class Connection
     }
 
     /**
+     * getTransactionStatus
+     *
+     * Return the current transaction status.
+     * Return a PHP constant.
+     * @see http://fr2.php.net/manual/en/function.pg-transaction-status.php
+     *
+     * @access public
+     * @return int
+     */
+    public function getTransactionStatus()
+    {
+        return pg_transaction_status($this->handler);
+    }
+
+    /**
      * parseDsn()
      *
      * Sets the different parameters from the DSN.

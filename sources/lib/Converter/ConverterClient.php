@@ -29,7 +29,7 @@ class ConverterClient implements ClientInterface
 {
     protected $converter;
     protected $name;
-    protected $session;
+    private   $session;
 
     /**
      * __construct
@@ -134,7 +134,7 @@ class ConverterClient implements ClientInterface
      * @access private
      * @return ConverterClient $this
      */
-    private function getSession()
+    protected function getSession()
     {
         if ($this->session === null) {
             throw new ConverterException(sprintf("Converter client '%s' is not initialized.", get_class($this)));

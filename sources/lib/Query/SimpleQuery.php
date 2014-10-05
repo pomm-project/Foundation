@@ -14,7 +14,6 @@ use PommProject\Foundation\Query\QueryInterface;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\ConvertedResultIterator;
-use PommProject\Foundation\Session;
 
 /**
  * SimpleQuery
@@ -38,19 +37,15 @@ class SimpleQuery extends Client implements QueryInterface
      */
     public function query($sql, array $parameters = [])
     {
-        if ($this->session === null) {
-            throw new FoundationException(sprintf("Query client is not initialized !"));
-        }
-
         $resource = $this
-            ->session
+            ->getSession()
             ->getConnection()
             ->sendQueryWithParameters(QueryParameterExpander::order($sql), $parameters)
             ;
 
         return new ConvertedResultIterator(
             $resource,
-            $this->session
+            $this->getSession()
         );
     }
 

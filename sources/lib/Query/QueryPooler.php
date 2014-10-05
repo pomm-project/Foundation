@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Query;
 
-use PommProject\Foundation\Session;
 use PommProject\Foundation\Client\ClientPooler;
 
 class QueryPooler extends ClientPooler
@@ -35,12 +34,12 @@ class QueryPooler extends ClientPooler
             $client = '\PommProject\Foundation\Query\SimpleQuery';
         }
 
-        if (!$this->session->hasClient($this->getPoolerType(), trim($client, "\\"))) {
-            $this->session->registerClient(new $client());
+        if (!$this->getSession()->hasClient($this->getPoolerType(), trim($client, "\\"))) {
+            $this->getSession()->registerClient(new $client());
         }
 
         return $this
-            ->session
+            ->getSession()
             ->getClient($this->getPoolerType(), trim($client, "\\"))
             ;
     }

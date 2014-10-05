@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Client\ClientPoolerInterface;
+use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Converter\ConverterClient;
 use PommProject\Foundation\Session;
@@ -25,10 +25,8 @@ use PommProject\Foundation\Session;
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see ClientPooler
  */
-class ConverterPooler implements ClientPoolerInterface
+class ConverterPooler extends ClientPooler
 {
-    protected $session;
-
     /**
      * getPoolerType
      *
@@ -46,12 +44,12 @@ class ConverterPooler implements ClientPoolerInterface
      */
     public function register(Session $session)
     {
-        $this->session = $session;
+        parent::register($session);
         $converter_holder = $session->getDatabaseConfiguration()->getConverterHolder();
         $types = $converter_holder->getTypesWithConverterName();
 
         foreach($types as $type => $name) {
-            $this->session->registerClient(new ConverterClient($type, $converter_holder->getConverter($name)));
+            $this->getSession()->registerClient(new ConverterClient($type, $converter_holder->getConverter($name)));
         }
     }
 
@@ -63,7 +61,7 @@ class ConverterPooler implements ClientPoolerInterface
      */
     public function getClient($name)
     {
-        $client = $this->session->getClient($this->getPoolerType(), $name);
+        $client = $this->getSession()->getClient($this->getPoolerType(), $name);
 
         if ($client === null) {
             throw new ConverterException(sprintf("No converter registered as '%s'.", $name));

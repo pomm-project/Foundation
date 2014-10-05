@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Client;
 
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Session;
 
@@ -27,7 +28,7 @@ use PommProject\Foundation\Session;
  */
 abstract class ClientPooler implements ClientPoolerInterface
 {
-    protected $session;
+    private $session;
 
     /**
      * register
@@ -39,6 +40,23 @@ abstract class ClientPooler implements ClientPoolerInterface
         $this->session = $session;
 
         return $this;
+    }
+
+    /**
+     * getSession
+     *
+     * Check if the session is set and return it.
+     *
+     * @access protected
+     * @return Session
+     */
+    protected function getSession()
+    {
+        if ($this->session === null) {
+            throw new FoundationException(sprintf("Client pooler '%s' is not initialized, session not set.", get_class($this)));
+        }
+
+        return $this->session;
     }
 }
 

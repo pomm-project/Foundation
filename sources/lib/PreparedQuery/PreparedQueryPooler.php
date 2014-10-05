@@ -45,14 +45,14 @@ class PreparedQueryPooler extends ClientPooler
      */
     public function getClient($sql)
     {
-        $query = $this->session->getClient(
+        $query = $this->getSession()->getClient(
             $this->getPoolerType(),
             PreparedQuery::getSignatureFor($sql)
         );
 
         if ($query === null) {
             $query = new PreparedQuery($sql);
-            $this->session->registerClient($query);
+            $this->getSession()->registerClient($query);
         }
 
         return $query;

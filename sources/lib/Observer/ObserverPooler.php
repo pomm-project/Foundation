@@ -49,7 +49,7 @@ class ObserverPooler extends ClientPooler
     public function getClient($channel)
     {
         $observer = $this
-            ->session
+            ->getSession()
             ->getClient($this->getPoolerType(), $channel)
             ;
 

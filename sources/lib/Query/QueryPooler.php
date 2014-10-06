@@ -33,7 +33,7 @@ class QueryPooler extends ClientPooler
     {
         return $this
             ->getSession()
-            ->getClientUsingPooler($this->getPoolerType(), trim($client, "\\"))
+            ->getClient($this->getPoolerType(), trim($client, "\\"))
             ;
     }
 

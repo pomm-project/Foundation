@@ -55,7 +55,7 @@ class ObserverPooler extends ClientPooler
 
         if ($observer === null) {
             $observer = new Observer($channel);
-            $session->registerClient($observer);
+            $this->getSession()->registerClient($observer);
         }
 
         return $observer;

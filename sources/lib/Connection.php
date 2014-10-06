@@ -573,7 +573,7 @@ class Connection
      *
      * @access public
      * @param  string $channel
-     * @return array
+     * @return arrayi|null
      */
     public function getNotification($channel)
     {

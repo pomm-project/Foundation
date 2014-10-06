@@ -71,13 +71,7 @@ class Observer extends Client
     public function initialize(Session $session)
     {
         parent::initialize($session);
-        $this
-            ->executeAnonymousQuery(
-                sprintf(
-                    "listen %s",
-                    $this->escapeIdentifier($this->channel)
-                )
-            );
+        $this->restartListening();
     }
 
     /**
@@ -87,12 +81,7 @@ class Observer extends Client
      */
     public function shutdown()
     {
-        $this->executeAnonymousQuery(
-            sprintf(
-                "unlisten %s",
-                $this->escapeIdentifier($this->channel)
-            )
-        );
+        $this->unlisten($this->channel);
     }
 
     /**
@@ -111,6 +100,68 @@ class Observer extends Client
             ->getConnection()
             ->getNotification($this->channel)
             ;
+    }
+
+    /**
+     * restartListening
+     *
+     * Send a LISTEN command to the backend. This is called in the initialize()
+     * method but it can be unlisten if the listen command took place in a
+     * transaction.
+     *
+     * @access public
+     * @return Otherwise $this
+     */
+    public function restartListening()
+    {
+        return $this->listen($this->channel);
+    }
+
+    /**
+     * listen
+     *
+     * Start to listen on the given channel. The observer automatically starts
+     * listening when registered against the session.
+     * NOTE: When listen is issued in a tranaction it is unlisten when the
+     * transation is commited or rollback.
+     *
+     * @access protected
+     * @param  string    $channel
+     * @return Otherwise $this
+     */
+    protected function listen($channel)
+    {
+        $this
+            ->executeAnonymousQuery(
+                sprintf(
+                    "listen %s",
+                    $this->escapeIdentifier($this->channel)
+                )
+            );
+
+        return $this;
+    }
+
+    /**
+     * unlisten
+     *
+     * Stop listening to events.
+     *
+     * @access protected
+     * @param  string   $channel
+     * @return Observer $this
+     *
+     */
+    protected function unlisten($channel)
+    {
+        $this->executeAnonymousQuery(
+            sprintf(
+                "unlisten %s",
+                $this->escapeIdentifier($channel)
+            )
+        );
+
+        return $this;
     }
 
     /**

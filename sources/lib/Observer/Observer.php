@@ -135,7 +135,7 @@ class Observer extends Client
             ->executeAnonymousQuery(
                 sprintf(
                     "listen %s",
-                    $this->escapeIdentifier($this->channel)
+                    $this->escapeIdentifier($channel)
                 )
             );
 

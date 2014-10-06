@@ -33,7 +33,7 @@ class QueryPooler extends ClientPooler
     {
         return $this
             ->getSession()
-            ->getClientFromPool($this->getPoolerType(), trim($client, "\\"))
+            ->getClientUsingPooler($this->getPoolerType(), trim($client, "\\"))
             ;
     }
 
@@ -49,7 +49,7 @@ class QueryPooler extends ClientPooler
         try {
             $reflection = new \ReflectionClass($client);
 
-            if ($reflexion->implementsInterface('\PommProject\Foundation\Query\QueryInterface') === false) {
+            if ($reflection->implementsInterface('\PommProject\Foundation\Query\QueryInterface') === false) {
                 throw new FoundationException(sprintf("Class '%s' is not a QueryInterface.", $client));
             }
 

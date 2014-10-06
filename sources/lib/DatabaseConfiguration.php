@@ -20,7 +20,7 @@ use PommProject\Foundation\Converter;
  * Holds configuration related to a database for connections. It sets default
  * values for the following settings:
  *
- * default_client_poolers
+ * default:client_poolers
  * configuration
  *
  * @package Pomm
@@ -132,6 +132,7 @@ class DatabaseConfiguration
                     'prepared_statement' => '\PommProject\Foundation\PreparedQuery\PreparedQueryPooler',
                     'query'              => '\PommProject\Foundation\Query\QueryPooler',
                     'converter'          => '\PommProject\Foundation\Converter\ConverterPooler',
+                    'observer'           => '\PommProject\Foundation\Observer\ObserverPooler',
                 ]
             );
 

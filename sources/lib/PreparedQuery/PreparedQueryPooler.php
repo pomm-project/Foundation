@@ -36,25 +36,29 @@ class PreparedQueryPooler extends ClientPooler
     }
 
     /**
-     * getPoolerType
+     * getClientFromPool
      *
-     * @access public
-     * @param  string  SQL query
-     * @return PreparedQuery
-     * @see    ClientPoolerInterface
+     * @see    ClientPooler
+     * @param  string             $sql
+     * @return PreparedQuery|null
      */
-    public function getClient($sql)
+    protected function getClientFromPool($sql)
     {
-        $query = $this->getSession()->getClient(
+        return $this->getSession()->getClient(
             $this->getPoolerType(),
             PreparedQuery::getSignatureFor($sql)
         );
+    }
 
-        if ($query === null) {
-            $query = new PreparedQuery($sql);
-            $this->getSession()->registerClient($query);
-        }
-
-        return $query;
+    /**
+     * createClient
+     *
+     * @see    ClientPooler
+     * @param  string  SQL query
+     * @return PreparedQuery
+     */
+    public function createClient($sql)
+    {
+        return new PreparedQuery($sql);
     }
 }

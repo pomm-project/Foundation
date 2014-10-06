@@ -40,6 +40,9 @@ class ConverterPooler extends ClientPooler
     /**
      * register
      *
+     * When registering to the session, it also registers all the configured
+     * converters.
+     *
      * @see ClientPoolerInterface
      */
     public function register(Session $session)
@@ -48,25 +51,22 @@ class ConverterPooler extends ClientPooler
         $converter_holder = $session->getDatabaseConfiguration()->getConverterHolder();
         $types = $converter_holder->getTypesWithConverterName();
 
-        foreach($types as $type => $name) {
+        foreach ($types as $type => $name) {
             $this->getSession()->registerClient(new ConverterClient($type, $converter_holder->getConverter($name)));
         }
     }
 
     /**
-     * getClient
+     * createClient
      *
-     * @see ClientPoolerInterface
-     * @throw ConverterException if no clients found.
+     * This pooler does not know how to create new converter instances. If a
+     * converter is not found in the pool then it must throw an exception.
+     *
+     * @see   ClientPooler
+     * @throw ConverterException
      */
-    public function getClient($name)
+    public function createClient($identifier)
     {
-        $client = $this->getSession()->getClient($this->getPoolerType(), $name);
-
-        if ($client === null) {
-            throw new ConverterException(sprintf("No converter registered as '%s'.", $name));
-        }
-
-        return $client;
+        throw new ConverterException(sprintf("No converter registered as '%s'.", $identifier));
     }
 }

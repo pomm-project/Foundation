@@ -24,9 +24,46 @@ class QueryPooler extends ClientPooler
     }
 
     /**
+     * getClientFromPool
+     *
+     * @see    ClientPooler
+     * @return QueryInterface|null
+     */
+    protected function getClientFromPool($client)
+    {
+        return $this
+            ->getSession()
+            ->getClientFromPool($this->getPoolerType(), trim($client, "\\"))
+            ;
+    }
+
+    /**
+     * createClient
+     *
+     * @see    ClientPooler
+     * @throw  FoundationException
+     * @return QueryInterface
+     */
+    protected function createClient($client)
+    {
+        try {
+            $reflection = new \ReflectionClass($client);
+
+            if ($reflexion->implementsInterface('\PommProject\Foundation\Query\QueryInterface') === false) {
+                throw new FoundationException(sprintf("Class '%s' is not a QueryInterface.", $client));
+            }
+
+        } catch (\ReflectionException $e) {
+            throw new FoundationException(sprintf("Could not load class '%s'.", $client));
+        }
+
+        return new $client();
+    }
+
+    /**
      * getPoolerType
      *
-     * @see ClientPoolerInterface
+     * @see ClientPooler
      */
     public function getClient($client = null)
     {
@@ -34,13 +71,6 @@ class QueryPooler extends ClientPooler
             $client = '\PommProject\Foundation\Query\SimpleQuery';
         }
 
-        if (!$this->getSession()->hasClient($this->getPoolerType(), trim($client, "\\"))) {
-            $this->getSession()->registerClient(new $client());
-        }
-
-        return $this
-            ->getSession()
-            ->getClient($this->getPoolerType(), trim($client, "\\"))
-            ;
+        return parent::getClient($client);
     }
 }

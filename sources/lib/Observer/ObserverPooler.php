@@ -37,27 +37,14 @@ class ObserverPooler extends ClientPooler
     }
 
     /**
-     * getClient
+     * createClient
      *
-     * Pool an Observer instance.
-     *
-     * @access public
+     * @see    ClientPooler
      * @param  string $channel
      * @return Observer
-     * @see    ClientPoolerInterface
      */
-    public function getClient($channel)
+    protected function createClient($channel)
     {
-        $observer = $this
-            ->getSession()
-            ->getClient($this->getPoolerType(), $channel)
-            ;
-
-        if ($observer === null) {
-            $observer = new Observer($channel);
-            $this->getSession()->registerClient($observer);
-        }
-
-        return $observer;
+        return new Observer($channel);
     }
 }

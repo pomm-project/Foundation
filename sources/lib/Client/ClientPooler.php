@@ -31,6 +31,18 @@ abstract class ClientPooler implements ClientPoolerInterface
     private $session;
 
     /**
+     * createClient
+     *
+     * Create a new client.
+     *
+     * @abstract
+     * @access protected
+     * @param  string $identifier
+     * @return Client
+     */
+    abstract protected function createClient($identifier);
+
+    /**
      * register
      *
      * @see ClientPoolerInterface
@@ -40,6 +52,45 @@ abstract class ClientPooler implements ClientPoolerInterface
         $this->session = $session;
 
         return $this;
+    }
+
+    /**
+     * getClient
+     *
+     * Basic getClient method.
+     *
+     * @access public
+     * @param  string $identifier
+     * @return Client
+     * @see    ClientInterface
+     */
+    public function getClient($identifier)
+    {
+        $client = $this->getClientFromPool($identifier);
+
+        if ($client === null) {
+            $client = $this->createClient($identifier);
+            $this->getSession()->registerClient($client);
+        }
+
+        return $client;
+    }
+
+    /**
+     * getClientFromPool
+     *
+     * How the pooler fetch a client from the pool.
+     *
+     * @access protected
+     * @param  string $identifier
+     * @return Client|null
+     */
+    protected function getClientFromPool($identifier)
+    {
+        return $this
+            ->getSession()
+            ->getClient($this->getPoolerType(), $identifier)
+            ;
     }
 
     /**

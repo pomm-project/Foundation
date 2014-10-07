@@ -9,19 +9,17 @@
  */
 namespace PommProject\Foundation\Exception;
 
-use PommProject\Foundation\Exception\PommException;
-
 /**
- * FoundationException
+ * PommException
  *
- * Base Exception for Pomm's Foundation package.
+ * Base Exception for all Pomm packages.
  *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- * @see \LogicException
+ * @see \Exception
  */
-class FoundationException extends PommException
+class PommException extends \Exception
 {
 }

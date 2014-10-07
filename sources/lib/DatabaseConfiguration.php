@@ -157,12 +157,12 @@ class DatabaseConfiguration
             ->registerConverter(
                 'Number',
                 new Converter\PgNumber(),
-                ['int2', 'int4', 'int8', 'numeric', 'float4', 'float8']
+                ['int2', 'int4', 'int8', 'numeric', 'float4', 'float8', 'oid']
             )
             ->registerConverter(
                 'String',
                 new Converter\PgString(),
-                ['varchar', 'char', 'text', 'uuid', 'tsvector', 'xml', 'bpchar', 'name', 'character varying']
+                ['varchar', 'char', 'text', 'uuid', 'tsvector', 'xml', 'bpchar', 'name', 'character varying', 'regclass']
             )
             ->registerConverter(
                 'Timestamp',

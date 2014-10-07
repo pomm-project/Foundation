@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Inspector;
 
 use PommProject\Foundation\Client\Client;
+use PommProject\Foundation\Where;
 
 /**
  * Inspector
@@ -135,22 +136,25 @@ SQL;
      *
      * @access public
      * @param  string $name
+     * @param  Where  $where optionnal where clause.
      * @return int|null
      */
-    public function getSchemaOid($schema)
+    public function getSchemaOid($schema, Where $where = null)
     {
+        $condition =
+            Where::create("s.nspname = $*", [$schema])
+            ->andWhere($where)
+            ;
         $sql = <<<SQL
 select
     s.oid as oid
 from
-    pg_catalog.pg_namespace s on s.nspname = $*
+    pg_catalog.pg_namespace s
+where
+    :condition
 SQL;
 
-        $iterator = $this
-            ->getSession()
-            ->getQuery()
-            ->query($sql, [$schema])
-            ;
+        $iterator = $this->executeSql($sql, $condition);
 
         return $iterator->isEmpty() ? null : $iterator->current()['oid'];
     }
@@ -189,13 +193,57 @@ SQL;
     /**
      * getSchemaRelations
      *
-     * Return informations on relations in a given schema.
+     * Return informations on relations in a given schema. An additional Where
+     * condition can be passed to filter against other criterias.
      *
      * @access public
      * @param  int    $schema_oid
+     * @param  Where  $where
      * @return array|null
      */
-    public function getSchemaRelations($schema_oid)
+    public function getSchemaRelations($schema_oid, Where $where = null)
     {
+        $condition = Where::create('relnamespace = $*', [$schema_oid])
+            ->andWhere(Where::createWhereIn('relkind', ['r', 'v']))
+            ->andWhere($where)
+            ;
+
+        $sql = <<<SQL
+select
+    cl.relname as name,
+    case
+        when cl.relkind = 'r' then 'table'
+        when cl.relkind = 'v' then 'view'
+        else 'other'
+    end as type,
+    cl.oid as oid
+from
+    pg_catalog.pg_class cl
+where :condition
+SQL;
+
+        return $this->executeSql($sql, $condition);
+    }
+
+    /**
+     * executeSql
+     *
+     * Launch query execution.
+     *
+     * @access protected
+     * @param  string $sql
+     * @param  Where $condition
+     * @return ResultIterator
+     */
+    protected function executeSql($sql, Where $condition = null)
+    {
+        $condition = (new Where)->andWhere($condition);
+        $sql = strtr($sql, [':condition' => $condition]);
+
+        return $this
+            ->getSession()
+            ->getQuery()
+            ->query($sql, $condition->getValues())
+            ;
     }
 }

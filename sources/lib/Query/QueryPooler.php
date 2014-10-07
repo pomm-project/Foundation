@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Query;
 
 use PommProject\Foundation\Client\ClientPooler;
+use PommProject\Foundation\Exception\FoundationException;
 
 class QueryPooler extends ClientPooler
 {

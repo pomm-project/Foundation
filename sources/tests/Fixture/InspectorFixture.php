@@ -40,6 +40,8 @@ Class InspectorFixture extends Client
         $sql[] = "create table inspector_test.no_pk (a_boolean bool, varchar_array character varying[])";
         $sql[] = "create table inspector_test.with_simple_pk (with_simple_pk_id int4 primary key, a_char char, some_timestamps timestamptz[])";
         $sql[] = "create table inspector_test.with_complex_pk (with_complex_pk_id int4, another_id int4, created_at timestamp not null default now(), primary key (with_complex_pk_id, another_id))";
+        $sql[] = "comment on table inspector_test.no_pk is 'This table has no primary key'";
+        $sql[] = "comment on column inspector_test.with_complex_pk.with_complex_pk_id is 'Test comment'";
         $this->executeAnonymousQuery(join('; ', $sql));
     }
 

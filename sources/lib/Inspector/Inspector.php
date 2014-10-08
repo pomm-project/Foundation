@@ -91,35 +91,28 @@ SQL;
     {
         $sql = <<<SQL
 select
-    a.attname as "name",
-    t.typname as "type",
-    n.nspname as "schema",
-    (
-        select
-            substring(pg_catalog.pg_get_expr(d.adbin, d.adrelid) for 128)
-        from
-            pg_catalog.pg_attrdef d
-        where
-            d.adrelid = a.attrelid
-            and
-            d.adnum = a.attnum
-            and
-            a.atthasdef
-  )            as default_value,
-  a.attnotnull as "is_notnull",
-  a.attnum     as "position"
+    att.attname     as "name",
+    typ.typname     as "type",
+    nsp.nspname     as "schema",
+    def.adsrc       as "default",
+    att.attnotnull  as "is_notnull",
+    dsc.description as "comment",
+    att.attnum      as "position"
 from
-  pg_catalog.pg_attribute a
-    join pg_catalog.pg_type t on a.atttypid = t.oid
-    join pg_namespace n on t.typnamespace = n.oid
+  pg_catalog.pg_attribute att
+    join pg_catalog.pg_type typ  on att.atttypid = typ.oid
+    join pg_namespace       nsp  on typ.typnamespace = nsp.oid
+    join pg_class           cla  on att.attrelid = cla.oid
+    left join pg_description dsc on cla.oid = dsc.objoid and att.attnum = dsc.objsubid
+    left join pg_attrdef     def on att.attrelid = def.adrelid and att.attnum = def.adnum
 where
-    a.attrelid = $*
+    att.attrelid = $*
     and
-    a.attnum > 0
+    att.attnum > 0
     and
-    not a.attisdropped
+    not att.attisdropped
 order by
-    a.attnum
+    att.attnum
 SQL;
         return $this
             ->getSession()

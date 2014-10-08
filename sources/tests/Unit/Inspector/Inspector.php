@@ -72,7 +72,7 @@ class Inspector extends SessionAwareAtoum
     {
         $this
             ->integer($this->getInspector()->getTableOid('inspector_test', 'no_pk'))
-            ->variable($this->getInspector()->getTableOid('pg_catalog', 'no table'))
+            ->variable($this->getInspector()->getTableOid('no schema', 'no table'))
             ->isNull()
             ->variable($this->getInspector()->getTableOid('inspector_test', 'no table'))
             ->isNull()
@@ -89,6 +89,8 @@ class Inspector extends SessionAwareAtoum
             ->isIdenticalTo(['with_complex_pk_id', 'another_id', 'created_at'])
             ->array($fields_info->slice('type'))
             ->isIdenticalTo(['int4', 'int4', 'timestamp'])
+            ->array($fields_info->slice('comment'))
+            ->isIdenticalTo(['Test comment', null, null])
             ;
     }
 

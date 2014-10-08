@@ -218,6 +218,27 @@ SQL;
     }
 
     /**
+     * getTableComment
+     *
+     * Return the comment on a table if set. Null otherwise.
+     *
+     * @access public
+     * @param  int    $table_oid
+     * @return string|null
+     */
+    public function getTableComment($table_oid)
+    {
+        $sql      = <<<SQL
+select description from pg_catalog.pg_description where :condition
+SQL;
+
+        $where    = Where::create('objoid = $*', [$table_oid]);
+        $iterator = $this->executeSql($sql, $where);
+
+        return $iterator->isEmpty() ? null : $iterator->current()['description'];
+    }
+
+    /**
      * executeSql
      *
      * Launch query execution.

@@ -135,4 +135,13 @@ class Inspector extends SessionAwareAtoum
             ;
     }
 
+    public function testGetTableComment()
+    {
+        $this
+            ->variable($this->getInspector()->getTableComment($this->getTableOid('with_simple_pk')))
+            ->isNull()
+            ->string($this->getInspector()->getTableComment($this->getTableOid('no_pk')))
+            ->isEqualTo('This table has no primary key')
+            ;
+    }
 }

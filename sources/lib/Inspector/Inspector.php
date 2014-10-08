@@ -162,7 +162,7 @@ SQL;
     /**
      * getPrimaryKey
      *
-     *TODO  Get relation's primary key if any.
+     * Get relation's primary key if any.
      *
      * @access public
      * @param  int $table_oid
@@ -172,22 +172,21 @@ SQL;
     {
         $sql = <<<SQL
 select
-    regexp_matches(pg_catalog.pg_get_indexdef(i.indexrelid, 0, true), e'\\\\((.*)\\\\)', 'gi') as pkey i
+    array_agg(att.attname) as fields
 from
-    pg_catalog.pg_class c,
-    pg_catalog.pg_class c2,
-    pg_catalog.pg_index i
+    pg_catalog.pg_attribute att
+        join pg_catalog.pg_index ind on att.attrelid = ind.indexrelid
 where
-    c.oid = $*
-    and
-    c.oid = i.indrelid
-    and
-    i.indexrelid = c2.oid
-order by
-    i.indisprimary desc,
-    i.indisunique desc,
-    c2.relname
+    :condition
 SQL;
+        $condition =
+            Where::create('ind.indrelid = $*', [$table_oid])
+            ->andWhere('ind.indisprimary')
+            ;
+
+        $pk = $this->executeSql($sql, $condition)->current();
+
+        return $pk['fields'][0] === null ? [] : $pk['fields'];
     }
 
     /**

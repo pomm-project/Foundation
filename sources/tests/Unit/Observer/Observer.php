@@ -11,12 +11,13 @@ namespace PommProject\Foundation\Test\Unit\Observer;
 
 use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 use PommProject\Foundation\Observer\ObserverPooler;
+use PommProject\Foundation\Session;
 
 class Observer extends SessionAwareAtoum
 {
-    protected function registerClientPoolers()
+    protected function initializeSession(Session $session)
     {
-        $this->session
+        $session
             ->registerClientPooler(new ObserverPooler())
             ;
     }

@@ -31,7 +31,7 @@ class PgArray implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
-        if ($data === '') return null;
+        if ($data === 'NULL' || $data === '') return null;
 
         if ($data !== "{NULL}" && $data !== "{}") {
             $converter = $session->getClientUsingPooler('converter', $type);

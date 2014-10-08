@@ -85,15 +85,15 @@ SQL;
      *
      * @access public
      * @param  int    $oid
-     * @return array|null
+     * @return ResultIterator|null
      */
     public function getTableFieldInformation($oid)
     {
         $sql = <<<SQL
 select
-    a.attname as attname,
-    t.typname as type,
-    n.nspname as type_namespace,
+    a.attname as "name",
+    t.typname as "type",
+    n.nspname as "schema",
     (
         select
             substring(pg_catalog.pg_get_expr(d.adbin, d.adrelid) for 128)
@@ -105,9 +105,9 @@ select
             d.adnum = a.attnum
             and
             a.atthasdef
-  )            as defaultval,
-  a.attnotnull as notnull,
-  a.attnum     as index
+  )            as default_value,
+  a.attnotnull as "is_notnull",
+  a.attnum     as "position"
 from
   pg_catalog.pg_attribute a
     join pg_catalog.pg_type t on a.atttypid = t.oid
@@ -125,7 +125,6 @@ SQL;
             ->getSession()
             ->getQuery()
             ->query($sql, [$oid])
-            ->current()
             ;
     }
 
@@ -186,7 +185,7 @@ SQL;
 
         $pk = $this->executeSql($sql, $condition)->current();
 
-        return $pk['fields'][0] === null ? [] : $pk['fields'];
+        return $pk['fields'][0] === null ? [] : array_reverse($pk['fields']);
     }
 
     /**
@@ -219,6 +218,7 @@ select
 from
     pg_catalog.pg_class cl
 where :condition
+order by name asc
 SQL;
 
         return $this->executeSql($sql, $condition);

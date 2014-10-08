@@ -9,10 +9,15 @@
  */
 namespace PommProject\Foundation\Test\Unit;
 
-use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
+use PommProject\Foundation\Session;
+use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 
-class ResultIterator extends BaseConverter
+class ResultIterator extends SessionAwareAtoum
 {
+    protected function initializeSession(Session $session)
+    {
+    }
+
     protected function getPikaSql()
     {
         return <<<SQL

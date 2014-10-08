@@ -15,7 +15,7 @@ use Atoum;
 
 abstract class SessionAwareAtoum extends Atoum
 {
-    protected $session;
+    private $session;
 
     protected function getDatabaseConfiguration()
     {
@@ -26,13 +26,11 @@ abstract class SessionAwareAtoum extends Atoum
     {
         if ($this->session === null) {
             $this->session = new Session($this->getDatabaseConfiguration());
-            $this->registerClientPoolers();
+            $this->initializeSession($this->session);
         }
 
         return $this->session;
     }
 
-    protected function registerClientPoolers()
-    {
-    }
+    abstract protected function initializeSession(Session $session);
 }

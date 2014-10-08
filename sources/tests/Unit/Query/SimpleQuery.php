@@ -9,10 +9,19 @@
  */
 namespace PommProject\Foundation\Test\Unit\Query;
 
-use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
+use PommProject\Foundation\Session;
+use PommProject\Foundation\Converter\ConverterPooler;
+use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 
-class SimpleQuery extends BaseConverter
+class SimpleQuery extends SessionAwareAtoum
 {
+    protected function initializeSession(Session $session)
+    {
+        $session
+            ->registerClientPooler(new ConverterPooler())
+            ;
+    }
+
     protected function getQueryManager()
     {
         $query_manager = $this->newTestedInstance();

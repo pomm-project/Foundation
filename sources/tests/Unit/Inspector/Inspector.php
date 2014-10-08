@@ -9,19 +9,23 @@
  */
 namespace PommProject\Foundation\Test\Unit\Inspector;
 
+use PommProject\Foundation\Session;
+use PommProject\Foundation\Query\QueryPooler;
 use PommProject\Foundation\Inspector\InspectorPooler;
 use PommProject\Foundation\Converter\ConverterPooler;
-use PommProject\Foundation\Query\QueryPooler;
 use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
+use PommProject\Foundation\Test\Fixture\InspectorFixture;
+use PommProject\Foundation\Exception\FoundationException;
 
 class Inspector extends SessionAwareAtoum
 {
-    protected function registerClientPoolers()
+    protected function initializeSession(Session $session)
     {
-        $this->session
+        $session
             ->registerClientPooler(new QueryPooler())
             ->registerClientPooler(new InspectorPooler())
             ->registerClientPooler(new ConverterPooler())
+            ->registerClient(new InspectorFixture())
             ;
     }
 
@@ -32,24 +36,101 @@ class Inspector extends SessionAwareAtoum
             ->getInspector();
     }
 
+    protected function getFixture()
+    {
+        $fixture = $this
+            ->getSession()
+            ->getClient('fixture', 'inspector')
+            ;
+
+        if ($fixture === null) {
+            throw new FoundationException("Unable to get client 'fixture'::'inspector' from the session's client pool.");
+        }
+
+        return $fixture;
+    }
+
+    protected function getTableOid($table_name)
+    {
+        return $this
+            ->getInspector()
+            ->getTableOid('inspector_test', $table_name)
+            ;
+    }
+
+    public function setUp()
+    {
+        $this->getFixture()->createSchema();
+    }
+
+    public function tearDown()
+    {
+        $this->getFixture()->dropSchema();
+    }
+
     public function testGetTableOid()
     {
         $this
-            ->integer($this->getInspector()->getTableOid('pg_catalog', 'pg_class'))
-            ->variable($this->getInspector()->getTableOid('no schema', 'no table'))
+            ->integer($this->getInspector()->getTableOid('inspector_test', 'no_pk'))
+            ->variable($this->getInspector()->getTableOid('pg_catalog', 'no table'))
+            ->isNull()
+            ->variable($this->getInspector()->getTableOid('inspector_test', 'no table'))
             ->isNull()
             ;
     }
 
     public function testGetTableFieldInformation()
     {
-        $oid = $this
-            ->getInspector()
-            ->getTableOid('pg_catalog', 'pg_class')
-            ;
+        $fields_info = $this->getInspector()->getTableFieldInformation($this->getTableOid('with_complex_pk'));
         $this
-            ->array($this->getInspector()->getTableFieldInformation($oid))
-            ->hasKeys(['attname', 'type', 'type_namespace', 'defaultval', 'notnull', 'index'])
+            ->object($fields_info)
+            ->isInstanceOf('\PommProject\Foundation\ResultIterator')
+            ->array($fields_info->slice('name'))
+            ->isIdenticalTo(['with_complex_pk_id', 'another_id', 'created_at'])
+            ->array($fields_info->slice('type'))
+            ->isIdenticalTo(['int4', 'int4', 'timestamp'])
             ;
     }
+
+    public function testGetPrimaryKey()
+    {
+        $inspector = $this->getInspector();
+        $this
+            ->array($inspector->getPrimaryKey($this->getTableOid('no_pk')))
+            ->isEmpty()
+            ->array($inspector->getPrimaryKey($this->getTableOid('with_simple_pk')))
+            ->isIdenticalTo(['with_simple_pk_id'])
+            ->array($inspector->getPrimaryKey($this->getTableOid('with_complex_pk')))
+            ->isIdenticalTo(['with_complex_pk_id', 'another_id'])
+            ;
+    }
+
+    public function testGetSchemaOid()
+    {
+        $this
+            ->integer($this->getInspector()->getSchemaOid('inspector_test'))
+            ->variable($this->getInspector()->getSchemaOid('whatever'))
+            ->isNull()
+            ;
+    }
+
+    public function testGetSchemaRelations()
+    {
+        $tables_info = $this
+            ->getInspector()
+            ->getSchemaRelations($this
+            ->getInspector()
+            ->getSchemaOid('inspector_test')
+        );
+
+        $this
+            ->object($tables_info)
+            ->isInstanceOf('\PommProject\Foundation\ResultIterator')
+            ->array($tables_info->slice('name'))
+            ->isIdenticalTo(['no_pk', 'with_complex_pk', 'with_simple_pk'])
+            ->boolean($this->getInspector()->getSchemaRelations(null)->isEmpty())
+            ->isTrue()
+            ;
+    }
+
 }

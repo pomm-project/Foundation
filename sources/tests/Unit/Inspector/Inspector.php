@@ -134,6 +134,10 @@ class Inspector extends SessionAwareAtoum
             ->isTrue()
             ->array($tables_info->current())
             ->hasKeys(['name', 'type', 'oid', 'comment'])
+            ->string($tables_info->get(0)['comment'])
+            ->isEqualTo('This table has no primary key')
+            ->variable($tables_info->get(1)['comment'])
+            ->isNull()
             ;
     }
 

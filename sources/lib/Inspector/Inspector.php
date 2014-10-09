@@ -208,7 +208,8 @@ select
     des.description as "comment"
 from
     pg_catalog.pg_class cl
-        left join pg_catalog.pg_description des on cl.oid = des.objoid
+        left join pg_catalog.pg_description des on
+            cl.oid = des.objoid and des.objsubid = 0
 where :condition
 order by name asc
 SQL;

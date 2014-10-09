@@ -198,15 +198,17 @@ SQL;
 
         $sql = <<<SQL
 select
-    cl.relname as name,
+    cl.relname      as "name",
     case
         when cl.relkind = 'r' then 'table'
         when cl.relkind = 'v' then 'view'
         else 'other'
-    end as type,
-    cl.oid as oid
+    end             as "type",
+    cl.oid          as "oid",
+    des.description as "comment"
 from
     pg_catalog.pg_class cl
+        left join pg_catalog.pg_description des on cl.oid = des.objoid
 where :condition
 order by name asc
 SQL;

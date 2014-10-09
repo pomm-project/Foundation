@@ -132,6 +132,8 @@ class Inspector extends SessionAwareAtoum
             ->isIdenticalTo(['no_pk', 'with_complex_pk', 'with_simple_pk'])
             ->boolean($this->getInspector()->getSchemaRelations(null)->isEmpty())
             ->isTrue()
+            ->array($tables_info->current())
+            ->hasKeys(['name', 'type', 'oid', 'comment'])
             ;
     }
 

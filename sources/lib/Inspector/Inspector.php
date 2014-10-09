@@ -91,20 +91,20 @@ SQL;
     {
         $sql = <<<SQL
 select
-    att.attname     as "name",
-    typ.typname     as "type",
-    nsp.nspname     as "schema",
-    def.adsrc       as "default",
-    att.attnotnull  as "is_notnull",
-    dsc.description as "comment",
-    att.attnum      as "position"
+    att.attname      as "name",
+    typ.typname      as "type",
+    def.adsrc        as "default",
+    att.attnotnull   as "is_notnull",
+    dsc.description  as "comment",
+    att.attnum       as "position",
+    att.attnum = any(ind.indkey) as "is_primary"
 from
   pg_catalog.pg_attribute att
     join pg_catalog.pg_type typ  on att.atttypid = typ.oid
-    join pg_namespace       nsp  on typ.typnamespace = nsp.oid
     join pg_class           cla  on att.attrelid = cla.oid
-    left join pg_description dsc on cla.oid = dsc.objoid and att.attnum = dsc.objsubid
-    left join pg_attrdef     def on att.attrelid = def.adrelid and att.attnum = def.adnum
+    left join pg_description dsc      on cla.oid = dsc.objoid and att.attnum = dsc.objsubid
+    left join pg_attrdef     def      on att.attrelid = def.adrelid and att.attnum = def.adnum
+    left join pg_catalog.pg_index ind on cla.oid = ind.indrelid
 where
 :condition
 order by

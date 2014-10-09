@@ -91,6 +91,8 @@ class Inspector extends SessionAwareAtoum
             ->isIdenticalTo(['int4', 'int4', 'timestamp'])
             ->array($fields_info->slice('comment'))
             ->isIdenticalTo(['Test comment', null, null])
+            ->array(array_values($fields_info->get(0)))
+            ->isIdenticalTo(['with_complex_pk_id', 'int4', null, true, 'Test comment', 1, true])
             ;
     }
 

@@ -65,14 +65,14 @@ from
     pg_catalog.pg_class c
         left join pg_catalog.pg_namespace n on n.oid = c.relnamespace
 where
-        n.nspname =  $* and c.relname = $*
+:condition
 SQL;
 
-        $iterator = $this
-            ->getSession()
-            ->getQuery()
-            ->query($sql, [$schema, $table])
+        $where = Where::create('n.nspname =  $*', [$schema])
+            ->andWhere('c.relname = $*', [$table])
             ;
+
+        $iterator = $this->executeSql($sql, $where);
 
         return $iterator->isEmpty() ? null : $iterator->current()['oid'];
     }
@@ -106,19 +106,16 @@ from
     left join pg_description dsc on cla.oid = dsc.objoid and att.attnum = dsc.objsubid
     left join pg_attrdef     def on att.attrelid = def.adrelid and att.attnum = def.adnum
 where
-    att.attrelid = $*
-    and
-    att.attnum > 0
-    and
-    not att.attisdropped
+:condition
 order by
     att.attnum
 SQL;
-        return $this
-            ->getSession()
-            ->getQuery()
-            ->query($sql, [$oid])
+        $where = Where::create('att.attrelid = $*', [$oid])
+            ->andWhere('att.attnum > 0')
+            ->andWhere('not att.attisdropped')
             ;
+
+        return $this->executeSql($sql, $where);
     }
 
     /**

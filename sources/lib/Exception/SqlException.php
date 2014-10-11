@@ -25,6 +25,7 @@ use PommProject\Foundation\Exception\FoundationException;
 class SqlException extends FoundationException
 {
     protected $result_resource;
+    protected $sql;
 
     /**
      * __construct
@@ -37,7 +38,16 @@ class SqlException extends FoundationException
     public function __construct($result_resource, $sql)
     {
         $this->result_resource = $result_resource;
-        $this->message = sprintf("«%s».\n\nSQL error state '%s' [%s]\n====\n%s\n====", $sql, $this->getSQLErrorState(), $this->getSQLErrorSeverity(), $this->getSqlErrorMessage());
+        $this->sql = $sql;
+        parent::__construct(
+            sprintf(
+                "«%s».\n\nSQL error state '%s' [%s]\n====\n%s\n====",
+                $sql,
+                $this->getSQLErrorState(),
+                $this->getSQLErrorSeverity(),
+                $this->getSqlErrorMessage()
+            )
+        );
     }
 
     /**

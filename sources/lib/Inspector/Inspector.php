@@ -187,7 +187,7 @@ SQL;
      * @access public
      * @param  int    $schema_oid
      * @param  Where  $where
-     * @return array|null
+     * @return ConvertedResultIterator
      */
     public function getSchemaRelations($schema_oid, Where $where = null)
     {

@@ -6,9 +6,13 @@ This is the foundation component for the Pomm database framework. It works only 
 
 This is experimental software and it may be broken or not non functional. If you are looking for a stable library, look at [Pomm 1.x](http://www.pomm-project.org).
 
-## What is that ?
+## Installation
 
-`Foundation` is the main block of Pomm database framework. It handles connection configuration and sessions.
+Pomm components are available on [packagist](https://packagist.org/packages/pomm-project/) using [composer](https://packagist.org/). To install and use Pomm's foundation, add a require line to `"pomm-project/foundation"` in your `composer.json` file.
+
+## What is Foundation ?
+
+It is the main block of Pomm database framework. It handles connection configuration and sessions.
 
 The easiest way to open a connection to the database server:
 
@@ -19,8 +23,10 @@ The easiest way to open a connection to the database server:
  ... autoloading stuff ..
 */
 
+use PommProject\Foundation\Pomm;
+
 // instantiate the service with the configuration as parameter:
-$pomm = new \PommProject\Foundation\Pomm(['my_db' => ['dsn' => 'pgsql://greg/greg']]);
+$pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name']]);
 
 // get a session from the service:
 $session = $pomm['my_db'];
@@ -28,13 +34,9 @@ $session = $pomm['my_db'];
 
 ## Sessions, clients and poolers
 
-The `Session` instance is the keystone of Foundation. It is a client manager for the database connection handler. A client is a class that needs to interact with the database. All model files are in a way clients of a session. By example, prepared statements are clients of a session. To be able to do its job it needs to do the following:
+The `Session` instance is the keystone of Foundation. It is a client manager for the database connection handler. A client is a class that needs to interact with the database. It registers to the Session so the session injects into it. As soon as a client is registered, it gets access to the database connection and all other clients in the same time. Furthermore, the session does shutdown all the clients properly when going down which may be useful if clients rely on database structure (prepared queries, temporary tables etc.).
 
- * Check if a prepared query already exist
- * If not, instantiate a PreparedQuery and register as client to the session.
- * Execute the query.
-
-This is a bit complicated, in order to make developers life a bit more easy, interactions between clients and session may be delegated to dedicated poolers. All the following steps then become:
+All model files are in a way clients of a session. By example, converter classes or prepared statements are clients of a session. To use a client from the session, call the `$session->getClient()` method. The problem here is that when no client is found, null is returned. To manage clients creation in the pool, `ClientPooler` can be registered. Most of the time, they check in the pool to see if the asked client is registered, if not they instantiate it, register it and send it back. It is possible to ask for a client through a `ClientPooler` using `$session->getClientUsingPooler()` method.
 
 ```php
 <?php
@@ -48,7 +50,7 @@ $pomm['my_db']
     ;
 ```
 
-This can also be written as the following:
+For convenience, it is possible to request a client through a pooler using Session's `__call` method:
 
 ```php
 <?php
@@ -101,7 +103,7 @@ The `query` method returns an iterator on results. Data can then be fetched on d
 ```php
 <?php
 //…
-$pomm = new \PommProject\Foundation\Pomm(['my_db' => ['dsn' => 'pgsql://greg/greg']]);
+$pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://greg/greg']]);
 $iterator = $pomm['my_db']
     ->query('select * from student where age > $*', [20]);
 

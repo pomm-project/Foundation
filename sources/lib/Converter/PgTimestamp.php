@@ -21,6 +21,7 @@ use PommProject\Foundation\Session;
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT <hubert.greg@gmail.com>
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see ConverterInterface
  */
 class PgTimestamp implements ConverterInterface
 {

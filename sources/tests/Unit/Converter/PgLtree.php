@@ -13,11 +13,6 @@ use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
 class PgLtree extends BaseConverter
 {
-    /**
-     * testFromPg
-     *
-     * testFromPg
-     */
     public function testFromPg()
     {
         $converter = $this->newTestedInstance();

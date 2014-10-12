@@ -4,7 +4,7 @@
 
 This is the foundation component for the Pomm database framework. It works only with PHP >= 5.4.4.
 
-This is experimental software and it may be broken or not non functional. If you are looking for a stable library, look at [Pomm 1.x](http://www.pomm-project.org).
+Pomm Foundation is in alpha state, code may change without notice. If you are looking for a stable library, look at [Pomm 1.x](http://www.pomm-project.org).
 
 ## Installation
 
@@ -12,7 +12,7 @@ Pomm components are available on [packagist](https://packagist.org/packages/pomm
 
 ## What is Foundation ?
 
-It is the main block of Pomm database framework. It handles connection configuration and sessions.
+It is the main block of Pomm database framework. It handles connection configuration and sessions. If you are looking for a library to use Postgresql in your web development, you might want to look at [Pomm's model manager](https://github.com/pomm-project/ModelManager). If you want to create a database access layer, Foundation is the right tool.
 
 The easiest way to open a connection to the database server:
 
@@ -42,7 +42,7 @@ All model files are in a way clients of a session. By example, converter classes
 <?php
 // ...
 
-$pomm = new \PommProject\Foundation\Pomm(['my_db' => ['dsn' => 'pgsql://greg/greg']]);
+$pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name']]);
 $pomm['my_db']
     ->getPoolerForType('prepared_query')
     ->getClient('select * from student where age > $*')
@@ -56,7 +56,7 @@ For convenience, it is possible to request a client through a pooler using Sessi
 <?php
 // ...
 
-$pomm = new \PommProject\Foundation\Pomm(['my_db' => ['dsn' => 'pgsql://greg/greg']]);
+$pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name']]);
 $pomm['my_db']
     ->getPreparedQuery('select * from student where age > $*')
     ->execute([20])
@@ -65,17 +65,6 @@ $pomm['my_db']
 
 The point here is to understand that the instantiated clients are automatically reused when they are called several times. Clients are shutdown properly when the session is destroyed by PHP. The second strong point of this system is that all clients own a pointer to the session. So it can use other clients from it.
 
-## How to develop with Foundation ?
-
-In most cases you are interested in using structures and entities from a database schema. This is the job of the Model Manager client provided with another package (yet to create). There may be cases where Model Manager would not fit the job, especially in case of legacy applications (among others):
-
- * Access to the database are stored procedures only.
- * SQL queries are stored in separate files in different directories.
- * You want stats, not entity related computations.
- * …
-
-It is easy to develop client classes and poolers to interact with the session, it is just a matter of implementing the `ClientInterface` or `ClientPoolerInterface` and register them in the session.
-
 ## Querying and converter system.
 
 In foundation, performing a query and return a result as an iterator is a Client too:
@@ -83,7 +72,7 @@ In foundation, performing a query and return a result as an iterator is a Client
 ```php
 <?php
 //…
-$pomm = new \PommProject\Foundation\Pomm(['my_db' => ['dsn' => 'pgsql://greg/greg']]);
+$pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name']]);
 $iterator = $pomm['my_db']
     ->getQuery()
     ->query('select * from student where age > $*', [20])
@@ -103,8 +92,9 @@ The `query` method returns an iterator on results. Data can then be fetched on d
 ```php
 <?php
 //…
-$pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://greg/greg']]);
+$pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name']]);
 $iterator = $pomm['my_db']
+    ->getQuery()
     ->query('select * from student where age > $*', [20]);
 
 printf("Names are: %s.\n", join(', ', $iterator->slice('name')));
@@ -119,49 +109,6 @@ $result = $pomm['my_db']
     ;
 ```
 
-## Tests and project structure
+## Tests
 
-This package uses Atoum as unit test framework. The tests are located in `sources/tests`. The test suite needs to access the database to ensure read and write operations are made in a consistent manner. You need to set up a database for that and fill the `sources/tests/config.php` file with the according DSN.
-
-```
-sources/
-├── lib
-│   ├── Connection.php
-│   ├── Inflector.php
-│   ├── ParameterHolder.php
-│   ├── Pomm.php
-│   ├── QueryParameterExpander.php
-│   ├── ResultIterator.php
-│   ├── Session.php
-│   ├── Where.php
-│   ├── Client
-│   │   ├── ClientHolder.php
-│   │   ├── ClientInterface.php
-│   │   ├── Client.php
-│   │   ├── ClientPoolerInterface.php
-│   │   └── ClientPooler.php
-│   ├── Converter
-│   │   ├── ConverterHolder.php
-│   │   ├── ConverterInterface.php
-│   │   └── …
-│   ├── DatabaseConfiguration.php
-│   ├── Exception
-│   │   ├── ConnectionException.php
-│   │   ├── ConverterException.php
-│   │   ├── FoundationException.php
-│   │   └── SqlException.php
-│   ├── PreparedQuery
-│   │   ├── PreparedQuery.php
-│   │   └── PreparedQueryPooler.php
-│   └── QueryManager
-│       ├── QueryManagerInterface.php
-│       └── SimpleQueryManager.php
-└── tests
-    ├── config.php
-    ├── config.php.dist
-    └── Unit
-        │
-        …
-
-11 directories, 40 files
-```
+This package uses Atoum as unit test framework. The tests are located in `sources/tests`. The test suite needs to access the database to ensure read and write operations are made in a consistent manner. You need to set up a database for that and fill the `sources/tests/config.php` file with the according DSN. For convenience, it is possible to extend class `SessionAwareAtoum` to get a `getSession()` method in the test class. Since the returned session is blank, this class defines an abstract method `initializeSession()` where it is possible to register needed poolers and clients for the tests.

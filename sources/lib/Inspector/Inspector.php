@@ -104,7 +104,7 @@ from
     join pg_class           cla  on att.attrelid = cla.oid
     left join pg_description dsc      on cla.oid = dsc.objoid and att.attnum = dsc.objsubid
     left join pg_attrdef     def      on att.attrelid = def.adrelid and att.attnum = def.adnum
-    left join pg_catalog.pg_index ind on cla.oid = ind.indrelid
+    left join pg_catalog.pg_index ind on cla.oid = ind.indrelid and ind.indisprimary
 where
 :condition
 order by

@@ -1,0 +1,12 @@
+language: php
+php:
+  - "5.4"
+  - "5.5"
+  - "hhvm"
+services: postgresql
+before_script:
+  - psql -c 'CREATE EXTENSION hstore' -U postgres -h 127.0.0.1 travic_ci_test
+  - psql -c 'CREATE EXTENSION ltree' -U postgres -h 127.0.0.1 travic_ci_test
+install: composer install --dev
+script: php vendor/atoum/atoum/bin/atoum -d sources/tests/Unit/
+

@@ -10,7 +10,6 @@
 namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Exception\ConverterException;
-use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Session;
 
 /**
@@ -50,7 +49,6 @@ class PgBoolean implements ConverterInterface
     public function toPg($data, $type, Session $session)
     {
         if ($data === null) return sprintf("NULL::%s", $type);
-
         return sprintf("%s '%s'", $type, $data === true ? "true" : "false");
     }
 }

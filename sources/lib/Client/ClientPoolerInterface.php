@@ -54,7 +54,7 @@ interface ClientPoolerInterface
      * Retrieve a client from session's ClientHolder.
      *
      * @access public
-     * @param  string           $name
+     * @param  string          $name
      * @return ClientInterface
      */
     public function getClient($name);

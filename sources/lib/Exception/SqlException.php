@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Exception;
 
-use PommProject\Foundation\Exception\FoundationException;
 /**
  * SqlException
  *

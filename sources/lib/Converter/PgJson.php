@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Session;
 
@@ -61,7 +60,7 @@ class PgJson implements ConverterInterface
     {
         if ($data === null) {
             return sprintf("NULL::%s", $type);
-        } else if (!is_array($data)) {
+        } elseif (!is_array($data)) {
             throw new ConverterException(
                 sprintf(
                     "Json data is not an array: '%s' given",

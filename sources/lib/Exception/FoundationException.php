@@ -9,8 +9,6 @@
  */
 namespace PommProject\Foundation\Exception;
 
-use PommProject\Foundation\Exception\PommException;
-
 /**
  * FoundationException
  *

@@ -9,17 +9,11 @@
  */
 namespace PommProject\Foundation;
 
-use PommProject\Foundation\DatabaseConfiguration;
-use PommProject\Foundation\Connection;
-use PommProject\Foundation\ParameterHolder;
-use PommProject\Foundation\Inflector;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\Exception\SqlException;
-use PommProject\Foundation\Exception\ConnectionException;
 
 /**
  * Session
@@ -34,7 +28,7 @@ use PommProject\Foundation\Exception\ConnectionException;
  */
 class Session
 {
-    private   $connection;
+    private $connection;
     protected $database_configuration;
     protected $client_holder;
     protected $client_poolers = [];
@@ -152,7 +146,7 @@ class Session
      * @access public
      * @param  string                $type
      * @param  ClientPoolerInterface $client_pooler
-     * @return Session            $this
+     * @return Session               $this
      */
     public function registerClientPooler(ClientPoolerInterface $client_pooler)
     {
@@ -186,7 +180,7 @@ class Session
      * Get the registered for the given type.
      *
      * @access public
-     * @param  string $type
+     * @param  string                $type
      * @throw  FoundationException if pooler does not exist
      * @return ClientPoolerInterface
      */
@@ -212,8 +206,8 @@ class Session
      * FoundationException is thrown.
      *
      * @access public
-     * @param  string $type
-     * @param  string $identifier
+     * @param  string          $type
+     * @param  string          $identifier
      * @return ClientInterface
      */
     public function getClientUsingPooler($type, $identifier)
@@ -227,8 +221,8 @@ class Session
      * Create handy methods to access clients through a pooler.
      *
      * @access public
-     * @param  string $method
-     * @param  array  $arguments
+     * @param  string          $method
+     * @param  array           $arguments
      * @throw  BadFunctionCallException if unknown method
      * @throw  FoundationException      if no poolers found
      * @return ClientInterface

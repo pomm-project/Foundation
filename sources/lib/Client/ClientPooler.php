@@ -10,7 +10,6 @@
 namespace PommProject\Foundation\Client;
 
 use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Session;
 
 /**
@@ -82,7 +81,7 @@ abstract class ClientPooler implements ClientPoolerInterface
      * How the pooler fetch a client from the pool.
      *
      * @access protected
-     * @param  string $identifier
+     * @param  string      $identifier
      * @return Client|null
      */
     protected function getClientFromPool($identifier)
@@ -110,4 +109,3 @@ abstract class ClientPooler implements ClientPoolerInterface
         return $this->session;
     }
 }
-

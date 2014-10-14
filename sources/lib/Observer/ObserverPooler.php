@@ -11,7 +11,6 @@ namespace PommProject\Foundation\Observer;
 
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Client\ClientPooler;
-use PommProject\Foundation\Observer\Observer;
 
 /**
  * ObserverPooler
@@ -40,7 +39,7 @@ class ObserverPooler extends ClientPooler
      * createClient
      *
      * @see    ClientPooler
-     * @param  string $channel
+     * @param  string   $channel
      * @return Observer
      */
     protected function createClient($channel)

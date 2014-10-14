@@ -9,8 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Exception\ConverterException;
-use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Client\Client;
 
 /**
@@ -91,7 +89,7 @@ class ConverterClient extends Client
      * Trigger converter's fromPg conversion method.
      *
      * @access public
-     * @param  mixed $value
+     * @param  mixed  $value
      * @param  string $type
      * @return mixed
      * @see ConverterInterface

@@ -9,10 +9,7 @@
  */
 namespace PommProject\Foundation;
 
-use PommProject\Foundation\ParameterHolder;
-use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Converter\ConverterHolder;
-use PommProject\Foundation\Converter;
 
 /**
  * DatabaseConfiguration
@@ -41,7 +38,7 @@ class DatabaseConfiguration
      *
      * @access public
      * @param  string $name
-     * @param  array $configuration
+     * @param  array  $configuration
      * @return void
      */
     public function __construct(
@@ -64,8 +61,8 @@ class DatabaseConfiguration
      * is set. When no name have been set, it checks in the parameter holder or
      * simply the class name.
      *
-     * @param string $name (null)
-     * @return mixed name it this
+     * @param  string $name (null)
+     * @return mixed  name it this
      */
     public function name($name = null)
     {

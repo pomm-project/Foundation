@@ -11,8 +11,6 @@ namespace PommProject\Foundation\PreparedQuery;
 
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\Client\Client;
-use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\Exception\ConnectionException;
 
 /**
  * PreparedQuery
@@ -25,8 +23,8 @@ use PommProject\Foundation\Exception\ConnectionException;
 class PreparedQuery extends Client
 {
     protected $sql;
-    private   $is_prepared = false;
-    private   $identifier;
+    private $is_prepared = false;
+    private $identifier;
 
     /**
      * getSignatureFor
@@ -49,7 +47,7 @@ class PreparedQuery extends Client
      * Build the prepared query.
      *
      * @access public
-     * @param  string     $sql        SQL query
+     * @param  string $sql SQL query
      * @return void
      */
     public function __construct($sql)

@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Session;
 
@@ -24,7 +23,7 @@ use PommProject\Foundation\Session;
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see ConverterInterface
  */
-class PgHStore implements ConverterInterface
+class PgHstore implements ConverterInterface
 {
     /**
      * @see \Pomm\Converter\ConverterInterface
@@ -74,4 +73,3 @@ class PgHStore implements ConverterInterface
         return sprintf("%s('%s')", $type, join(', ', $insert_values));
     }
 }
-

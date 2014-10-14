@@ -9,9 +9,6 @@
  */
 namespace PommProject\Foundation;
 
-use PommProject\Foundation\Exception\ConnectionException;
-use PommProject\Foundation\Exception\FoundationException;
-
 /**
  * ResultIterator
  *

@@ -66,7 +66,7 @@ class Pomm implements \ArrayAccess
      * Get a configuration.
      *
      * @access public
-     * @param  string $name
+     * @param  string                $name
      * @return DatabaseConfiguration
      */
     public function getConfiguration($name)
@@ -84,7 +84,7 @@ class Pomm implements \ArrayAccess
      * to create one.
      *
      * @access public
-     * @param  string $name
+     * @param  string  $name
      * @return Session
      */
     public function getSession($name)
@@ -103,7 +103,7 @@ class Pomm implements \ArrayAccess
      * previous session for this name is overrided.
      *
      * @access public
-     * @param  string $name
+     * @param  string  $name
      * @return Session
      */
     public function createSession($name)
@@ -136,7 +136,7 @@ class Pomm implements \ArrayAccess
      * @access protected
      * @param  string $name
      * @param  string $class_name
-     * @return Pomm  $this
+     * @return Pomm   $this
      */
     protected function createNewSession($name, $class_name)
     {
@@ -224,7 +224,7 @@ class Pomm implements \ArrayAccess
      *
      * @access public
      * @param  string $name
-     * throw   FoundationException if exists.
+     *                      throw   FoundationException if exists.
      * @return Pomm   $this
      */
     public function checkExistConfiguration($name)
@@ -323,7 +323,7 @@ class Pomm implements \ArrayAccess
      * Create a DatabaseConfiguration instance from configuration definition.
      *
      * @access private
-     * @param  array  $configuration
+     * @param  array                 $configuration
      * @return DatabaseConfiguration
      */
     private function buildDatabaseConfiguration(array $configuration)

@@ -10,8 +10,6 @@ namespace PommProject\Foundation\Exception;
  * file that was distributed with this source code.
  */
 
-use PommProject\Foundation\Exception\FoundationException;
-
 /**
  * ConnectionException
  *
@@ -26,4 +24,3 @@ use PommProject\Foundation\Exception\FoundationException;
 class ConnectionException extends FoundationException
 {
 }
-

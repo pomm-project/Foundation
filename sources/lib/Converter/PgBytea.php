@@ -9,8 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Exception\ConverterException;
-use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Session;
 
 /**
@@ -31,7 +29,6 @@ class PgBytea implements ConverterInterface
     public function toPg($data, $type, Session $session)
     {
         if ($data === null) return sprintf("NULL::%s", $type);
-
         return sprintf(
             "%s '%s'",
             $type,
@@ -51,4 +48,3 @@ class PgBytea implements ConverterInterface
         return $session->getConnection()->unescapeBytea($data);
     }
 }
-

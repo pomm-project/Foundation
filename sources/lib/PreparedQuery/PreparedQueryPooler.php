@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\PreparedQuery;
 
-use PommProject\Foundation\Session;
 use PommProject\Foundation\Client\ClientPooler;
 
 /**

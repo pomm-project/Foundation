@@ -11,7 +11,6 @@ namespace PommProject\Foundation;
 
 use PommProject\Foundation\Exception\ConnectionException;
 use PommProject\Foundation\Exception\SqlException;
-use PommProject\Foundation\ResultHandler;
 
 /**
  * Connection
@@ -79,7 +78,7 @@ class Connection
      * Add configuration settings. If settings exist, they are overridden.
      *
      * @access public
-     * @param  array          $configuration
+     * @param  array      $configuration
      * @return Connection $this
      */
     public function addConfiguration(array $configuration)
@@ -98,8 +97,8 @@ class Connection
      * Add or everride a configuration definition.
      *
      * @access public
-     * @param  string         $name
-     * @param  string         $value
+     * @param  string     $name
+     * @param  string     $value
      * @return Connection
      */
     public function addConfigurationSetting($name, $value)
@@ -451,9 +450,9 @@ class Connection
      * Execute a asynchronous query with parameters and send the results.
      *
      * @access public
-     * @param  string $query
-     * @param  array $parameters
-     * @return ResultHandler     query result wrapper
+     * @param  string        $query
+     * @param  array         $parameters
+     * @return ResultHandler query result wrapper
      */
     public function sendQueryWithParameters($query, array $parameters = [])
     {
@@ -516,8 +515,8 @@ class Connection
      * Execute a prepared statement.
      *
      * @access public
-     * @param  string $identifier
-     * @param  array  $parameters
+     * @param  string        $identifier
+     * @param  array         $parameters
      * @return ResultHandler
      */
     public function sendExecuteQuery($identifier, array $parameters = [])
@@ -560,7 +559,7 @@ class Connection
         $result = pg_set_client_encoding($this->getHandler(), $encoding);
 
         return $this
-            ->testQuery((bool) ($result <> -1), sprintf("Set client encoding to '%s'.", $encoding))
+            ->testQuery((bool) ($result != -1), sprintf("Set client encoding to '%s'.", $encoding))
             ;
     }
 
@@ -572,7 +571,7 @@ class Connection
      * and de backend's PID is returned.
      *
      * @access public
-     * @param  string $channel
+     * @param  string      $channel
      * @return arrayi|null
      */
     public function getNotification($channel)

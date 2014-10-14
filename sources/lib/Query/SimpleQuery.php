@@ -9,8 +9,6 @@
  */
 namespace PommProject\Foundation\Query;
 
-use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\Query\QueryInterface;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\ConvertedResultIterator;

@@ -9,8 +9,6 @@
  */
 namespace PommProject\Foundation\Client;
 
-use PommProject\Foundation\Client\ClientInterface;
-
 /**
  * ClientHolder
  *
@@ -62,8 +60,8 @@ class ClientHolder
      * Return a client by its name or null if no client exist for that name.
      *
      * @access public
-     * @param  string $type
-     * @param  string $name
+     * @param  string          $type
+     * @param  string          $name
      * @return ClientInterface
      */
     public function get($type, $name)

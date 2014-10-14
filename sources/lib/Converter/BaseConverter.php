@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Client\ClientInterface;
 
 abstract class BaseConverter implements ConverterInterface, ClientInterface

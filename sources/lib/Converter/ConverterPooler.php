@@ -11,7 +11,6 @@ namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Exception\ConverterException;
-use PommProject\Foundation\Converter\ConverterClient;
 use PommProject\Foundation\Session;
 
 /**

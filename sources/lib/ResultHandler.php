@@ -78,7 +78,7 @@ class ResultHandler
      * Fetch a row as associative array. Index starts from 0.
      *
      * @access public
-     * @param  int $index
+     * @param  int   $index
      * @throw OutOfBoundsException if $index out of bounds.
      * @return array
      */
@@ -144,7 +144,7 @@ class ResultHandler
      * Return the associated type of a field.
      *
      * @access public
-     * @param  int       $field_no
+     * @param  int    $field_no
      * @return string
      */
     public function getFieldType($name)
@@ -160,7 +160,7 @@ class ResultHandler
      * Return the name from a field number.
      *
      * @access public
-     * @param  int       $field_no
+     * @param  int    $field_no
      * @return string
      */
     public function getFieldName($field_no)
@@ -178,7 +178,7 @@ class ResultHandler
      * Return the field index from its name.
      *
      * @access protected
-     * @param  string    $name
+     * @param  string $name
      * @return long
      */
     protected function getFieldNumber($name)
@@ -226,7 +226,7 @@ class ResultHandler
      * Return the type oid of the given field.
      *
      * @access public
-     * @param  string $name
+     * @param  string   $name
      * @throw  FoundationException on error
      * @return int|null
      */

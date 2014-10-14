@@ -52,8 +52,8 @@ class Inspector extends Client
      * is returned.
      *
      * @access public
-     * @param  string $schema
-     * @param  string $table
+     * @param  string   $schema
+     * @param  string   $table
      * @return int|null
      */
     public function getTableOid($schema, $table)
@@ -84,7 +84,7 @@ SQL;
      * returned.
      *
      * @access public
-     * @param  int    $oid
+     * @param  int                 $oid
      * @return ResultIterator|null
      */
     public function getTableFieldInformation($oid)
@@ -124,8 +124,8 @@ SQL;
      * Return the given schema oid, null if the schema is not found.
      *
      * @access public
-     * @param  string $name
-     * @param  Where  $where optionnal where clause.
+     * @param  string   $name
+     * @param  Where    $where optionnal where clause.
      * @return int|null
      */
     public function getSchemaOid($schema, Where $where = null)
@@ -154,7 +154,7 @@ SQL;
      * Get relation's primary key if any.
      *
      * @access public
-     * @param  int $table_oid
+     * @param  int        $table_oid
      * @return array|null
      */
     public function getPrimaryKey($table_oid)
@@ -185,8 +185,8 @@ SQL;
      * condition can be passed to filter against other criterias.
      *
      * @access public
-     * @param  int    $schema_oid
-     * @param  Where  $where
+     * @param  int                     $schema_oid
+     * @param  Where                   $where
      * @return ConvertedResultIterator
      */
     public function getSchemaRelations($schema_oid, Where $where = null)
@@ -223,7 +223,7 @@ SQL;
      * Return the comment on a table if set. Null otherwise.
      *
      * @access public
-     * @param  int    $table_oid
+     * @param  int         $table_oid
      * @return string|null
      */
     public function getTableComment($table_oid)
@@ -245,8 +245,8 @@ SQL;
      * It Additionally returns the type category.
      *
      * @access public
-     * @param  string $type_name
-     * @param  string $type_schema
+     * @param  string     $type_name
+     * @param  string     $type_schema
      * @return array|null
      */
     public function getTypeInformation($type_name, $type_schema = null)
@@ -280,7 +280,7 @@ SQL;
      * Get type category.
      *
      * @access public
-     * @param  int $oid
+     * @param  int        $oid
      * @return array|null
      */
     public function getTypeCategory($oid)
@@ -309,7 +309,7 @@ SQL;
      * Return all possible values from an enumerated type in its natural order.
      *
      * @access public
-     * @param  int $oid
+     * @param  int        $oid
      * @return array|null
      */
     public function getTypeEnumValues($oid)
@@ -341,7 +341,7 @@ SQL;
      * Return the structure of a composite row.
      *
      * @access public
-     * @param  int $oid
+     * @param  int                     $oid
      * @return ConvertedResultIterator
      */
     public function getCompositeInformation($oid)
@@ -368,13 +368,13 @@ SQL;
      * Launch query execution.
      *
      * @access protected
-     * @param  string $sql
-     * @param  Where $condition
+     * @param  string         $sql
+     * @param  Where          $condition
      * @return ResultIterator
      */
     protected function executeSql($sql, Where $condition = null)
     {
-        $condition = (new Where)->andWhere($condition);
+        $condition = (new Where())->andWhere($condition);
         $sql = strtr($sql, [':condition' => $condition]);
 
         return $this

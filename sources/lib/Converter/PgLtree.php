@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Session;
 
@@ -50,9 +49,8 @@ class PgLtree implements ConverterInterface
     public function toPg($data, $type, Session $session)
     {
         if ($data === null) {
-
             return sprintf("NULL::%s", $type);
-        } else if (!is_array($data)) {
+        } elseif (!is_array($data)) {
 
             throw new ConverterException(
                 sprintf(

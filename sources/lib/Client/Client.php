@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Client;
 
-use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Session;
 
 /**

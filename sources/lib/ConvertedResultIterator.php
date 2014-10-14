@@ -9,12 +9,6 @@
  */
 namespace PommProject\Foundation;
 
-use PommProject\Foundation\Exception\ConnectionException;
-use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\ResultIterator;
-use PommProject\Foundation\ResultHandler;
-use PommProject\Foundation\Session;
-
 /**
  * ConvertedResultIterator
  *
@@ -63,7 +57,7 @@ class ConvertedResultIterator extends ResultIterator
      */
     protected function initTypes()
     {
-        foreach($this->result->getFieldNames() as $index => $name) {
+        foreach ($this->result->getFieldNames() as $index => $name) {
             $this->types[$index] = $this->result->getFieldType($name);
         }
 
@@ -83,7 +77,7 @@ class ConvertedResultIterator extends ResultIterator
     {
         $output_values = [];
 
-        foreach($values as $name => $value) {
+        foreach ($values as $name => $value) {
             $output_values[$name] =
                 $this->convertField($name, $value) ;
         }
@@ -97,8 +91,8 @@ class ConvertedResultIterator extends ResultIterator
      * Return converted value for a result field.
      *
      * @access protected
-     * @param int    $field_no
-     * @param string $value
+     * @param  int    $field_no
+     * @param  string $value
      * @return mixed
      */
     protected function convertField($name, $value)
@@ -106,7 +100,6 @@ class ConvertedResultIterator extends ResultIterator
         $type = $this->result->getFieldType($name);
 
         if (preg_match('/^_(.+)$/', $type, $matchs)) {
-
             return $this
                 ->session
                 ->getClientUsingPooler('converter', 'array')
@@ -133,7 +126,7 @@ class ConvertedResultIterator extends ResultIterator
     public function slice($name)
     {
         $values = [];
-        foreach(parent::slice($name) as $value) {
+        foreach (parent::slice($name) as $value) {
             $values[] = $this->convertField($name, $value);
         }
 

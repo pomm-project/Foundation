@@ -59,7 +59,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * check if the given parameter exists.
      *
      * @access public
-     * @param  string  $name
+     * @param  string $name
      * @return bool
      */
     public function hasParameter($name)

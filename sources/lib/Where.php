@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation;
 
-
 /**
  * Where
  *
@@ -61,7 +60,7 @@ class Where
         $escape = function ($values) use (&$escape) {
                 $escaped_values = [];
 
-                foreach($values as $value) {
+                foreach ($values as $value) {
                     if (is_array($value)) {
                         $escaped_values[] =
                             sprintf("(%s)", join(', ', $escape($value)));
@@ -73,10 +72,10 @@ class Where
                 return $escaped_values;
             };
 
-        $get_values = function($values) {
+        $get_values = function ($values) {
                 $array = [];
 
-                foreach(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($values)) as $value) {
+                foreach (new \RecursiveIteratorIterator(new \RecursiveArrayIterator($values)) as $value) {
                     $array[] = $value;
                 }
 
@@ -94,8 +93,8 @@ class Where
      * __construct
      *
      * @access public
-     * @param string $element  (optional)
-     * @param array  $values   (optional)
+     * @param string $element (optional)
+     * @param array  $values  (optional)
      */
     public function __construct($element = null, array $values = [])
     {
@@ -317,7 +316,7 @@ class Where
 
         $values = [];
 
-        foreach($this->stack as $offset => $where) {
+        foreach ($this->stack as $offset => $where) {
             $values = array_merge($values, $where->getValues());
         }
 

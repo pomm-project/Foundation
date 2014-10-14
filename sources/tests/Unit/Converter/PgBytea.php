@@ -21,7 +21,7 @@ class PgBytea extends BaseConverter
             ->string($output)
             ->string(base64_encode($output))
             ->isEqualTo(base64_encode($binary))
-            ->variable($this->newTestedInstance()->fromPg('NULL', 'bytea', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'bytea', $this->getSession()))
             ->isNull()
             ;
     }

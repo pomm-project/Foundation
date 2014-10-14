@@ -38,7 +38,7 @@ class PgBoolean implements ConverterInterface
                 return null;
             }
 
-            throw new ConverterException(sprintf("Unknown boolean data '%s'.", $data));
+            throw new ConverterException(sprintf("Unknown %s data '%s'.", $type, $data));
         }
 
         return (bool) ($data === 't');

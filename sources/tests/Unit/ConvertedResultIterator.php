@@ -18,14 +18,15 @@ class ConvertedResultIterator extends BaseConverter
         return <<<SQL
 select
     p.id,
-    p.pika
+    p.pika,
+    p.chu
 from
   (values
-    (1::int4, 'a'::text),
-    (2, 'b'),
-    (3, 'c'),
-    (4, 'd')
-  ) p (id, pika)
+    (1::int4, 'a'::text, null::int4[]),
+    (null, 'b', array[null]::int4[]),
+    (3, 'c', array[1]),
+    (4, 'd', array[2, 2])
+  ) p (id, pika, chu)
 SQL;
     }
 
@@ -59,9 +60,9 @@ SQL;
 
         $this
             ->array($iterator->get(0))
-            ->isIdenticalTo(['id' => 1, 'pika' => 'a'])
+            ->isIdenticalTo(['id' => 1, 'pika' => 'a', 'chu' => null])
             ->array($iterator->get(2))
-            ->isIdenticalTo(['id' => 3, 'pika' => 'c'])
+            ->isIdenticalTo(['id' => 3, 'pika' => 'c', 'chu' => [1]])
             ;
     }
 
@@ -114,7 +115,7 @@ SQL;
             ->array($iterator->slice('pika'))
             ->isIdenticalTo(['a', 'b', 'c', 'd'])
             ->array($iterator->slice('id'))
-            ->isIdenticalTo([1, 2, 3, 4])
+            ->isIdenticalTo([1, null, 3, 4])
             ;
     }
 }

@@ -24,7 +24,7 @@ class PgHstore extends BaseConverter
             ->isIdenticalTo(['a' => 'b', 'b' => null, 'a b c' => 'd \'é\' f'])
             ->variable(
                 $converter
-                    ->fromPg('NULL', 'hstore', $this->getSession())
+                    ->fromPg(null, 'hstore', $this->getSession())
             )
             ->isNull()
             ;
@@ -38,7 +38,7 @@ class PgHstore extends BaseConverter
                 $converter
                     ->toPg(null, 'hstore', $this->getSession())
                 )
-            ->isEqualTo('NULL')
+            ->isEqualTo('NULL::hstore')
             ->string(
                 $converter
                     ->toPg(['a' => 'b', 'b' => null, 'a b c' => 'd \'é\' f'], 'hstore', $this->getSession())

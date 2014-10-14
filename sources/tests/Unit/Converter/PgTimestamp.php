@@ -18,7 +18,7 @@ class PgTimestamp extends BaseConverter
         $this
             ->datetime($this->newTestedInstance()->fromPg('2014-09-27 18:51:35.678406+00', 'timestamptz', $this->getSession()))
             ->hasDateAndTime(2014, 9, 27, 18, 51, 35.678406)
-            ->variable($this->newTestedInstance()->fromPg('NULL', 'timestamptz', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'timestamptz', $this->getSession()))
             ->isNull()
             ;
     }

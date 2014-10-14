@@ -33,7 +33,9 @@ class PgLtree implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
-        if ($data === 'NULL' || $data === '') {
+        $data = trim($data);
+
+        if ($data === '') {
             return null;
         }
 
@@ -49,7 +51,7 @@ class PgLtree implements ConverterInterface
     {
         if ($data === null) {
 
-            return 'NULL';
+            return sprintf("NULL::%s", $type);
         } else if (!is_array($data)) {
 
             throw new ConverterException(

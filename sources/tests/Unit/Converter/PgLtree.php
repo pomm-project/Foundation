@@ -22,7 +22,7 @@ class PgLtree extends BaseConverter
                     ->fromPg('_a_b_.c.d', 'ltree', $this->getSession())
             )
             ->isIdenticalTo(['_a_b_', 'c', 'd'])
-            ->variable($converter->fromPg('NULL', 'ltre', $this->getSession()))
+            ->variable($converter->fromPg(null, 'ltree', $this->getSession()))
             ->isNull()
             ;
     }
@@ -37,7 +37,7 @@ class PgLtree extends BaseConverter
             )
             ->isEqualTo("ltree '_a_b_.c.d'")
             ->string($converter->toPg(null, 'ltree', $this->getSession()))
-            ->isEqualTo('NULL')
+            ->isEqualTo('NULL::ltree')
         ;
     }
 }

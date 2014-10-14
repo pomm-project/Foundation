@@ -21,8 +21,10 @@ _;
         $this
             ->string($this->newTestedInstance()->fromPg($string, 'text', $this->getSession()))
             ->isEqualTo("\\\" ''\r")
-            ->variable($this->newTestedInstance()->fromPg('NULL', 'text', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'text', $this->getSession()))
             ->isNull()
+            ->string($this->newTestedInstance()->fromPg(' ', 'text', $this->getSession()))
+            ->isEqualTo(' ')
             ->string($this->newTestedInstance()->fromPg('', 'text', $this->getSession()))
             ->isEqualTo('')
             ;

@@ -32,7 +32,7 @@ class PgTimestamp implements ConverterInterface
     {
         $data = trim($data);
 
-        return $data !== 'NULL' ? new \DateTime($data) : null;
+        return $data !== '' ? new \DateTime($data) : null;
     }
 
     /**

@@ -22,7 +22,9 @@ class PgBoolean extends BaseConverter
             ->isFalse()
             ->exception(function() { $this->newTestedInstance()->fromPg('whatever', 'bool', $this->getSession()); })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
-            ->message->contains('Unknown boolean data')
+            ->message->contains('Unknown bool data')
+            ->variable($this->newTestedInstance()->fromPg(null, 'bool', $this->getSession()))
+            ->isNull()
             ;
     }
 

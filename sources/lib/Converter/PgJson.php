@@ -33,7 +33,7 @@ class PgJson implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
-        if ($data === 'NULL') {
+        if (trim($data) === '') {
             return null;
         }
 
@@ -60,7 +60,7 @@ class PgJson implements ConverterInterface
     public function toPg($data, $type, Session $session)
     {
         if ($data === null) {
-            return 'NULL';
+            return sprintf("NULL::%s", $type);
         } else if (!is_array($data)) {
             throw new ConverterException(
                 sprintf(

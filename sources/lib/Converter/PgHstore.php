@@ -31,7 +31,7 @@ class PgHStore implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
-        if ($data === 'NULL' || $data === '') {
+        if ($data ===  null) {
             return null;
         }
 
@@ -50,7 +50,7 @@ class PgHStore implements ConverterInterface
     public function toPg($data, $type, Session $session)
     {
         if ($data === null) {
-            return 'NULL';
+            return sprintf("NULL::%s", $type);
         }
 
         if (!is_array($data)) {

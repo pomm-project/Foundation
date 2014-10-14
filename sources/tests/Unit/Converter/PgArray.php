@@ -18,6 +18,12 @@ class PgArray extends BaseConverter
         $converter = $this->newTestedInstance();
 
         $this
+            ->variable($converter->fromPg(null, 'int4', $this->getSession()))
+            ->isNull()
+            ->array($converter->fromPg('{}', 'int4', $this->getSession()))
+            ->isIdenticalTo([])
+            ->array($converter->fromPg('{NULL}', 'int4', $this->getSession()))
+            ->isIdenticalTo([null])
             ->array($converter->fromPg('{1,2,3,NULL}', 'int4', $this->getSession()))
             ->isIdenticalTo([1, 2, 3, null])
             ->array($converter->fromPg('{1.634,2.00001,3.99999,NULL}', 'float4', $this->getSession()))
@@ -43,6 +49,10 @@ class PgArray extends BaseConverter
     {
         $converter = $this->newTestedInstance();
         $this
+            ->string($converter->toPg(null, 'int4', $this->getSession()))
+            ->isEqualTo('NULL::int4[]')
+            ->string($converter->toPg([null], 'int4', $this->getSession()))
+            ->isEqualTo('ARRAY[NULL::int4]::int4[]')
             ->string($converter->toPg([1, 2, 3, null], 'int4', $this->getSession()))
             ->isEqualTo("ARRAY[int4 '1',int4 '2',int4 '3',NULL::int4]::int4[]")
             ->string($converter->toPg([1.634, 2.000, 3.99999, null], 'float4', $this->getSession()))
@@ -51,11 +61,17 @@ class PgArray extends BaseConverter
             ->isEqualTo("ARRAY[varchar 'ab a',varchar 'aba',varchar 'a b a',NULL::varchar]::varchar[]")
             ->string($converter->toPg([true, true, false, null], 'bool', $this->getSession()))
             ->isEqualTo("ARRAY[bool 'true',bool 'true',bool 'false',NULL::bool]::bool[]")
-            ->string($converter->toPg([
-                new \DateTime('2014-09-29 18:24:54.591767'),
-                new \DateTime('2014-07-29 14:50:01'),
-                new \DateTime('2012-12-14 04:17:09.063948'),
-            ], 'timestamp', $this->getSession()))
-            ;
+            ->string(
+                $converter->toPg(
+                    [
+                        new \DateTime('2014-09-29 18:24:54.591767'),
+                        new \DateTime('2014-07-29 14:50:01'),
+                        new \DateTime('2012-12-14 04:17:09.063948'),
+                    ],
+                    'timestamp',
+                    $this->getSession()
+                )
+            )
+        ;
     }
 }

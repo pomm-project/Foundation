@@ -31,16 +31,18 @@ class PgArray implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
-        if ($data === 'NULL' || $data === '') return null;
+        if ($data === null || $data === 'NULL') {
+            return null;
+        }
 
-        if ($data !== "{NULL}" && $data !== "{}") {
+        if ($data !== "{}") {
             $converter = $session->getClientUsingPooler('converter', $type);
 
             return array_map(function ($val) use ($converter, $type) {
                     return $val !== "NULL" ? $converter->fromPg($val, $type) : null;
                 }, str_getcsv(trim($data, "{}")));
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -51,7 +53,7 @@ class PgArray implements ConverterInterface
     {
         if (!is_array($data)) {
             if (is_null($data)) {
-                return 'NULL';
+                return sprintf("NULL::%s[]", $type);
             }
 
             throw new ConverterException(sprintf("Array converter toPg() data must be an array ('%s' given).", gettype($data)));

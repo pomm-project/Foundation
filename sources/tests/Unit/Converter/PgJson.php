@@ -29,6 +29,7 @@ JSON;
                 )
             )
             ->isIdenticalTo(["az" => ['b' => [' c ', 'd'], 'e' => ['fé' => 'gù']], 'h' => ['\'i\'', 'j']])
+            ->variable($converter->fromPg(null, 'json', $this->getSession()))
         ;
     }
 
@@ -42,6 +43,12 @@ JSON;
                     ->toPg($data, 'json', $this->getSession())
                 )
             ->isEqualTo('json \'{"a":{"b":[" c ","d"],"e":"f"},"g":["h","i"]}\'')
+            ->string(
+                $this
+                    ->newTestedInstance()
+                    ->toPg(null, 'json', $this->getSession())
+                )
+            ->isEqualTo('NULL::json')
             ;
     }
 }

@@ -16,6 +16,7 @@ use PommProject\Foundation\Converter\ConverterPooler;
 use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 use PommProject\Foundation\Test\Fixture\InspectorFixture;
 use PommProject\Foundation\Exception\FoundationException;
+use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
 
 class Inspector extends SessionAwareAtoum
 {
@@ -23,6 +24,7 @@ class Inspector extends SessionAwareAtoum
     {
         $session
             ->registerClientPooler(new QueryPooler())
+            ->registerClientPooler(new PreparedQueryPooler())
             ->registerClientPooler(new InspectorPooler())
             ->registerClientPooler(new ConverterPooler())
             ->registerClient(new InspectorFixture())
@@ -150,6 +152,33 @@ class Inspector extends SessionAwareAtoum
             ->isNull()
             ->string($this->getInspector()->getTableComment($this->getTableOid('no_pk')))
             ->isEqualTo('This table has no primary key')
+            ;
+    }
+
+    public function getTypeCategory()
+    {
+        $result = $this->getInspector()->getTableOid('someone', 'inspector_test');
+
+        $this
+            ->isArray($result)
+            ->hasKeys(['oid', 'category'])
+            ;
+        $oid_result = $this->getInspector()->getTypeCategory($result['oid']);
+
+        $this
+            ->array($oid_result)
+            ->isIdenticalTo(['name' => 'inspector_test.someone', 'category' => 'C'])
+            ;
+    }
+
+    public function testGetTypeEnumValues()
+    {
+        $result = $this->getInspector()->getTypeInformation('sponsor_rating', 'inspector_test');
+        $this
+            ->array($this->getInspector()->getTypeEnumValues($result['oid']))
+            ->isIdenticalTo(['platinum', 'gold', 'silver', 'bronze', 'aluminium'])
+            ->variable($this->getInspector()->getTypeEnumValues(1))
+            ->isNull()
             ;
     }
 }

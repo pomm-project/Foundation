@@ -35,14 +35,17 @@ Class InspectorFixture extends Client
     public function createSchema()
     {
         $this->dropSchema();
-        $sql = [];
-        $sql[] = "create schema inspector_test";
-        $sql[] = "create table inspector_test.no_pk (a_boolean bool, varchar_array character varying[])";
-        $sql[] = "create table inspector_test.with_simple_pk (with_simple_pk_id int4 primary key, a_char char, some_timestamps timestamptz[])";
-        $sql[] = "create table inspector_test.with_complex_pk (with_complex_pk_id int4, another_id int4, created_at timestamp not null default now(), primary key (with_complex_pk_id, another_id))";
-        $sql[] = "create index inspector_test_with_complex_pk_created_at on inspector_test.with_complex_pk (created_at)";
-        $sql[] = "comment on table inspector_test.no_pk is 'This table has no primary key'";
-        $sql[] = "comment on column inspector_test.with_complex_pk.with_complex_pk_id is 'Test comment'";
+        $sql = [
+            "create schema inspector_test",
+            "create table inspector_test.no_pk (a_boolean bool, varchar_array character varying[])",
+            "create table inspector_test.with_simple_pk (with_simple_pk_id int4 primary key, a_char char, some_timestamps timestamptz[])",
+            "create table inspector_test.with_complex_pk (with_complex_pk_id int4, another_id int4, created_at timestamp not null default now(), primary key (with_complex_pk_id, another_id))",
+            "create index inspector_test_with_complex_pk_created_at on inspector_test.with_complex_pk (created_at)",
+            "comment on table inspector_test.no_pk is 'This table has no primary key'",
+            "comment on column inspector_test.with_complex_pk.with_complex_pk_id is 'Test comment'",
+            "create type inspector_test.someone as (first_names varchar[], last_name varchar, age int)",
+            "create type inspector_test.sponsor_rating as enum ('platinum', 'gold', 'silver', 'bronze', 'aluminium')",
+        ];
         $this->executeAnonymousQuery(join('; ', $sql));
     }
 

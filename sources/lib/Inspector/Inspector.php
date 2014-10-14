@@ -100,11 +100,11 @@ select
     att.attnum = any(ind.indkey) as "is_primary"
 from
   pg_catalog.pg_attribute att
-    join pg_catalog.pg_type typ  on att.atttypid = typ.oid
-    join pg_class           cla  on att.attrelid = cla.oid
-    left join pg_description dsc      on cla.oid = dsc.objoid and att.attnum = dsc.objsubid
-    left join pg_attrdef     def      on att.attrelid = def.adrelid and att.attnum = def.adnum
-    left join pg_catalog.pg_index ind on cla.oid = ind.indrelid and ind.indisprimary
+    join pg_catalog.pg_type  typ  on att.atttypid = typ.oid
+    join pg_catalog.pg_class cla  on att.attrelid = cla.oid
+    left join pg_catalog.pg_description dsc on cla.oid = dsc.objoid and att.attnum = dsc.objsubid
+    left join pg_catalog.pg_attrdef def     on att.attrelid = def.adrelid and att.attnum = def.adnum
+    left join pg_catalog.pg_index ind       on cla.oid = ind.indrelid and ind.indisprimary
 where
 :condition
 order by
@@ -239,6 +239,132 @@ SQL;
     }
 
     /**
+     * getTypeInformation
+     *
+     * Return the Oid of the given type name.
+     * It Additionally returns the type category.
+     *
+     * @access public
+     * @param  string $type_name
+     * @param  string $type_schema
+     * @return array|null
+     */
+    public function getTypeInformation($type_name, $type_schema = null)
+    {
+        $condition = Where::create("t.typname = $*", [$type_name]);
+        $sql = <<<SQL
+select
+    t.oid as "oid",
+    t.typcategory as "category"
+from
+    pg_catalog.pg_type t :join
+where
+    :condition
+SQL;
+
+        if ($type_schema !== null) {
+            $sql = strtr($sql, [':join' => 'join pg_namespace n on n.oid = t.typnamespace']);
+            $condition->andWhere('n.nspname = $*', [$type_schema]);
+        } else {
+            $sql = strtr($sql, [':join' => '']);
+        }
+
+        $iterator = $this->executeSql($sql, $condition);
+
+        return $iterator->isEmpty() ? null : $iterator->current();
+    }
+
+    /**
+     * getTypeCategory
+     *
+     * Get type category.
+     *
+     * @access public
+     * @param  int $oid
+     * @return array|null
+     */
+    public function getTypeCategory($oid)
+    {
+        $sql = <<<SQL
+select
+    case
+        when n.nspname is null then t.type_name
+        else n.nspname||'.'||t.type_name
+    end as "name",
+    t.typcategory as "category"
+from
+    pg_catalog.pg_type t
+        left join pg_namespace n on n.oid = t.typnamespace
+where
+    :condition
+SQL;
+        $iterator = $this->executeSql($sql, Where::create('t.oid = $*', [$oid]));
+
+        return $iterator->isEmpty() ? null : $iterator->current();
+    }
+
+    /**
+     * getTypeEnumValues
+     *
+     * Return all possible values from an enumerated type in its natural order.
+     *
+     * @access public
+     * @param  int $oid
+     * @return array|null
+     */
+    public function getTypeEnumValues($oid)
+    {
+        $sql = <<<SQL
+with
+    enum_value as (
+        select
+            e.enumlabel as "label"
+        from
+            pg_catalog.pg_enum e
+        where
+            :condition
+    )
+select array_agg(label) as labels from enum_value
+SQL;
+
+        $result = $this
+            ->executeSql($sql, Where::create('e.enumtypid = $*', [$oid]))
+            ->current()
+            ;
+
+        return $result['labels'];
+    }
+
+    /**
+     * getCompositeInformation
+     *
+     * Return the structure of a composite row.
+     *
+     * @access public
+     * @param  int $oid
+     * @return ConvertedResultIterator
+     */
+    public function getCompositeInformation($oid)
+    {
+        $sql = <<<SQL
+select
+    a.attname as "name",
+    t.typname as "type"
+from
+    pg_type orig
+        join pg_catalog.pg_class c      on orig.typrelid = c.oid
+        join pg_catalog.pg_attribute a  on a.attrelid = c.oid and a.attnum > 0
+        join pg_catalog.pg_type t       on t.oid = a.atttypid
+where
+    :condition
+SQL;
+
+        $iterator = $this->executeSql($sql, Where::create('orig.oid = $*', [$oid]));
+
+        return $this->executeSql($sql, $where);
+    }
+
+    /**
      * executeSql
      *
      * Launch query execution.
@@ -255,7 +381,7 @@ SQL;
 
         return $this
             ->getSession()
-            ->getQuery()
+            ->getClientUsingPooler('query', '\PommProject\Foundation\PreparedQuery\PreparedQueryQuery')
             ->query($sql, $condition->getValues())
             ;
     }

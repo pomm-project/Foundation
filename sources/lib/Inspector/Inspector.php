@@ -359,9 +359,7 @@ where
     :condition
 SQL;
 
-        $iterator = $this->executeSql($sql, Where::create('orig.oid = $*', [$oid]));
-
-        return $this->executeSql($sql, $where);
+        return $this->executeSql($sql, Where::create('orig.oid = $*', [$oid]));
     }
 
     /**

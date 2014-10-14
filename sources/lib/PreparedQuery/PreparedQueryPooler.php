@@ -32,7 +32,7 @@ class PreparedQueryPooler extends ClientPooler
      */
     public function getPoolerType()
     {
-        return 'prepared_statement';
+        return 'prepared_query';
     }
 
     /**

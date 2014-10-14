@@ -63,7 +63,7 @@ class PreparedQuery extends Client
      */
     public function getClientType()
     {
-        return 'prepared_statement';
+        return 'prepared_query';
     }
 
     /**

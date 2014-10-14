@@ -288,7 +288,7 @@ SQL;
         $sql = <<<SQL
 select
     case
-        when n.nspname is null then t.type_name
+        when n is null then t.type_name
         else n.nspname||'.'||t.type_name
     end as "name",
     t.typcategory as "category"

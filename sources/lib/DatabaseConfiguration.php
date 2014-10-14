@@ -129,7 +129,7 @@ class DatabaseConfiguration
             ->setDefaultValue(
                 'default:client_poolers',
                 [
-                    'prepared_statement' => '\PommProject\Foundation\PreparedQuery\PreparedQueryPooler',
+                    'prepared_query'     => '\PommProject\Foundation\PreparedQuery\PreparedQueryPooler',
                     'query'              => '\PommProject\Foundation\Query\QueryPooler',
                     'converter'          => '\PommProject\Foundation\Converter\ConverterPooler',
                     'observer'           => '\PommProject\Foundation\Observer\ObserverPooler',

@@ -75,7 +75,8 @@ SQL;
             $this->getSession()
         );
 
-        $this->integer($iterator->count())
+        $this
+            ->integer($iterator->count())
             ->isEqualTo(1)
             ->array($iterator->current()['array_one'])
             ->isIdenticalTo([1, 2, 3, null])

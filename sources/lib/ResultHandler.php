@@ -219,4 +219,30 @@ class ResultHandler
     {
         return (bool) (pg_field_num($this->handler, $name) > -1);
     }
+
+    /**
+     * getTypeOid
+     *
+     * Return the type oid of the given field.
+     *
+     * @access public
+     * @param  string $name
+     * @throw  FoundationException on error
+     * @return int|null
+     */
+    public function getTypeOid($name)
+    {
+        $ret = pg_field_type_oid($this->handler, $name);
+
+        if ($ret === false) {
+            throw new FoundationException(
+                sprintf(
+                    "Error while fetching type oid for field '%s'.",
+                    $name
+                )
+            );
+        }
+
+        return $ret;
+    }
 }

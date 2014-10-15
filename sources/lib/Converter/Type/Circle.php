@@ -66,4 +66,22 @@ class Circle
     {
         return new Point($description);
     }
+
+    /**
+     * __toString
+     *
+     * Create a string representation of the Cicle.
+     * Actually, it dumps a SQL compatible circle representation.
+     *
+     * @access public
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            "circle(%s,%s)",
+            $this->center->__toString(),
+            $this->radius
+        );
+    }
 }

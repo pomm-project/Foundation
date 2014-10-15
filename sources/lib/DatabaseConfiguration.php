@@ -170,9 +170,9 @@ class DatabaseConfiguration
             ->registerConverter('Binary', new Converter\PgBytea(), ['bytea'])
             ->registerConverter('Point', new Converter\Geometry\PgPoint(), ['point'])
             ->registerConverter('Circle', new Converter\Geometry\PgCircle(), ['circle'])
+            ->registerConverter('JSON', new Converter\PgJson(), ['json', 'jsonb'])
             //->registerConverter('NumberRange', new Converter\PgNumberRange(), ['int4range', 'int8range', 'numrange'])
             //->registerConverter('TsRange', new Converter\PgTsRange(), ['tsrange', 'daterange'])
-            //->registerConverter('JSON', new Converter\PgJSON(), ['json', 'jsonb'])
             ;
 
         return $this;

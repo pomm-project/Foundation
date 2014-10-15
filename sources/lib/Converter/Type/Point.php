@@ -50,4 +50,21 @@ class Point
         $this->x = (float) $matchs[1];
         $this->y = (float) $matchs[2];
     }
+
+    /**
+     * __toString
+     *
+     * Return a string representation of Point.
+     *
+     * @access public
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            "point(%s,%s)",
+            $this->x,
+            $this->y
+        );
+    }
 }

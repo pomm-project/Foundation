@@ -66,6 +66,6 @@ class PgPoint implements ConverterInterface
             $data = $this->fromPg($data, $type, $session);
         }
 
-        return sprintf("point(%s,%s)", $data->x, $data->y);
+        return $data->__toString();
     }
 }

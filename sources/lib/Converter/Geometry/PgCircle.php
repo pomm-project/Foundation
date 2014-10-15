@@ -76,13 +76,6 @@ class PgCircle implements ConverterInterface
             $data = $this->fromPg($data, $type, $session);
         }
 
-        return sprintf(
-            "circle(%s,%s)",
-            $session
-                ->getClientUsingPooler('converter', 'point')
-                ->toPg($data->center)
-                ,
-            $data->radius
-        );
+        return $data->__toString();
     }
 }

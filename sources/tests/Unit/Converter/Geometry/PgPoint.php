@@ -19,15 +19,21 @@ class PgPoint extends BaseConverter
         $this
             ->object($this->newTestedInstance()->fromPg('(1.2345,-9.87654)', 'point', $this->getSession()))
             ->isInstanceOf('PommProject\Foundation\Converter\Type\Point')
-            ->isEqualTo(new Point(1.2345, -9.87654))
             ->variable($this->newTestedInstance()->fromPg(null, 'point', $this->getSession()))
             ->isNull()
+            ;
+        $point = $this->newTestedInstance()->fromPg('(1.2345,-9.87654)', 'point', $this->getSession());
+        $this
+            ->float($point->x)
+            ->isEqualTo(1.2345)
+            ->float($point->y)
+            ->isEqualTo(-9.87654)
             ;
     }
 
     public function testToPg()
     {
-        $point = new Point(1.2345, -9.87654);
+        $point = new Point('(1.2345, -9.87654)');
         $this
             ->string($this->newTestedInstance()->toPg($point, 'point', $this->getSession()))
             ->isEqualTo('point(1.2345,-9.87654)')

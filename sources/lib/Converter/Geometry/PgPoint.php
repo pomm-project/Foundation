@@ -33,24 +33,22 @@ class PgPoint implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
-        $data = trim($data, ' ()');
 
-        if (!preg_match('/([0-9e\-+\.]+),([0-9e\-+\.]+)/', $data, $matchs)) {
-            if ($data === '') {
-                return null;
-            }
-
-            throw new ConverterException(
-                sprintf(
-                    "Could not parse point representation '%s'.",
-                    $data
-                )
-            );
+        if ($data === null) {
+            return null;
         }
 
         $class = $this->type_class_name;
 
-        return new $class((float) $matchs[1], (float) $matchs[2]);
+        try {
+            return new $class($data);
+        } catch (\InvalidArgumentException $e) {
+            throw new ConverterException(
+                sprintf("Point conversion error."),
+                null,
+                $e
+            );
+        }
     }
 
     /**

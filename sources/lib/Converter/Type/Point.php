@@ -27,16 +27,27 @@ class Point
     /**
      * __construct
      *
-     * Set point's coordinates.
+     * Create a point from a string description.
      *
      * @access public
-     * @param  float $x
-     * @param  float $y
+     * @param  string $description
      * @return void
      */
-    public function __construct($x, $y)
+    public function __construct($description)
     {
-        $this->x = $x;
-        $this->y = $y;
+        $description = trim($description, ' ()');
+
+        if (!preg_match('/([0-9e\-+\.]+), *([0-9e\-+\.]+)/', $description, $matchs)) {
+
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Could not parse point representation '%s'.",
+                    $description
+                )
+            );
+        }
+
+        $this->x = (float) $matchs[1];
+        $this->y = (float) $matchs[2];
     }
 }

@@ -59,7 +59,7 @@ class InspectorPooler extends ClientPooler
     protected function createClient($identifier)
     {
         try {
-            $reflection = new \ReflectionClass($identifier);
+            new \ReflectionClass($identifier);
         } catch (\ReflectionException $e) {
             throw new FoundationException(
                 sprintf(

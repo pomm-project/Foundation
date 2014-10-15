@@ -171,7 +171,7 @@ class DatabaseConfiguration
             ->registerConverter('Point', new Converter\Geometry\PgPoint(), ['point'])
             ->registerConverter('Circle', new Converter\Geometry\PgCircle(), ['circle'])
             ->registerConverter('JSON', new Converter\PgJson(), ['json', 'jsonb'])
-            //->registerConverter('NumberRange', new Converter\PgNumberRange(), ['int4range', 'int8range', 'numrange'])
+            ->registerConverter('NumberRange', new Converter\PgNumRange(), ['int4range', 'int8range', 'numrange'])
             //->registerConverter('TsRange', new Converter\PgTsRange(), ['tsrange', 'daterange'])
             ;
 

@@ -9,10 +9,7 @@
  */
 namespace PommProject\Foundation\Converter\Geometry;
 
-use PommProject\Foundation\Exception\ConverterException;
-use PommProject\Foundation\Converter\ConverterInterface;
-use PommProject\Foundation\Converter\Type\Circle;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Converter\TypeConverter;
 
 /**
  * PgCircle
@@ -25,57 +22,17 @@ use PommProject\Foundation\Session;
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see ConverterInterface
  */
-class PgCircle implements ConverterInterface
+class PgCircle extends TypeConverter
 {
-    protected $circle_class_name;
-
     /**
-     * __construct
+     * getTypeClassName
      *
-     * The parameter is the class of the circle that will be instantiated.
+     * Circle class name
      *
-     * @access public
-     * @param  string $circle_class_name
-     * @return void
+     * @see TypeConverter
      */
-    public function __construct($circle_class_name = null)
+    protected function getTypeClassName()
     {
-        $this->circle_class_name =
-            $circle_class_name === null
-            ? '\PommProject\Foundation\Converter\Type\Circle'
-            : $circle_class_name
-            ;
-    }
-
-    public function fromPg($data, $type, Session $session)
-    {
-        if ($data === null) {
-            return null;
-        }
-
-        $class_name = $this->circle_class_name;
-
-        try {
-            return new $class_name($data);
-        } catch (\InvalidArgumentException $e) {
-            throw new ConverterException(
-                sprintf("Unable to create a Circle instance."),
-                null,
-                $e
-            );
-        }
-    }
-
-    public function toPg($data, $type, Session $session)
-    {
-        if ($data === null) {
-            return sprintf("NULL::%s", $type);
-        }
-
-        if (!$data instanceOf Circle) {
-            $data = $this->fromPg($data, $type, $session);
-        }
-
-        return $data->__toString();
+        return '\PommProject\Foundation\Converter\Type\Circle';
     }
 }

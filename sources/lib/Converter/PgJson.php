@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Pomm package.
+ * This file is part of Pomm's Foundation package.
  *
  * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
  *
@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Exception\ConverterException;
+use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Session;
 
 /**

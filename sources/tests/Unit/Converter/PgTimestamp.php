@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the PommProject/Foundation package.
+ * This file is part of PommProject's Foundation package.
  *
  * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
  *

@@ -34,6 +34,9 @@ class PgNumRange extends TypeConverter
     {
         $data = parent::toPg($data, $type, $session);
 
-        return sprintf("%s(%s)", $type, $data);
+        return preg_match('/^NULL/', $data)
+            ? $data
+            : sprintf("%s(%s)", $type, $data)
+            ;
     }
 }

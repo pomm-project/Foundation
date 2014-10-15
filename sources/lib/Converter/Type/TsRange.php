@@ -11,17 +11,7 @@ namespace PommProject\Foundation\Converter\Type;
 
 use PommProject\Foundation\Converter\Type\BaseRange;
 
-/**
- * NumRange
- *
- * Type for numerical ranges.
- *
- * @package Foundation
- * @copyright 2014 Grégoire HUBERT
- * @author Grégoire HUBERT
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- */
-class NumRange extends BaseRange
+class TsRange extends NumRange
 {
     /**
      * getRegexp
@@ -30,7 +20,7 @@ class NumRange extends BaseRange
      */
     protected function getRegexp()
     {
-        return '/([\[\(])(-?[0-9\.]+), *(-?[0-9\.]+)([\]\)])/';
+        return '/([\[\(])"?([0-9 :+\.-]+)"?, *"?([0-9 :+\.-]+)?"([\]\)])/';
     }
 
     /**
@@ -40,6 +30,6 @@ class NumRange extends BaseRange
      */
     protected function getSubElement($element)
     {
-        return $element + 0;
+        return new \DateTime($element);
     }
 }

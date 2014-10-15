@@ -172,7 +172,7 @@ class DatabaseConfiguration
             ->registerConverter('Circle', new Converter\Geometry\PgCircle(), ['circle'])
             ->registerConverter('JSON', new Converter\PgJson(), ['json', 'jsonb'])
             ->registerConverter('NumberRange', new Converter\PgNumRange(), ['int4range', 'int8range', 'numrange'])
-            //->registerConverter('TsRange', new Converter\PgTsRange(), ['tsrange', 'daterange'])
+            ->registerConverter('TsRange', new Converter\PgTsRange(), ['tsrange', 'daterange', 'tstzrange'])
             ;
 
         return $this;

@@ -41,7 +41,7 @@ abstract class BaseRange
      * - right bracket style
      *
      * @access protected
-     * @return array
+     * @return string
      */
     abstract protected function getRegexp();
 

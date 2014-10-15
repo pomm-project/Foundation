@@ -107,7 +107,7 @@ class Inspector extends SessionAwareAtoum
             ->array($inspector->getPrimaryKey($this->getTableOid('with_simple_pk')))
             ->isIdenticalTo(['with_simple_pk_id'])
             ->array($inspector->getPrimaryKey($this->getTableOid('with_complex_pk')))
-            ->isIdenticalTo(['with_complex_pk_id', 'another_id'])
+            ->isIdenticalTo(['another_id', 'with_complex_pk_id'])
             ;
     }
 

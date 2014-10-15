@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9deeb7d5b85a45836f62c320f1d4ac9d",
+    "hash": "1edfbe1d40b43048a5eb9636507c2126",
     "packages": [
         {
             "name": "psr/log",
@@ -57,12 +57,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/atoum/atoum.git",
-                "reference": "a9503a7a0c5b1f5893f9ec01c35082dc4a6c4cd3"
+                "reference": "662e543db9302b92a9341180173890dfcdb8af34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atoum/atoum/zipball/a9503a7a0c5b1f5893f9ec01c35082dc4a6c4cd3",
-                "reference": "a9503a7a0c5b1f5893f9ec01c35082dc4a6c4cd3",
+                "url": "https://api.github.com/repos/atoum/atoum/zipball/662e543db9302b92a9341180173890dfcdb8af34",
+                "reference": "662e543db9302b92a9341180173890dfcdb8af34",
                 "shasum": ""
             },
             "require": {
@@ -123,12 +123,10 @@
                 "test",
                 "unit testing"
             ],
-            "time": "2014-09-22 13:35:41"
+            "time": "2014-10-07 11:28:16"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
         "atoum/atoum": 20
@@ -138,7 +136,5 @@
         "php": ">=5.4.4",
         "ext-pgsql": "*"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }

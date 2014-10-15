@@ -160,13 +160,18 @@ SQL;
     public function getPrimaryKey($table_oid)
     {
         $sql = <<<SQL
-select
-    array_agg(att.attname) as fields
-from
-    pg_catalog.pg_attribute att
-        join pg_catalog.pg_index ind on att.attrelid = ind.indexrelid
-where
-    :condition
+with
+    pk_field as (
+        select
+            att.attname as field
+        from
+            pg_catalog.pg_attribute att
+                join pg_catalog.pg_index ind on att.attrelid = ind.indexrelid
+        where
+            :condition
+        order by att.attnum asc
+)
+select array_agg(field) as fields from pk_field
 SQL;
         $condition =
             Where::create('ind.indrelid = $*', [$table_oid])

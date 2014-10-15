@@ -25,6 +25,11 @@ class PgNumRange extends TypeConverter
         return '\PommProject\Foundation\Converter\Type\NumRange';
     }
 
+    /**
+     * toPg
+     *
+     * @see ConverterInterface
+     */
     public function toPg($data, $type, Session $session)
     {
         $data = parent::toPg($data, $type, $session);

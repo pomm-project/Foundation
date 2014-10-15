@@ -48,7 +48,11 @@ class PgNumRange extends BaseConverter
 
     public function testToPg()
     {
-        $range = $this->newTestedInstance()->fromPg('[1,3)', 'numrange', $this->getSession());
+        $range = $this->newTestedInstance()->fromPg('[1,3)', 'myrange', $this->getSession());
+        $this
+            ->string($this->newTestedInstance()->toPg($range, 'myrange', $this->getSession()))
+            ->isEqualTo("myrange('[1,3)')")
+            ;
     }
 }
 

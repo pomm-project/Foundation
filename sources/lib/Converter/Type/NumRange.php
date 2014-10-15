@@ -46,6 +46,6 @@ class NumRange
      */
     public function __toString()
     {
-        return sprintf("'%s", $this->description);
+        return sprintf("'%s'", $this->description);
     }
 }

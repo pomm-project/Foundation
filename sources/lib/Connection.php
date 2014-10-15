@@ -365,9 +365,10 @@ class Connection
      * getQueryResult
      *
      * Get an asynchronous query result.
+     * The only reason for the SQL query to be passed as parameter is to throw
+     * a meaningful exception when an error is raised.
      *
-     * @param  string (default null) the SQL query to make informative error
-     * message.
+     * @param  string (default null)
      * @throw  ConnectionException if no response are available.
      * @throw  SqlException if the result is an error.
      * @return ResultHandler
@@ -513,19 +514,21 @@ class Connection
      * sendExecuteQuery
      *
      * Execute a prepared statement.
+     * The optional SQL parameter is for debuging purpose only.
      *
      * @access public
      * @param  string        $identifier
      * @param  array         $parameters
+     * @param  string        $sql
      * @return ResultHandler
      */
-    public function sendExecuteQuery($identifier, array $parameters = [])
+    public function sendExecuteQuery($identifier, array $parameters = [], $sql = '')
     {
         $ret = pg_send_execute($this->getHandler(), $identifier, $parameters);
 
         return $this
             ->testQuery($ret, sprintf("Prepared query '%s'.", $identifier))
-            ->getQueryResult($identifier)
+            ->getQueryResult($sql)
             ;
     }
 

@@ -16,7 +16,13 @@ use PommProject\Foundation\Session;
  * ClientPooler
  *
  * Base class for client poolers. ClientPooler instances are factories for
- * Session's Client.
+ * Session's Client. The workflow of the ClientPooler is the following:
+ * When a client is called
+ * 1   It is fetched from the pool
+ * 2.0 If no client is found:
+ * 2.1 The createClient() method is triggered.
+ * 2.2 The client is registered to the session
+ * 3   The client is returned back
  *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT

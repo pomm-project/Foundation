@@ -117,7 +117,8 @@ class PreparedQuery extends Client
             ->getConnection()
             ->sendExecuteQuery(
                 $this->getClientIdentifier(),
-                $this->prepareValues($values)
+                $this->prepareValues($values),
+                $this->sql
             );
     }
 

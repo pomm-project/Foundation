@@ -43,10 +43,13 @@ class PreparedQueryPooler extends ClientPooler
      */
     protected function getClientFromPool($sql)
     {
-        return $this->getSession()->getClient(
-            $this->getPoolerType(),
-            PreparedQuery::getSignatureFor($sql)
-        );
+        return $this
+            ->getSession()
+            ->getClient(
+                $this->getPoolerType(),
+                PreparedQuery::getSignatureFor($sql)
+            )
+        ;
     }
 
     /**

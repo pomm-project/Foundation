@@ -81,7 +81,13 @@ class Connection extends Atoum
             ->object($connection->executeAnonymousQuery('select true'))
             ->isInstanceOf('\PommProject\Foundation\ResultHandler')
             ->exception(function() use ($connection) {
-                    $connection->executeAnonymousQuery('zesdflxcv');
+                    $connection->executeAnonymousQuery('bad query');
+                })
+            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
+            ->array($connection->executeAnonymousQuery('select true; select false; select null'))
+            ->hasSize(3)
+            ->exception(function() use ($connection) {
+                    $connection->executeAnonymousQuery('select true; bad query');
                 })
             ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
             ;

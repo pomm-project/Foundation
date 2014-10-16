@@ -367,23 +367,39 @@ class Connection
      * Get an asynchronous query result.
      * The only reason for the SQL query to be passed as parameter is to throw
      * a meaningful exception when an error is raised.
+     * Since it is possible to send several queries at a time, This method can
+     * return an array of ResultHandler.
      *
+     * @access protected
      * @param  string (default null)
      * @throw  ConnectionException if no response are available.
      * @throw  SqlException if the result is an error.
-     * @return ResultHandler
+     * @return ResultHandler|array
      */
-    public function getQueryResult($sql = null)
+    protected function getQueryResult($sql = null)
     {
-        $result = pg_get_result($this->getHandler());
-        $this->testQuery($result, 'Query result stack is empty.');
-        $status = pg_result_status($result, \PGSQL_STATUS_LONG);
+        $results = [];
 
-        if ($status !== \PGSQL_COMMAND_OK && $status !== \PGSQL_TUPLES_OK) {
-            throw new SqlException($result, $sql);
+        while ($result = pg_get_result($this->getHandler())) {
+            $status = pg_result_status($result, \PGSQL_STATUS_LONG);
+
+            if ($status !== \PGSQL_COMMAND_OK && $status !== \PGSQL_TUPLES_OK) {
+                throw new SqlException($result, $sql);
+            }
+
+            $results[] = new ResultHandler($result);
         }
 
-        return new ResultHandler($result);
+        if (count($results) === 0) {
+            throw new ConnectionException(
+                sprintf(
+                    "There are no waiting results in connection.\s Query = '%'.",
+                    $sql
+                )
+            );
+        }
+
+        return count($results) === 1 ? $results[0] : $results;
     }
 
     /**

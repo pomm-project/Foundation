@@ -235,7 +235,7 @@ class Pomm implements \ArrayAccess
                     "Available configurations are {%s}.",
                     join(', ',
                         array_map(
-                            function($val) { return sprintf("'%s'", $val); },
+                            function ($val) { return sprintf("'%s'", $val); },
                             array_keys($this->configurations)
                         )
                     )

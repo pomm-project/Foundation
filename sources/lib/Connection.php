@@ -348,7 +348,7 @@ class Connection
      * Performs a raw SQL query
      *
      * @access public
-     * @param  string        $sql The sql statement to execute.
+     * @param  string              $sql The sql statement to execute.
      * @return ResultHandler|array
      */
     public function executeAnonymousQuery($sql)

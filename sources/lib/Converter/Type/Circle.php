@@ -9,8 +9,6 @@
  */
 namespace PommProject\Foundation\Converter\Type;
 
-use PommProject\Foundation\Converter\Type\Point;
-
 /**
  * Circle
  *

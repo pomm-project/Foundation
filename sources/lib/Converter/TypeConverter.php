@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Session;
 
@@ -94,7 +93,7 @@ abstract class TypeConverter implements ConverterInterface
 
         $class = $this->getTypeClassName();
 
-        if (!$data instanceOf $class) {
+        if (!$data instanceof $class) {
             $data = $this->fromPg($data, $type, $session);
         }
 

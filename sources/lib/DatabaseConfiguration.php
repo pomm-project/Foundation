@@ -37,9 +37,9 @@ class DatabaseConfiguration
      * A short description here
      *
      * @access public
-     * @param array $configuration
-     * @param ParameterHolder $parameter_holder
-     * @param ConverterHolder $converter_holder
+     * @param  array           $configuration
+     * @param  ParameterHolder $parameter_holder
+     * @param  ConverterHolder $converter_holder
      * @return void
      */
     public function __construct(
@@ -62,7 +62,7 @@ class DatabaseConfiguration
      * is set. When no name have been set, it checks in the parameter holder or
      * simply the class name.
      *
-     * @param  string $name (null)
+     * @param  string                       $name (null)
      * @return DatabaseConfiguration|string
      */
     public function name($name = null)

@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Session;
 

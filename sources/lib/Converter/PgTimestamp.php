@@ -10,7 +10,6 @@
 namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Session;
-use PommProject\Foundation\Converter\ConverterInterface;
 
 /**
  * PgTimestamp

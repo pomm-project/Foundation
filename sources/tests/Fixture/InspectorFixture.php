@@ -36,6 +36,7 @@ Class InspectorFixture extends Client
     {
         $this->dropSchema();
         $sql = [
+            "begin",
             "create schema inspector_test",
             "create table inspector_test.no_pk (a_boolean bool, varchar_array character varying[])",
             "create table inspector_test.with_simple_pk (with_simple_pk_id int4 primary key, a_char char, some_timestamps timestamptz[])",
@@ -45,6 +46,7 @@ Class InspectorFixture extends Client
             "comment on column inspector_test.with_complex_pk.with_complex_pk_id is 'Test comment'",
             "create type inspector_test.someone as (first_names varchar[], last_name varchar, age int)",
             "create type inspector_test.sponsor_rating as enum ('platinum', 'gold', 'silver', 'bronze', 'aluminium')",
+            "commit",
         ];
         $this->executeAnonymousQuery(join('; ', $sql));
     }

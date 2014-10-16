@@ -349,11 +349,11 @@ class Connection
      *
      * @access public
      * @param  string        $sql The sql statement to execute.
-     * @return ResultHandler
+     * @return ResultHandler|array
      */
     public function executeAnonymousQuery($sql)
     {
-        $ret = @pg_send_query($this->getHandler(), $sql);
+        $ret = pg_send_query($this->getHandler(), $sql);
 
         return $this
             ->testQuery($ret, sprintf("Anonymous query failed '%s'.", $sql))

@@ -117,12 +117,12 @@ class Pomm implements \ArrayAccess
             ;
         $session = $this->createNewSession($name, $class_name);
 
-        foreach($session
+        foreach($this
             ->configurations[$name]
             ->getParameterHolder()
             ->getParameter('default:client_poolers', [])
             as $pooler) {
-                $this->sessions[$name]->registerClientPooler(new $pooler());
+                $session->registerClientPooler(new $pooler());
             }
 
         return $session;
@@ -136,7 +136,7 @@ class Pomm implements \ArrayAccess
      * @access protected
      * @param  string $name
      * @param  string $class_name
-     * @return Pomm   $this
+     * @return Session
      */
     protected function createNewSession($name, $class_name)
     {
@@ -164,7 +164,7 @@ class Pomm implements \ArrayAccess
                     : null
             );
 
-        return $this;
+        return $this->sessions[$name];
     }
 
     /**

@@ -102,6 +102,8 @@ class Pomm extends Atoum
             ->exception(function() use ($pomm) { return $pomm->getSession('whatever'); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains("{'db_one', 'db_two', 'db_three'}")
+            ->array($pomm->getSession('db_one')->getRegisterPoolersNames())
+            ->isIdenticalTo(['prepared_query', 'query', 'converter', 'observer'])
             ;
     }
 

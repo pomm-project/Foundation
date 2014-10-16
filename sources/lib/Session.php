@@ -191,7 +191,7 @@ class Session
                 sprintf(
                     "No pooler registered for type '%s'. Poolers are available for types {%s}.",
                     $type,
-                    join(', ', array_keys($this->client_poolers))
+                    join(', ', $this->getRegisterPoolersNames())
                 )
             );
         }
@@ -250,5 +250,18 @@ class Session
     public function getDatabaseConfiguration()
     {
         return $this->database_configuration;
+    }
+
+    /**
+     * getRegisterPoolersNames
+     *
+     * Useful to test & debug.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRegisterPoolersNames()
+    {
+        return array_keys($this->client_poolers);
     }
 }

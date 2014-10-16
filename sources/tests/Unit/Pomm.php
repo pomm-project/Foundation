@@ -99,6 +99,9 @@ class Pomm extends Atoum
             ->isInstanceOf('\PommProject\Foundation\Session')
             ->object($pomm->getSession('db_two'))
             ->isInstanceOf('\PommProject\Foundation\Test\Unit\PommTestSession')
+            ->exception(function() use ($pomm) { return $pomm->getSession('whatever'); })
+            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->message->contains("{'db_one', 'db_two', 'db_three'}")
             ;
     }
 

@@ -34,11 +34,12 @@ class DatabaseConfiguration
     /**
      * __construct
      *
-     * DatabaseConfiguration constructor.
+     * A short description here
      *
      * @access public
-     * @param  string $name
-     * @param  array  $configuration
+     * @param array $configuration
+     * @param ParameterHolder $parameter_holder
+     * @param ConverterHolder $converter_holder
      * @return void
      */
     public function __construct(
@@ -62,13 +63,13 @@ class DatabaseConfiguration
      * simply the class name.
      *
      * @param  string $name (null)
-     * @return mixed  name it this
+     * @return DatabaseConfiguration|string
      */
     public function name($name = null)
     {
         if ($name === null) {
             return $this->name === null
-                ? $this->parameter_holder->getParameter('name', get_class($this))
+                ? $this->parameter_holder->getParameter('name')
                 : $this->name
                 ;
         }

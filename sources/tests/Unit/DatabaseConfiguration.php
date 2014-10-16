@@ -55,4 +55,22 @@ class DatabaseConfiguration extends Atoum
             ->isTrue()
             ;
     }
+
+    public function testName()
+    {
+        $configuration = $this->newTestedInstance(
+            ['dsn'  =>  'pgsql://user:pass@host:port/db_name']
+        );
+
+        $this
+            ->string($this->getDatabase()->name())
+            ->isEqualTo('db_name')
+            ->variable($configuration->name())
+            ->isNull()
+            ->object($configuration->name('pika'))
+            ->isInstanceOf('\PommProject\Foundation\DatabaseConfiguration')
+            ->string($configuration->name())
+            ->isEqualTo('pika')
+            ;
+    }
 }

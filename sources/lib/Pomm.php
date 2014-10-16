@@ -55,7 +55,7 @@ class Pomm implements \ArrayAccess
      */
     public function setConfiguration($name, DatabaseConfiguration $configuration)
     {
-        $this->configurations[$name] = $configuration;
+        $this->configurations[$name] = $configuration->name($name);
 
         return $this;
     }
@@ -230,7 +230,27 @@ class Pomm implements \ArrayAccess
     public function checkExistConfiguration($name)
     {
         if (!$this->hasConfiguration($name)) {
-            throw new FoundationException(sprintf("Database configuration '%s' not found.", $name));
+            if (count($this->configurations) > 0) {
+                $meaningful_message = sprintf(
+                    "Available configurations are {%s}.",
+                    join(', ',
+                        array_map(
+                            function($val) { return sprintf("'%s'", $val); },
+                            array_keys($this->configurations)
+                        )
+                    )
+                );
+            } else {
+                $meaningful_message = "No configurations set in Pomm service.";
+            }
+
+            throw new FoundationException(
+                sprintf(
+                    "Database configuration '%s' not found. %s",
+                    $name,
+                    $meaningful_message
+                )
+            );
         }
 
         return $this;

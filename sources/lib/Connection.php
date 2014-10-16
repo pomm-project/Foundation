@@ -393,7 +393,7 @@ class Connection
         if (count($results) === 0) {
             throw new ConnectionException(
                 sprintf(
-                    "There are no waiting results in connection.\s Query = '%'.",
+                    "There are no waiting results in connection.\nQuery = '%s'.",
                     $sql
                 )
             );
@@ -502,7 +502,7 @@ class Connection
                 pg_send_prepare($this->getHandler(), $identifier, $sql),
                 sprintf("Could not send prepare statement «%s».", $sql)
             )
-            ->getQueryResult($sql)
+            ->getQueryResult(sprintf("PREPARE ===\n%s\n ===", $sql))
             ;
 
         return $this;
@@ -544,7 +544,7 @@ class Connection
 
         return $this
             ->testQuery($ret, sprintf("Prepared query '%s'.", $identifier))
-            ->getQueryResult($sql)
+            ->getQueryResult(sprintf("EXECUTE ===\n%s\n ===\nparameters = {%s}", $sql, join(', ', $parameters)))
             ;
     }
 

@@ -12,9 +12,12 @@ namespace PommProject\Foundation\Query;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Exception\FoundationException;
+use PommProject\Foundation\Query\ListenerAwareInterface;
+use PommProject\Foundation\Query\ListenerTrait;
 
-class QueryPooler extends ClientPooler
+class QueryPooler extends ClientPooler implements ListenerAwareInterface
 {
+    protected $listeners = [];
     /**
      * getPoolerType
      *
@@ -43,6 +46,7 @@ class QueryPooler extends ClientPooler
      * createClient
      *
      * @see    ClientPooler
+     * @param  string   $client_class_name
      * @throw  FoundationException
      * @return Client
      */
@@ -66,6 +70,10 @@ class QueryPooler extends ClientPooler
             throw new FoundationException(sprintf("Could not load class '%s'.", $client));
         }
 
+        foreach ($this->listeners as $listener) {
+            $client->registerListener($listener);
+        }
+
         return new $client();
     }
 
@@ -81,5 +89,14 @@ class QueryPooler extends ClientPooler
         }
 
         return parent::getClient($client);
+    }
+
+    public function registerListener(ListenerInterface $listener)
+    {
+        foreach ($this->getSession()->getAllClientForType('query') as $query_client) {
+            $query_client->registerListener($listener);
+        }
+
+        $this->listeners[] = $listeners;
     }
 }

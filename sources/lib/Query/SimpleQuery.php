@@ -63,8 +63,7 @@ class SimpleQuery extends Client
             'post',
             [
                 'result_count' => $iterator->count(),
-                'time_ms'           => sprintf("%03.1f", ($end - $start) * 1000),
-
+                'time_ms'      => sprintf("%03.1f", ($end - $start) * 1000),
             ]
         );
 
@@ -116,7 +115,7 @@ class SimpleQuery extends Client
      */
     public function registerListener(ListenerInterface $listener)
     {
-        $this->listerners[] = $listener;
+        $this->listeners[] = $listener;
 
         return $this;
     }

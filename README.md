@@ -104,7 +104,7 @@ It is possible to use your own Query class as soon as it implements `QueryInterf
 
 ```php
 $result = $pomm['my_db']
-    ->getQuery(`My\Query\Class')
+    ->getQuery('My\Query\Class')
     ->query('select * from student where age > $*', [20])
     ;
 ```

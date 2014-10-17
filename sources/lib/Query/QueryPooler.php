@@ -99,6 +99,6 @@ class QueryPooler extends ClientPooler implements ListenerAwareInterface
             $query_client->registerListener($listener);
         }
 
-        $this->listeners[] = $listeners;
+        $this->listeners[] = $listener;
     }
 }

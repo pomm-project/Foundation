@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\PreparedQuery;
 
-use PommProject\Foundation\Query\QueryInterface;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\ConvertedResultIterator;
 
@@ -22,14 +21,18 @@ use PommProject\Foundation\ConvertedResultIterator;
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- * @see ClientInterface
  */
-class PreparedQueryQuery extends Client implements QueryInterface
+class PreparedQueryQuery extends Client
 {
     /**
      * query
      *
-     * @see QueryInterface
+     * Execute a prepared query.
+     *
+     * @access public
+     * @param  string   $sql
+     * @param  array    $parameters
+     * @return ConvertedResultIterator
      */
     public function query($sql, array $parameters = [])
     {

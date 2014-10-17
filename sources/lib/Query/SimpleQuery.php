@@ -28,7 +28,12 @@ class SimpleQuery extends Client
     /**
      * query
      *
-     * @see QueryInterface
+     * Perform a simple escaped query.
+     *
+     * @access public
+     * @param  sting $sql
+     * @param  array $parameters
+     * @return ConvertedResultIterator
      */
     public function query($sql, array $parameters = [])
     {

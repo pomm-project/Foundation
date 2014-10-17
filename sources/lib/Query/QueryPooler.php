@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Query;
 
+use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Exception\FoundationException;
 
@@ -28,7 +29,7 @@ class QueryPooler extends ClientPooler
      * getClientFromPool
      *
      * @see    ClientPooler
-     * @return QueryInterface|null
+     * @return Client
      */
     protected function getClientFromPool($client)
     {
@@ -43,16 +44,12 @@ class QueryPooler extends ClientPooler
      *
      * @see    ClientPooler
      * @throw  FoundationException
-     * @return QueryInterface
+     * @return Client
      */
     protected function createClient($client)
     {
         try {
             $reflection = new \ReflectionClass($client);
-
-            if ($reflection->implementsInterface('\PommProject\Foundation\Query\QueryInterface') === false) {
-                throw new FoundationException(sprintf("Class '%s' is not a QueryInterface.", $client));
-            }
 
         } catch (\ReflectionException $e) {
             throw new FoundationException(sprintf("Could not load class '%s'.", $client));

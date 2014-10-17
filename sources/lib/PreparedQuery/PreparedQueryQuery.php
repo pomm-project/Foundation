@@ -11,6 +11,9 @@ namespace PommProject\Foundation\PreparedQuery;
 
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\ConvertedResultIterator;
+use PommProject\Foundation\Query\ListenerInterface;
+use PommProject\Foundation\Query\ListenerAwareInterface;
+use PommProject\Foundation\Query\ListenerTrait;
 
 /**
  * PreparedQueryQuery
@@ -22,8 +25,10 @@ use PommProject\Foundation\ConvertedResultIterator;
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  */
-class PreparedQueryQuery extends Client
+class PreparedQueryQuery extends Client implements ListenerAwareInterface
 {
+    use ListenerTrait;
+
     /**
      * query
      *

@@ -51,6 +51,17 @@ class QueryPooler extends ClientPooler
         try {
             $reflection = new \ReflectionClass($client);
 
+            if (!$reflection->implementsInterface(
+                '\PommProject\Foundation\Query\ListenerAwareInterface'
+            )) {
+                throw new FoundationException(
+                    sprintf(
+                        "Client '%s' does not implements ListenerAwareInterface.",
+                        $client
+                    )
+                );
+            }
+
         } catch (\ReflectionException $e) {
             throw new FoundationException(sprintf("Could not load class '%s'.", $client));
         }

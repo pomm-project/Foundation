@@ -12,6 +12,7 @@ namespace PommProject\Foundation\Query;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\ConvertedResultIterator;
+use PommProject\Foundation\Query\ListenerInterface;
 
 /**
  * SimpleQuery
@@ -25,6 +26,8 @@ use PommProject\Foundation\ConvertedResultIterator;
  */
 class SimpleQuery extends Client
 {
+    protected $listeners = [];
+
     /**
      * query
      *
@@ -37,16 +40,49 @@ class SimpleQuery extends Client
      */
     public function query($sql, array $parameters = [])
     {
+        $this->sendNotification(
+            'pre',
+            [
+                'sql'        => $sql,
+                'parameters' => $parameters,
+            ]
+        );
+        $start = microtime(true);
         $resource = $this
             ->getSession()
             ->getConnection()
             ->sendQueryWithParameters(QueryParameterExpander::order($sql), $parameters)
             ;
+        $end = microtime(true);
 
-        return new ConvertedResultIterator(
+        $iterator = new ConvertedResultIterator(
             $resource,
             $this->getSession()
         );
+        $this->sendNotification(
+            'post',
+            [
+                'result_count' => $iterator->count(),
+                'time_ms'           => sprintf("%03.1f", ($end - $start) * 1000),
+
+            ]
+        );
+
+        return $iterator;
+    }
+
+    /**
+     * doQuery
+     *
+     * Perform the query
+     *
+     * @access protected
+     * @param  string $sql
+     * @param  array $parameters
+     * @return ConvertedResultIterator
+     */
+    protected function doQuery($sql, array $parameters)
+    {
     }
 
     /**
@@ -67,5 +103,40 @@ class SimpleQuery extends Client
     public function getClientIdentifier()
     {
         return get_class($this);
+    }
+
+    /**
+     * registerListener
+     *
+     * Add a new listener to the pooler.
+     *
+     * @access public
+     * @param ListenerInterface $listener
+     * @return SimpleQuery
+     */
+    public function registerListener(ListenerInterface $listener)
+    {
+        $this->listerners[] = $listener;
+
+        return $this;
+    }
+
+    /**
+     * notify
+     *
+     * Send a notification to all listeners.
+     *
+     * @access protected
+     * @param  string $event_type
+     * @param  array $data
+     * @return SimpleQuery
+     */
+    protected function sendNotification($event_type, array $data)
+    {
+        foreach ($this->listeners as $listener) {
+            $listener->notify($event_type, $data);
+        }
+
+        return $this;
     }
 }

@@ -94,4 +94,22 @@ class ClientHolder extends Atoum
             ->once()
             ;
     }
+
+    public function testGetAllFor()
+    {
+        $client_holder = $this->getClientHolder()
+            ->add($this->getClientMock('one'))
+            ->add($this->getClientMock('two'))
+            ;
+
+        $this
+            ->exception(function() use ($client_holder) {
+                $client_holder->getAllFor('whatever');
+            })
+            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->message->contains('does not exist.')
+            ->array($client_holder->getAllFor('test'))
+            ->hasSize(2)
+            ;
+    }
 }

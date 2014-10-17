@@ -9,6 +9,8 @@
  */
 namespace PommProject\Foundation\Client;
 
+use PommProject\Foundation\Exception\FoundationException;
+
 /**
  * ClientHolder
  *
@@ -67,6 +69,30 @@ class ClientHolder
     public function get($type, $name)
     {
         return $this->has($type, $name) ? $this->clients[$type][$name] : null;
+    }
+
+    /**
+     * getAllFor
+     *
+     * Return all clients for a given type.
+     * It throws an exception if the type does not exist.
+     *
+     * @access publci
+     * @param  string $type
+     * @return array
+     */
+    public function getAllFor($type)
+    {
+        if (!isset($this->clients[$type])) {
+            throw new FoundationException(
+                sprintf(
+                    "Type '%s' does not exist.",
+                    $type
+                )
+            );
+        }
+
+        return $this->clients[$type];
     }
 
     /**

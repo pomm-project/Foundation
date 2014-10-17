@@ -230,6 +230,20 @@ class Session implements LoggerAwareInterface
     }
 
     /**
+     * getAllClientForType
+     *
+     * Return all instances of clients for a given type.
+     *
+     * @access public
+     * @param  string $type
+     * @return ClientInterface
+     */
+    public function getAllClientForType($type)
+    {
+        return $this->client_holder->getAllFor($type);
+    }
+
+    /**
      * getClientUsingPooler
      *
      * Summon a pooler to retrieve a client. If the pooler does not exist, a

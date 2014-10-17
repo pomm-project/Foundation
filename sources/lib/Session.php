@@ -15,6 +15,9 @@ use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Exception\FoundationException;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+
 /**
  * Session
  *
@@ -25,13 +28,16 @@ use PommProject\Foundation\Exception\FoundationException;
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see LoggerAwareInterface
  */
-class Session
+class Session implements LoggerAwareInterface
 {
     private $connection;
     protected $database_configuration;
     protected $client_holder;
     protected $client_poolers = [];
+
+    use LoggerAwareTrait;
 
     /**
      * __construct
@@ -42,14 +48,13 @@ class Session
      *
      * @access public
      * @param  DatabaseConfiguration $configuration
-     * @return void
+     * @return null
      */
     public function __construct(
         DatabaseConfiguration $configuration,
         ClientHolder          $client_holder = null,
         Connection            $connection    = null
-    )
-    {
+    ) {
         $this->database_configuration = $configuration;
 
         $this->client_holder = $client_holder === null ? new ClientHolder() : $client_holder;
@@ -68,13 +73,38 @@ class Session
      * connection termination.
      *
      * @access public
-     * @return void
+     * @return null
      */
     public function __destruct()
     {
         $this->client_holder->shutdown();
         $this->client_poolers = [];
         $this->connection->close();
+    }
+
+    /**
+     * logMessage
+     *
+     * Log a message if a logger is set.
+     * Message can be a callable, it will then be evaluated only if a logger is
+     * set.
+     *
+     * @access public
+     * @param  int              $level
+     * @param  string|callable  $message
+     * @return Session          $this
+     */
+    public function logMessage($level, $message)
+    {
+        if ($this->logger !== null) {
+            if (is_callable($message)) {
+                $message = call_user_func($message);
+            }
+
+            $this->logger->log($level, $message);
+        }
+
+        return $this;
     }
 
     /**

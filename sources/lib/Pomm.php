@@ -125,6 +125,14 @@ class Pomm implements \ArrayAccess
                 $session->registerClientPooler(new $pooler());
             }
 
+        if ($logger = ($this
+            ->configurations[$name]
+            ->getParameterHolder()
+            ->getParameter('class:logger'))
+            !== null) {
+                $session->setLogger(new $logger());
+            }
+
         return $session;
     }
 

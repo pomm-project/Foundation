@@ -117,7 +117,7 @@ class DatabaseConfiguration
     {
         $this->parameter_holder
             ->setDefaultValue(
-                'configuration',
+                'connection_configuration',
                 [
                     'bytea_output'  => 'hex',
                     'intervalstyle' => 'ISO_8601',
@@ -132,7 +132,8 @@ class DatabaseConfiguration
                     'converter'          => '\PommProject\Foundation\Converter\ConverterPooler',
                     'observer'           => '\PommProject\Foundation\Observer\ObserverPooler',
                 ]
-            );
+            )
+            ;
 
         return $this
             ->registerBaseConverters()

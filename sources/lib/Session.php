@@ -62,7 +62,7 @@ class Session implements LoggerAwareInterface
         $this->connection    = $connection === null
             ? new Connection(
                 $configuration->getParameterHolder()->mustHave('dsn')->getParameter('dsn'),
-                $configuration->getParameterHolder()->getParameter('configuration')
+                $configuration->getParameterHolder()->getParameter('connection_configuration')
             )
             : $connection;
     }

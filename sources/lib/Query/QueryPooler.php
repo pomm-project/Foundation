@@ -70,7 +70,10 @@ class QueryPooler extends ClientPooler implements ListenerAwareInterface
             throw new FoundationException(sprintf("Could not load class '%s'.", $client), null, $e);
         }
 
-        return $this->addListenersToClient(new $client());
+        $client_instance = new $client();
+        $this->addListenersToClient($client_instance);
+
+        return $client_instance;
     }
 
     /**

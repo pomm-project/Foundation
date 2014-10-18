@@ -16,7 +16,7 @@ class LoggerListener implements LoggerAwareInterface, ListenerInterface
 {
     use LoggerAwareTrait;
 
-    public function notify($event, $data)
+    public function notify($event, array $data)
     {
         if ($event === 'pre') {
             $message = $data['sql'];
@@ -24,6 +24,14 @@ class LoggerListener implements LoggerAwareInterface, ListenerInterface
         } else if ($event === 'post') {
             $message = "Query ok.";
             $context = $data;
+        } else {
+            throw new FoundationException(
+                sprintf(
+                    "Do not know what to log for event '%s' (data {%s}).",
+                    $event,
+                    join(', ', array_map(function($val) { return sprintf("'%s'", $val); }))
+                )
+            );
         }
 
         $this->logger->info($message, $context);

@@ -17,6 +17,7 @@ use PommProject\Foundation\Exception\FoundationException;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * Session
@@ -83,28 +84,16 @@ class Session implements LoggerAwareInterface
     }
 
     /**
-     * logMessage
+     * getLogger
      *
-     * Log a message if a logger is set.
-     * Message can be a callable, it will then be evaluated only if a logger is
-     * set.
+     * Return the logger if any.
      *
      * @access public
-     * @param  int              $level
-     * @param  string|callable  $message
-     * @return Session          $this
+     * @return LoggerInterface|null
      */
-    public function logMessage($level, $message)
+    public function getLogger()
     {
-        if ($this->hasLogger()) {
-            if (is_callable($message)) {
-                $message = call_user_func($message);
-            }
-
-            $this->logger->log($level, $message);
-        }
-
-        return $this;
+        return $this->logger;
     }
 
     /**

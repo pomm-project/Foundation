@@ -186,18 +186,21 @@ class Connection
      * Open a connection on the database.
      *
      * @access private
+     * @throw  ConnectionException if connection fails.
      * return  Connection $this
      */
     private function launch()
     {
-        $handler = pg_connect($this->configurator->getConnectionString(), \PGSQL_CONNECT_FORCE_NEW);
+        $string = $this->configurator->getConnectionString();
+        $handler = pg_connect($string, \PGSQL_CONNECT_FORCE_NEW);
 
         if ($handler === false) {
             throw new ConnectionException(
                 sprintf(
                     "Error connecting to the database with parameters '%s'.",
-                    join(' ', $connect_parameters)
-                ));
+                    preg_replace('/password=[^ ]+/', 'password=xxxx', $string)
+                )
+            );
         } else {
             $this->handler = $handler;
         }

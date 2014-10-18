@@ -507,10 +507,9 @@ class Connection
      * and de backend's PID is returned.
      *
      * @access public
-     * @param  string      $channel
-     * @return arrayi|null
+     * @return array|null
      */
-    public function getNotification($channel)
+    public function getNotification()
     {
         $data = pg_get_notify($this->handler, \PGSQL_ASSOC);
 

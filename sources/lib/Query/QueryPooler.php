@@ -110,7 +110,7 @@ class QueryPooler extends ClientPooler implements ListenerAwareInterface
      * @param  Client $client
      * @return Client
      */
-    protected function addListenersToClient(Client $client)
+    protected function addListenersToClient(ListenerInterface $client)
     {
         foreach ($this->listeners as $listener) {
             $client->registerListener($listener);

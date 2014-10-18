@@ -38,4 +38,11 @@ class QueryListener implements ListenerInterface
     {
         return $this->counter;
     }
+
+    public function clean()
+    {
+        $this->counter      = 0;
+        $this->events       = [];
+        $this->event_data   = [];
+    }
 }

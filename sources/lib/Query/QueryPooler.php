@@ -70,13 +70,7 @@ class QueryPooler extends ClientPooler implements ListenerAwareInterface
             throw new FoundationException(sprintf("Could not load class '%s'.", $client), null, $e);
         }
 
-        $instance = new $client();
-
-        foreach ($this->listeners as $listener) {
-            $instance->registerListener($listener);
-        }
-
-        return $instance;
+        return $this->addListenersToClient(new $client());
     }
 
     /**
@@ -93,6 +87,11 @@ class QueryPooler extends ClientPooler implements ListenerAwareInterface
         return parent::getClient($client);
     }
 
+    /**
+     * registerListener
+     *
+     * @see ListenerAwareInterface
+     */
     public function registerListener(ListenerInterface $listener)
     {
         foreach ($this->getSession()->getAllClientForType('query') as $query_client) {
@@ -100,5 +99,23 @@ class QueryPooler extends ClientPooler implements ListenerAwareInterface
         }
 
         $this->listeners[] = $listener;
+    }
+
+    /**
+     * addListenersToClient
+     *
+     * Register all pooler registered listeners to a client.
+     *
+     * @access protected
+     * @param  Client $client
+     * @return Client
+     */
+    protected function addListenersToClient(Client $client)
+    {
+        foreach ($this->listeners as $listener) {
+            $client->registerListener($listener);
+        }
+
+        return $client;
     }
 }

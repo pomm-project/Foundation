@@ -9,11 +9,8 @@
  */
 namespace PommProject\Foundation\PreparedQuery;
 
-use PommProject\Foundation\Client\Client;
-use PommProject\Foundation\ConvertedResultIterator;
-use PommProject\Foundation\Query\ListenerInterface;
-use PommProject\Foundation\Query\ListenerAwareInterface;
-use PommProject\Foundation\Query\ListenerTrait;
+use PommProject\Foundation\ResultHandler;
+use PommProject\Foundation\Query\SimpleQuery;
 
 /**
  * PreparedQueryQuery
@@ -24,52 +21,22 @@ use PommProject\Foundation\Query\ListenerTrait;
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see SimpleQuery
  */
-class PreparedQueryQuery extends Client implements ListenerAwareInterface
+class PreparedQueryQuery extends SimpleQuery
 {
-    use ListenerTrait;
-
     /**
-     * query
+     * doQuery
      *
-     * Execute a prepared query.
-     *
-     * @access public
-     * @param  string   $sql
-     * @param  array    $parameters
-     * @return ConvertedResultIterator
+     * @see SimpleQuery
      */
-    public function query($sql, array $parameters = [])
+    protected function doQuery($sql, array $parameters)
     {
-        $resource = $this
+        return $this
             ->getSession()
             ->getClientUsingPooler('prepared_query', $sql)
             ->execute($parameters)
             ;
 
-        return new ConvertedResultIterator(
-            $resource,
-            $this->getSession()
-        );
-    }
-
-    /**
-     * getClientType
-     *
-     * @see ClientInterface
-     */
-    public function getClientType()
-    {
-        return 'query';
-    }
-
-    /**
-     * getClientIdentifier
-     *
-     * @see ClientInterface
-     */
-    public function getClientIdentifier()
-    {
-        return get_class($this);
     }
 }

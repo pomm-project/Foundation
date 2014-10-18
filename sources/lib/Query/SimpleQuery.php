@@ -50,11 +50,7 @@ class SimpleQuery extends Client implements ListenerAwareInterface
             ]
         );
         $start = microtime(true);
-        $resource = $this
-            ->getSession()
-            ->getConnection()
-            ->sendQueryWithParameters(QueryParameterExpander::order($sql), $parameters)
-            ;
+        $resource = $this->doQuery($sql, $parameters);
         $end = microtime(true);
 
         $iterator = new ConvertedResultIterator(
@@ -80,10 +76,15 @@ class SimpleQuery extends Client implements ListenerAwareInterface
      * @access protected
      * @param  string $sql
      * @param  array $parameters
-     * @return ConvertedResultIterator
+     * @return ResultHandler
      */
     protected function doQuery($sql, array $parameters)
     {
+        return $this
+            ->getSession()
+            ->getConnection()
+            ->sendQueryWithParameters(QueryParameterExpander::order($sql), $parameters)
+            ;
     }
 
     /**

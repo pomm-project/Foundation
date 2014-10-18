@@ -96,7 +96,7 @@ class Session implements LoggerAwareInterface
      */
     public function logMessage($level, $message)
     {
-        if ($this->logger !== null) {
+        if ($this->hasLogger()) {
             if (is_callable($message)) {
                 $message = call_user_func($message);
             }
@@ -105,6 +105,19 @@ class Session implements LoggerAwareInterface
         }
 
         return $this;
+    }
+
+    /**
+     * hasLogger
+     *
+     * Return true if a logger is set.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasLogger()
+    {
+        return (bool) ($this->logger !== null);
     }
 
     /**

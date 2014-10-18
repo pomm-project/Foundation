@@ -28,27 +28,29 @@ class Connection extends Atoum
 
     public function badDsnDataProvider()
     {
-        return [
-            'azertyuiop',
-            'abcde://user:pass/host:1234/dbname',
-            'pgsql://toto',
-            'pgsql://toto:p4ssW0rD',
+        return
+            [
+                'azertyuiop',
+                'abcde://user:pass/host:1234/dbname',
+                'pgsql://toto',
+                'pgsql://toto:p4ssW0rD',
             ];
     }
 
     public function goodDsnDataProvider()
     {
-        return [
-            'pgsql://user:p4ssW0rD/a_host:5432/dbname',
-            'pgsql://user:p4ssW0rD/a_host:postgres/dbname',
-            'pgsql://user:p4ssW0rD/a_host/dbname',
-            'pgsql://user/a_host/dbname',
-            'pgsql://user/dbname',
-            'pgsql://user:p4ssW0rD/172.18.210.109:5432/dbname',
-            'pgsql://user:p4ssW0rD/172.18.210.109/dbname',
-            'pgsql://user:p4ssW0rD/!/var/run/pgsql!:5432/dbname',
-            'pgsql://user:p4ssW0rD/!/var/run/pgsql!/dbname',
-        ];
+        return
+            [
+                'pgsql://user:p4ssW0rD/a_host:5432/dbname',
+                'pgsql://user:p4ssW0rD/a_host:postgres/dbname',
+                'pgsql://user:p4ssW0rD/a_host/dbname',
+                'pgsql://user/a_host/dbname',
+                'pgsql://user/dbname',
+                'pgsql://user:p4ssW0rD/172.18.210.109:5432/dbname',
+                'pgsql://user:p4ssW0rD/172.18.210.109/dbname',
+                'pgsql://user:p4ssW0rD/!/var/run/pgsql!:5432/dbname',
+                'pgsql://user:p4ssW0rD/!/var/run/pgsql!/dbname',
+            ];
     }
 
     /**

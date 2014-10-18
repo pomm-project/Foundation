@@ -11,6 +11,7 @@ namespace PommProject\Foundation;
 
 use PommProject\Foundation\Exception\ConnectionException;
 use PommProject\Foundation\Exception\SqlException;
+use PommProject\Foundation\ConnectionConfigurator;
 
 /**
  * Connection
@@ -36,8 +37,7 @@ class Connection
     const ACCESS_MODE_READ_WRITE    = "READ WRITE";      // default
 
     protected $handler = null;
-    protected $parameter_holder;
-    protected $configuration = [];
+    protected $configurator;
 
     /**
      * __construct
@@ -50,9 +50,8 @@ class Connection
      */
     public function __construct($dsn, array $configuration = [])
     {
-        $this->parameter_holder = new ParameterHolder();
-        $this->configuration    = $configuration;
-        $this->parseDsn($dsn);
+        $this->configurator = new ConnectionConfigurator($dsn);
+        $this->configurator->addConfiguration($configuration);
     }
 
     /**
@@ -78,15 +77,15 @@ class Connection
      * Add configuration settings. If settings exist, they are overridden.
      *
      * @access public
-     * @param  array      $configuration
-     * @return Connection $this
+     * @param  array               $configuration
+     * @throw  ConnectionException if connection is already up.
+     * @return Connection          $this
      */
     public function addConfiguration(array $configuration)
     {
         $this
-            ->checkConnectionUp()
-            ->configuration = array_merge($this->configuration, $configuration)
-            ;
+            ->checkConnectionUp("Cannot update configuration once the connection is open.")
+            ->configurator->addConfiguration($configuration);
 
         return $this;
     }
@@ -104,22 +103,9 @@ class Connection
     public function addConfigurationSetting($name, $value)
     {
         $this->checkConnectionUp("Cannot set configuration once a connection is made with the server.")
-            ->configuration[$name] = $value;
+            ->configurator->set($name, $value);
 
         return $this;
-    }
-
-    /**
-     * getConfiguration
-     *
-     * Return the configuration settings.
-     *
-     * @access public
-     * @return array
-     */
-    public function getConfiguration()
-    {
-        return $this->configuration;
     }
 
     /**
@@ -195,61 +181,6 @@ class Connection
     }
 
     /**
-     * parseDsn()
-     *
-     * Sets the different parameters from the DSN.
-     *
-     * @access private
-     * @param  string         DSN
-     * @return Connection $this
-     */
-    private function parseDsn($dsn)
-    {
-        if (!preg_match('#([a-z]+)://([^:@]+)(?::([^@]+))?(?:@([\w\.-]+|!/.+[^/]!)(?::(\w+))?)?/(.+)#', $dsn, $matchs)) {
-            throw new ConnectionException(sprintf('Could not parse DSN "%s".', $dsn));
-        }
-
-        if ($matchs[1] == null || $matchs[1] !== 'pgsql') {
-            throw new ConnectionException(sprintf("bad protocol information '%s' in dsn '%s'. Pomm does only support 'pgsql' for now.", $matchs[1], $dsn));
-        }
-
-        $adapter = $matchs[1];
-
-        if ($matchs[2] === null) {
-            throw ConnectionException(sprintf('No user information in dsn "%s".', $dsn));
-        }
-
-        $user = $matchs[2];
-        $pass = $matchs[3];
-
-        if (preg_match('/!(.*)!/', $matchs[4], $host_matchs)) {
-            $host = $host_matchs[1];
-        } else {
-            $host = $matchs[4];
-        }
-
-        $port = $matchs[5];
-
-        if ($matchs[6] === null) {
-            throw new ConnectionException(sprintf('No database name in dsn "%s".', $dsn));
-        }
-
-        $database = $matchs[6];
-        $this->parameter_holder
-            ->setParameter('adapter',  $adapter)
-            ->setParameter('user',     $user)
-            ->setParameter('pass',     $pass)
-            ->setParameter('host',     $host)
-            ->setParameter('port',     $port)
-            ->setParameter('database', $database)
-            ->mustHave('user')
-            ->mustHave('database')
-            ;
-
-        return $this;
-    }
-
-    /**
      * launch
      *
      * Open a connection on the database.
@@ -259,21 +190,7 @@ class Connection
      */
     private function launch()
     {
-        $connect_parameters = [sprintf("user=%s dbname=%s", $this->parameter_holder['user'], $this->parameter_holder['database'])];
-
-        if ($this->parameter_holder['host'] !== '') {
-            $connect_parameters[] = sprintf('host=%s', $this->parameter_holder['host']);
-        }
-
-        if ($this->parameter_holder['port'] !== '') {
-            $connect_parameters[] = sprintf('port=%s', $this->parameter_holder['port']);
-        }
-
-        if ($this->parameter_holder['pass'] !== '') {
-            $connect_parameters[] = sprintf('password=%s', addslashes($this->parameter_holder['pass']));
-        }
-
-        $handler = pg_connect(join(' ', $connect_parameters), \PGSQL_CONNECT_FORCE_NEW);
+        $handler = pg_connect($this->configurator->getConnectionString(), \PGSQL_CONNECT_FORCE_NEW);
 
         if ($handler === false) {
             throw new ConnectionException(
@@ -308,7 +225,7 @@ class Connection
     {
         $sql=[];
 
-        foreach ($this->configuration as $setting => $value) {
+        foreach ($this->configurator->getConfiguration() as $setting => $value) {
             $sql[] = sprintf("set %s = %s", pg_escape_identifier($this->handler, $setting), pg_escape_literal($this->handler, $value));
         }
 

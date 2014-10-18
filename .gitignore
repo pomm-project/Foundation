@@ -1,2 +1,3 @@
+.ctags
 vendor/*
 sources/tests/config.php

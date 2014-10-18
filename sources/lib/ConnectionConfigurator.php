@@ -202,6 +202,17 @@ class ConnectionConfigurator
      */
     public function getConfiguration()
     {
-        return $this->configuration->getParameter('configuration');
+        $configuration = $this->configuration->getParameter('configuration');
+
+        if (!is_array($configuration)) {
+            throw new ConnectionException(
+                sprintf(
+                    "Invalid configuration. It should be an array of settings, '%s' returned.",
+                    gettype($configuration)
+                )
+            );
+        }
+
+        return $configuration;
     }
 }

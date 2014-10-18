@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Converter\Type;
 
-class TsRange extends NumRange
+class TsRange extends BaseRange
 {
     /**
      * getRegexp

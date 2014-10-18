@@ -98,7 +98,7 @@ class Observer extends Client
         return $this
             ->getSession()
             ->getConnection()
-            ->getNotification($this->channel)
+            ->getNotification()
             ;
     }
 

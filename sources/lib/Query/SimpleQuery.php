@@ -12,7 +12,6 @@ namespace PommProject\Foundation\Query;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\ConvertedResultIterator;
-use PommProject\Foundation\Query\ListenerInterface;
 use PommProject\Foundation\Query\ListenerAwareInterface;
 use PommProject\Foundation\Query\ListenerTrait;
 

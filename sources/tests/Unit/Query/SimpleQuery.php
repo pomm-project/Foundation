@@ -11,29 +11,26 @@ namespace PommProject\Foundation\Test\Unit\Query;
 
 use PommProject\Foundation\Session;
 use PommProject\Foundation\Converter\ConverterPooler;
-use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 use PommProject\Foundation\Test\Fixture\QueryListener;
+use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
-class SimpleQuery extends SessionAwareAtoum
+class SimpleQuery extends BaseConverter
 {
     protected function initializeSession(Session $session)
     {
-        $session
-            ->registerClientPooler(new ConverterPooler())
-            ;
     }
 
-    protected function getQueryManager()
+    protected function getQueryManager(Session $session)
     {
         $query_manager = $this->newTestedInstance();
-        $query_manager->initialize($this->getSession());
+        $session->registerClient($query_manager);
 
         return $query_manager;
     }
 
     public function testSimpleQuery()
     {
-        $iterator = $this->getQueryManager()->query('select true as one, null::int4 as two');
+        $iterator = $this->getQueryManager($this->getSession())->query('select true as one, null::int4 as two');
         $this
             ->object($iterator)
             ->isInstanceOf('\PommProject\Foundation\ConvertedResultIterator')
@@ -57,7 +54,7 @@ from (values
 ) p (id, pika)
 where p.id = $* or p.pika = $*
 SQL;
-        $iterator = $this->getQueryManager()->query($sql, [2, 'three']);
+        $iterator = $this->getQueryManager($this->getSession())->query($sql, [2, 'three']);
         $this
             ->array($iterator->slice('id'))
             ->isIdenticalTo([2, 3])
@@ -68,7 +65,7 @@ SQL;
     {
         $listener = new QueryListener;
         $this
-            ->getQueryManager()
+            ->getQueryManager($this->getSession())
             ->registerListener($listener)
             ->query('select generate_series(1, 99) as id')
             ;

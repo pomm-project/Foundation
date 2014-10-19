@@ -50,16 +50,15 @@ class QueryPooler extends SessionAwareAtoum
     public function testRegisterListener()
     {
         $listener = new QueryListener();
-        $this
-            ->getSession()
+        $session = $this->getSession();
+        $session
             ->getClientUsingPooler('query', null)
             ;
-        $this
-            ->getSession()
+        $session
             ->getPoolerForType('query')
-            ->registerListener($listener);
-        $this
-            ->getSession()
+            ->registerListener($listener)
+            ;
+        $session
             ->getClientUsingPooler('query', null)
             ->query('select generate_series(1, 5) as pika')
             ;
@@ -68,8 +67,7 @@ class QueryPooler extends SessionAwareAtoum
             ->isEqualTo(2)
             ;
         $listener->clean();
-        $this
-            ->getSession()
+        $session
             ->getClientUsingPooler('query', '\PommProject\Foundation\PreparedQuery\PreparedQueryQuery')
             ->query('select generate_series(1, 10) as pika')
             ;

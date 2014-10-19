@@ -9,20 +9,16 @@
  */
 namespace PommProject\Foundation\Test\Unit;
 
-use PommProject\Foundation\DatabaseConfiguration;
+use PommProject\Foundation\Session                           as FoundationSession;
+use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 use Mock\PommProject\Foundation\Client\ClientInterface       as ClientInterfaceMock;
 use Mock\PommProject\Foundation\Client\ClientPoolerInterface as ClientPoolerInterfaceMock;
 use Atoum;
 
-class Session extends Atoum
+class Session extends SessionAwareAtoum
 {
-    protected function getSession(array $config = [], $ignore = false)
+    protected function initializeSession(FoundationSession $session)
     {
-        if ($ignore === false) {
-            $config = array_merge($GLOBALS['pomm_db1'], $config);
-        }
-
-        return $this->newTestedInstance(new DatabaseConfiguration($config));
     }
 
     protected function getClientInterfaceMock($identifier)
@@ -41,17 +37,6 @@ class Session extends Atoum
         $client_pooler->getMockController()->getClient = $this->getClientInterfaceMock('ok');
 
         return $client_pooler;
-    }
-
-    public function testConstructor()
-    {
-        $this
-            ->exception(function() { $this->getSession([], true); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
-            ->message->contains('is mandatory')
-            ->object($this->getSession())
-            ->isInstanceOf('\PommProject\Foundation\Session')
-            ;
     }
 
     public function testGetConnection()

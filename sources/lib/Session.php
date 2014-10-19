@@ -33,8 +33,7 @@ use Psr\Log\LoggerInterface;
  */
 class Session implements LoggerAwareInterface
 {
-    private $connection;
-    protected $database_configuration;
+    protected $connection;
     protected $client_holder;
     protected $client_poolers = [];
 
@@ -48,23 +47,19 @@ class Session implements LoggerAwareInterface
      * 'dsn' parameter from the ParameterHolder.
      *
      * @access public
-     * @param  DatabaseConfiguration $configuration
+     * @param  Connection $connection
+     * @param  ConverterHolder
      * @return null
      */
     public function __construct(
-        DatabaseConfiguration $configuration,
-        ClientHolder          $client_holder = null,
-        Connection            $connection    = null
+        Connection      $connection,
+        ClientHolder    $client_holder = null
     ) {
-        $this->database_configuration = $configuration;
-
-        $this->client_holder = $client_holder === null ? new ClientHolder() : $client_holder;
-        $this->connection    = $connection === null
-            ? new Connection(
-                $configuration->getParameterHolder()->mustHave('dsn')->getParameter('dsn'),
-                $configuration->getParameterHolder()->getParameter('connection_configuration')
-            )
-            : $connection;
+        $this->connection    = $connection;
+        $this->client_holder = $client_holder === null
+            ? new ClientHolder
+            : $client_holder
+            ;
     }
 
     /**
@@ -283,19 +278,6 @@ class Session implements LoggerAwareInterface
             Inflector::underscore($matchs[1]),
             count($arguments) > 0 ? $arguments[0] : null
         );
-    }
-
-    /**
-     * getDatabaseConfiguration
-     *
-     * Returns the connection's database configuration.
-     *
-     * @access public
-     * @return Database
-     */
-    public function getDatabaseConfiguration()
-    {
-        return $this->database_configuration;
     }
 
     /**

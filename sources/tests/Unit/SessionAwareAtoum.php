@@ -9,27 +9,34 @@
  */
 namespace PommProject\Foundation\Test\Unit;
 
-use PommProject\Foundation\DatabaseConfiguration;
+use PommProject\Foundation\SessionBuilder;
 use PommProject\Foundation\Session;
 use Atoum;
 
 abstract class SessionAwareAtoum extends Atoum
 {
-    private $session;
-
-    protected function getDatabaseConfiguration()
-    {
-        return new DatabaseConfiguration($GLOBALS['pomm_db1']);
-    }
+    private $session_builder;
 
     protected function getSession()
     {
-        if ($this->session === null) {
-            $this->session = new Session($this->getDatabaseConfiguration());
-            $this->initializeSession($this->session);
+        $session = $this->getSessionBuilder()->buildSession();
+        $this->initializeSession($session);
+
+        return $session;
+    }
+
+    protected function getSessionBuilder()
+    {
+        if ($this->session_builder === null) {
+            $this->session_builder = $this->createSessionBuilder($GLOBALS['pomm_db1']);
         }
 
-        return $this->session;
+        return $this->session_builder;
+    }
+
+    protected function createSessionBuilder($configuration)
+    {
+        return new SessionBuilder($configuration);
     }
 
     abstract protected function initializeSession(Session $session);

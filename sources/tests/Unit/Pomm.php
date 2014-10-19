@@ -9,31 +9,28 @@
  */
 namespace PommProject\Foundation\Test\Unit;
 
-use PommProject\Foundation\DatabaseConfiguration;
+use PommProject\Foundation\SessionBuilder;
 use PommProject\Foundation\Session;
 use Atoum;
 
 class Pomm extends Atoum
 {
-    protected function getDatabaseConfiguration(array $config = [])
+    protected function getSessionBuilder(array $config = [])
     {
-        return new DatabaseConfiguration($config);
+        return new SessionBuilder($config);
     }
 
     protected function getPomm(array $configuration = null)
     {
         if ($configuration === null) {
-            $configuration = [
-                "db_one"   => ["dsn" => "pgsql://user:pass@host:port/db_name"],
-                "db_two"   => [
-                    "dsn" => "pgsql://user:pass@host:port/db_name",
-                    "config_class_name" => "PommProject\Foundation\Test\Unit\PommTestDatabaseConfiguration",
-                ],
-                "db_three"   => [
-                    "dsn" => "pgsql://user:pass@host:port/db_name",
-                    "config_class_name" => "\\Whatever\\Unexistent\\Class",
-                ],
-            ];
+            $configuration = 
+                [
+                    "db_one"   => ["dsn" => "pgsql://user:pass@host:port/db_name"],
+                    "db_two"   => [
+                        "dsn" => "pgsql://user:pass@host:port/db_name",
+                        "class:session_builder" => "PommProject\\Foundation\\Test\\Fixture\\PommTestSessionBuilder",
+                    ],
+                ];
         }
 
         return $this->newTestedInstance($configuration);
@@ -46,7 +43,7 @@ class Pomm extends Atoum
             ->assert("Empty constructor.")
             ->object($pomm)
             ->isTestedInstance()
-            ->array($pomm->getConfigurations())
+            ->array($pomm->getSessionBuilders())
             ->isIdenticalTo([])
             ->assert("Constructor with parameters.")
             ->array(
@@ -57,37 +54,43 @@ class Pomm extends Atoum
                     "second_db_config" => [
                         "dsn" => "pgsql://user:pass@host:port/db_name",
                     ],
-                ])->getConfigurations())
+                ])->getSessionBuilders())
                 ->size->isEqualTo(2)
+                ->exception(function() { return $this->newTestedInstance(
+                    [
+                        "db_three" => [
+                            "dsn" => "pgsql://user:pass@host:port/db_name",
+                            "class:session_builder" => "\\Whatever\\Unexistent\\Class",
+                        ],
+                    ]); })
+                ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+                ->message->contains('Could not instanciate')
                 ;
     }
 
-    public function testSetConfiguration()
+    public function testAddBuilder()
     {
         $pomm = $this->getPomm([]);
         $this
-            ->assert("Set new database configuration.")
-            ->object($pomm->setConfiguration('pika', $this->getDatabaseConfiguration()))
+            ->assert("Set new session builder.")
+            ->object($pomm->addBuilder('pika', $this->getSessionBuilder()))
             ->isInstanceOf('\PommProject\Foundation\Pomm')
-            ->array(array_keys($pomm->setConfiguration('pika', $this->getDatabaseConfiguration())->getConfigurations()))
+            ->array(array_keys($pomm->addBuilder('pika', $this->getSessionBuilder())->getSessionBuilders()))
             ->isIdenticalTo(['pika'])
             ;
     }
 
-    public function testGetConfiguration()
+    public function testGetBuilder()
     {
         $pomm = $this->getPomm();
         $this
-            ->object($pomm->getConfiguration('db_one'))
-            ->isInstanceOf('\PommProject\Foundation\DatabaseConfiguration')
-            ->object($pomm->getConfiguration('db_two'))
-            ->isInstanceOf('PommProject\Foundation\Test\Unit\PommTestDatabaseConfiguration')
-            ->exception(function() use ($pomm) { $pomm->getConfiguration('db_three'); })
+            ->object($pomm->getBuilder('db_one'))
+            ->isInstanceOf('\PommProject\Foundation\SessionBuilder')
+            ->object($pomm->getBuilder('db_two'))
+            ->isInstanceOf('\PommProject\Foundation\Test\Fixture\PommTestSessionBuilder')
+            ->exception(function() use ($pomm) { $pomm->getBuilder('whatever'); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
-            ->message->contains('could not be loaded')
-            ->exception(function() use ($pomm) { $pomm->getConfiguration('whatever'); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
-            ->message->contains("not found")
+            ->message->contains("No such builder")
             ;
     }
 
@@ -98,12 +101,12 @@ class Pomm extends Atoum
             ->object($pomm->getSession('db_one'))
             ->isInstanceOf('\PommProject\Foundation\Session')
             ->object($pomm->getSession('db_two'))
-            ->isInstanceOf('\PommProject\Foundation\Test\Unit\PommTestSession')
+            ->isInstanceOf('\PommProject\Foundation\Test\Fixture\PommTestSession')
             ->exception(function() use ($pomm) { return $pomm->getSession('whatever'); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
-            ->message->contains("{'db_one', 'db_two', 'db_three'}")
+            ->message->contains("{'db_one', 'db_two'}")
             ->array($pomm->getSession('db_one')->getRegisterPoolersNames())
-            ->isIdenticalTo(['prepared_query', 'query', 'converter', 'observer'])
+            ->isIdenticalTo(['prepared_query', 'query', 'converter', 'observer', 'inspector'])
             ;
     }
 
@@ -114,23 +117,7 @@ class Pomm extends Atoum
             ->object($pomm->getSession('db_one'))
             ->isInstanceOf('\PommProject\Foundation\Session')
             ->object($pomm->getSession('db_two'))
-            ->isInstanceOf('\PommProject\Foundation\Test\Unit\PommTestSession')
+            ->isInstanceOf('\PommProject\Foundation\Test\Fixture\PommTestSession')
             ;
     }
-}
-
-class PommTestDatabaseConfiguration extends \PommProject\Foundation\DatabaseConfiguration
-{
-    public function __construct(array $configuration)
-    {
-        parent::__construct($configuration);
-        $this
-            ->getParameterHolder()
-            ->setDefaultValue('class:session', '\PommProject\Foundation\Test\Unit\PommTestSession')
-            ;
-    }
-}
-
-class PommTestSession extends \PommProject\Foundation\Session
-{
 }

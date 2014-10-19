@@ -26,6 +26,22 @@ use PommProject\Foundation\Session;
  */
 class ConverterPooler extends ClientPooler
 {
+    protected $converter_holder;
+
+    /**
+     * __construct
+     *
+     * Instanciate converter pooler.
+     *
+     * @access public
+     * @param  ConverterHolder $converter_holder
+     * @return null
+     */
+    public function __construct(ConverterHolder $converter_holder)
+    {
+        $this->converter_holder = $converter_holder;
+    }
+
     /**
      * getPoolerType
      *
@@ -47,11 +63,17 @@ class ConverterPooler extends ClientPooler
     public function register(Session $session)
     {
         parent::register($session);
-        $converter_holder = $session->getDatabaseConfiguration()->getConverterHolder();
-        $types = $converter_holder->getTypesWithConverterName();
+        $types = $this->converter_holder->getTypesWithConverterName();
 
         foreach ($types as $type => $name) {
-            $this->getSession()->registerClient(new ConverterClient($type, $converter_holder->getConverter($name)));
+            $this->getSession()
+                ->registerClient(
+                    new ConverterClient(
+                        $type,
+                        $this->converter_holder->getConverter($name)
+                    )
+                )
+            ;
         }
     }
 

@@ -75,21 +75,15 @@ class ClientHolder
      * getAllFor
      *
      * Return all clients for a given type.
-     * It throws an exception if the type does not exist.
      *
-     * @access publci
+     * @access public
      * @param  string $type
      * @return array
      */
     public function getAllFor($type)
     {
         if (!isset($this->clients[$type])) {
-            throw new FoundationException(
-                sprintf(
-                    "Type '%s' does not exist.",
-                    $type
-                )
-            );
+            return [];
         }
 
         return $this->clients[$type];

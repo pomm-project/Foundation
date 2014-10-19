@@ -13,20 +13,16 @@ use PommProject\Foundation\Session;
 use PommProject\Foundation\Query\QueryPooler;
 use PommProject\Foundation\Inspector\InspectorPooler;
 use PommProject\Foundation\Converter\ConverterPooler;
-use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 use PommProject\Foundation\Test\Fixture\InspectorFixture;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
+use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
-class Inspector extends SessionAwareAtoum
+class Inspector extends BaseConverter
 {
     protected function initializeSession(Session $session)
     {
         $session
-            ->registerClientPooler(new QueryPooler())
-            ->registerClientPooler(new PreparedQueryPooler())
-            ->registerClientPooler(new InspectorPooler())
-            ->registerClientPooler(new ConverterPooler())
             ->registerClient(new InspectorFixture())
             ;
     }

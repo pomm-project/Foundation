@@ -103,11 +103,8 @@ class ClientHolder extends Atoum
             ;
 
         $this
-            ->exception(function() use ($client_holder) {
-                $client_holder->getAllFor('whatever');
-            })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
-            ->message->contains('does not exist.')
+            ->array($client_holder->getAllFor('whatever'))
+            ->isEmpty()
             ->array($client_holder->getAllFor('test'))
             ->hasSize(2)
             ;

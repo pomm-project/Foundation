@@ -10,6 +10,7 @@
 namespace PommProject\Foundation;
 
 use PommProject\Foundation\Exception\FoundationException;
+use PommProject\Foundation\SessionBuilder;
 
 /**
  * Pomm
@@ -23,8 +24,8 @@ use PommProject\Foundation\Exception\FoundationException;
  */
 class Pomm implements \ArrayAccess
 {
-    protected $configurations = [];
-    protected $sessions       = [];
+    protected $builders = [];
+    protected $sessions = [];
 
     /**
      * __construct
@@ -41,40 +42,100 @@ class Pomm implements \ArrayAccess
      */
     public function __construct(array $configurations = [])
     {
-        $this->configurations = $configurations;
+        foreach ($configurations as $name => $configuration) {
+            if (isset($configuration['class:session_builder'])) {
+                $builder_class = $configuration['class:session_builder'];
+
+                try {
+                    $reflection = new \ReflectionClass($builder_class);
+
+                    if (!$reflection->isSubClassOf('\PommProject\Foundation\SessionBuilder')) {
+                        throw new FoundationException(
+                            sprintf(
+                                "Class '%s' is not a subclass of \Pomm\Foundation\SessionBuilder.",
+                                $builder_class
+                            )
+                        );
+                    }
+                } catch (\ReflectionException $e) {
+                    throw new FoundationException(
+                        sprintf(
+                            "Could not instanciate class '%s'.",
+                            $builder_class
+                        ),
+                        null,
+                        $e
+                    );
+                }
+            } else {
+                $builder_class = '\PommProject\Foundation\FoundationSessionBuilder';
+            }
+
+            $this->builders[$name] = new $builder_class($configuration);
+        }
     }
 
     /**
-     * setConfiguration
+     * addBuilder
      *
-     * Add or replace a database configuration.
+     * Add a new session builder. Override any previously existing builder with
+     * the same name.
      *
      * @access public
-     * @param  DatabaseConfiguration $configuration
-     * @return Pomm                  $this
+     * @param  string           $builder_name
+     * @param  SessionBuilder   $builder
+     * @return Pomm             $this
      */
-    public function setConfiguration($name, DatabaseConfiguration $configuration)
+    public function addBuilder($builder_name, SessionBuilder $builder)
     {
-        $this->configurations[$name] = $configuration->name($name);
+        $this->builders[$builder_name] = $builder;
 
         return $this;
     }
 
     /**
-     * getConfiguration
+     * hasBuilder
      *
-     * Get a configuration.
+     * Return if true or false the given builder exists.
      *
      * @access public
-     * @param  string                $name
-     * @return DatabaseConfiguration
+     * @param  string $name
+     * @return bool
      */
-    public function getConfiguration($name)
+    public function hasBuilder($name)
     {
-        return $this
-            ->checkExistConfiguration($name)
-            ->expandConfiguration($name)
-            ->configurations[$name];
+        return (bool) isset($this->builders[$name]);
+    }
+
+    /**
+     * removeBuilder
+     *
+     * Remove the builder with the given name.
+     *
+     * @access public
+     * @param  string   $name
+     * @throw FoundationException if name does not exist.
+     * @return Pomm     $this
+     */
+    public function removeBuilder($name)
+    {
+        unset($this->builderMustExist($name)->builders[$name]);
+
+        return $this;
+    }
+
+    /**
+     * getBuilder
+     *
+     * Return the given builder.
+     *
+     * @access public
+     * @param  string $name
+     * @return SessionBuilder
+     */
+    public function getBuilder($name)
+    {
+        return $this->builderMustExist($name)->builders[$name];
     }
 
     /**
@@ -99,116 +160,37 @@ class Pomm implements \ArrayAccess
     /**
      * createSession
      *
-     * Create a new session using a configuration and set it to the pool. Any
+     * Create a new session using a session_builder and set it to the pool. Any
      * previous session for this name is overrided.
      *
      * @access public
      * @param  string  $name
+     * @throw  FoundationException if builder does not exist.
      * @return Session
      */
     public function createSession($name)
     {
-        $class_name = $this
-            ->checkExistConfiguration($name)
-            ->expandConfiguration($name)
-            ->configurations[$name]
-            ->getParameterHolder()
-            ->getParameter('class:session', '\PommProject\Foundation\Session')
+        $this->sessions[$name] = $this
+            ->builderMustExist($name)
+            ->builders[$name]
+            ->buildSession()
             ;
-        $session = $this->createNewSession($name, $class_name);
-
-        foreach($this
-            ->configurations[$name]
-            ->getParameterHolder()
-            ->getParameter('default:client_poolers', [])
-            as $pooler) {
-                $session->registerClientPooler(new $pooler());
-            }
-
-        if ($logger = ($this
-            ->configurations[$name]
-            ->getParameterHolder()
-            ->getParameter('class:logger'))
-            !== null) {
-                $session->setLogger(new $logger());
-            }
-
-        return $session;
-    }
-
-    /**
-     * createNewSession
-     *
-     * Create a new session from class name.
-     *
-     * @access protected
-     * @param  string $name
-     * @param  string $class_name
-     * @return Session
-     */
-    protected function createNewSession($name, $class_name)
-    {
-        $parameter_holder = $this
-            ->checkExistConfiguration($name)
-            ->getConfiguration($name)
-            ->getParameterHolder()
-            ;
-        $client_holder_class = $parameter_holder
-            ->getParameter('class:client_holder')
-            ;
-        $connection_class= $parameter_holder
-            ->getParameter('class:connection')
-            ;
-        $this
-            ->checkSubClassOf($class_name, '\PommProject\Foundation\Session')
-            ->sessions[$name] = new $class_name(
-                $this->getConfiguration($name),
-                $client_holder_class !== null ? new $client_holder_class() : null,
-                $connection_class !== null
-                    ? new $connection_class($parameter_holder
-                        ->mustHave('connection:dsn')
-                        ->getParameter('connection:dsn')
-                        )
-                    : null
-            );
 
         return $this->sessions[$name];
     }
 
     /**
-     * registerSession
+     * hasSessionBuilder
      *
-     * Add a session to the pool.
-     *
-     * @access public
-     * @param  string  $name
-     * @param  Session $session
-     * @return Pomm    $this
-     */
-    public function registerSession($name, Session $session)
-    {
-        if ($this->hasConfiguration($name)) {
-            throw new FoundationException(sprintf("Configuration name '%s' is already used.", $name));
-        }
-
-        $this->sessions[$name] = $session;
-        $this->configurations[$name] = $session->getDatabaseConfiguration();
-
-        return $this;
-    }
-
-    /**
-     * hasConfiguration
-     *
-     * Does a given configuration exist ?
+     * Does a given builder exist ?
      *
      * @access public
      * @param  string $name
      * @return bool
      */
-    public function hasConfiguration($name)
+    public function hasSessionBuilder($name)
     {
-        return (bool) (isset($this->configurations[$name]));
+        return (bool) (isset($this->builders[$name]));
     }
 
     /**
@@ -226,72 +208,17 @@ class Pomm implements \ArrayAccess
     }
 
     /**
-     * checkExistConfiguration
+     * getSessionBuilders
      *
-     * Throw an exception if a given configuration does not exist.
-     *
-     * @access public
-     * @param  string $name
-     *                      throw   FoundationException if exists.
-     * @return Pomm   $this
-     */
-    public function checkExistConfiguration($name)
-    {
-        if (!$this->hasConfiguration($name)) {
-            if (count($this->configurations) > 0) {
-                $meaningful_message = sprintf(
-                    "Available configurations are {%s}.",
-                    join(', ',
-                        array_map(
-                            function ($val) { return sprintf("'%s'", $val); },
-                            array_keys($this->configurations)
-                        )
-                    )
-                );
-            } else {
-                $meaningful_message = "No configurations set in Pomm service.";
-            }
-
-            throw new FoundationException(
-                sprintf(
-                    "Database configuration '%s' not found. %s",
-                    $name,
-                    $meaningful_message
-                )
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * clearConfiguration
-     *
-     * Remove a configuration definition.
-     *
-     * @access public
-     * @param  string $name
-     * @return Pomm   $this
-     */
-    public function clearConfiguration($name)
-    {
-        unset($this->checkExistConfiguration($name)->configurations[$name]);
-
-        return $this;
-    }
-
-    /**
-     * getConfigurations
-     *
-     * Return the configuration holder. This is mainly done for testing
+     * Return the builders. This is mainly done for testing
      * purposes.
      *
      * @access public
      * @return array
      */
-    public function getConfigurations()
+    public function getSessionBuilders()
     {
-        return $this->configurations;
+        return $this->builders;
     }
 
     /**
@@ -307,7 +234,7 @@ class Pomm implements \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        $this->setConfiguration($offset, $value);
+        $this->addBuilder($offset, $value);
     }
 
     /**
@@ -315,7 +242,7 @@ class Pomm implements \ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        $this->clearConfiguration($offset);
+        $this->removeBuilder($offset);
     }
 
     /**
@@ -323,70 +250,35 @@ class Pomm implements \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return $this->hasConfiguration($offset);
+        return $this->hasBuilder($offset);
     }
 
     /**
-     * expandConfiguration
+     * builderMustExist
      *
-     * Ensure a given configuration is a DatabaseConfiguration instance. If
-     * not, it spawns one.
-     *
-     * @access private
-     * @param  string $name
-     * @return Pomm   $this
-     */
-    private function expandConfiguration($name)
-    {
-        if (!is_object($this->configurations[$name])) {
-            $this->configurations[$name] = $this->buildDatabaseConfiguration($this->configurations[$name]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * buildDatabaseConfiguration
-     *
-     * Create a DatabaseConfiguration instance from configuration definition.
+     * Throw a FoundationException if the given builder does not exist.
      *
      * @access private
-     * @param  array                 $configuration
-     * @return DatabaseConfiguration
+     * @param  string   $name
+     * @throw  FoundationException
+     * @return Pom      $this
      */
-    private function buildDatabaseConfiguration(array $configuration)
+    private function builderMustExist($name)
     {
-        if (!isset($configuration['config_class_name'])) {
-            return new DatabaseConfiguration($configuration);
-        }
-
-        $class_name = $configuration['config_class_name'];
-        $this->checkSubClassOf($class_name, '\PommProject\Foundation\DatabaseConfiguration');
-
-        return new $class_name($configuration);
-
-    }
-
-    /**
-     * checkSubClassOf
-     *
-     * Check if a class exists and if it is a subclass of another.
-     *
-     * @access private
-     * @param  string $class
-     * @param  string $super_class
-     * @return Pomm   $this
-     */
-    private function checkSubClassOf($class, $super_class)
-    {
-        try {
-            $reflection = new \ReflectionClass($class);
-
-            if (!(trim($class, "\\") === trim($super_class, "\\") || $reflection->isSubClassOf($super_class))) {
-                throw new FoundationException(sprintf("Class '%s' must extend '%s'.", $reflection->getName(), $super_class));
-            }
-        } catch (\ReflectionException $e) {
-            throw new FoundationException(sprintf("Class '%s' could not be loaded. Reason given:\n%s", $class, $e->getMessage()));
+        if (!$this->hasBuilder($name)) {
+            throw new FoundationException(
+                sprintf(
+                    "No such builder '%s'. Available builders are {%s}.",
+                    $name,
+                    join(
+                        ', ',
+                        array_map(
+                            function ($val) { return sprintf("'%s'", $val); },
+                            array_keys($this->getSessionBuilders())
+                        )
+                    )
+                )
+            );
         }
 
         return $this;

@@ -45,44 +45,42 @@ class Observer extends SessionAwareAtoum
 
     public function testGetNotification()
     {
-        $this
-            ->getSession()
+        $session = $this->getSession()
             ->registerClient($this->newTestedInstance('pika'))
             ;
 
         $this
-            ->variable($this->getSession()->getObserver('pika')->getNotification())
+            ->variable($session->getObserver('pika')->getNotification())
             ->isNull()
             ;
         $this->notify('pika');
         $this
-            ->array($this->getSession()->getObserver('pika')->getNotification())
+            ->array($session->getObserver('pika')->getNotification())
             ->containsValues(['pika', ''])
             ;
         $this->notify('pika', 'chu');
         $this
-            ->array($this->getSession()->getObserver('pika')->getNotification())
+            ->array($session->getObserver('pika')->getNotification())
             ->containsValues(['pika', 'chu'])
-            ->variable($this->getSession()->getObserver('pika')->getNotification())
+            ->variable($session->getObserver('pika')->getNotification())
             ->isNull()
             ;
     }
 
     public function testThrowNotification()
     {
-        $this
-            ->getSession()
+        $session = $this->getSession()
             ->registerClient($this->newTestedInstance('an identifier'))
             ;
         $this
-            ->object($this->getSession()->getObserver('an identifier')->throwNotification())
+            ->object($session->getObserver('an identifier')->throwNotification())
             ->isInstanceOf('\PommProject\Foundation\Observer\Observer')
             ;
         $this->notify('an identifier', 'some data');
         $this
-            ->exception(function() { $this->getSession()->getObserver('an identifier')->throwNotification(); })
+            ->exception(function() use ($session) { $session->getObserver('an identifier')->throwNotification(); })
             ->message->contains('some data')
-            ->object($this->getSession()->getObserver('an identifier')->throwNotification())
+            ->object($session->getObserver('an identifier')->throwNotification())
             ->isInstanceOf('\PommProject\Foundation\Observer\Observer')
             ;
     }

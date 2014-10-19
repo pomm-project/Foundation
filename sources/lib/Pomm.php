@@ -10,7 +10,7 @@
 namespace PommProject\Foundation;
 
 use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\Session\SessionBuilder;
+use PommProject\Foundation\Session\SessionBuilder as VanillaSessionBuilder;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -83,11 +83,11 @@ class Pomm implements \ArrayAccess
      * the same name.
      *
      * @access public
-     * @param  string           $builder_name
-     * @param  SessionBuilder   $builder
-     * @return Pomm             $this
+     * @param  string                   $builder_name
+     * @param  VanillaSessionBuilder    $builder
+     * @return Pomm                     $this
      */
-    public function addBuilder($builder_name, SessionBuilder $builder)
+    public function addBuilder($builder_name, VanillaSessionBuilder $builder)
     {
         $this->builders[$builder_name] = $builder;
 
@@ -132,7 +132,7 @@ class Pomm implements \ArrayAccess
      *
      * @access public
      * @param  string $name
-     * @return SessionBuilder
+     * @return VanillaSessionBuilder
      */
     public function getBuilder($name)
     {

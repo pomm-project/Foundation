@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Test\Unit;
 
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 
 class ResultIterator extends SessionAwareAtoum

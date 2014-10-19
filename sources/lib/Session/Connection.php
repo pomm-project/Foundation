@@ -7,11 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PommProject\Foundation;
+namespace PommProject\Foundation\Session;
 
 use PommProject\Foundation\Exception\ConnectionException;
 use PommProject\Foundation\Exception\SqlException;
-use PommProject\Foundation\ConnectionConfigurator;
+use PommProject\Foundation\Session\ConnectionConfigurator;
+use PommProject\Foundation\Session\ResultHandler;
 
 /**
  * Connection

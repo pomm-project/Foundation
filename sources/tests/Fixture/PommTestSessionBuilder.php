@@ -9,9 +9,9 @@
  */
 namespace PommProject\Foundation\Test\Fixture;
 
-use PommProject\Foundation\SessionBuilder;
+use PommProject\Foundation\Session\Connection;
 use PommProject\Foundation\Client\ClientHolder;
-use PommProject\Foundation\Connection;
+use PommProject\Foundation\Session\SessionBuilder;
 use PommProject\Foundation\Test\Fixture\PommTestSession;
 
 class PommTestSessionBuilder extends SessionBuilder

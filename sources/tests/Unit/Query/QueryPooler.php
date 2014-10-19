@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Test\Unit\Query;
 
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 use PommProject\Foundation\Test\Fixture\QueryListener;
 use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;

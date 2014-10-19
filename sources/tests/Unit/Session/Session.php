@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PommProject\Foundation\Test\Unit;
+namespace PommProject\Foundation\Test\Unit\Session;
 
-use PommProject\Foundation\Session                           as FoundationSession;
+use PommProject\Foundation\Session\Session                   as VanillaSession;
 use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 use Mock\PommProject\Foundation\Client\ClientInterface       as ClientInterfaceMock;
 use Mock\PommProject\Foundation\Client\ClientPoolerInterface as ClientPoolerInterfaceMock;
@@ -17,7 +17,7 @@ use Atoum;
 
 class Session extends SessionAwareAtoum
 {
-    protected function initializeSession(FoundationSession $session)
+    protected function initializeSession(VanillaSession $session)
     {
     }
 
@@ -45,7 +45,7 @@ class Session extends SessionAwareAtoum
 
         $this
             ->object($session->getConnection())
-            ->isInstanceOf('\PommProject\Foundation\Connection')
+            ->isInstanceOf('\PommProject\Foundation\Session\Connection')
             ;
     }
 
@@ -75,7 +75,7 @@ class Session extends SessionAwareAtoum
             ->variable($session->getClient('test', 'one'))
             ->isNull()
             ->object($session->registerClient($client_mock))
-            ->isInstanceOf('\PommProject\Foundation\Session')
+            ->isInstanceOf('\PommProject\Foundation\Session\Session')
             ->mock($client_mock)
             ->call('getClientIdentifier')
             ->once()
@@ -98,7 +98,7 @@ class Session extends SessionAwareAtoum
             ->isFalse()
             ->assert('Testing client pooler registration.')
             ->object($session->registerClientPooler($client_pooler_mock))
-            ->isInstanceOf('\PommProject\Foundation\Session')
+            ->isInstanceOf('\PommProject\Foundation\Session\Session')
             ->boolean($session->hasPoolerForType('test'))
             ->isTrue()
             ->mock($client_pooler_mock)

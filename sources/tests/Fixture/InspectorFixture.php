@@ -10,7 +10,7 @@
 namespace PommProject\Foundation\Test\Fixture;
 
 use PommProject\Foundation\Client\Client;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 
 Class InspectorFixture extends Client
 {

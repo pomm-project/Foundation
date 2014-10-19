@@ -10,7 +10,7 @@
 namespace PommProject\Foundation\Test\Unit\Converter;
 
 use PommProject\Foundation\Converter\ConverterInterface;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 use Atoum;
 
 class ConverterHolder extends Atoum

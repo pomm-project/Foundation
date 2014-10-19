@@ -11,7 +11,7 @@ namespace PommProject\Foundation\Test\Unit\Observer;
 
 use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 use PommProject\Foundation\Observer\ObserverPooler;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 
 class Observer extends SessionAwareAtoum
 {

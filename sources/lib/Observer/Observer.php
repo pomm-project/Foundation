@@ -11,7 +11,7 @@ namespace PommProject\Foundation\Observer;
 
 use PommProject\Foundation\Exception\NotificationException;
 use PommProject\Foundation\Client\Client;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 
 /**
  * Observer

@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Test\Unit;
 
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
 class ConvertedResultIterator extends BaseConverter

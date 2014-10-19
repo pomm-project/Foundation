@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Test\Fixture;
 
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 
 class PommTestSession extends Session
 {

@@ -9,8 +9,8 @@
  */
 namespace PommProject\Foundation\Test\Unit;
 
-use PommProject\Foundation\SessionBuilder;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\SessionBuilder;
+use PommProject\Foundation\Session\Session;
 use Atoum;
 
 abstract class SessionAwareAtoum extends Atoum

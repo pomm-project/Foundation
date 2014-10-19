@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Test\Unit\Inspector;
 
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Query\QueryPooler;
 use PommProject\Foundation\Inspector\InspectorPooler;
 use PommProject\Foundation\Converter\ConverterPooler;

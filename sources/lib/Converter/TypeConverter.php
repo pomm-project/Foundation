@@ -10,7 +10,7 @@
 namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Exception\ConverterException;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 
 /**
  * TypeConverter

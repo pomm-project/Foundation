@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PommProject\Foundation\Test\Unit;
+namespace PommProject\Foundation\Test\Unit\Session;
 
 use Atoum;
-use PommProject\Foundation\Connection as PommConnection;
+use PommProject\Foundation\Session\Connection as PommConnection;
 
 class Connection extends Atoum
 {
@@ -81,7 +81,7 @@ class Connection extends Atoum
         $connection = $this->getConnection($this->getDsn());
         $this
             ->object($connection->executeAnonymousQuery('select true'))
-            ->isInstanceOf('\PommProject\Foundation\ResultHandler')
+            ->isInstanceOf('\PommProject\Foundation\Session\ResultHandler')
             ->exception(function() use ($connection) {
                     $connection->executeAnonymousQuery('bad query');
                 })

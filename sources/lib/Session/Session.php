@@ -7,8 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PommProject\Foundation;
+namespace PommProject\Foundation\Session;
 
+use PommProject\Foundation\Inflector;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Client\ClientInterface;

@@ -10,7 +10,8 @@
 namespace PommProject\Foundation;
 
 use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\SessionBuilder;
+use PommProject\Foundation\Session\SessionBuilder;
+use PommProject\Foundation\Session\Session;
 
 /**
  * Pomm
@@ -49,10 +50,10 @@ class Pomm implements \ArrayAccess
                 try {
                     $reflection = new \ReflectionClass($builder_class);
 
-                    if (!$reflection->isSubClassOf('\PommProject\Foundation\SessionBuilder')) {
+                    if (!$reflection->isSubClassOf('\PommProject\Foundation\Session\SessionBuilder')) {
                         throw new FoundationException(
                             sprintf(
-                                "Class '%s' is not a subclass of \Pomm\Foundation\SessionBuilder.",
+                                "Class '%s' is not a subclass of \Pomm\Foundation\Session\SessionBuilder.",
                                 $builder_class
                             )
                         );
@@ -68,7 +69,7 @@ class Pomm implements \ArrayAccess
                     );
                 }
             } else {
-                $builder_class = '\PommProject\Foundation\FoundationSessionBuilder';
+                $builder_class = '\PommProject\Foundation\SessionBuilder';
             }
 
             $this->builders[$name] = new $builder_class($configuration);

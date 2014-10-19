@@ -10,7 +10,7 @@
 namespace PommProject\Foundation\Client;
 
 use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\Session;
 
 /**
  * ClientPooler

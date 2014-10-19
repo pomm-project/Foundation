@@ -9,6 +9,9 @@
  */
 namespace PommProject\Foundation;
 
+use PommProject\Foundation\Session\ResultHandler;
+use PommProject\Foundation\Session\Session;
+
 /**
  * ConvertedResultIterator
  *

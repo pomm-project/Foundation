@@ -9,8 +9,8 @@
  */
 namespace PommProject\Foundation\Test\Unit;
 
-use PommProject\Foundation\SessionBuilder;
-use PommProject\Foundation\Session;
+use PommProject\Foundation\Session\SessionBuilder;
+use PommProject\Foundation\Session\Session;
 use Atoum;
 
 class Pomm extends Atoum
@@ -85,7 +85,7 @@ class Pomm extends Atoum
         $pomm = $this->getPomm();
         $this
             ->object($pomm->getBuilder('db_one'))
-            ->isInstanceOf('\PommProject\Foundation\SessionBuilder')
+            ->isInstanceOf('\PommProject\Foundation\Session\SessionBuilder')
             ->object($pomm->getBuilder('db_two'))
             ->isInstanceOf('\PommProject\Foundation\Test\Fixture\PommTestSessionBuilder')
             ->exception(function() use ($pomm) { $pomm->getBuilder('whatever'); })
@@ -99,7 +99,7 @@ class Pomm extends Atoum
         $pomm = $this->getPomm();
         $this
             ->object($pomm->getSession('db_one'))
-            ->isInstanceOf('\PommProject\Foundation\Session')
+            ->isInstanceOf('\PommProject\Foundation\Session\Session')
             ->object($pomm->getSession('db_two'))
             ->isInstanceOf('\PommProject\Foundation\Test\Fixture\PommTestSession')
             ->exception(function() use ($pomm) { return $pomm->getSession('whatever'); })
@@ -115,7 +115,7 @@ class Pomm extends Atoum
         $pomm = $this->getPomm();
         $this
             ->object($pomm->getSession('db_one'))
-            ->isInstanceOf('\PommProject\Foundation\Session')
+            ->isInstanceOf('\PommProject\Foundation\Session\Session')
             ->object($pomm->getSession('db_two'))
             ->isInstanceOf('\PommProject\Foundation\Test\Fixture\PommTestSession')
             ;

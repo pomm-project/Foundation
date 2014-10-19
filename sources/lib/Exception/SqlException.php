@@ -34,7 +34,7 @@ class SqlException extends FoundationException
      * @param  string   $sql
      * @return void
      */
-    public function __construct($result_resource, $sql)
+    public function __construct($result_resource, $sql, $code = null, \Exception $e = null)
     {
         $this->result_resource = $result_resource;
         $this->sql = $sql;
@@ -45,7 +45,9 @@ class SqlException extends FoundationException
                 $this->getSQLErrorState(),
                 $this->getSQLErrorSeverity(),
                 $this->getSqlErrorMessage()
-            )
+            ),
+            $code,
+            $e
         );
     }
 

@@ -9,18 +9,11 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
+use PommProject\Foundation\Tester\FoundationSessionAtoum;
 use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\SessionBuilder;
-use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
-use PommProject\Foundation\Converter\ConverterPooler;
 
-class BaseConverter extends SessionAwareAtoum
+abstract class BaseConverter extends FoundationSessionAtoum
 {
-    protected function createSessionBuilder($configuration)
-    {
-        return new SessionBuilder($configuration);
-    }
-
     protected function initializeSession(Session $session)
     {
     }

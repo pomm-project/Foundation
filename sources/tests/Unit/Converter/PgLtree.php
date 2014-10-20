@@ -15,28 +15,30 @@ class PgLtree extends BaseConverter
 {
     public function testFromPg()
     {
+        $session = $this->buildSession();
         $converter = $this->newTestedInstance();
         $this
             ->array(
                 $converter
-                    ->fromPg('_a_b_.c.d', 'ltree', $this->getSession())
+                    ->fromPg('_a_b_.c.d', 'ltree', $session)
             )
             ->isIdenticalTo(['_a_b_', 'c', 'd'])
-            ->variable($converter->fromPg(null, 'ltree', $this->getSession()))
+            ->variable($converter->fromPg(null, 'ltree', $session))
             ->isNull()
             ;
     }
 
     public function testToPg()
     {
+        $session = $this->buildSession();
         $converter = $this->newTestedInstance();
         $this
             ->string(
                 $converter
-                    ->toPg(['_a_b_', 'c', 'd'], 'ltree', $this->getSession())
+                    ->toPg(['_a_b_', 'c', 'd'], 'ltree', $session)
             )
             ->isEqualTo("ltree '_a_b_.c.d'")
-            ->string($converter->toPg(null, 'ltree', $this->getSession()))
+            ->string($converter->toPg(null, 'ltree', $session))
             ->isEqualTo('NULL::ltree')
         ;
     }

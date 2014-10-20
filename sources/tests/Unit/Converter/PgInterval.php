@@ -15,20 +15,22 @@ class PgInterval extends BaseConverter
 {
     public function testFromPg()
     {
+        $session = $this->buildSession();
         $this
-            ->variable($this->newTestedInstance()->fromPg(null, 'interval', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'interval', $session))
             ->isNull()
-            ->dateInterval($this->newTestedInstance()->fromPg('P14346DT22H47M3.138892S', 'interval', $this->getSession()))
+            ->dateInterval($this->newTestedInstance()->fromPg('P14346DT22H47M3.138892S', 'interval', $session))
             ->isEqualTo(new \DateInterval('P14346DT22H47M3S')) // <- truncated to second precision
             ;
     }
 
     public function testToPg()
     {
+        $session = $this->buildSession();
         $this
-            ->string($this->newTestedInstance()->toPg(null, 'interval', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(null, 'interval', $session))
             ->isEqualTo('NULL::interval')
-            ->string($this->newTestedInstance()->toPg(new \DateInterval('P14346DT22H47M3S'), 'interval', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(new \DateInterval('P14346DT22H47M3S'), 'interval', $session))
             ->isEqualTo("interval '00 years 00 months 14346 days 22:47:03'")
             ;
     }

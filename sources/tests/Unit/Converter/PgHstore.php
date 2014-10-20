@@ -16,15 +16,16 @@ class PgHstore extends BaseConverter
     public function testFromPg()
     {
         $converter = $this->newTestedInstance();
+        $session = $this->buildSession();
         $this
             ->array(
                 $converter
-                    ->fromPg('"a"=>"b", "b"=>NULL, "a b c"=>"d \'é\' f"', 'hstore', $this->getSession())
+                    ->fromPg('"a"=>"b", "b"=>NULL, "a b c"=>"d \'é\' f"', 'hstore', $session)
             )
             ->isIdenticalTo(['a' => 'b', 'b' => null, 'a b c' => 'd \'é\' f'])
             ->variable(
                 $converter
-                    ->fromPg(null, 'hstore', $this->getSession())
+                    ->fromPg(null, 'hstore', $session)
             )
             ->isNull()
             ;
@@ -32,16 +33,17 @@ class PgHstore extends BaseConverter
 
     public function testToPg()
     {
+        $session   = $this->buildSession();
         $converter = $this->newTestedInstance();
         $this
             ->string(
                 $converter
-                    ->toPg(null, 'hstore', $this->getSession())
+                    ->toPg(null, 'hstore', $session)
                 )
             ->isEqualTo('NULL::hstore')
             ->string(
                 $converter
-                    ->toPg(['a' => 'b', 'b' => null, 'a b c' => 'd \'é\' f'], 'hstore', $this->getSession())
+                    ->toPg(['a' => 'b', 'b' => null, 'a b c' => 'd \'é\' f'], 'hstore', $session)
                 )
             ->isEqualTo('hstore(\'"a" => "b", "b" => NULL, "a b c" => "d \'\'é\'\' f"\')')
             ;

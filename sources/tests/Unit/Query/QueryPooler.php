@@ -10,11 +10,11 @@
 namespace PommProject\Foundation\Test\Unit\Query;
 
 use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
 use PommProject\Foundation\Test\Fixture\QueryListener;
+use PommProject\Foundation\Tester\VanillaSessionAtoum;
 use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
 
-class QueryPooler extends SessionAwareAtoum
+class QueryPooler extends VanillaSessionAtoum
 {
     protected function initializeSession(Session $session)
     {
@@ -26,18 +26,17 @@ class QueryPooler extends SessionAwareAtoum
 
     public function testGetClient()
     {
+        $session = $this->buildSession();
         $this
             ->object(
-                $this
-                    ->getSession()
+                $session
                     ->getPoolerForType('query')
                     ->getClient()
                 )
             ->isInstanceOf('\PommProject\Foundation\Query\SimpleQuery')
-            ->exception(function() {
+            ->exception(function() use ($session) {
                 return
-                    $this
-                        ->getSession()
+                    $session
                         ->getPoolerForType('query')
                         ->getClient('\No\Such\Client')
                         ;
@@ -49,8 +48,8 @@ class QueryPooler extends SessionAwareAtoum
 
     public function testRegisterListener()
     {
+        $session = $this->buildSession();
         $listener = new QueryListener();
-        $session = $this->getSession();
         $session
             ->getClientUsingPooler('query', null)
             ;

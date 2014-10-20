@@ -10,10 +10,14 @@
 namespace PommProject\Foundation\Test\Unit;
 
 use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
+use PommProject\Foundation\Tester\FoundationSessionAtoum;
 
-class ConvertedResultIterator extends BaseConverter
+class ConvertedResultIterator extends FoundationSessionAtoum
 {
+    protected function initializeSession(Session $session)
+    {
+    }
+
     protected function getPikaSql()
     {
         return <<<SQL
@@ -33,14 +37,14 @@ SQL;
 
     protected function getResultResource($sql, array $params = [])
     {
-        return $this->getSession()->getConnection()->sendQueryWithParameters($sql, $params);
+        return $this->buildSession()->getConnection()->sendQueryWithParameters($sql, $params);
     }
 
     public function testConstructor()
     {
         $iterator = $this->newTestedInstance(
             $this->getResultResource("select true::boolean"),
-            $this->getSession()
+            $this->buildSession()
         );
 
         $this
@@ -56,7 +60,7 @@ SQL;
         $sql = $this->getPikaSql();
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
-            $this->getSession()
+            $this->buildSession()
         );
 
         $this
@@ -73,7 +77,7 @@ SQL;
 
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
-            $this->getSession()
+            $this->buildSession()
         );
 
         $this
@@ -92,7 +96,7 @@ SQL;
 
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
-            $this->getSession()
+            $this->buildSession()
         );
 
         $this
@@ -110,7 +114,7 @@ SQL;
         $sql = $this->getPikaSql();
         $iterator = $this->newTestedInstance(
             $this->getResultResource($sql),
-            $this->getSession()
+            $this->buildSession()
         );
 
         $this

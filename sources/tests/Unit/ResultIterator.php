@@ -10,9 +10,9 @@
 namespace PommProject\Foundation\Test\Unit;
 
 use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
+use PommProject\Foundation\Tester\VanillaSessionAtoum;
 
-class ResultIterator extends SessionAwareAtoum
+class ResultIterator extends VanillaSessionAtoum
 {
     protected function initializeSession(Session $session)
     {
@@ -36,7 +36,7 @@ SQL;
 
     protected function getResultResource($sql, array $params = [])
     {
-        return $this->getSession()->getConnection()->sendQueryWithParameters($sql, $params);
+        return $this->buildSession()->getConnection()->sendQueryWithParameters($sql, $params);
     }
 
     public function testConstructor()

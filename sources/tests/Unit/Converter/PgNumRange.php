@@ -16,13 +16,14 @@ class PgNumRange extends BaseConverter
 {
     public function testFromPg()
     {
+        $session = $this->buildSession();
         $this
-            ->object($this->newTestedInstance()->fromPg('[1,3)', 'int4range', $this->getSession()))
+            ->object($this->newTestedInstance()->fromPg('[1,3)', 'int4range', $session))
             ->isInstanceOf('PommProject\Foundation\Converter\Type\NumRange')
-            ->variable($this->newTestedInstance()->fromPg(null, 'point', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'point', $session))
             ->isNull()
             ;
-        $range = $this->newTestedInstance()->fromPg('[1,3)', 'int4range', $this->getSession());
+        $range = $this->newTestedInstance()->fromPg('[1,3)', 'int4range', $session);
         $this
             ->integer($range->start_limit)
             ->isEqualTo(1)
@@ -33,7 +34,7 @@ class PgNumRange extends BaseConverter
             ->boolean($range->end_incl)
             ->isFalse()
             ;
-        $range = $this->newTestedInstance()->fromPg('(-3.1415, -1.6180]', 'numrange', $this->getSession());
+        $range = $this->newTestedInstance()->fromPg('(-3.1415, -1.6180]', 'numrange', $session);
         $this
             ->float($range->start_limit)
             ->isEqualTo(-3.1415)
@@ -48,9 +49,10 @@ class PgNumRange extends BaseConverter
 
     public function testToPg()
     {
-        $range = $this->newTestedInstance()->fromPg('[1,3)', 'myrange', $this->getSession());
+        $session = $this->buildSession();
+        $range = $this->newTestedInstance()->fromPg('[1,3)', 'myrange', $session);
         $this
-            ->string($this->newTestedInstance()->toPg($range, 'myrange', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg($range, 'myrange', $session))
             ->isEqualTo("myrange('[1,3)')")
             ;
     }

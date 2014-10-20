@@ -15,32 +15,34 @@ class PgString extends BaseConverter
 {
     public function testFromPg()
     {
+        $session = $this->buildSession();
         $string = <<<_
 \\" ''\r
 _;
         $this
-            ->string($this->newTestedInstance()->fromPg($string, 'text', $this->getSession()))
+            ->string($this->newTestedInstance()->fromPg($string, 'text', $session))
             ->isEqualTo("\\\" ''\r")
-            ->variable($this->newTestedInstance()->fromPg(null, 'text', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'text', $session))
             ->isNull()
-            ->string($this->newTestedInstance()->fromPg(' ', 'text', $this->getSession()))
+            ->string($this->newTestedInstance()->fromPg(' ', 'text', $session))
             ->isEqualTo(' ')
-            ->string($this->newTestedInstance()->fromPg('', 'text', $this->getSession()))
+            ->string($this->newTestedInstance()->fromPg('', 'text', $session))
             ->isEqualTo('')
             ;
     }
 
     public function testToPg()
     {
+        $session = $this->buildSession();
         $string = <<<_
 \\"	!'
 _;
         $this
-            ->string($this->newTestedInstance()->toPg($string, 'varchar', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg($string, 'varchar', $session))
             ->isEqualTo("varchar  E'\\\\\"\t!'''")
-            ->string($this->newTestedInstance()->toPg(null, 'varchar', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(null, 'varchar', $session))
             ->isEqualTo('NULL::varchar')
-            ->string($this->newTestedInstance()->toPg('', 'bpchar', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg('', 'bpchar', $session))
             ->isEqualTo("bpchar ''")
             ;
     }

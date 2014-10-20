@@ -15,20 +15,22 @@ class PgTimestamp extends BaseConverter
 {
     public function testFromPg()
     {
+        $session = $this->buildSession();
         $this
-            ->datetime($this->newTestedInstance()->fromPg('2014-09-27 18:51:35.678406+00', 'timestamptz', $this->getSession()))
+            ->datetime($this->newTestedInstance()->fromPg('2014-09-27 18:51:35.678406+00', 'timestamptz', $session))
             ->hasDateAndTime(2014, 9, 27, 18, 51, 35.678406)
-            ->variable($this->newTestedInstance()->fromPg(null, 'timestamptz', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'timestamptz', $session))
             ->isNull()
             ;
     }
 
     public function testToPg()
     {
+        $session = $this->buildSession();
         $this
-            ->string($this->newTestedInstance()->toPg(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz', $session))
             ->isEqualTo("timestamptz '2014-09-27 18:51:35.678406+00:00'")
-            ->string($this->newTestedInstance()->toPg(null, 'timestamptz', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(null, 'timestamptz', $session))
             ->isEqualTo("NULL::timestamptz")
             ;
     }

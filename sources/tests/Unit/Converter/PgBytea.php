@@ -15,13 +15,14 @@ class PgBytea extends BaseConverter
 {
     public function testFromPg()
     {
+        $session = $this->buildSession();
         $binary = chr(0).chr(27).chr(92).chr(39).chr(32).chr(13);
-        $output = $this->newTestedInstance()->fromPg('\x001b5c27200d', 'bytea', $this->getSession());
+        $output = $this->newTestedInstance()->fromPg('\x001b5c27200d', 'bytea', $session);
         $this
             ->string($output)
             ->string(base64_encode($output))
             ->isEqualTo(base64_encode($binary))
-            ->variable($this->newTestedInstance()->fromPg(null, 'bytea', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'bytea', $session))
             ->isNull()
             ;
     }
@@ -30,11 +31,12 @@ class PgBytea extends BaseConverter
     {
         $binary = chr(0).chr(27).chr(92).chr(39).chr(32).chr(13);
         $output = '\x001b5c27200d';
+        $session = $this->buildSession();
 
         $this
-            ->string($this->newTestedInstance()->toPg($binary, 'bytea', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg($binary, 'bytea', $session))
             ->isEqualTo(sprintf("bytea '%s'", $output))
-            ->string($this->newTestedInstance()->toPg(null, 'bytea', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(null, 'bytea', $session))
             ->isEqualTo('NULL::bytea')
             ;
     }

@@ -16,13 +16,14 @@ class PgPoint extends BaseConverter
 {
     public function testFromPg()
     {
+        $session = $this->buildSession();
         $this
-            ->object($this->newTestedInstance()->fromPg('(1.2345,-9.87654)', 'point', $this->getSession()))
+            ->object($this->newTestedInstance()->fromPg('(1.2345,-9.87654)', 'point', $session))
             ->isInstanceOf('PommProject\Foundation\Converter\Type\Point')
-            ->variable($this->newTestedInstance()->fromPg(null, 'point', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'point', $session))
             ->isNull()
             ;
-        $point = $this->newTestedInstance()->fromPg('(1.2345,-9.87654)', 'point', $this->getSession());
+        $point = $this->newTestedInstance()->fromPg('(1.2345,-9.87654)', 'point', $session);
         $this
             ->float($point->x)
             ->isEqualTo(1.2345)
@@ -33,17 +34,18 @@ class PgPoint extends BaseConverter
 
     public function testToPg()
     {
+        $session = $this->buildSession();
         $point = new Point('(1.2345, -9.87654)');
         $this
-            ->string($this->newTestedInstance()->toPg($point, 'point', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg($point, 'point', $session))
             ->isEqualTo('point(1.2345,-9.87654)')
-            ->string($this->newTestedInstance()->toPg('(1.2345,-9.87654)', 'point', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg('(1.2345,-9.87654)', 'point', $session))
             ->isEqualTo('point(1.2345,-9.87654)')
-            ->exception(function() {
-                return $this->newTestedInstance()->toPg('azsdf', 'point', $this->getSession());
+            ->exception(function() use ($session) {
+                return $this->newTestedInstance()->toPg('azsdf', 'point', $session);
             })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
-            ->string($this->newTestedInstance()->toPg(null, 'subpoint', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(null, 'subpoint', $session))
             ->isEqualTo('NULL::subpoint')
             ;
     }

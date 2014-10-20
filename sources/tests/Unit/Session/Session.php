@@ -10,12 +10,11 @@
 namespace PommProject\Foundation\Test\Unit\Session;
 
 use PommProject\Foundation\Session\Session                   as VanillaSession;
-use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
+use PommProject\Foundation\Tester\VanillaSessionAtoum;
 use Mock\PommProject\Foundation\Client\ClientInterface       as ClientInterfaceMock;
 use Mock\PommProject\Foundation\Client\ClientPoolerInterface as ClientPoolerInterfaceMock;
-use Atoum;
 
-class Session extends SessionAwareAtoum
+class Session extends VanillaSessionAtoum
 {
     protected function initializeSession(VanillaSession $session)
     {
@@ -41,7 +40,7 @@ class Session extends SessionAwareAtoum
 
     public function testGetConnection()
     {
-        $session = $this->getSession();
+        $session = $this->buildSession();
 
         $this
             ->object($session->getConnection())
@@ -51,7 +50,7 @@ class Session extends SessionAwareAtoum
 
     public function testGetClient()
     {
-        $session = $this->getSession();
+        $session = $this->buildSession();
         $client  = $this->getClientInterfaceMock('one');
         $session->registerClient($client);
         $this
@@ -68,7 +67,7 @@ class Session extends SessionAwareAtoum
 
     public function testRegisterClient()
     {
-        $session     = $this->getSession();
+        $session     = $this->buildSession();
         $client_mock = $this->getClientInterfaceMock('one');
 
         $this
@@ -90,7 +89,7 @@ class Session extends SessionAwareAtoum
 
     public function testRegisterPooler()
     {
-        $session            = $this->getSession();
+        $session            = $this->buildSession();
         $client_pooler_mock = $this->getClientPoolerInterfaceMock('test');
 
         $this
@@ -111,7 +110,7 @@ class Session extends SessionAwareAtoum
 
     public function testGetPoolerForType()
     {
-        $session            = $this->getSession();
+        $session            = $this->buildSession();
         $client_pooler_mock = $this->getClientPoolerInterfaceMock('test');
 
         $this
@@ -129,7 +128,7 @@ class Session extends SessionAwareAtoum
     public function testGetClientUsingPooler()
     {
         $client_pooler_mock = $this->getClientPoolerInterfaceMock('test');
-        $session            = $this->getSession()->registerClientPooler($client_pooler_mock);
+        $session            = $this->buildSession()->registerClientPooler($client_pooler_mock);
 
         $this
             ->object($session->getClientUsingPooler('test', 'ok'))
@@ -143,7 +142,7 @@ class Session extends SessionAwareAtoum
     public function testUnderscoreCall()
     {
         $client_pooler_mock = $this->getClientPoolerInterfaceMock('test');
-        $session            = $this->getSession()->registerClientPooler($client_pooler_mock);
+        $session            = $this->buildSession()->registerClientPooler($client_pooler_mock);
 
         $this
             ->exception(function() use ($session) { $session->azerty('ok', 'what'); })

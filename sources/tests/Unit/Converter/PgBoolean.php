@@ -15,27 +15,29 @@ class PgBoolean extends BaseConverter
 {
     public function testFromPg()
     {
+        $session = $this->buildSession();
         $this
-            ->boolean($this->newTestedInstance()->fromPg('t', 'bool', $this->getSession()))
+            ->boolean($this->newTestedInstance()->fromPg('t', 'bool', $session))
             ->isTrue()
-            ->boolean($this->newTestedInstance()->fromPg('f', 'bool', $this->getSession()))
+            ->boolean($this->newTestedInstance()->fromPg('f', 'bool', $session))
             ->isFalse()
-            ->exception(function() { $this->newTestedInstance()->fromPg('whatever', 'bool', $this->getSession()); })
+            ->exception(function() use ($session) { $this->newTestedInstance()->fromPg('whatever', 'bool', $session); })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
             ->message->contains('Unknown bool data')
-            ->variable($this->newTestedInstance()->fromPg(null, 'bool', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'bool', $session))
             ->isNull()
             ;
     }
 
     public function testToPg()
     {
+        $session = $this->buildSession();
         $this
-            ->string($this->newTestedInstance()->toPg(true, 'bool', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(true, 'bool', $session))
             ->isEqualTo("bool 'true'")
-            ->string($this->newTestedInstance()->toPg(false, 'bool', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(false, 'bool', $session))
             ->isEqualTo("bool 'false'")
-            ->string($this->newTestedInstance()->toPg(null, 'bool', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(null, 'bool', $session))
             ->isEqualTo("NULL::bool")
             ;
     }

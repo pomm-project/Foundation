@@ -16,13 +16,14 @@ class PgCircle extends BaseConverter
 {
     public function testFromPg()
     {
+        $session = $this->buildSession();
         $this
-            ->object($this->newTestedInstance()->fromPg('<(1.2345,-9.87654),3.141596>', 'circle', $this->getSession()))
+            ->object($this->newTestedInstance()->fromPg('<(1.2345,-9.87654),3.141596>', 'circle', $session))
             ->isInstanceOf('PommProject\Foundation\Converter\Type\Circle')
-            ->variable($this->newTestedInstance()->fromPg(null, 'circle', $this->getSession()))
+            ->variable($this->newTestedInstance()->fromPg(null, 'circle', $session))
             ->isNull()
             ;
-        $circle = $this->newTestedInstance()->fromPg('<(1.2345,-9.87654),3.141596>', 'circle', $this->getSession());
+        $circle = $this->newTestedInstance()->fromPg('<(1.2345,-9.87654),3.141596>', 'circle', $session);
         $this
             ->object($circle->center)
             ->isInstanceOf('PommProject\Foundation\Converter\Type\Point')
@@ -35,16 +36,17 @@ class PgCircle extends BaseConverter
 
     public function testToPg()
     {
-        $circle = $this->newTestedInstance()->fromPg('<(1.2345,-9.87654),3.141596>', 'circle', $this->getSession());
+        $session = $this->buildSession();
+        $circle = $this->newTestedInstance()->fromPg('<(1.2345,-9.87654),3.141596>', 'circle', $session);
         $this
-            ->string($this->newTestedInstance()->toPg($circle, 'circle', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg($circle, 'circle', $session))
             ->isEqualTo('circle(point(1.2345,-9.87654),3.141596)')
-            ->string($this->newTestedInstance()->toPg('<(1.2345,-9.87654),3.141596>', 'circle', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg('<(1.2345,-9.87654),3.141596>', 'circle', $session))
             ->isEqualTo('circle(point(1.2345,-9.87654),3.141596)')
-            ->string($this->newTestedInstance()->toPg(null, 'mycircle', $this->getSession()))
+            ->string($this->newTestedInstance()->toPg(null, 'mycircle', $session))
             ->isEqualTo('NULL::mycircle')
-            ->exception(function() {
-                return $this->newTestedInstance()->toPg('azsdf', 'circle', $this->getSession());
+            ->exception(function() use ($session) {
+                return $this->newTestedInstance()->toPg('azsdf', 'circle', $session);
             })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
             ;

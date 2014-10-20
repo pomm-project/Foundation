@@ -15,11 +15,22 @@ use PommProject\Foundation\Inspector\InspectorPooler;
 use PommProject\Foundation\Converter\ConverterPooler;
 use PommProject\Foundation\Test\Fixture\InspectorFixture;
 use PommProject\Foundation\Exception\FoundationException;
+use PommProject\Foundation\Tester\FoundationSessionAtoum;
 use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
-use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
-class Inspector extends BaseConverter
+class Inspector extends FoundationSessionAtoum
 {
+    protected $session;
+
+    protected function getSession()
+    {
+        if ($this->session === null) {
+            $this->session = $this->buildSession();
+        }
+
+        return $this->session;
+    }
+
     protected function initializeSession(Session $session)
     {
         $session

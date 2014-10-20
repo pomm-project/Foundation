@@ -9,11 +9,11 @@
  */
 namespace PommProject\Foundation\Test\Unit\Observer;
 
-use PommProject\Foundation\Test\Unit\SessionAwareAtoum;
+use PommProject\Foundation\Tester\VanillaSessionAtoum;
 use PommProject\Foundation\Observer\ObserverPooler;
 use PommProject\Foundation\Session\Session;
 
-class Observer extends SessionAwareAtoum
+class Observer extends VanillaSessionAtoum
 {
     protected function initializeSession(Session $session)
     {
@@ -24,10 +24,8 @@ class Observer extends SessionAwareAtoum
 
     protected function notify($channel, $data = null)
     {
-        $connection = $this
-            ->getSession()
-            ->getConnection()
-            ;
+        $session    = $this->buildSession();
+        $connection = $session->getConnection();
 
         $connection
             ->executeAnonymousQuery(
@@ -45,7 +43,7 @@ class Observer extends SessionAwareAtoum
 
     public function testGetNotification()
     {
-        $session = $this->getSession()
+        $session = $this->buildSession()
             ->registerClient($this->newTestedInstance('pika'))
             ;
 
@@ -69,7 +67,7 @@ class Observer extends SessionAwareAtoum
 
     public function testThrowNotification()
     {
-        $session = $this->getSession()
+        $session = $this->buildSession()
             ->registerClient($this->newTestedInstance('an identifier'))
             ;
         $this

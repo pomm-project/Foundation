@@ -106,6 +106,26 @@ class Session implements LoggerAwareInterface
     }
 
     /**
+     * logMessage
+     *
+     * Log a message if a logger is present.
+     *
+     * @access public
+     * @param  string   $message
+     * @param  int      $level
+     * @param  array    $context
+     * @return Session  $this
+     */
+    public function logMessage($message, $level, array $context = [])
+    {
+        if ($this->hasLogger()) {
+            $this->getLogger()->log($level, $message, $context);
+        }
+
+        return $this;
+    }
+
+    /**
      * getConnection
      *
      * Return the database connection.

@@ -10,7 +10,6 @@
 namespace PommProject\Foundation\Test\Unit\Query;
 
 use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Test\Fixture\QueryListener;
 use PommProject\Foundation\Tester\VanillaSessionAtoum;
 use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
 
@@ -43,38 +42,6 @@ class QueryPooler extends VanillaSessionAtoum
             })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('Could not load')
-            ;
-    }
-
-    public function testRegisterListener()
-    {
-        $session = $this->buildSession();
-        $listener = new QueryListener();
-        $session
-            ->getClientUsingPooler('query', null)
-            ;
-        $session
-            ->getPoolerForType('query')
-            ->registerListener($listener)
-            ;
-        $session
-            ->getClientUsingPooler('query', null)
-            ->query('select generate_series(1, 5) as pika')
-            ;
-        $this
-            ->integer($listener->getCounter())
-            ->isEqualTo(2)
-            ;
-        $listener->clean();
-        $session
-            ->getClientUsingPooler('query', '\PommProject\Foundation\PreparedQuery\PreparedQueryQuery')
-            ->query('select generate_series(1, 10) as pika')
-            ;
-        $this
-            ->integer($listener->getCounter())
-            ->isEqualTo(2)
-            ->integer($listener->getLastEventData()['result_count'])
-            ->isEqualTo(10)
             ;
     }
 }

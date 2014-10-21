@@ -12,10 +12,8 @@ namespace PommProject\Foundation\Query;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\Query\ListenerAwareInterface;
-use PommProject\Foundation\Query\ListenerTrait;
 
-class QueryPooler extends ClientPooler implements ListenerAwareInterface
+class QueryPooler extends ClientPooler
 {
     protected $listeners = [];
     /**
@@ -55,23 +53,11 @@ class QueryPooler extends ClientPooler implements ListenerAwareInterface
         try {
             $reflection = new \ReflectionClass($client);
 
-            if (!$reflection->implementsInterface(
-                '\PommProject\Foundation\Query\ListenerAwareInterface'
-            )) {
-                throw new FoundationException(
-                    sprintf(
-                        "Client '%s' does not implements ListenerAwareInterface.",
-                        $client
-                    )
-                );
-            }
-
         } catch (\ReflectionException $e) {
             throw new FoundationException(sprintf("Could not load class '%s'.", $client), null, $e);
         }
 
         $client_instance = new $client();
-        $this->addListenersToClient($client_instance);
 
         return $client_instance;
     }
@@ -88,37 +74,5 @@ class QueryPooler extends ClientPooler implements ListenerAwareInterface
         }
 
         return parent::getClient($client);
-    }
-
-    /**
-     * registerListener
-     *
-     * @see ListenerAwareInterface
-     */
-    public function registerListener(ListenerInterface $listener)
-    {
-        foreach ($this->getSession()->getAllClientForType('query') as $query_client) {
-            $query_client->registerListener($listener);
-        }
-
-        $this->listeners[] = $listener;
-    }
-
-    /**
-     * addListenersToClient
-     *
-     * Register all pooler registered listeners to a client.
-     *
-     * @access protected
-     * @param  Client $client
-     * @return Client
-     */
-    protected function addListenersToClient(ListenerAwareInterface $client)
-    {
-        foreach ($this->listeners as $listener) {
-            $client->registerListener($listener);
-        }
-
-        return $client;
     }
 }

@@ -11,7 +11,6 @@ namespace PommProject\Foundation\Test\Unit\Query;
 
 use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Converter\ConverterPooler;
-use PommProject\Foundation\Test\Fixture\QueryListener;
 use PommProject\Foundation\Tester\FoundationSessionAtoum;
 
 class SimpleQuery extends FoundationSessionAtoum
@@ -60,30 +59,6 @@ SQL;
         $this
             ->array($iterator->slice('id'))
             ->isIdenticalTo([2, 3])
-            ;
-    }
-
-    public function testNotification()
-    {
-        $session = $this->buildSession();
-        $listener = new QueryListener;
-        $this
-            ->getQueryManager($session)
-            ->registerListener($listener)
-            ->query('select generate_series(1, 99) as id')
-            ;
-
-        $this
-            ->integer($listener->getCounter())
-            ->isEqualTo(2)
-            ->string($listener->getLastEventType())
-            ->isEqualTo('post')
-            ->integer($listener->getLastEventData()['result_count'])
-            ->isEqualTo(99)
-            ->string($listener->getLastEventType())
-            ->isEqualTo('pre')
-            ->string($listener->getLastEventData()['sql'])
-            ->isEqualTo('select generate_series(1, 99) as id')
             ;
     }
 }

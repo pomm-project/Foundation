@@ -23,7 +23,7 @@ class Pomm extends Atoum
     protected function getPomm(array $configuration = null)
     {
         if ($configuration === null) {
-            $configuration = 
+            $configuration =
                 [
                     "db_one"   => ["dsn" => "pgsql://user:pass@host:port/db_name"],
                     "db_two"   => [
@@ -106,7 +106,7 @@ class Pomm extends Atoum
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains("{'db_one', 'db_two'}")
             ->array($pomm->getSession('db_one')->getRegisterPoolersNames())
-            ->isIdenticalTo(['prepared_query', 'query', 'converter', 'observer', 'inspector'])
+            ->isIdenticalTo(['prepared_query', 'query', 'converter', 'observer', 'inspector', 'listener'])
             ;
     }
 

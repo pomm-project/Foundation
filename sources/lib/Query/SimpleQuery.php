@@ -12,8 +12,6 @@ namespace PommProject\Foundation\Query;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\ConvertedResultIterator;
-use PommProject\Foundation\Query\ListenerAwareInterface;
-use PommProject\Foundation\Query\ListenerTrait;
 
 /**
  * SimpleQuery
@@ -25,10 +23,8 @@ use PommProject\Foundation\Query\ListenerTrait;
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  */
-class SimpleQuery extends Client implements ListenerAwareInterface
+class SimpleQuery extends Client
 {
-    use ListenerTrait;
-
     /**
      * query
      *
@@ -104,5 +100,26 @@ class SimpleQuery extends Client implements ListenerAwareInterface
     public function getClientIdentifier()
     {
         return get_class($this);
+    }
+
+    /**
+     * sendNotification
+     *
+     * Send notification to the listener pooler.
+     *
+     * @access protected
+     * @param  string $name
+     * @param  array $data
+     * @return SimpleQuery $this
+     */
+    protected function sendNotification($name, array $data)
+    {
+        $this
+            ->getSession()
+            ->getPoolerForType('listener')
+            ->notify($name, $data)
+            ;
+
+        return $this;
     }
 }

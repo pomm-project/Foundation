@@ -13,6 +13,7 @@ use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Query\QueryPooler;
 use PommProject\Foundation\Session\SessionBuilder as VanillaSessionBuilder;
 use PommProject\Foundation\Observer\ObserverPooler;
+use PommProject\Foundation\Listener\ListenerPooler;
 use PommProject\Foundation\Inspector\InspectorPooler;
 use PommProject\Foundation\Converter\ConverterPooler;
 use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
@@ -43,6 +44,7 @@ class SessionBuilder extends VanillaSessionBuilder
             ->registerClientPooler(new ConverterPooler($this->converter_holder))
             ->registerClientPooler(new ObserverPooler)
             ->registerClientPooler(new InspectorPooler)
+            ->registerClientPooler(new ListenerPooler)
             ;
 
         return $this;

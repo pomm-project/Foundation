@@ -13,6 +13,9 @@ use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Session\SessionBuilder as VanillaSessionBuilder;
 use PommProject\Foundation\Session\Session;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+
 /**
  * Pomm
  *
@@ -23,10 +26,12 @@ use PommProject\Foundation\Session\Session;
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  */
-class Pomm implements \ArrayAccess
+class Pomm implements \ArrayAccess, LoggerAwareInterface
 {
     protected $builders = [];
     protected $sessions = [];
+
+    use LoggerAwareTrait;
 
     /**
      * __construct
@@ -177,7 +182,13 @@ class Pomm implements \ArrayAccess
             ->buildSession()
             ;
 
-        return $this->sessions[$name];
+        $session = $this->sessions[$name];
+
+        if ($this->logger !== null) {
+            $session->setLogger($this->logger);
+        }
+
+        return $session;
     }
 
     /**

@@ -36,7 +36,7 @@ class Observer extends VanillaSessionAtoum
                 )
             );
 
-        sleep(0.5);
+        sleep(0.7);
 
         return $this;
     }

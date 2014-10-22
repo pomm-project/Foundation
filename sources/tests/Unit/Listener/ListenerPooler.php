@@ -68,6 +68,19 @@ class ListenerPooler extends FoundationSessionAtoum
             ->mock($session->getClient('listener', 'chu'))
             ->call('notify')
             ->once()
+            ->assert('notifying a listeners with subspace.')
+            ->object(
+                $session
+                    ->getPoolerForType('listener')
+                    ->notify('pika:plop', [ 'data' => 1 ])
+                )
+            ->isInstanceOf('\PommProject\Foundation\Listener\ListenerPooler')
+            ->mock($session->getClient('listener', 'pika'))
+            ->call('notify')
+            ->once()
+            ->mock($session->getClient('listener', 'chu'))
+            ->call('notify')
+            ->never()
             ;
     }
 }

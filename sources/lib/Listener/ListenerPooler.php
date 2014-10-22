@@ -84,7 +84,7 @@ class ListenerPooler extends ClientPooler
 
         foreach ($identifiers as $identifier) {
             $client_name = strpos($identifier, ':') !== false
-                ? substr($identifier, 0, strpos(':'))
+                ? substr($identifier, 0, strpos($identifier, ':'))
                 : $identifier
                 ;
 

@@ -12,6 +12,7 @@ namespace PommProject\Foundation\Query;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\ConvertedResultIterator;
+use PommProject\Foundation\Listener\SendNotificationTrait;
 
 /**
  * SimpleQuery
@@ -25,6 +26,8 @@ use PommProject\Foundation\ConvertedResultIterator;
  */
 class SimpleQuery extends Client
 {
+    use SendNotificationTrait;
+
     /**
      * query
      *
@@ -38,7 +41,7 @@ class SimpleQuery extends Client
     public function query($sql, array $parameters = [])
     {
         $this->sendNotification(
-            'pre',
+            'query:pre',
             [
                 'sql'        => $sql,
                 'parameters' => $parameters,
@@ -53,7 +56,7 @@ class SimpleQuery extends Client
             $this->getSession()
         );
         $this->sendNotification(
-            'post',
+            'query:post',
             [
                 'result_count' => $iterator->count(),
                 'time_ms'      => sprintf("%03.1f", ($end - $start) * 1000),
@@ -100,26 +103,5 @@ class SimpleQuery extends Client
     public function getClientIdentifier()
     {
         return get_class($this);
-    }
-
-    /**
-     * sendNotification
-     *
-     * Send notification to the listener pooler.
-     *
-     * @access protected
-     * @param  string $name
-     * @param  array $data
-     * @return SimpleQuery $this
-     */
-    protected function sendNotification($name, array $data)
-    {
-        $this
-            ->getSession()
-            ->getPoolerForType('listener')
-            ->notify($name, $data)
-            ;
-
-        return $this;
     }
 }

@@ -70,7 +70,6 @@ class ListenerPooler extends ClientPooler
                 "ListenerPooler: notification received.",
                 [
                     'receivers' => $identifiers,
-                    'data'      => $data,
                 ]
             );
 
@@ -97,7 +96,7 @@ class ListenerPooler extends ClientPooler
     protected function notifyAll(array $data)
     {
         foreach (
-            $this->getSession()->getAllClientForType($this->getPoolerType()) 
+            $this->getSession()->getAllClientForType($this->getPoolerType())
             as $client) {
                 $client->notify('*', $data);
             }

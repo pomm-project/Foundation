@@ -82,23 +82,7 @@ class ListenerPooler extends ClientPooler
             $identifiers = [ $identifiers ];
         }
 
-        foreach ($identifiers as $identifier) {
-            $client_name = strpos($identifier, ':') !== false
-                ? substr($identifier, 0, strpos($identifier, ':'))
-                : $identifier
-                ;
-
-            $client = $this
-                ->getSession()
-                ->getClient($this->getPoolerType(), $client_name)
-                ;
-
-            if ($client !== null) {
-                $client->notify($identifier, $data);
-            }
-        }
-
-        return $this;
+        return $this->notifyClients($identifiers, $data);
     }
 
     /**
@@ -121,4 +105,34 @@ class ListenerPooler extends ClientPooler
         return $this;
     }
 
+    /**
+     * notifyClients
+     *
+     * Send a notification to the specified clients.
+     *
+     * @access protected
+     * @param  array            $identifiers
+     * @param  array            $data
+     * @return ListenerPooler   $this
+     */
+    protected function notifyClients(array $identifiers, array $data)
+    {
+        foreach ($identifiers as $identifier) {
+            $client_name = strpos($identifier, ':') !== false
+                ? substr($identifier, 0, strpos($identifier, ':'))
+                : $identifier
+                ;
+
+            $client = $this
+                ->getSession()
+                ->getClient($this->getPoolerType(), $client_name)
+                ;
+
+            if ($client !== null) {
+                $client->notify($identifier, $data);
+            }
+        }
+
+        return $this;
+    }
 }

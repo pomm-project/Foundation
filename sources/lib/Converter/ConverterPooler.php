@@ -77,4 +77,17 @@ class ConverterPooler extends ClientPooler
             $this->converter_holder->getConverterForType($identifier)
         );
     }
+
+    /**
+     * getConverterHolder
+     *
+     * Exposse converter holder so one can add new converters on the fly.
+     *
+     * @access public
+     * @return ConverterHolder
+     */
+    public function getConverterHolder()
+    {
+        return $this->converter_holder;
+    }
 }

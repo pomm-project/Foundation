@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Client;
 
 use PommProject\Foundation\Exception\FoundationException;
+use PommProject\Foundation\Exception\PommException;
 
 /**
  * ClientHolder
@@ -124,13 +125,26 @@ class ClientHolder
      */
     public function shutdown()
     {
+        $exception = null;
         foreach ($this->clients as $type => $names) {
             foreach ($names as $name => $client) {
-                $client->shutdown();
+
+                try {
+                    $client->shutdown();
+                } catch (PommException $e) {
+                    $exception = $exception === null
+                        ? $e
+                        : new FoundationException($e->getMessage(), $e->getCode(), $e)
+                        ;
+                }
             }
         }
 
         $this->clients = [];
+
+        if ($exception !== null) {
+            throw $e;
+        }
 
         return $this;
     }

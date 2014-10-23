@@ -228,7 +228,7 @@ class Session implements LoggerAwareInterface
         if (!$this->hasPoolerForType($type)) {
             throw new FoundationException(
                 sprintf(
-                    "No pooler registered for type '%s'. Poolers are available for types {%s}.",
+                    "No pooler registered for type '%s'. Poolers available: {%s}.",
                     $type,
                     join(', ', $this->getRegisterPoolersNames())
                 )

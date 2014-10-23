@@ -75,17 +75,8 @@ class Listener extends Client
      * @throw  FoundationException if $action is not a callable.
      * @return Listener $this
      */
-    public function attachAction($action)
+    public function attachAction(callable $action)
     {
-        if (!is_callable($action)) {
-            throw new FoundationException(
-                sprintf(
-                    "Action must be a callable, '%s' given.",
-                    gettype($action)
-                )
-            );
-        }
-
         $this->actions[] = $action;
 
         return $this;

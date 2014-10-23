@@ -102,4 +102,17 @@ class ConverterClient extends Client
             $this->getSession()
         );
     }
+
+    /**
+     * getConverter
+     *
+     * Return the embeded converter.
+     *
+     * @access public
+     * @return ConverterInterface
+     */
+    public function getConverter()
+    {
+        return $this->converter;
+    }
 }

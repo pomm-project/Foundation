@@ -41,7 +41,7 @@ class SessionBuilder extends VanillaSessionBuilder
         $session
             ->registerClientPooler(new PreparedQueryPooler)
             ->registerClientPooler(new QueryPooler)
-            ->registerClientPooler(new ConverterPooler($this->converter_holder))
+            ->registerClientPooler(new ConverterPooler(clone $this->converter_holder))
             ->registerClientPooler(new ObserverPooler)
             ->registerClientPooler(new InspectorPooler)
             ->registerClientPooler(new ListenerPooler)

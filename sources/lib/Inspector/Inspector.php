@@ -57,9 +57,11 @@ class Inspector extends Client
     {
         $sql = <<<SQL
 select
-    n.nspname   as "name",
-    n.oid       as "oid"
+    n.nspname     as "name",
+    n.oid         as "oid",
+    d.description as "comment"
 from pg_catalog.pg_namespace n
+    left join pg_catalog.pg_description d on n.oid = d.objoid
 where :condition
 order by 1;
 SQL;

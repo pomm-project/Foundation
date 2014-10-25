@@ -59,10 +59,13 @@ class Inspector extends Client
 select
     n.nspname     as "name",
     n.oid         as "oid",
-    d.description as "comment"
+    d.description as "comment",
+    count(c)      as "relations"
 from pg_catalog.pg_namespace n
     left join pg_catalog.pg_description d on n.oid = d.objoid
+    left join pg_catalog.pg_class c on c.relnamespace = n.oid and c.relkind in ('r', 'v')
 where :condition
+group by 1, 2, 3
 order by 1;
 SQL;
         $condition = new Where('n.nspname !~ $* and n.nspname <> $*', ['^pg_', 'information_schema']);

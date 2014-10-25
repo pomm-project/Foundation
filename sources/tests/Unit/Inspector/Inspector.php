@@ -77,6 +77,16 @@ class Inspector extends FoundationSessionAtoum
         $this->getFixture()->dropSchema();
     }
 
+    public function testGetSchemas()
+    {
+        $this
+            ->object($this->getInspector()->getSchemas())
+            ->isInstanceOf('\PommProject\Foundation\ResultIterator')
+            ->array($this->getInspector()->getSchemas()->slice('name'))
+            ->contains('inspector_test')
+            ;
+    }
+
     public function testGetTableOid()
     {
         $this

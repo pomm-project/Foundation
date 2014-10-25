@@ -46,6 +46,29 @@ class Inspector extends Client
     }
 
     /**
+     * getSchemas
+     *
+     * Return a list of available schemas in the current database.
+     *
+     * @access public
+     * @return ConvertedResultIterator
+     */
+    public function getSchemas()
+    {
+        $sql = <<<SQL
+select
+    n.nspname   as "name",
+    n.oid       as "oid"
+from pg_catalog.pg_namespace n
+where :condition
+order by 1;
+SQL;
+        $condition = new Where('n.nspname !~ $* and n.nspname <> $*', ['^pg_', 'information_schema']);
+
+        return $this->executeSql($sql, $condition);
+    }
+
+    /**
      * getTableOid
      *
      * Return the table oid from postgresql catalog. If no table is found, null

@@ -120,7 +120,10 @@ SQL;
         $sql = <<<SQL
 select
     att.attname      as "name",
-    typ.typname      as "type",
+    case
+        when name.nspname = 'pg_catalog' then typ.typname
+        else format('%s.%s', name.nspname, typ.typname)
+    end as "type",
     def.adsrc        as "default",
     att.attnotnull   as "is_notnull",
     dsc.description  as "comment",
@@ -133,6 +136,7 @@ from
     left join pg_catalog.pg_description dsc on cla.oid = dsc.objoid and att.attnum = dsc.objsubid
     left join pg_catalog.pg_attrdef def     on att.attrelid = def.adrelid and att.attnum = def.adnum
     left join pg_catalog.pg_index ind       on cla.oid = ind.indrelid and ind.indisprimary
+    left join pg_catalog.pg_namespace name  on typ.typnamespace = name.oid
 where
 :condition
 order by

@@ -113,6 +113,12 @@ class Inspector extends FoundationSessionAtoum
             ->array(array_values($fields_info->get(0)))
             ->isIdenticalTo(['with_complex_pk_id', 'int4', null, true, 'Test comment', 1, true])
             ;
+        $fields_info = $this->getInspector()->getTableFieldInformation($this->getTableOid('with_simple_pk'));
+        $this
+            ->array($fields_info->slice('type'))
+            ->isIdenticalTo(['int4', 'inspector_test._someone', '_timestamptz'])
+            ;
+
     }
 
     public function testGetPrimaryKey()

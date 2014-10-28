@@ -32,20 +32,6 @@ $pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name']]);
 $session = $pomm['my_db'];
 ```
 
-## Session builder
-
-By default, Pomm uses a very lean session builder so freshly created sessions does not have any clients nor poolers registered. Foundation also provides a full featured builder:
-
-```php
-$pomm = new Pomm([
-    'my_db' =>
-        [
-        'dsn'                   => 'pgsql://user:pass@host:port/db_name',
-        'class:session_builder' => '\PommProject\Foundation\SessionBuilder',
-        ]
-    ]);
-```
-
 ## Sessions, clients and poolers
 
 The `Session` instance is the keystone of Foundation. It is a client manager for the database connection handler. A client is a class that needs to interact with the database. It registers to the Session so the session injects into it. As soon as a client is registered, it gets access to the database connection and all other clients in the same time. Furthermore, the session does shutdown all the clients properly when going down which may be useful if clients rely on database structure (prepared queries, temporary tables etc.).
@@ -124,6 +110,25 @@ $result = $pomm['my_db']
 ```
 
 The prepared query query manager stores prepared statements and re-use them when needed.
+
+## Session builder
+
+In order to create sessions, Pomm uses a session builder mechanism. By default, Foundation provides a full featured builder, but it is possible -- and advised -- to use a dedicated session builder class:
+
+```php
+$pomm = new Pomm([
+    'my_db' =>
+        [
+        'dsn'                   => 'pgsql://user:pass@host:port/db_name',
+        'class:session_builder' => '\My\Project\SessionBuilder',
+        ]
+    ]);
+```
+
+For convenience, it exists two `SessionBuilder`, one that just creates a blank session and the other that registers all poolers and clients needed for foundation to work:
+
+ * `PommProject\Foundation\Session\SessionBuilder` vanilla session builder.
+ * `PommProject\Foundation\SessionBuilder` full featured session builder.
 
 ## Tests
 

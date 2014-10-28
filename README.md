@@ -41,7 +41,7 @@ $pomm = new Pomm([
     'my_db' =>
         [
         'dsn'                   => 'pgsql://user:pass@host:port/db_name',
-        'class:session_builder' => \PommProject\Foundation\SessionBuilder`,
+        'class:session_builder' => '\PommProject\Foundation\SessionBuilder',
         ]
     ]);
 ```

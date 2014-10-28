@@ -32,6 +32,20 @@ $pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name']]);
 $session = $pomm['my_db'];
 ```
 
+## Session builder
+
+By default, Pomm uses a very lean session builder so freshly created sessions does not have any clients nor poolers registered. Foundation also provides a full featured builder:
+
+```php
+$pomm = new Pomm([
+    'my_db' =>
+        [
+        'dsn'                   => 'pgsql://user:pass@host:port/db_name',
+        'class:session_builder' => \PommProject\Foundation\SessionBuilder`,
+        ]
+    ]);
+```
+
 ## Sessions, clients and poolers
 
 The `Session` instance is the keystone of Foundation. It is a client manager for the database connection handler. A client is a class that needs to interact with the database. It registers to the Session so the session injects into it. As soon as a client is registered, it gets access to the database connection and all other clients in the same time. Furthermore, the session does shutdown all the clients properly when going down which may be useful if clients rely on database structure (prepared queries, temporary tables etc.).
@@ -65,9 +79,9 @@ $pomm['my_db']
 
 The point here is to understand that the instantiated clients are automatically reused when they are called several times. Clients are shutdown properly when the session is destroyed by PHP. The second strong point of this system is that all clients own a pointer to the session. So it can use other clients from it.
 
-## Querying and converter system.
+## Query and converter system.
 
-In foundation, performing a query and return a result as an iterator is a Client too:
+In foundation, performing a query and return a result iterator is performed by a Client too:
 
 ```php
 <?php
@@ -104,11 +118,18 @@ It is possible to use your own Query class as soon as it implements `QueryInterf
 
 ```php
 $result = $pomm['my_db']
-    ->getQuery('My\Query\Class')
+    ->getQuery('\PommProject\Foundation\PreparedQuery\PreparedQueryQuery')
     ->query('select * from student where age > $*', [20])
     ;
 ```
 
+The prepared query query manager stores prepared statements and re-use them when needed.
+
 ## Tests
 
-This package uses Atoum as unit test framework. The tests are located in `sources/tests`. The test suite needs to access the database to ensure read and write operations are made in a consistent manner. You need to set up a database for that and fill the `sources/tests/config.php` file with the according DSN. For convenience, it is possible to extend class `SessionAwareAtoum` to get a `getSession()` method in the test class. Since the returned session is blank, this class defines an abstract method `initializeSession()` where it is possible to register needed poolers and clients for the tests.
+This package uses Atoum as unit test framework. The tests are located in `sources/tests`. The test suite needs to access the database to ensure read and write operations are made in a consistent manner. You need to set up a database for that and fill the `sources/tests/config.php` file with the according DSN. For convenience, Foundation provides two classes that extend `Atoum` with a `Session`:
+
+ * `PommProject\Foundation\Tester\VanillaSessionAtoum`
+ * `PommProject\Foundation\Tester\FoundationSessionAtoum`
+
+Make your test class to extend one of these will grant them with a `buildSession` method that returns a newly created session. Clients of these classe must implement a `initializeSession(Session $session)` method (even a blank one). It is often a good idea to provide a fixture class as a session client, this method is the right place to register it.

@@ -133,7 +133,7 @@ class Session implements LoggerAwareInterface
         $client->initialize($this);
         $this->client_holder->add($client);
         $this->hasLogger() && $this->getLogger()->debug(
-            "Registering new client",
+            "Pomm: Registering new client",
             [
                 'type' => $client->getClientType(),
                 'identifier' => $client->getClientIdentifier(),
@@ -192,7 +192,7 @@ class Session implements LoggerAwareInterface
         $client_pooler->register($this);
         $this->client_poolers[$client_pooler->getPoolerType()] = $client_pooler;
         $this->hasLogger() && $this->getLogger()->debug(
-                "Registering new client pooler.",
+                "Pomm: Registering new client pooler.",
                 ['type' => $client_pooler->getPoolerType()]
             );
 

@@ -67,7 +67,7 @@ class ListenerPooler extends ClientPooler
     {
         $this->getSession()->hasLogger() &&
             $this->getSession()->getLogger()->info(
-                "ListenerPooler: notification received.",
+                "Pomm: ListenerPooler: notification received.",
                 [
                     'receivers' => $identifiers,
                 ]

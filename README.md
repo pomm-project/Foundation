@@ -65,16 +65,16 @@ $pomm['my_db']
 
 The point here is to understand that the instantiated clients are automatically reused when they are called several times. Clients are shutdown properly when the session is destroyed by PHP. The second strong point of this system is that all clients own a pointer to the session. So it can use other clients from it.
 
-## Query and converter system.
+## Query manager and converter system.
 
-In foundation, performing a query and return a result iterator is performed by a Client too:
+With foundation, performing a query and return a converted result iterator is performed by the `QueryManager` client.
 
 ```php
 <?php
 //…
 $pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name']]);
 $iterator = $pomm['my_db']
-    ->getQuery()
+    ->getQueryManager()
     ->query('select * from student where age > $*', [20])
     ;
 
@@ -94,7 +94,7 @@ The `query` method returns an iterator on results. Data can then be fetched on d
 //…
 $pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name']]);
 $iterator = $pomm['my_db']
-    ->getQuery()
+    ->getQueryManager()
     ->query('select * from student where age > $*', [20]);
 
 printf("Names are: %s.\n", join(', ', $iterator->slice('name')));
@@ -104,7 +104,7 @@ It is possible to use your own Query class as soon as it implements `QueryInterf
 
 ```php
 $result = $pomm['my_db']
-    ->getQuery('\PommProject\Foundation\PreparedQuery\PreparedQueryQuery')
+    ->getQueryManager('\PommProject\Foundation\PreparedQuery\PreparedQueryManager')
     ->query('select * from student where age > $*', [20])
     ;
 ```
@@ -119,8 +119,8 @@ In order to create sessions, Pomm uses a session builder mechanism. By default, 
 $pomm = new Pomm([
     'my_db' =>
         [
-        'dsn'                   => 'pgsql://user:pass@host:port/db_name',
-        'class:session_builder' => '\My\Project\SessionBuilder',
+            'dsn'                   => 'pgsql://user:pass@host:port/db_name',
+            'class:session_builder' => '\My\Project\SessionBuilder',
         ]
     ]);
 ```

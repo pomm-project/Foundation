@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PommProject\Foundation\Query;
+namespace PommProject\Foundation\QueryManager;
 
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\QueryParameterExpander;
@@ -15,7 +15,7 @@ use PommProject\Foundation\ConvertedResultIterator;
 use PommProject\Foundation\Listener\SendNotificationTrait;
 
 /**
- * SimpleQuery
+ * SimpleQueryManager
  *
  * Query system as a client.
  *
@@ -24,14 +24,14 @@ use PommProject\Foundation\Listener\SendNotificationTrait;
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  */
-class SimpleQuery extends Client
+class SimpleQueryManager extends Client
 {
     use SendNotificationTrait;
 
     /**
      * query
      *
-     * Perform a simple escaped query.
+     * Perform a simple escaped query and return converted result iterator.
      *
      * @access public
      * @param  sting $sql
@@ -41,22 +41,22 @@ class SimpleQuery extends Client
     public function query($sql, array $parameters = [])
     {
         $this->sendNotification(
-            'query:pre',
+            'query_manager:pre',
             [
                 'sql'        => $sql,
                 'parameters' => $parameters,
             ]
         );
-        $start = microtime(true);
+        $start    = microtime(true);
         $resource = $this->doQuery($sql, $parameters);
-        $end = microtime(true);
+        $end      = microtime(true);
 
         $iterator = new ConvertedResultIterator(
             $resource,
             $this->getSession()
         );
         $this->sendNotification(
-            'query:post',
+            'query_manager:post',
             [
                 'result_count' => $iterator->count(),
                 'time_ms'      => sprintf("%03.1f", ($end - $start) * 1000),
@@ -92,7 +92,7 @@ class SimpleQuery extends Client
      */
     public function getClientType()
     {
-        return 'query';
+        return 'query_manager';
     }
 
     /**

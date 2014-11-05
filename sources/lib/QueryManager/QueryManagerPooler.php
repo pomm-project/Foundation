@@ -7,13 +7,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PommProject\Foundation\Query;
+namespace PommProject\Foundation\QueryManager;
 
-use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Client\ClientPooler;
+use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Exception\FoundationException;
 
-class QueryPooler extends ClientPooler
+/**
+ * QueryManagerPooler
+ *
+ * Pooler for the query_manager clients type.
+ *
+ * @package Foundation
+ * @copyright 2014 Grégoire HUBERT
+ * @author Grégoire HUBERT
+ * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see ClientPooler
+ */
+class QueryManagerPooler extends ClientPooler
 {
     protected $listeners = [];
     /**
@@ -23,14 +34,14 @@ class QueryPooler extends ClientPooler
      */
     public function getPoolerType()
     {
-        return 'query';
+        return 'query_manager';
     }
 
     /**
      * getClientFromPool
      *
      * @see    ClientPooler
-     * @return Client
+     * @return ClientInterface
      */
     protected function getClientFromPool($client)
     {
@@ -46,7 +57,7 @@ class QueryPooler extends ClientPooler
      * @see    ClientPooler
      * @param  string   $client_class_name
      * @throw  FoundationException
-     * @return Client
+     * @return ClientInterface
      */
     protected function createClient($client)
     {
@@ -70,7 +81,7 @@ class QueryPooler extends ClientPooler
     public function getClient($client = null)
     {
         if ($client === null) {
-            $client = '\PommProject\Foundation\Query\SimpleQuery';
+            $client = '\PommProject\Foundation\QueryManager\SimpleQueryManager';
         }
 
         return parent::getClient($client);

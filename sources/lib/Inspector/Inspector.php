@@ -416,7 +416,7 @@ SQL;
 
         return $this
             ->getSession()
-            ->getClientUsingPooler('query', '\PommProject\Foundation\PreparedQuery\PreparedQueryQuery')
+            ->getClientUsingPooler('query_manager', '\PommProject\Foundation\PreparedQuery\PreparedQueryManager')
             ->query($sql, $condition->getValues())
             ;
     }

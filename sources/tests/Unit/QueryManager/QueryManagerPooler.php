@@ -7,13 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace PommProject\Foundation\Test\Unit\Query;
+namespace PommProject\Foundation\Test\Unit\QueryManager;
 
 use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Tester\VanillaSessionAtoum;
 use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
 
-class QueryPooler extends VanillaSessionAtoum
+class QueryManagerPooler extends VanillaSessionAtoum
 {
     protected function initializeSession(Session $session)
     {
@@ -29,14 +29,14 @@ class QueryPooler extends VanillaSessionAtoum
         $this
             ->object(
                 $session
-                    ->getPoolerForType('query')
+                    ->getPoolerForType('query_manager')
                     ->getClient()
                 )
-            ->isInstanceOf('\PommProject\Foundation\Query\SimpleQuery')
+            ->isInstanceOf('\PommProject\Foundation\QueryManager\SimpleQueryManager')
             ->exception(function() use ($session) {
                 return
                     $session
-                        ->getPoolerForType('query')
+                        ->getPoolerForType('query_manager')
                         ->getClient('\No\Such\Client')
                         ;
             })

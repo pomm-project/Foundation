@@ -10,12 +10,12 @@
 namespace PommProject\Foundation\PreparedQuery;
 
 use PommProject\Foundation\ResultHandler;
-use PommProject\Foundation\Query\SimpleQuery;
+use PommProject\Foundation\QueryManager\SimpleQueryManager;
 
 /**
- * PreparedQueryQuery
+ * PreparedQueryManager
  *
- * Query using the prepared_statement client.
+ * Query manager using the prepared_statement client.
  *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT
@@ -23,7 +23,7 @@ use PommProject\Foundation\Query\SimpleQuery;
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see SimpleQuery
  */
-class PreparedQueryQuery extends SimpleQuery
+class PreparedQueryManager extends SimpleQueryManager
 {
     /**
      * doQuery
@@ -37,6 +37,5 @@ class PreparedQueryQuery extends SimpleQuery
             ->getClientUsingPooler('prepared_query', $sql)
             ->execute($parameters)
             ;
-
     }
 }

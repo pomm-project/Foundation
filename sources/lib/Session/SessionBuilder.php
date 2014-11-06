@@ -55,11 +55,13 @@ class SessionBuilder
                 $configuration
             )
         );
-        $this->converter_holder = $converter_holder === null
+        $converter_holder = $converter_holder === null
             ? new ConverterHolder
             : $converter_holder
             ;
-        $this->initializeConverterHolder();
+
+        $this->initializeConverterHolder($converter_holder);
+        $this->converter_holder = $converter_holder;
     }
 
     /**
@@ -222,9 +224,10 @@ class SessionBuilder
      * If new converters are to be registered, it goes here.
      *
      * @access protected
-     * @return SessionBuilder $this
+     * @param  ConverterHolder  $converter_holder
+     * @return SessionBuilder   $this
      */
-    protected function initializeConverterHolder()
+    protected function initializeConverterHolder(ConverterHolder $converter_holder)
     {
         return $this;
     }

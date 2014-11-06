@@ -15,6 +15,7 @@ use PommProject\Foundation\Observer\ObserverPooler;
 use PommProject\Foundation\Listener\ListenerPooler;
 use PommProject\Foundation\Inspector\InspectorPooler;
 use PommProject\Foundation\Converter\ConverterPooler;
+use PommProject\Foundation\Converter\ConverterHolder;
 use PommProject\Foundation\QueryManager\QueryManagerPooler;
 use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
 
@@ -55,9 +56,9 @@ class SessionBuilder extends VanillaSessionBuilder
      *
      * @see SessionBuilder
      */
-    protected function initializeConverterHolder()
+    protected function initializeConverterHolder(ConverterHolder $converter_holder)
     {
-        $this->getConverterHolder()
+        $converter_holder
             ->registerConverter('Array', new Converter\PgArray(), ['array'])
             ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool'])
             ->registerConverter(

@@ -110,7 +110,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      */
     public function hasBuilder($name)
     {
-        return (bool) isset($this->builders[$name]);
+        return (bool) (isset($this->builders[$name]));
     }
 
     /**
@@ -189,20 +189,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
         }
 
         return $session;
-    }
-
-    /**
-     * hasSessionBuilder
-     *
-     * Does a given builder exist ?
-     *
-     * @access public
-     * @param  string $name
-     * @return bool
-     */
-    public function hasSessionBuilder($name)
-    {
-        return (bool) (isset($this->builders[$name]));
     }
 
     /**

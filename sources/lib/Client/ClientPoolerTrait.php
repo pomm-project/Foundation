@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Client;
 
 use PommProject\Foundation\Exception\FoundationException;
+use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -34,6 +35,13 @@ use PommProject\Foundation\Session\Session;
 trait ClientPoolerTrait
 {
     private $session;
+
+    /**
+     * getPoolerType
+     *
+     * @see ClientPoolerInterface
+     */
+    abstract public function getPoolerType();
 
     /**
      * createClient

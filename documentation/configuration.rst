@@ -18,7 +18,9 @@ Foundation manages relations between a database *connection* and *clients* throu
  - ``Client`` abstract class that implements ``ClientInterface``. Instances are *session*'s *clients*.
  - ``ClientPooler`` abstract class that implements ``ClientPoolerInterface``. They manage *clients* in *sessions*.
 
-This complexity is at first glance hidden. If one wants to open a connection, send a query and get converted results, it is as simple as::
+This complexity is at first glance hidden. If one wants to open a connection, send a query and get converted results, it is as simple as:
+
+.. code:: php
 
     <?php
     //…
@@ -56,14 +58,18 @@ Pomm service is an interface to easily declare and build *sessions* through *ses
 Adding session builders
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-It is possible to declare session builders either using ``Pomm``'s class constructor or the ``addBuilder`` method::
+It is possible to declare session builders either using ``Pomm``'s class constructor or the ``addBuilder`` method:
+
+.. code:: php
 
     <?php
 
     $pomm = new Pomm(['first_db' => ['dsn' => 'pgsql://user:pass@host/first_db']]);
     $pomm->addBuilder('second_db', new MySessionBuilder(['dsn' => 'pgsql://user:pass@host/second_db']));
 
-It is often more practial to declare all *sessions* configuration from the constructor directly even if the builder is a custom class::
+It is often more practial to declare all *sessions* configuration from the constructor directly even if the builder is a custom class:
+
+.. code:: php
 
     <?php
 
@@ -86,7 +92,9 @@ Each session builder has a name. This name is important, it represents a configu
 Spanwing sessions
 ~~~~~~~~~~~~~~~~~
 
-The easiest way to get a session from the *service* is to use the ``ArrayAccess`` implementation::
+The easiest way to get a session from the *service* is to use the ``ArrayAccess`` implementation:
+
+.. code:: php
 
     <?php
 
@@ -106,7 +114,9 @@ Session builder
 Configuration
 ~~~~~~~~~~~~~
 
-There are several ways set configuration::
+There are several ways set configuration:
+
+.. code:: php
 
     <?php
 
@@ -134,7 +144,9 @@ It is a encouraged to create a project dedicated *session builder* that overload
 Converter holder
 ~~~~~~~~~~~~~~~~
 
-The *converter holder* is a special configuration setting. It holds all the converters and is cloned when passed as parameter to the `converter pooler`_. A pre-configured customized *converter holder* can be passed as parameter to the *session builder*'s constructor::
+The *converter holder* is a special configuration setting. It holds all the converters and is cloned when passed as parameter to the `converter pooler`_. A pre-configured customized *converter holder* can be passed as parameter to the *session builder*'s constructor:
+
+.. code:: php
 
     <?php
 
@@ -159,7 +171,9 @@ There are several ways to access *clients* and *poolers* using the *session*:
 :``getClient($type, $identifier)``:     return the asked *client* if it exists, null otherwise.
 :``getClientUsingPooler($type, $identifier)``:  ask for a *client* using a *client pooler*.
 
-There is a shortcut for the last method::
+There is a shortcut for the last method:
+
+.. code:: php
 
     <?php
 
@@ -216,7 +230,9 @@ Converter pooler
 
 Responsible of proposing converter *clients*. If a client is not found, it checks in the *converter holder* if the given type has a converter. If yes, it wrap the *converter* in a ``ConverterClient`` and register it to the session. There are as many ``ConverterClient`` as registered types but they can share the same *converter* instances.
 
-This way, it is possible to add custom converters or converters for database specific types like composite types. The best place to do that is in a `Session builder`_'s ``postConfigure(Session)`` method::
+This way, it is possible to add custom converters or converters for database specific types like composite types. The best place to do that is in a `Session builder`_'s ``postConfigure(Session)`` method:
+
+.. code:: php
 
     <?php
     //…
@@ -251,7 +267,8 @@ A ``Listener`` is a class that can hold anonymous functions that are triggered w
 
 Foundation owns a basic event dispatcher mechanism.
 
-::
+.. code:: php
+
 
     <?php
     //…
@@ -263,7 +280,9 @@ Foundation owns a basic event dispatcher mechanism.
 
 To trigger the attached functions, the listener *pooler* proposes a ``notify(array, mixed)`` method. The first argument is an array of event names and the second is the data payload to be sent. Albeit simple, this mechanism is powerful since all attached functions have access to the session hence all the *poolers*.
 
-There is also a method to notify all clients::
+There is also a method to notify all clients:
+
+.. code:: php
 
     <?php
     //…
@@ -286,7 +305,9 @@ Prepared query pooler
 
 :Type: prepared_query
 
-This *pooler* prepares statements if they do not already exist and execute them with parameters::
+This *pooler* prepares statements if they do not already exist and execute them with parameters:
+
+.. code:: php
 
     <?php
     //…
@@ -302,7 +323,9 @@ Query manager pooler
 
 :Type:  query_manager
 
-The query manager *pooler* returns a traversable iterator on converted results. The default *client* is a simple parametrized query but Foundation also comes with a prepared query manager::
+The query manager *pooler* returns a traversable iterator on converted results. The default *client* is a simple parametrized query but Foundation also comes with a prepared query manager:
+
+.. code:: php
 
     <?php
     //…

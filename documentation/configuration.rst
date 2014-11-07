@@ -168,6 +168,7 @@ There are several ways to access *clients* and *poolers* using the *session*:
 There is a shortcut for the last method:
 
 .. code:: php
+
     <?php
 
     $client = $session->getType($identifier);
@@ -226,6 +227,7 @@ Responsible of proposing converter *clients*. If a client is not found, it check
 This way, it is possible to add custom converters or converters for database specific types like composite types. The best place to do that is in a `Session builder`_'s ``postConfigure(Session)`` method:
 
 .. code:: php
+
     <?php
     //…
     function postConfigure(Session $session)
@@ -260,6 +262,7 @@ A ``Listener`` is a class that can hold anonymous functions that are triggered w
 Foundation owns a basic event dispatcher mechanism.
 
 .. code:: php
+
     <?php
     //…
 
@@ -273,6 +276,7 @@ To trigger the attached functions, the listener *pooler* proposes a ``notify(arr
 There is also a method to notify all clients:
 
 .. code:: php
+
     <?php
     //…
 
@@ -297,6 +301,7 @@ Prepared query pooler
 This *pooler* prepares statements if they do not already exist and execute them with parameters:
 
 .. code:: php
+
     <?php
     //…
     $session
@@ -314,6 +319,7 @@ Query manager pooler
 The query manager *pooler* returns a traversable iterator on converted results. The default *client* is a simple parametrized query but Foundation also comes with a prepared query manager:
 
 .. code:: php
+
     <?php
     //…
     $result = $session

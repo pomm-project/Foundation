@@ -21,6 +21,7 @@ Foundation manages relations between a database *connection* and *clients* throu
 This complexity is at first glance hidden. If one wants to open a connection, send a query and get converted results, it is as simple as:
 
 .. code:: php
+
     <?php
     //…
 
@@ -60,6 +61,7 @@ Adding session builders
 It is possible to declare session builders either using ``Pomm``'s class constructor or the ``addBuilder`` method:
 
 .. code:: php
+
     <?php
 
     $pomm = new Pomm(['first_db' => ['dsn' => 'pgsql://user:pass@host/first_db']]);
@@ -92,6 +94,7 @@ Spanwing sessions
 The easiest way to get a session from the *service* is to use the ``ArrayAccess`` implementation:
 
 .. code:: php
+
     <?php
 
     $session = $pomm['first_db'];
@@ -113,6 +116,7 @@ Configuration
 There are several ways set configuration:
 
 .. code:: php
+
     <?php
 
     $session_builder = new SessionBuilder(['dsn' => 'pgsql://user:pass@host:port/db_name']);
@@ -142,6 +146,7 @@ Converter holder
 The *converter holder* is a special configuration setting. It holds all the converters and is cloned when passed as parameter to the `converter pooler`_. A pre-configured customized *converter holder* can be passed as parameter to the *session builder*'s constructor:
 
 .. code:: php
+
     <?php
 
     $session_builder = new SessionBuilder(

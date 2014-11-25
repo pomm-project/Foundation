@@ -44,6 +44,8 @@ _;
             ->isEqualTo('NULL::varchar')
             ->string($this->newTestedInstance()->toPg('', 'bpchar', $session))
             ->isEqualTo("bpchar ''")
+            ->string($this->newTestedInstance()->toPg('10.2.3.4', 'inet', $session))
+            ->isEqualTo("inet '10.2.3.4'")
             ;
     }
 }

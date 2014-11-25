@@ -69,7 +69,21 @@ class SessionBuilder extends VanillaSessionBuilder
             ->registerConverter(
                 'String',
                 new Converter\PgString(),
-                ['varchar', 'char', 'text', 'uuid', 'tsvector', 'xml', 'bpchar', 'name', 'character varying', 'regclass']
+                [
+                    'varchar',
+                    'char',
+                    'text',
+                    'uuid',
+                    'tsvector',
+                    'xml',
+                    'bpchar',
+                    'name',
+                    'character varying',
+                    'regclass',
+                    'inet',
+                    'cidr',
+                    'macaddr',
+                ]
             )
             ->registerConverter(
                 'Timestamp',

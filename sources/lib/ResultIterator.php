@@ -233,4 +233,25 @@ class ResultIterator implements \Iterator, \Countable
 
         return $this->result->fetchColumn($field);
     }
+
+    /**
+     * extract
+     *
+     * Dump an iterator.
+     * This actually stores all the results in PHP allocated memory.
+     * THIS MAY USE A LOT OF MEMORY.
+     *
+     * @access public
+     * @return array
+     */
+    public function extract()
+    {
+        $results = [];
+
+        foreach ($this as $result) {
+            $results[] = $result;
+        }
+
+        return $results;
+    }
 }

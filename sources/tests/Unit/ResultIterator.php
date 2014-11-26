@@ -153,4 +153,31 @@ SQL;
             ->message->contains('Cound not find field')
             ;
     }
+
+    public function testExtract()
+    {
+        $iterator = $this->newTestedInstance(
+            $this->getResultResource($this->getPikaSql())
+        );
+
+        $this
+            ->array($iterator->extract())
+            ->isIdenticalTo(
+                [
+                    ['id' => '1', 'pika' => 'a'],
+                    ['id' => '2', 'pika' => 'b'],
+                    ['id' => '3', 'pika' => 'c'],
+                    ['id' => '4', 'pika' => 'd'],
+                ]
+            );
+
+        $iterator = $this->newTestedInstance(
+            $this->getResultResource('select true where false')
+        );
+
+        $this
+            ->array($iterator->extract())
+            ->isEmpty()
+            ;
+    }
 }

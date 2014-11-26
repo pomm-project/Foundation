@@ -124,4 +124,24 @@ SQL;
             ->isIdenticalTo([1, null, 3, 4])
             ;
     }
+
+    public function testExtract()
+    {
+        $sql = $this->getPikaSql();
+        $iterator = $this->newTestedInstance(
+            $this->getResultResource($sql),
+            $this->buildSession()
+        );
+
+        $this
+            ->array($iterator->extract())
+            ->isIdenticalTo(
+                [
+                    ['id' => 1, 'pika' => 'a', 'chu' => null],
+                    ['id' => null, 'pika' => 'b', 'chu' => [null]],
+                    ['id' => 3, 'pika' => 'c', 'chu' => [1]],
+                    ['id' => 4, 'pika' => 'd', 'chu' => [2, 2]],
+                ]
+            );
+    }
 }

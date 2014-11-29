@@ -24,5 +24,10 @@
             "PommProject\\Foundation\\Test\\": "sources/tests"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "master": "2.0-dev"
+        }
+    }
 }

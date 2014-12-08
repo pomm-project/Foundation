@@ -120,4 +120,16 @@ class Pomm extends Atoum
             ->isInstanceOf('\PommProject\Foundation\Test\Fixture\PommTestSession')
             ;
     }
+
+    public function testPostConfiguration()
+    {
+        $pomm = $this
+            ->getPomm()
+            ->addPostConfiguration('db_two', function($session) { $session->getListener('pika'); });
+
+        $this
+            ->boolean($pomm['db_two']->hasClient('listener', 'pika'))
+            ->isTrue()
+            ;
+    }
 }

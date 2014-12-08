@@ -29,6 +29,7 @@ use Psr\Log\LoggerAwareTrait;
 class Pomm implements \ArrayAccess, LoggerAwareInterface
 {
     protected $builders = [];
+    protected $post_configurations = [];
     protected $sessions = [];
 
     use LoggerAwareTrait;
@@ -77,7 +78,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
                 $builder_class = '\PommProject\Foundation\SessionBuilder';
             }
 
-            $this->builders[$name] = new $builder_class($configuration);
+            $this->addBuilder($name, new $builder_class($configuration));
         }
     }
 
@@ -95,6 +96,28 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     public function addBuilder($builder_name, VanillaSessionBuilder $builder)
     {
         $this->builders[$builder_name] = $builder;
+        $this->post_configurations[$builder_name] = [];
+
+        return $this;
+    }
+
+    /**
+     * addPostConfiguration
+     *
+     * Add a environment dependent post configuration callable that will be run
+     * once after the session creation.
+     *
+     * @access public
+     * @param  string   $name
+     * @param  callable $callable
+     * @return Pomm     $this
+     */
+    public function addPostConfiguration($name, callable $callable)
+    {
+        $this
+            ->builderMustExist($name)
+            ->post_configurations[$name][] = $callable
+            ;
 
         return $this;
     }
@@ -126,6 +149,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     public function removeBuilder($name)
     {
         unset($this->builderMustExist($name)->builders[$name]);
+        unset($this->post_configurations[$name]);
 
         return $this;
     }
@@ -183,6 +207,10 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
             ;
 
         $session = $this->sessions[$name];
+
+        foreach ($this->post_configurations[$name] as $callable) {
+            call_user_func($callable, $session);
+        }
 
         if ($this->logger !== null) {
             $session->setLogger($this->logger);

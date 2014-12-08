@@ -9,9 +9,11 @@
  */
 namespace PommProject\Foundation\Test\Fixture;
 
+use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Session\Connection;
 use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Session\SessionBuilder;
+use PommProject\Foundation\Listener\ListenerPooler;
 use PommProject\Foundation\Test\Fixture\PommTestSession;
 
 class PommTestSessionBuilder extends SessionBuilder
@@ -27,5 +29,14 @@ class PommTestSessionBuilder extends SessionBuilder
     protected function createSession(Connection $connection, ClientHolder $client_holder)
     {
         return new PommTestSession($connection, $client_holder);
+    }
+
+    protected function postConfigure(Session $session)
+    {
+        parent::postConfigure($session);
+
+        $session
+            ->registerClientPooler(new ListenerPooler)
+            ;
     }
 }

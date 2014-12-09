@@ -41,7 +41,7 @@ class SimpleQueryManager extends Client
     public function query($sql, array $parameters = [])
     {
         $this->sendNotification(
-            'query_manager:pre',
+            'query:pre',
             [
                 'sql'        => $sql,
                 'parameters' => $parameters,
@@ -56,7 +56,7 @@ class SimpleQueryManager extends Client
             $this->getSession()
         );
         $this->sendNotification(
-            'query_manager:post',
+            'query:post',
             [
                 'result_count' => $iterator->count(),
                 'time_ms'      => sprintf("%03.1f", ($end - $start) * 1000),

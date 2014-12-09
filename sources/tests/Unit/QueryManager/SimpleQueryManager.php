@@ -61,4 +61,28 @@ SQL;
             ->isIdenticalTo([2, 3])
             ;
     }
+
+    public function testSendNotification()
+    {
+        $session = $this->buildSession();
+        $listener_tester = new ListenerTester();
+        $session->getClientUsingPooler('listener', 'query')
+            ->attachAction([$listener_tester, 'call'])
+            ;
+        $iterator = $this->getQueryManager($session)->query('select true as one');
+        $this
+            ->boolean($listener_tester->is_called)
+            ->isTrue()
+            ;
+    }
+}
+
+class ListenerTester
+{
+    public $is_called = false;
+
+    public function call($event, array $data, Session $session)
+    {
+        $this->is_called = true;
+    }
 }

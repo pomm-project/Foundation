@@ -55,8 +55,8 @@ Pomm service
 
 Pomm service is an interface to easily declare and build *sessions* through *session builders*.
 
-Adding session builders
-~~~~~~~~~~~~~~~~~~~~~~~
+Using session builders
+~~~~~~~~~~~~~~~~~~~~~~
 
 It is possible to declare session builders either using ``Pomm``'s class constructor or the ``addBuilder`` method:
 
@@ -104,6 +104,19 @@ The easiest way to get a session from the *service* is to use the ``ArrayAccess`
     $session = $pomm->getSession('first_db');
 
 The ``getSession($name)`` method checks if a *session* using this *session builder* has already been created. If yes, it is returned, otherwise a new one is created using the ``createSession($name)``. This last method creates a new session every time it is called. This implies a new database connection will be used.
+
+Context dependent configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Session builders do configure session but in some cases, configuration options may be context dependent like development options or production options. This kind of configuration occures directly in Pomm service passing anonymous functions:
+
+.. code:: php
+
+    <?php
+    // …
+    $pomm->addPostConfiguration('first_db', function($session) { /* … */ });
+
+When the session is created, the post configuration functions are launched and the session is returned.
 
 Session builder
 ---------------

@@ -1,6 +1,6 @@
 # Foundation
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/pomm-project/Foundation/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pomm-project/Foundation/?branch=master) [![Build Status](https://travis-ci.org/pomm-project/Foundation.svg?branch=master)](https://travis-ci.org/pomm-project/Foundation)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/pomm-project/Foundation/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pomm-project/Foundation/?branch=master) [![Build Status](https://travis-ci.org/pomm-project/Foundation.svg?branch=master)](https://travis-ci.org/pomm-project/Foundation) [![Total Downloads](https://poser.pugx.org/pomm-project/foundation/downloads.svg)](https://packagist.org/packages/pomm-project/foundation) [![License](https://poser.pugx.org/pomm-project/foundation/license.svg)](https://packagist.org/packages/pomm-project/foundation)
 
 This is the foundation component for the Pomm database framework. It works only with PHP >= 5.4.4.
 

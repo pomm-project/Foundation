@@ -2,7 +2,7 @@
     "name": "pomm-project/foundation",
     "type": "library",
     "description":  "Pomm connection manager for Postgresql",
-    "keywords": ["framework", "postgresql", "database"],
+    "keywords": ["framework", "postgresql", "database", "pomm"],
     "homepage": "http://www.pomm-project.org",
     "license":  "MIT",
     "authors":  [ { "name": "Grégoire HUBERT", "email": "hubert.greg@gmail.com", "homepage": "http://www.coolkeums.org" } ],

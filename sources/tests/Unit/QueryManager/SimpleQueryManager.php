@@ -30,13 +30,13 @@ class SimpleQueryManager extends FoundationSessionAtoum
     public function testSimpleQuery()
     {
         $session = $this->buildSession();
-        $iterator = $this->getQueryManager($session)->query('select true as one, null::int4 as two');
+        $iterator = $this->getQueryManager($session)->query('select true as "one one", null::int4 as "TWO"');
         $this
             ->object($iterator)
             ->isInstanceOf('\PommProject\Foundation\ConvertedResultIterator')
-            ->boolean($iterator->current()['one'])
+            ->boolean($iterator->current()['one one'])
             ->isTrue()
-            ->variable($iterator->current()['two'])
+            ->variable($iterator->current()['TWO'])
             ->isNull()
             ;
     }

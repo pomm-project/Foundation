@@ -183,10 +183,10 @@ class ResultHandler
      */
     protected function getFieldNumber($name)
     {
-        $no = pg_field_num($this->handler, $name);
+        $no = pg_field_num($this->handler, sprintf('"%s"', $name));
 
         if ($no ===  -1) {
-            throw new \InvalidArgumentException(sprintf("Cound not find field name '%s'.", $name));
+            throw new \InvalidArgumentException(sprintf("Cound not find field name '%s'. Available fields are {%s}.", $name, join(', ', array_keys(pg_fetch_assoc($this->handler)))));
         }
 
         return $no;

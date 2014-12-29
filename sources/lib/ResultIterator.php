@@ -23,7 +23,7 @@ use PommProject\Foundation\Session\ResultHandler;
  * @see \Iterator
  * @see \Countable
  */
-class ResultIterator implements \Iterator, \Countable
+class ResultIterator implements \Iterator, \Countable, \JsonSerializable
 {
     private   $position;
     protected $result;
@@ -253,5 +253,15 @@ class ResultIterator implements \Iterator, \Countable
         }
 
         return $results;
+    }
+
+    /**
+     * jsonSerialize
+     *
+     * @see \JsonSerializable
+     */
+    public function jsonSerialize()
+    {
+        return $this->extract();
     }
 }

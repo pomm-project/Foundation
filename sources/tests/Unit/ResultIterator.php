@@ -180,4 +180,16 @@ SQL;
             ->isEmpty()
             ;
     }
+
+    public function testJsonSerializable()
+    {
+        $iterator = $this->newTestedInstance(
+            $this->getResultResource($this->getPikaSql())
+        );
+
+        $json = json_encode($iterator);
+        $this
+            ->string($json)
+            ->isIdenticalTo('[{"id":"1","pika":"a"},{"id":"2","pika":"b"},{"id":"3","pika":"c"},{"id":"4","pika":"d"}]');
+    }
 }

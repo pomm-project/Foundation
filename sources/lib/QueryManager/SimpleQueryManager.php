@@ -43,8 +43,9 @@ class SimpleQueryManager extends Client
         $this->sendNotification(
             'query:pre',
             [
-                'sql'        => $sql,
-                'parameters' => $parameters,
+                'sql'           => $sql,
+                'parameters'    => $parameters,
+                'session_stamp' => $this->getSession()->getStamp(),
             ]
         );
         $start    = microtime(true);

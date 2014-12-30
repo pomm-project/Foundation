@@ -26,9 +26,9 @@ class PommTestSessionBuilder extends SessionBuilder
      * @see SessionBuilder
      * @return PommTestSession
      */
-    protected function createSession(Connection $connection, ClientHolder $client_holder)
+    protected function createSession(Connection $connection, ClientHolder $client_holder, $stamp)
     {
-        return new PommTestSession($connection, $client_holder);
+        return new PommTestSession($connection, $client_holder, $stamp);
     }
 
     protected function postConfigure(Session $session)

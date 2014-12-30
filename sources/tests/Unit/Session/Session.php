@@ -38,7 +38,7 @@ class Session extends VanillaSessionAtoum
         return $client_pooler;
     }
 
-    public function getStamp()
+    public function testGetStamp()
     {
         $this
             ->variable($this->buildSession()->getStamp())

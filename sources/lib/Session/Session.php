@@ -93,7 +93,7 @@ class Session implements LoggerAwareInterface
      */
     public function getStamp()
     {
-        return (string) $this->stamp;
+        return is_null($this->stamp) ? null : (string) $this->stamp;
     }
 
     /**

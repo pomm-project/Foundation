@@ -115,8 +115,9 @@ class SessionBuilder
             ->getParameter('connection:configuration')
             ;
         $session    = $this->createSession(
-            $this->createConnection($dsn, $connection_configuration, $stamp),
-            $this->createClientHolder()
+            $this->createConnection($dsn, $connection_configuration),
+            $this->createClientHolder(),
+            $stamp
         );
         $this->postConfigure($session);
 
@@ -171,9 +172,9 @@ class SessionBuilder
      * @param  string   $stamp
      * @return Connection
      */
-    protected function createConnection($dsn, $connection_configuration, $stamp)
+    protected function createConnection($dsn, $connection_configuration)
     {
-        return new Connection($dsn, $connection_configuration, $stamp);
+        return new Connection($dsn, $connection_configuration);
     }
 
     /**
@@ -186,9 +187,9 @@ class SessionBuilder
      * @param  ClientHolder $client_holder
      * @return Session
      */
-    protected function createSession(Connection $connection, ClientHolder $client_holder)
+    protected function createSession(Connection $connection, ClientHolder $client_holder, $stamp)
     {
-        return new Session($connection, $client_holder);
+        return new Session($connection, $client_holder, $stamp);
     }
 
     /**

@@ -37,6 +37,7 @@ class Session implements LoggerAwareInterface
     protected $connection;
     protected $client_holder;
     protected $client_poolers = [];
+    protected $stamp;
 
     use LoggerAwareTrait;
 
@@ -48,19 +49,22 @@ class Session implements LoggerAwareInterface
      * 'dsn' parameter from the ParameterHolder.
      *
      * @access public
-     * @param  Connection $connection
-     * @param  ConverterHolder
+     * @param  Connection       $connection
+     * @param  ConverterHolder  $converter_holder
+     * @param  string           $stamp
      * @return null
      */
     public function __construct(
         Connection      $connection,
-        ClientHolder    $client_holder = null
+        ClientHolder    $client_holder = null,
+        $stamp = null
     ) {
         $this->connection    = $connection;
         $this->client_holder = $client_holder === null
             ? new ClientHolder
             : $client_holder
             ;
+        $this->stamp = $stamp;
     }
 
     /**
@@ -77,6 +81,19 @@ class Session implements LoggerAwareInterface
         $this->client_holder->shutdown();
         $this->client_poolers = [];
         $this->connection->close();
+    }
+
+    /**
+     * getStamp
+     *
+     * Return the session's stamp if any
+     *
+     * @access public
+     * @return string|null
+     */
+    public function getStamp()
+    {
+        return (string) $this->stamp;
     }
 
     /**

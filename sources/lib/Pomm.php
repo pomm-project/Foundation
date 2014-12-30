@@ -203,7 +203,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
         $this->sessions[$name] = $this
             ->builderMustExist($name)
             ->builders[$name]
-            ->buildSession()
+            ->buildSession($name)
             ;
 
         $session = $this->sessions[$name];

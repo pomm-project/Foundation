@@ -39,11 +39,12 @@ abstract class VanillaSessionAtoum extends Atoum
      * A short description here
      *
      * @access protected
+     * @param  string       $stamp
      * @return Session
      */
-    protected function buildSession()
+    protected function buildSession($stamp = null)
     {
-        $session = $this->getSessionBuilder()->buildSession();
+        $session = $this->getSessionBuilder()->buildSession($stamp);
         $this->initializeSession($session);
 
         return $session;

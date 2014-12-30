@@ -101,9 +101,10 @@ class SessionBuilder
      *
      * @final
      * @access public
+     * @param  string   $stamp
      * @return Session
      */
-   final public function buildSession()
+   final public function buildSession($stamp = null)
     {
         $this->preConfigure();
         $dsn = $this
@@ -114,7 +115,7 @@ class SessionBuilder
             ->getParameter('connection:configuration')
             ;
         $session    = $this->createSession(
-            $this->createConnection($dsn, $connection_configuration),
+            $this->createConnection($dsn, $connection_configuration, $stamp),
             $this->createClientHolder()
         );
         $this->postConfigure($session);
@@ -165,13 +166,14 @@ class SessionBuilder
      * Connection instanciation.
      *
      * @access protected
-     * @param  string $dsn
-     * @param  string $connection_configuration
+     * @param  string   $dsn
+     * @param  string   $connection_configuration
+     * @param  string   $stamp
      * @return Connection
      */
-    protected function createConnection($dsn, $connection_configuration)
+    protected function createConnection($dsn, $connection_configuration, $stamp)
     {
-        return new Connection($dsn, $connection_configuration);
+        return new Connection($dsn, $connection_configuration, $stamp);
     }
 
     /**

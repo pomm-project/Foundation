@@ -117,7 +117,7 @@ class PreparedQuery extends Client
             ->getConnection()
             ->sendExecuteQuery(
                 $this->getClientIdentifier(),
-                $this->prepareValues($values),
+                QueryParameterExpander::prepareValues($values),
                 $this->sql
             );
     }
@@ -155,25 +155,5 @@ class PreparedQuery extends Client
     public function getSql()
     {
         return $this->sql;
-    }
-
-    /**
-     * prepareValues
-     *
-     * Process the values for the query so they are understandable by Postgres.
-     *
-     * @access private
-     * @param  array $values Query parameters
-     * @return array
-     */
-    private function prepareValues(array $values)
-    {
-        foreach ($values as $index => $value) {
-            if ($value instanceof \DateTime) {
-                $values[$index] = $value->format('Y-m-d H:i:s.uP');
-            }
-        }
-
-        return $values;
     }
 }

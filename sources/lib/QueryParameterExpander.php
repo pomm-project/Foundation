@@ -50,4 +50,25 @@ class QueryParameterExpander
     {
         return preg_replace_callback('/\$\*/', function () { static $nb = 0; return sprintf("$%d", ++$nb); }, $string );
     }
+
+    /**
+     * prepareValues
+     *
+     * Process the values for the query so they are understandable by Postgres.
+     *
+     * @static
+     * @access public
+     * @param  array $values Query parameters
+     * @return array
+     */
+    public static function prepareValues(array $values)
+    {
+        foreach ($values as $index => $value) {
+            if ($value instanceof \DateTime) {
+                $values[$index] = $value->format('Y-m-d H:i:s.uP');
+            }
+        }
+
+        return $values;
+    }
 }

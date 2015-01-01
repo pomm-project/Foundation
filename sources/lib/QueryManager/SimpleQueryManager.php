@@ -49,7 +49,7 @@ class SimpleQueryManager extends Client
             ]
         );
         $start    = microtime(true);
-        $resource = $this->doQuery($sql, $parameters);
+        $resource = $this->doQuery($sql, QueryParameterExpander::prepareValues($parameters));
         $end      = microtime(true);
 
         $iterator = new ConvertedResultIterator(

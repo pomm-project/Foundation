@@ -46,16 +46,16 @@ class SimpleQueryManager extends FoundationSessionAtoum
         $session = $this->buildSession();
         $sql = <<<SQL
 select
-  p.id, p.pika
+  p.id, p.pika, p.a_timestamp
 from (values
-    (1, 'one'),
-    (2, 'two'),
-    (3, 'three'),
-    (4, 'four')
-) p (id, pika)
-where p.id = $* or p.pika = $*
+    (1, 'one', '1999-08-08'::timestamp),
+    (2, 'two', '2000-09-07'::timestamp),
+    (3, 'three', '2001-10-25 15:43'::timestamp),
+    (4, 'four', '2002-01-01 01:10'::timestamp)
+) p (id, pika, a_timestamp)
+where (p.id = $* or p.pika = $*) and p.a_timestamp > $*
 SQL;
-        $iterator = $this->getQueryManager($session)->query($sql, [2, 'three']);
+        $iterator = $this->getQueryManager($session)->query($sql, [2, 'three', new \DateTime('2000-01-01')]);
         $this
             ->array($iterator->slice('id'))
             ->isIdenticalTo([2, 3])

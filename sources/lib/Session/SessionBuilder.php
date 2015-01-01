@@ -169,7 +169,6 @@ class SessionBuilder
      * @access protected
      * @param  string   $dsn
      * @param  string   $connection_configuration
-     * @param  string   $stamp
      * @return Connection
      */
     protected function createConnection($dsn, $connection_configuration)
@@ -183,8 +182,9 @@ class SessionBuilder
      * Session instanciation.
      *
      * @access protected
-     * @param  Connection $connection
+     * @param  Connection   $connection
      * @param  ClientHolder $client_holder
+     * @param  string|null  $stamp
      * @return Session
      */
     protected function createSession(Connection $connection, ClientHolder $client_holder, $stamp)

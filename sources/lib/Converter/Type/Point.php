@@ -62,7 +62,7 @@ class Point
     public function __toString()
     {
         return sprintf(
-            "point(%s,%s)",
+            "(%s,%s)",
             $this->x,
             $this->y
         );

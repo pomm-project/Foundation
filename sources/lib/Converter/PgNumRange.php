@@ -30,11 +30,10 @@ class PgNumRange extends TypeConverter
      */
     public function toPg($data, $type, Session $session)
     {
-        $data = parent::toPg($data, $type, $session);
+        if (($data = $this->checkData($data, $type, $session)) === null) {
+            return sprintf("NULL::%s", $type);
+        }
 
-        return preg_match('/^NULL/', $data)
-            ? $data
-            : sprintf("%s(%s)", $type, $data)
-            ;
+        return sprintf("%s('%s')", $type, $data->__toString());
     }
 }

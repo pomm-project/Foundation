@@ -81,14 +81,20 @@ abstract class TypeConverter implements ConverterInterface
     }
 
     /**
-     * toPg
+     * checkData
      *
-     * @see ConverterInterface
+     * Check if data is suitable for Pg conversion.
+     *
+     * @access public
+     * @param  mixed    $data
+     * @param  string   $type
+     * @param  Session  $session
+     * @return Object|null
      */
-    public function toPg($data, $type, Session $session)
+    public function checkData($data, $type, Session $session)
     {
         if ($data === null) {
-            return sprintf("NULL::%s", $type);
+            return null;
         }
 
         $class = $this->getTypeClassName();
@@ -97,6 +103,6 @@ abstract class TypeConverter implements ConverterInterface
             $data = $this->fromPg($data, $type, $session);
         }
 
-        return $data->__toString();
+        return $data;
     }
 }

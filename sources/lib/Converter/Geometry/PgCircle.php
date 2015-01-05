@@ -10,6 +10,8 @@
 namespace PommProject\Foundation\Converter\Geometry;
 
 use PommProject\Foundation\Converter\TypeConverter;
+use PommProject\Foundation\Converter\ConverterInterface;
+use PommProject\Foundation\Session\Session;
 
 /**
  * PgCircle
@@ -34,5 +36,25 @@ class PgCircle extends TypeConverter
     protected function getTypeClassName()
     {
         return '\PommProject\Foundation\Converter\Type\Circle';
+    }
+
+    /**
+     * toPg
+     *
+     * @see ConverterInterface
+     */
+    public function toPg($data, $type, Session $session)
+    {
+        if (($data = $this->checkData($data, $type, $session)) === null) {
+            return sprintf("NULL::%s", $type);
+        }
+
+        return sprintf(
+            "circle(%s,%s)",
+            $session
+                ->getClientUsingPooler('converter', 'point')
+                ->toPg($data->center, 'point', $session),
+            $data->radius
+        );
     }
 }

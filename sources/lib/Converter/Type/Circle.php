@@ -77,9 +77,9 @@ class Circle
     public function __toString()
     {
         return sprintf(
-            "circle(%s,%s)",
-            $this->center->__toString(),
-            $this->radius
-        );
+            "<%s,%s>",
+                (string) $this->center,
+                $this->radius
+            );
     }
 }

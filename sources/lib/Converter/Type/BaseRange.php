@@ -95,6 +95,6 @@ abstract class BaseRange
      */
     public function __toString()
     {
-        return sprintf("'%s'", $this->description);
+        return $this->description;
     }
 }

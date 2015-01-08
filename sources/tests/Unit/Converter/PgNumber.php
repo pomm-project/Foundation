@@ -20,6 +20,8 @@ class PgNumber extends BaseConverter
         $this
             ->variable($this->newTestedInstance()->fromPg(null, 'int4', $session))
             ->isNull()
+            ->integer($this->newTestedInstance()->fromPg('0', 'int4', $session))
+            ->isEqualTo(0)
             ->integer($this->newTestedInstance()->fromPg('2015', 'int4', $session))
             ->isEqualTo(2015)
             ->float($this->newTestedInstance()->fromPg('3.141596', 'float4', $session))
@@ -37,6 +39,8 @@ class PgNumber extends BaseConverter
             ->isEqualTo("float8 '1.6180339887499'")
             ->string($this->newTestedInstance()->toPg(null, 'int4', $session))
             ->isEqualTo("NULL::int4")
-            ;
+            ->string($this->newTestedInstance()->toPg(0, 'int4', $session))
+            ->isEqualTo("int4 '0'")
+        ;
     }
 }

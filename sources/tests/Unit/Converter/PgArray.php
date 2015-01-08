@@ -76,4 +76,35 @@ class PgArray extends BaseConverter
             )
         ;
     }
+
+    public function testToCsv()
+    {
+        $converter  = $this->newTestedInstance();
+        $session    = $this->buildSession();
+        $this
+            ->variable($converter->toCsv(null, 'int4', $session))
+            ->isNull()
+            ->string($converter->toCsv([null], 'int4', $session))
+            ->isEqualTo('"{NULL}"')
+            ->string($converter->toCsv([1, 2, 3, null], 'int4', $session))
+            ->isEqualTo('"{1,2,3,NULL}"')
+            ->string($converter->toCsv([1.634, 2.000, 3.99999, null], 'float4', $session))
+            ->isEqualTo('"{1.634,2,3.99999,NULL}"')
+            ->string($converter->toCsv(['ab a', 'aba', 'a b a', null], 'varchar', $session))
+            ->isEqualTo('"{""ab a"",""aba"",""a b a"",NULL}"')
+            ->string($converter->toCsv([true, true, false, null], 'bool', $session))
+            ->isEqualTo('"{t,t,f,NULL}"')
+            ->string(
+                $converter->toCsv(
+                    [
+                        new \DateTime('2014-09-29 18:24:54.591767'),
+                        new \DateTime('2014-07-29 14:50:01'),
+                        new \DateTime('2012-12-14 04:17:09.063948'),
+                    ],
+                    'timestamp',
+                    $session
+                )
+            )
+        ;
+    }
 }

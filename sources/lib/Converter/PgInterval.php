@@ -44,14 +44,45 @@ class PgInterval implements ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
+        return $data !== null
+            ? sprintf("%s '%s'", $type, $this->checkData($data)->format('%Y years %M months %D days %H:%i:%S'))
+            : sprintf("NULL::%s", $type)
+            ;
+    }
+
+
+    /**
+     * @see ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        return $data !== null
+            ? sprintf('"%s"', $this->checkData($data)->format('%Y years %M months %D days %H:%i:%S'))
+            : null
+            ;
+    }
+
+    /**
+     * checkData
+     *
+     * Check if Data is a DateInterval. If not, it tries to instanciate a
+     * DateInterval with the given data.
+     *
+     * @access protected
+     * @param  mixed $data
+     * @throw \InvalidParameterException
+     * @return DateInterval $data
+     */
+    protected function checkData($data)
+    {
         if (!$data instanceof \DateInterval) {
-            if ($data === null) {
-                return sprintf("NULL::%s", $type);
-            } else {
-                throw new ConverterException(sprintf("First argument is not a \DateInterval instance."));
+            try {
+                $data = new \DateInterval($data);
+            } catch (\Exception $e) {
+                throw new \InvalidParameterException(sprintf("First argument is not a \DateInterval instance."), null, $e);
             }
         }
 
-        return sprintf("%s '%s'", $type, $data->format('%Y years %M months %D days %H:%i:%S'));
+        return $data;
     }
 }

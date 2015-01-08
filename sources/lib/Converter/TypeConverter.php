@@ -86,6 +86,20 @@ abstract class TypeConverter implements ConverterInterface
     }
 
     /**
+     * toCsv
+     *
+     * @see ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        return
+            $data !== null
+            ? sprintf("%s", str_replace('"', '""', $this->checkData($data)->__toString()))
+            : null
+            ;
+    }
+
+    /**
      * checkData
      *
      * Check if data is suitable for Pg conversion. If not an attempt is made to build the object from the given definition.

@@ -42,6 +42,7 @@ interface ConverterInterface
      * Parse the output string from Postgresql and returns the converted value
      * into an according PHP representation.
      *
+     * @access public
      * @param  string  $data    Input string from Pg row result.
      * @param  string  $type
      * @param  Session $session
@@ -54,10 +55,25 @@ interface ConverterInterface
      *
      * Convert a PHP representation into the according Pg formatted string.
      *
+     * @access public
      * @param  mixed   $data    PHP representation.
      * @param  string  $type
      * @param  Session $session
      * @return string  Pg converted string for input.
      */
     public function toPg($data, $type, Session $session);
+
+    /**
+     * toCsv
+     *
+     * Convert a PHP representation into short Postgresql format like used in
+     * COPY values list.
+     *
+     * @access public
+     * @param mixed     $data
+     * @param string    $type
+     * @param Session   $session
+     * @return string   Postgrsql Csv representation.
+     */
+    public function toCsv($data, $type, Session $session);
 }

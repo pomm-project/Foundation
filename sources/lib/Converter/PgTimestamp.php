@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Session\Session;
+use PommProject\Foundation\Exception\ConverterException;
 
 /**
  * PgTimestamp
@@ -25,6 +26,8 @@ use PommProject\Foundation\Session\Session;
 class PgTimestamp implements ConverterInterface
 {
     /**
+     * fromPg
+     *
      * @see ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
@@ -35,16 +38,60 @@ class PgTimestamp implements ConverterInterface
     }
 
     /**
+     * toPg
+     *
      * @see ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
-        if ($data === null) return sprintf("NULL::%s", $type);
+        return
+            $data !== null
+            ? sprintf("%s '%s'", $type, $this->checkData($data)->format('Y-m-d H:i:s.uP'))
+            : sprintf("NULL::%s", $type)
+            ;
+    }
 
+    /**
+     * toCsv
+     *
+     * @see ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        return
+            $data !== null
+           ? sprintf('"%s"', $this->checkData($data)->format('Y-m-d H:i:s.uP'))
+            : null
+            ;
+    }
+
+    /**
+     * checkData
+     *
+     * Ensure a DateTime instance.
+     *
+     * @access protected
+     * @param  mixed $data
+     * @throw  \ConverterException
+     * @return \DateTime
+     */
+    protected function checkData($data)
+    {
         if (!$data instanceof \DateTime) {
-            $data = new \DateTime($data);
+            try {
+                $data = new \DateTime($data);
+            } catch (\InvalidParameterException $e) {
+                throw new ConverterException(
+                    sprintf(
+                        "Cannot convert data from invalid datetime representation '%s'.",
+                        $data
+                    ),
+                    null,
+                    $e
+                );
+            }
         }
 
-        return sprintf("%s '%s'", $type, $data->format('Y-m-d H:i:s.uP'));
+        return $data;
     }
 }

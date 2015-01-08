@@ -51,4 +51,22 @@ class PgCircle extends BaseConverter
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
             ;
     }
+
+    public function testToCsv()
+    {
+        $session = $this->buildSession();
+        $circle = new Circle('<(1.2345,-9.87654),3.141596>');
+        $this
+            ->string($this->newTestedInstance()->toCsv($circle, 'circle', $session))
+            ->isEqualTo('<(1.2345,-9.87654),3.141596>')
+            ->string($this->newTestedInstance()->toCsv('<(1.2345,-9.87654),3.141596>', 'circle', $session))
+            ->isEqualTo('<(1.2345,-9.87654),3.141596>')
+            ->variable($this->newTestedInstance()->toCsv(null, 'mycircle', $session))
+            ->isNull()
+            ->exception(function() use ($session) {
+                return $this->newTestedInstance()->toCsv('azsdf', 'circle', $session);
+            })
+            ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
+            ;
+    }
 }

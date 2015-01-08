@@ -48,4 +48,22 @@ _;
             ->isEqualTo("inet '10.2.3.4'")
             ;
     }
+
+    public function testToCsv()
+    {
+        $session = $this->buildSession();
+        $string = <<<_
+\\"\t!'\n
+_;
+        $this
+            ->string($this->newTestedInstance()->toCsv($string, 'varchar', $session))
+            ->isEqualTo("\"\\\"\"\t!'\n\"")
+            ->variable($this->newTestedInstance()->toCsv(null, 'varchar', $session))
+            ->isNull()
+            ->string($this->newTestedInstance()->toCsv('', 'bpchar', $session))
+            ->isEqualTo('""')
+            ->string($this->newTestedInstance()->toCsv('10.2.3.4', 'inet', $session))
+            ->isEqualTo('"10.2.3.4"')
+            ;
+    }
 }

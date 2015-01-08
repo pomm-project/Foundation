@@ -41,4 +41,17 @@ class PgBoolean extends BaseConverter
             ->isEqualTo("NULL::bool")
             ;
     }
+
+    public function testToCsv()
+    {
+        $session = $this->buildSession();
+        $this
+            ->string($this->newTestedInstance()->toCsv(true, 'bool', $session))
+            ->isEqualTo("t")
+            ->string($this->newTestedInstance()->toCsv(false, 'bool', $session))
+            ->isEqualTo("f")
+            ->variable($this->newTestedInstance()->toCsv(null, 'bool', $session))
+            ->isNull()
+            ;
+    }
 }

@@ -52,24 +52,66 @@ class PgHstore implements ConverterInterface
             return sprintf("NULL::%s", $type);
         }
 
-        if (!is_array($data)) {
-            throw new ConverterException(sprintf("HStore::toPg takes an associative array as parameter ('%s' given).", gettype($data)));
+        $this->checkArray($data);
+
+        return sprintf("%s('%s')", $type, join(', ', $this->buildArray($data, $session)));
+    }
+
+    /**
+     * @see \Pomm\Converter\ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        if ($data === null) {
+            return null;
         }
 
+        $this->checkArray($data);
+
+        return sprintf('"%s"', join(', ', $this->buildArray($data, $session, '"')));
+    }
+
+    /**
+     * checkArray
+     *
+     * Ensure the data is an array.
+     *
+     * @access protected
+     * @param  mixed $data
+     * @return null
+     */
+    protected function checkArray($data)
+    {
+        if (!is_array($data)) {
+            throw new \InvalidParameterException(sprintf("HStore::toPg and toCsv take an associative array as parameter ('%s' given).", gettype($data)));
+        }
+    }
+
+    /**
+     * buildArray
+     *
+     * Return an array of HStore elements.
+     *
+     * @access protected
+     * @param  array $data
+     * @return array
+     */
+    protected function buildArray(array $data, Session $session, $quote = "'")
+    {
         $insert_values = [];
 
         foreach ($data as $key => $value) {
-            if (is_null($value)) {
-                $insert_values[] = sprintf('"%s" => NULL', $key);
+            if ($value === null) {
+                $insert_values[] = sprintf('%s => NULL', str_replace($quote, $quote.$quote, $session->getConnection()->escapeIdentifier($key)));
             } else {
                 $insert_values[] = sprintf(
                     '%s => %s',
-                    $session->getConnection()->escapeIdentifier($key),
-                    $session->getConnection()->escapeIdentifier(str_replace("'", "''", $value))
+                    str_replace($quote, $quote.$quote, $session->getConnection()->escapeIdentifier($key)),
+                    str_replace($quote, $quote.$quote, $session->getConnection()->escapeIdentifier($value))
                 );
             }
         }
 
-        return sprintf("%s('%s')", $type, join(', ', $insert_values));
+        return $insert_values;
     }
 }

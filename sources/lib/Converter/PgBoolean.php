@@ -51,4 +51,16 @@ class PgBoolean implements ConverterInterface
         if ($data === null) return sprintf("NULL::%s", $type);
         return sprintf("%s '%s'", $type, $data === true ? "true" : "false");
     }
+
+    /**
+     * @see ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        return
+            $data !== null
+            ? $data === true ? 't' : 'f'
+            : null
+            ;
+    }
 }

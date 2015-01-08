@@ -40,6 +40,20 @@ class PgBytea extends BaseConverter
             ->isEqualTo('NULL::bytea')
             ;
     }
+
+    public function testToCsv()
+    {
+        $binary = chr(0).chr(27).chr(92).chr(39).chr(32).chr(13);
+        $output = '\x001b5c27200d';
+        $session = $this->buildSession();
+
+        $this
+            ->string($this->newTestedInstance()->toCsv($binary, 'bytea', $session))
+            ->isEqualTo(sprintf('"%s"', $output))
+            ->variable($this->newTestedInstance()->toCsv(null, 'bytea', $session))
+            ->isNull()
+            ;
+    }
 }
 
 

@@ -42,4 +42,19 @@ class PgLtree extends BaseConverter
             ->isEqualTo('NULL::ltree')
         ;
     }
+
+    public function testToCsv()
+    {
+        $session = $this->buildSession();
+        $converter = $this->newTestedInstance();
+        $this
+            ->string(
+                $converter
+                    ->toCsv(['_a_b_', 'c', 'd'], 'ltree', $session)
+            )
+            ->isEqualTo('_a_b_.c.d')
+            ->variable($converter->toCsv(null, 'ltree', $session))
+            ->isNull()
+        ;
+    }
 }

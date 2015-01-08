@@ -66,6 +66,27 @@ class PgArray implements ConverterInterface
     }
 
     /**
+     * @see ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        if ($data === null) {
+            return null;
+        }
+
+        $converter = $this->getSubtypeConverter($type, $session);
+        $data = $this->checkArray($data);
+
+        return
+             sprintf('"{%s}"', str_replace('"', '""', join(',', array_map(function ($val) use ($converter, $type) {
+                    $val = $converter->toCsv($val, $type);
+
+                    return $val !== null ? $val : 'NULL';
+                }, $data)), $type))
+            ;
+    }
+
+    /**
      * checkArray
      *
      * Check if the data is an array.

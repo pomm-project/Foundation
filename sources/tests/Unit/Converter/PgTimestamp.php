@@ -34,4 +34,15 @@ class PgTimestamp extends BaseConverter
             ->isEqualTo("NULL::timestamptz")
             ;
     }
+
+    public function testToCsv()
+    {
+        $session = $this->buildSession();
+        $this
+            ->string($this->newTestedInstance()->toCsv(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz', $session))
+            ->isEqualTo('"2014-09-27 18:51:35.678406+00:00"')
+            ->variable($this->newTestedInstance()->toCsv(null, 'timestamptz', $session))
+            ->isNull()
+            ;
+    }
 }

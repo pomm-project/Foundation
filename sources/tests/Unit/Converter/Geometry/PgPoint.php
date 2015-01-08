@@ -49,5 +49,23 @@ class PgPoint extends BaseConverter
             ->isEqualTo('NULL::subpoint')
             ;
     }
+
+    public function testToCsv()
+    {
+        $session = $this->buildSession();
+        $point = new Point('(1.2345, -9.87654)');
+        $this
+            ->string($this->newTestedInstance()->toCsv($point, 'point', $session))
+            ->isEqualTo('(1.2345,-9.87654)')
+            ->string($this->newTestedInstance()->toCsv('(1.2345,-9.87654)', 'point', $session))
+            ->isEqualTo('(1.2345,-9.87654)')
+            ->exception(function() use ($session) {
+                return $this->newTestedInstance()->toCsv('azsdf', 'point', $session);
+            })
+            ->isInstanceOf('PommProject\Foundation\Exception\ConverterException')
+            ->variable($this->newTestedInstance()->toCsv(null, 'subpoint', $session))
+            ->isNull()
+            ;
+    }
 }
 

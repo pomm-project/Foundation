@@ -47,4 +47,17 @@ class PgBytea implements ConverterInterface
 
         return $session->getConnection()->unescapeBytea($data);
     }
+
+    /**
+     * @see Pomm\Converter\ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        if ($data === null) return null;
+
+        return sprintf(
+            '"%s"',
+            preg_replace(["/\\\\/", '/"/'], ["\\", '""'], $session->getConnection()->escapeBytea($data))
+        );
+    }
 }

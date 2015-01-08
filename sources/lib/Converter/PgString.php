@@ -25,6 +25,8 @@ use PommProject\Foundation\Session\Session;
 class PgString implements ConverterInterface
 {
     /**
+     * toPg
+     *
      * @see ConverterInterface
      */
     public function toPg($data, $type, Session $session)
@@ -32,6 +34,19 @@ class PgString implements ConverterInterface
         return $data !== null
             ? sprintf("%s %s",  $type, $session->getConnection()->escapeLiteral($data))
             : sprintf("NULL::%s", $type)
+            ;
+    }
+
+    /**
+     * toCsv
+     *
+     * @see ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        return $data !== null
+            ? sprintf('"%s"',  str_replace('"', '""', $data))
+            : null
             ;
     }
 

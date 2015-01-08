@@ -48,4 +48,22 @@ class PgHstore extends BaseConverter
             ->isEqualTo('hstore(\'"a" => "b", "b" => NULL, "a b c" => "d \'\'é\'\' f"\')')
             ;
     }
+
+    public function testToCsv()
+    {
+        $session   = $this->buildSession();
+        $converter = $this->newTestedInstance();
+        $this
+            ->variable(
+                $converter
+                    ->toCsv(null, 'hstore', $session)
+                )
+            ->isNull()
+            ->string(
+                $converter
+                    ->toCsv(['a' => 'b', 'b' => null, 'a b c' => 'd \'é\' f'], 'hstore', $session)
+                )
+                ->isEqualTo('"""a"" => ""b"", ""b"" => NULL, ""a b c"" => ""d \'é\' f"""')
+            ;
+    }
 }

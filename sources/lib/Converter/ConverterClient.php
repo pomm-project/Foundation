@@ -104,6 +104,26 @@ class ConverterClient extends Client
     }
 
     /**
+     * toCsv
+     *
+     * Export data as CSV representation
+     *
+     * @access public
+     * @param  mixed    $value
+     * @param  string   $type
+     * @return string
+     * @see ConverterInterface
+     */
+    public function toCsv($value, $type = null)
+    {
+        return $this->converter->toCsv(
+            $value,
+            $type === null ? $this->getClientIdentifier() : $type,
+            $this->getSession()
+        );
+    }
+
+    /**
      * getConverter
      *
      * Return the embeded converter.

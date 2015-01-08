@@ -60,5 +60,25 @@ JSON;
             ->isEqualTo('NULL::json')
             ;
     }
+
+    public function testToCsv()
+    {
+        $session = $this->buildSession();
+        $data = ['a' => ['b' => [' c ', 'd'], 'e' => 'f'], 'g' => ['h', 'i']];
+        $this
+            ->string(
+                $this
+                    ->newTestedInstance()
+                    ->toCsv($data, 'json', $session)
+                )
+            ->isEqualTo('"{""a"":{""b"":["" c "",""d""],""e"":""f""},""g"":[""h"",""i""]}"')
+            ->variable(
+                $this
+                    ->newTestedInstance()
+                    ->toCsv(null, 'json', $session)
+                )
+            ->isNull()
+            ;
+    }
 }
 

@@ -43,4 +43,17 @@ class PgNumber extends BaseConverter
             ->isEqualTo("int4 '0'")
         ;
     }
+
+    public function testToCsv()
+    {
+        $session = $this->buildSession();
+        $this
+            ->string($this->newTestedInstance()->toCsv(2014, 'int4', $session))
+            ->isEqualTo("2014")
+            ->string($this->newTestedInstance()->toCsv(1.6180339887499, 'float8', $session))
+            ->isEqualTo("1.6180339887499")
+            ->variable($this->newTestedInstance()->toCsv(null, 'int4', $session))
+            ->isNull()
+            ;
+    }
 }

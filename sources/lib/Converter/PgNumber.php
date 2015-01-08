@@ -25,6 +25,8 @@ use PommProject\Foundation\Session\Session;
 class PgNumber implements ConverterInterface
 {
     /**
+     * fromPg
+     *
      * @see ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
@@ -39,14 +41,30 @@ class PgNumber implements ConverterInterface
     }
 
     /**
+     * toPg
+     *
      * @see ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
-        if ($data !== null) {
-            return sprintf("%s '%s'", $type, $data + 0);
-        } else {
-            return sprintf("NULL::%s", $type);
-        }
+        return
+            $data !== null
+            ? sprintf("%s '%s'", $type, $data + 0)
+            : sprintf("NULL::%s", $type)
+            ;
+    }
+
+    /**
+     * toCsv
+     *
+     * @see ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        return
+            $data !== null
+            ? sprintf("%s", $data + 0)
+            : null
+            ;
     }
 }

@@ -50,10 +50,22 @@ class PgNumRange extends BaseConverter
     public function testToPg()
     {
         $session = $this->buildSession();
-        $range = $this->newTestedInstance()->fromPg('[1,3)', 'myrange', $session);
         $this
-            ->string($this->newTestedInstance()->toPg($range, 'myrange', $session))
+            ->string($this->newTestedInstance()->toPg(new NumRange('[1,3)'), 'myrange', $session))
             ->isEqualTo("myrange('[1,3)')")
+            ->string($this->newTestedInstance()->toPg(null, 'myrange', $session))
+            ->isEqualTo('NULL::myrange')
+            ;
+    }
+
+    public function testToCsv()
+    {
+        $session = $this->buildSession();
+        $this
+            ->string($this->newTestedInstance()->toCsv(new NumRange('[1,3)'), 'myrange', $session))
+            ->isEqualTo("[1,3)")
+            ->variable($this->newTestedInstance()->toCsv(null, 'myrange', $session))
+            ->isNull()
             ;
     }
 }

@@ -48,18 +48,50 @@ class PgLtree implements ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
-        if ($data === null) {
-            return sprintf("NULL::%s", $type);
-        } elseif (!is_array($data)) {
+        return
+            $data !== null
+            ? sprintf("ltree '%s'", join('.', $this->checkData($data)))
+            : sprintf("NULL::%s", $type)
+            ;
+    }
+
+
+    /**
+     * toCsv
+     *
+     * @see ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        return
+            $data !== null
+            ? sprintf("%s", join('.', $this->checkData($data)))
+            : null
+            ;
+    }
+
+    /**
+     * checkData
+     *
+     * Check if data is a suitable LTree PHP representation.
+     *
+     * @access protected
+     * @param  mixed $data
+     * @throw  ConverterException
+     * @return array
+     */
+    protected function checkData($data)
+    {
+        if (!is_array($data)) {
 
             throw new ConverterException(
                 sprintf(
-                    "Ltree data must be an array, '%s' given.",
+                    "Ltree output converter expects data to be an array, '%s' given.",
                     gettype($data)
                 )
             );
         }
 
-        return sprintf("ltree '%s'", join('.', $data));
+        return $data;
     }
 }

@@ -34,4 +34,15 @@ class PgInterval extends BaseConverter
             ->isEqualTo("interval '00 years 00 months 14346 days 22:47:03'")
             ;
     }
+
+    public function testToCsv()
+    {
+        $session = $this->buildSession();
+        $this
+            ->variable($this->newTestedInstance()->toCsv(null, 'interval', $session))
+            ->isNull()
+            ->string($this->newTestedInstance()->toCsv(new \DateInterval('P14346DT22H47M3S'), 'interval', $session))
+            ->isEqualTo('"00 years 00 months 14346 days 22:47:03"')
+            ;
+    }
 }

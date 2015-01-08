@@ -79,18 +79,51 @@ class PgJson implements ConverterInterface
             return sprintf("NULL::%s", $type);
         }
 
-        $json = json_encode($data);
+        return
+            $data !== null
+            ? sprintf("json '%s'", $this->jsonEncode($data))
+            : sprintf("NULL::%s", $type)
+            ;
+    }
 
-        if ($json === false) {
+    /**
+     * toCsv
+     *
+     * @see ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        return
+            $data !== null
+            ? sprintf('"%s"', str_replace('"', '""', $this->jsonEncode($data)))
+            : null
+            ;
+    }
+
+    /**
+     * jsonEncode
+     *
+     * Encode data to Json. Throw an exception if an error occures.
+     *
+     * @access protected
+     * @param  mixed $data
+     * @throw  ConverterException
+     * @return string
+     */
+    protected function jsonEncode($data)
+    {
+        $return = json_encode($data);
+
+        if ($return === false) {
             throw new ConverterException(
                 sprintf(
-                    "Error '%s' while encoding data to JSON.\n%s",
+                    "Could not convert data to JSON. Driver returned '%s'.\n======\n%s\n",
                     json_last_error(),
-                    print_r($data, true)
+                    $data
                 )
             );
         }
 
-        return sprintf("%s '%s'", $type, $json);
+        return $return;
     }
 }

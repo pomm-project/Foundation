@@ -287,7 +287,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * @access private
      * @param  string   $name
      * @throw  FoundationException
-     * @return Pom      $this
+     * @return Pomm      $this
      */
     private function builderMustExist($name)
     {

@@ -50,7 +50,6 @@ class Session implements LoggerAwareInterface
      *
      * @access public
      * @param  Connection       $connection
-     * @param  ConverterHolder  $converter_holder
      * @param  string           $stamp
      * @return null
      */
@@ -196,7 +195,6 @@ class Session implements LoggerAwareInterface
      * Add or replace a Client pooler for the specified type.
      *
      * @access public
-     * @param  string                $type
      * @param  ClientPoolerInterface $client_pooler
      * @return Session               $this
      */

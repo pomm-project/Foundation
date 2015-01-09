@@ -11,7 +11,6 @@ namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Exception\ConverterException;
-use PommProject\Foundation\Session\Session;
 
 /**
  * ConverterPooler
@@ -35,7 +34,7 @@ class ConverterPooler extends ClientPooler
      *
      * @access public
      * @param  ConverterHolder $converter_holder
-     * @return null
+     * @return \PommProject\Foundation\Client\ClientPoolerInterface
      */
     public function __construct(ConverterHolder $converter_holder)
     {

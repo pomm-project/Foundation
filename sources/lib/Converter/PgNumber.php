@@ -43,7 +43,7 @@ class PgNumber implements ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
-        if ($data != null) {
+        if ($data !== null) {
             return sprintf("%s '%s'", $type, $data + 0);
         } else {
             return sprintf("NULL::%s", $type);

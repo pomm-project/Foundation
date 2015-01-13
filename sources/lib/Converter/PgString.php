@@ -45,7 +45,9 @@ class PgString implements ConverterInterface
     public function toCsv($data, $type, Session $session)
     {
         return $data !== null
-            ? sprintf('"%s"',  str_replace('"', '""', $data))
+            ? strlen($data) === 0 || preg_match('/\s/', $data)
+                ? sprintf('"%s"',  str_replace('"', '""', $data))
+                : $data
             : null
             ;
     }

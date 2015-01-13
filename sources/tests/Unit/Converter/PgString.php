@@ -63,7 +63,9 @@ _;
             ->string($this->newTestedInstance()->toCsv('', 'bpchar', $session))
             ->isEqualTo('""')
             ->string($this->newTestedInstance()->toCsv('10.2.3.4', 'inet', $session))
-            ->isEqualTo('"10.2.3.4"')
+            ->isEqualTo('10.2.3.4')
+            ->string($this->newTestedInstance()->toCsv('This is a "quoted" text.', 'text', $session))
+            ->isEqualTo('"This is a ""quoted"" text."')
             ;
     }
 }

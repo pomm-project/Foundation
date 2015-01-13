@@ -22,18 +22,4 @@ class PgNumRange extends TypeConverter
     {
         return '\PommProject\Foundation\Converter\Type\NumRange';
     }
-
-    /**
-     * toPg
-     *
-     * @see ConverterInterface
-     */
-    public function toPg($data, $type, Session $session)
-    {
-        if (($data = $this->checkData($data, $type, $session)) === null) {
-            return sprintf("NULL::%s", $type);
-        }
-
-        return sprintf("%s('%s')", $type, $data->__toString());
-    }
 }

@@ -15,6 +15,11 @@ use PommProject\Foundation\Session\Session;
 
 class PgPoint extends TypeConverter
 {
+    /**
+     * getTypeClassName
+     *
+     * @see TypeConverter
+     */
     public function getTypeClassName()
     {
         return  '\PommProject\Foundation\Converter\Type\Point';
@@ -27,9 +32,11 @@ class PgPoint extends TypeConverter
      */
     public function toPg($data, $type, Session $session)
     {
-        if (($data = $this->checkData($data, $type, $session)) === null) {
+        if ($data === null) {
             return sprintf("NULL::%s", $type);
         }
+
+        $data = $this->checkData($data);
 
         return sprintf(
             "point(%s,%s)",

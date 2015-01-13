@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Exception\ConverterException;
+use PommProject\Foundation\Converter\Type\BaseRange;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -63,10 +64,73 @@ abstract class TypeConverter implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
-        if ($data === null) {
-            return null;
+        return
+            $data !== null
+            ? $this->createObjectFrom($data)
+            : null
+            ;
+    }
+
+    /**
+     * toPg
+     *
+     * @see ConverterInterface
+     */
+    public function toPg($data, $type, Session $session)
+    {
+        return
+            $data !== null
+            ? sprintf("%s('%s')", $type, $this->checkData($data)->__toString())
+            : sprintf("NULL::%s", $type)
+            ;
+    }
+
+    /**
+     * toCsv
+     *
+     * @see ConverterInterface
+     */
+    public function toCsv($data, $type, Session $session)
+    {
+        return
+            $data !== null
+            ? sprintf("%s", str_replace('"', '""', $this->checkData($data)->__toString()))
+            : null
+            ;
+    }
+
+    /**
+     * checkData
+     *
+     * Check if data is suitable for Pg conversion. If not an attempt is made to build the object from the given definition.
+     *
+     * @access public
+     * @param  mixed    $data
+     * @return object
+     */
+    public function checkData($data)
+    {
+        $class_name = $this->getTypeClassName();
+
+        if (!$data instanceof $class_name) {
+            $data = $this->createObjectFrom($data);
         }
 
+        return $data;
+    }
+
+    /**
+     * createObjectFrom
+     *
+     * Create a range object from a given definition. If the object creation
+     * fails, an exception is thrown.
+     *
+     * @access protected
+     * @param  mixed $data
+     * @return BaseRange
+     */
+    protected function createObjectFrom($data)
+    {
         $class_name = $this->class_name;
 
         try {
@@ -78,31 +142,5 @@ abstract class TypeConverter implements ConverterInterface
                 $e
             );
         }
-    }
-
-    /**
-     * checkData
-     *
-     * Check if data is suitable for Pg conversion.
-     *
-     * @access public
-     * @param  mixed    $data
-     * @param  string   $type
-     * @param  Session  $session
-     * @return Object|null
-     */
-    public function checkData($data, $type, Session $session)
-    {
-        if ($data === null) {
-            return null;
-        }
-
-        $class = $this->getTypeClassName();
-
-        if (!$data instanceof $class) {
-            $data = $this->fromPg($data, $type, $session);
-        }
-
-        return $data;
     }
 }

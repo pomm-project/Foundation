@@ -25,6 +25,9 @@ use PommProject\Foundation\Session\Session;
  */
 class PgArray implements ConverterInterface
 {
+
+    protected $subtype_converter = [];
+
     /**
      * @see ConverterInterface
      */
@@ -35,7 +38,7 @@ class PgArray implements ConverterInterface
         }
 
         if ($data !== "{}") {
-            $converter = $session->getClientUsingPooler('converter', $type);
+            $converter = $this->getSubtypeConverter($type, $session);
 
             return array_map(function ($val) use ($converter, $type) {
                     return $val !== "NULL" ? $converter->fromPg($val, $type) : null;
@@ -50,18 +53,59 @@ class PgArray implements ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
-        if (!is_array($data)) {
-            if (is_null($data)) {
+        if ($data === null) {
                 return sprintf("NULL::%s[]", $type);
-            }
-
-            throw new ConverterException(sprintf("Array converter toPg() data must be an array ('%s' given).", gettype($data)));
         }
 
-        $converter = $session->getClientUsingPooler('converter', $type);
+        $converter = $this->getSubtypeConverter($type, $session);
+        $data = $this->checkArray($data);
 
         return sprintf('ARRAY[%s]::%s[]', join(',', array_map(function ($val) use ($converter, $type) {
                     return $converter->toPg($val, $type);
                 }, $data)), $type);
     }
+
+    /**
+     * checkArray
+     *
+     * Check if the data is an array.
+     *
+     * @access protected
+     * @param  mixed    $data
+     * @return array    $data
+     */
+    protected function checkArray($data)
+    {
+        if (!is_array($data)) {
+            throw new ConverterException(
+                sprintf(
+                    "Array converter data must be an array ('%s' given).",
+                    gettype($data)
+                )
+            );
+        }
+
+        return $data;
+    }
+
+    /**
+     * getSubtypeConverter
+     *
+     * Since the arrays in Postgresql have the same sub type, it is useful to
+     * cache it here to ovoid summoning the ClientHolder all the time.
+     *
+     * @access protected
+     * @param  string   $type
+     * @param  Session  $session
+     * @return ConverterInterface
+     */
+    protected function getSubtypeConverter($type, Session $session)
+    {
+        if (!isset($this->subtype_converter[$type])) {
+            $this->subtype_converter[$type] = $session->getClientUsingPooler('converter', $type);
+        }
+
+        return $this->subtype_converter[$type];
+    }
+
 }

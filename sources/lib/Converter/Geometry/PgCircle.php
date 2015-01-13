@@ -26,6 +26,8 @@ use PommProject\Foundation\Session\Session;
  */
 class PgCircle extends TypeConverter
 {
+    protected $point_converter;
+
     /**
      * getTypeClassName
      *
@@ -45,16 +47,39 @@ class PgCircle extends TypeConverter
      */
     public function toPg($data, $type, Session $session)
     {
-        if (($data = $this->checkData($data, $type, $session)) === null) {
+        if ($data === null) {
             return sprintf("NULL::%s", $type);
         }
 
-        return sprintf(
-            "circle(%s,%s)",
-            $session
-                ->getClientUsingPooler('converter', 'point')
-                ->toPg($data->center, 'point', $session),
-            $data->radius
-        );
+        $data = $this->checkData($data);
+
+        return
+            sprintf(
+                "%s(%s,%s)",
+                $type,
+                $this
+                    ->getPointConverter($session)
+                    ->toPg($data->center, 'point', $session),
+                $data->radius
+            );
+    }
+
+    /**
+     * getPointConverter
+     *
+     * Cache the point converter.
+     *
+     * @access protected
+     * @param  Session $session
+     * @return ConverterInterface
+     */
+    protected function getPointConverter(Session $session)
+    {
+        if ($this->point_converter === null) {
+            $this->point_converter = $session
+                ->getClientUsingPooler('converter', 'point');
+        }
+
+        return $this->point_converter;
     }
 }

@@ -9,6 +9,8 @@
  */
 namespace PommProject\Foundation\Converter;
 
+use PommProject\Foundation\Converter\TypeConverter;
+
 /**
  * PgTsRange
  *
@@ -18,11 +20,9 @@ namespace PommProject\Foundation\Converter;
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- *
- *
- * @see PgNumRange
+ * @see TypeConverter
  */
-class PgTsRange extends PgNumRange
+class PgTsRange extends TypeConverter
 {
     public function getTypeClassName()
     {

@@ -37,7 +37,7 @@ class PgCircle extends BaseConverter
     public function testToPg()
     {
         $session = $this->buildSession();
-        $circle = $this->newTestedInstance()->fromPg('<(1.2345,-9.87654),3.141596>', 'circle', $session);
+        $circle = new Circle('<(1.2345,-9.87654),3.141596>');
         $this
             ->string($this->newTestedInstance()->toPg($circle, 'circle', $session))
             ->isEqualTo('circle(point(1.2345,-9.87654),3.141596)')

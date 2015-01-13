@@ -10,13 +10,9 @@
 namespace PommProject\Foundation\Test\Unit\Inspector;
 
 use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Inspector\InspectorPooler;
-use PommProject\Foundation\Converter\ConverterPooler;
 use PommProject\Foundation\Test\Fixture\InspectorFixture;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Tester\FoundationSessionAtoum;
-use PommProject\Foundation\QueryManager\QueryManagerPooler;
-use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
 
 class Inspector extends FoundationSessionAtoum
 {

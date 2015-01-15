@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Inspector;
 
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Where;
 
@@ -398,6 +399,29 @@ where
 SQL;
 
         return $this->executeSql($sql, Where::create('orig.oid = $*', [$oid]));
+    }
+
+    /**
+     * getVersion
+     *
+     * Return server version.
+     *
+     * @access public
+     * @throw  FoundationException if invalid string.
+     * @return string
+     */
+    public function getVersion()
+    {
+        $sql = "select version()";
+        $row = $this->executeSql($sql)->current();
+
+        if (preg_match('/^postgresql ([^ ]+) /i', $row['version'], $match) === false) {
+            throw new FoundationException(
+                sprintf("Invalid version string returned by the server '%s'.", $string)
+            );
+        }
+
+        return $match[1];
     }
 
     /**

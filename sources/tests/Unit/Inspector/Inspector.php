@@ -200,4 +200,14 @@ class Inspector extends FoundationSessionAtoum
             ->isNull()
             ;
     }
+
+    public function testGetVersion()
+    {
+        $result = $this->getInspector()->getVersion();
+
+        $this
+            ->boolean(version_compare($result, "9.1.0") === 1)
+            ->isTrue()
+           ;
+    }
 }

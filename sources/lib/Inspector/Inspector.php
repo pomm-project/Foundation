@@ -229,7 +229,7 @@ SQL;
     public function getSchemaRelations($schema_oid, Where $where = null)
     {
         $condition = Where::create('relnamespace = $*', [$schema_oid])
-            ->andWhere(Where::createWhereIn('relkind', ['r', 'v']))
+            ->andWhere(Where::createWhereIn('relkind', ['r', 'v', 'm']))
             ->andWhere($where)
             ;
 
@@ -239,6 +239,7 @@ select
     case
         when cl.relkind = 'r' then 'table'
         when cl.relkind = 'v' then 'view'
+        when cl.relkind = 'm' then 'materialized view'
         else 'other'
     end             as "type",
     cl.oid          as "oid",

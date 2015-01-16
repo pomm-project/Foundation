@@ -1,0 +1,13 @@
+== VERSION 2.0.0-beta.2
+
+ * Added inspector::getVersion.
+ * Inspect materialized views
+ * Refactord converters.
+ * fixed toPg convertion for (int)0
+ * Better converter type decoupling.
+ * Expanding DateTime parameters (close #8).
+ * Query logger sends session stamp.
+ * ResultIterator implements JsonSerializable
+ * SimpleQuery bug with uppercase fields.
+
+== VERSION 2.0.0-beta1.1

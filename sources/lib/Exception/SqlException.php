@@ -40,11 +40,11 @@ class SqlException extends FoundationException
         $this->sql = $sql;
         parent::__construct(
             sprintf(
-                "«%s».\n\nSQL error state '%s' [%s]\n====\n%s\n====",
-                $sql,
+                "\nSQL error state '%s' [%s]\n====\n%s\n====\n«%s».",
                 $this->getSQLErrorState(),
                 $this->getSQLErrorSeverity(),
-                $this->getSqlErrorMessage()
+                $this->getSqlErrorMessage(),
+                $sql
             ),
             $code,
             $e

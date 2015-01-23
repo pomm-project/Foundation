@@ -69,7 +69,7 @@ class ClientHolder
      */
     public function get($type, $name)
     {
-        return $this->has($type, $name) ? $this->clients[$type][$name] : null;
+        return isset($this->clients[$type][$name]) ? $this->clients[$type][$name] : null;
     }
 
     /**
@@ -103,7 +103,7 @@ class ClientHolder
      */
     public function clear($type, $name)
     {
-        if ($this->has($type, $name)) {
+        if (isset($this->clients[$type][$name])) {
             $this->clients[$type][$name]->shutdown();
             unset($this->clients[$type][$name]);
         }

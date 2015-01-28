@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the Pomm's Foundation package.
+ *
+ * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace PommProject\Foundation;
 
 /*
@@ -64,7 +72,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function hasParameter($name)
     {
-        return array_key_exists($name, $this->parameters);
+        return isset($this->parameters['name']) || array_key_exists($name, $this->parameters);
     }
 
     /**

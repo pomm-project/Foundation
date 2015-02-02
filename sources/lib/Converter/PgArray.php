@@ -102,7 +102,7 @@ class PgArray implements ConverterInterface
     protected function getSubtypeConverter($type, Session $session)
     {
         if (!isset($this->subtype_converter[$type])) {
-            $this->subtype_converter[$type] = $session->getClientUsingPooler('converter', $type);
+            $this->subtype_converter[$type] = $session->getClientUsingPooler('converter', $type)->getConverter();
         }
 
         return $this->subtype_converter[$type];

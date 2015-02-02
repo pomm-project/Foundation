@@ -58,11 +58,6 @@ JSON;
                     ->toPg(null, 'json', $session)
                 )
             ->isEqualTo('NULL::json')
-            ->exception(function() use ($converter, $session) {
-                $converter->toPg(fopen(__FILE__, 'r'), 'json', $session);
-            })
-            ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
-            ->message->contains('while encoding data to JSON')
             ;
     }
 }

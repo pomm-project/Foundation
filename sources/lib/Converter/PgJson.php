@@ -25,6 +25,22 @@ use PommProject\Foundation\Session\Session;
  */
 class PgJson implements ConverterInterface
 {
+    protected $is_array;
+
+    /**
+     * __construct
+     *
+     * Configure the JSON converter to decode JSON as StdObject instances or
+     * arrays (default).
+     *
+     * @access public
+     * @param boolean $is_array
+     */
+    public function __construct($is_array = null)
+    {
+        $this->is_array = $is_array === null ? true : $is_array;
+    }
+
     /**
      * fromPg
      *
@@ -36,13 +52,12 @@ class PgJson implements ConverterInterface
             return null;
         }
 
-        $return = json_decode($data, true);
+        $return = json_decode($data, $this->is_array);
 
         if ($return === false) {
             throw new ConverterException(
                 sprintf(
-                    "Could not convert given Json '%s' to PHP array, '%s' error reported.",
-                    $data,
+                    "Could not convert Json to PHP array, '%s' error reported.",
                     json_last_error()
                 )
             );
@@ -60,15 +75,19 @@ class PgJson implements ConverterInterface
     {
         if ($data === null) {
             return sprintf("NULL::%s", $type);
-        } elseif (!is_array($data)) {
+        }
+
+        $json = json_encode($data);
+
+        if ($json === false) {
             throw new ConverterException(
                 sprintf(
-                    "Json data is not an array: '%s' given",
-                    gettype($data)
+                    "Error '%s' while encoding data to JSON.",
+                    json_last_error()
                 )
             );
         }
 
-        return sprintf("json '%s'", json_encode($data));
+        return sprintf("%s '%s'", $type, $json);
     }
 }

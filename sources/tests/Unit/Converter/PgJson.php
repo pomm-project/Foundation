@@ -31,7 +31,15 @@ JSON;
             )
             ->isIdenticalTo(["az" => ['b' => [' c ', 'd'], 'e' => ['fé' => 'gù']], 'h' => ['\'i\'', 'j']])
             ->variable($converter->fromPg(null, 'json', $session))
-        ;
+            ;
+        $object = $this->newTestedInstance(false)->fromPg($json, 'json', $session);
+        $this
+            ->object($object)
+            ->isInstanceOf((object) [])
+            ->object($object->az)
+            ->array($object->az->b)
+            ->isIdenticalTo([' c ', 'd'])
+            ;
     }
 
     public function testToPg()

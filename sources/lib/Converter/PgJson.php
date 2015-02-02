@@ -57,8 +57,10 @@ class PgJson implements ConverterInterface
         if ($return === false) {
             throw new ConverterException(
                 sprintf(
-                    "Could not convert Json to PHP array, '%s' error reported.",
-                    json_last_error()
+                    "Could not convert Json to PHP %s, driver said '%s'.\n%s",
+                    $this->is_array ? 'array' : 'object',
+                    json_last_error(),
+                    $data
                 )
             );
         }
@@ -82,8 +84,9 @@ class PgJson implements ConverterInterface
         if ($json === false) {
             throw new ConverterException(
                 sprintf(
-                    "Error '%s' while encoding data to JSON.",
-                    json_last_error()
+                    "Error '%s' while encoding data to JSON.\n%s",
+                    json_last_error(),
+                    print_r($data, true)
                 )
             );
         }

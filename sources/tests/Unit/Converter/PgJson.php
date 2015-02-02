@@ -45,20 +45,24 @@ JSON;
     public function testToPg()
     {
         $session = $this->buildSession();
+        $converter = $this->newTestedInstance();
         $data = ['a' => ['b' => [' c ', 'd'], 'e' => 'f'], 'g' => ['h', 'i']];
         $this
             ->string(
-                $this
-                    ->newTestedInstance()
+                $converter
                     ->toPg($data, 'json', $session)
                 )
             ->isEqualTo('json \'{"a":{"b":[" c ","d"],"e":"f"},"g":["h","i"]}\'')
             ->string(
-                $this
-                    ->newTestedInstance()
+                $converter
                     ->toPg(null, 'json', $session)
                 )
             ->isEqualTo('NULL::json')
+            ->exception(function() use ($converter, $session) {
+                $converter->toPg(fopen(__FILE__, 'r'), 'json', $session);
+            })
+            ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
+            ->message->contains('while encoding data to JSON')
             ;
     }
 }

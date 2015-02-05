@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\PreparedQuery;
 
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\Client\Client;
 
@@ -52,6 +53,10 @@ class PreparedQuery extends Client
      */
     public function __construct($sql)
     {
+        if (empty($sql)) {
+            throw new FoundationException("Can not prepare an empty query.");
+        }
+
         $this->sql        = $sql;
         $this->identifier = static::getSignatureFor($sql);
     }
@@ -86,15 +91,17 @@ class PreparedQuery extends Client
      */
     public function shutdown()
     {
-        $this
-            ->getSession()
-            ->getConnection()
-            ->executeAnonymousQuery(sprintf(
-                "deallocate %s",
-                $this->getSession()->getConnection()->escapeIdentifier($this->getClientIdentifier())
-            ));
+        if ($this->is_prepared === true) {
+            $this
+                ->getSession()
+                ->getConnection()
+                ->executeAnonymousQuery(sprintf(
+                    "deallocate %s",
+                    $this->getSession()->getConnection()->escapeIdentifier($this->getClientIdentifier())
+                ));
 
-        $this->is_prepared = false;
+            $this->is_prepared = false;
+        }
     }
 
     /**

@@ -11,7 +11,6 @@ namespace PommProject\Foundation\Test\Unit\QueryManager;
 
 use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Tester\VanillaSessionAtoum;
-use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
 
 class QueryManagerPooler extends VanillaSessionAtoum
 {
@@ -19,7 +18,6 @@ class QueryManagerPooler extends VanillaSessionAtoum
     {
         $session
             ->registerClientPooler($this->newTestedInstance())
-            ->registerClientPooler(new PreparedQueryPooler)
             ;
     }
 

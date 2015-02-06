@@ -28,7 +28,7 @@ use PommProject\Foundation\SessionBuilder;
  */
 abstract class FoundationSessionAtoum extends VanillaSessionAtoum
 {
-    protected function createSessionBuilder($configuration)
+    protected function createSessionBuilder(array $configuration)
     {
         return new SessionBuilder($configuration);
     }

@@ -59,8 +59,8 @@ class PgArray extends BaseConverter
             ->isEqualTo("ARRAY[int4 '1',int4 '2',int4 '3',NULL::int4]::int4[]")
             ->string($converter->toPg([1.634, 2.000, 3.99999, null], 'float4', $session))
             ->isEqualTo("ARRAY[float4 '1.634',float4 '2',float4 '3.99999',NULL::float4]::float4[]")
-            ->string($converter->toPg(['ab a', 'aba', 'a b a', null], 'varchar', $session))
-            ->isEqualTo("ARRAY[varchar 'ab a',varchar 'aba',varchar 'a b a',NULL::varchar]::varchar[]")
+            ->string($converter->toPg(['', ' ab a', 'aba', 'a b a', null], 'varchar', $session))
+            ->isEqualTo("ARRAY[varchar '',varchar ' ab a',varchar 'aba',varchar 'a b a',NULL::varchar]::varchar[]")
             ->string($converter->toPg([true, true, false, null], 'bool', $session))
             ->isEqualTo("ARRAY[bool 'true',bool 'true',bool 'false',NULL::bool]::bool[]")
             ->string(
@@ -90,8 +90,8 @@ class PgArray extends BaseConverter
             ->isEqualTo('"{1,2,3,NULL}"')
             ->string($converter->toCsv([1.634, 2.000, 3.99999, null], 'float4', $session))
             ->isEqualTo('"{1.634,2,3.99999,NULL}"')
-            ->string($converter->toCsv(['ab a', 'aba', 'a b a', null], 'varchar', $session))
-            ->isEqualTo('"{""ab a"",""aba"",""a b a"",NULL}"')
+            ->string($converter->toCsv(['', ' ab a', 'aba', 'a b a', null], 'varchar', $session))
+            ->isEqualTo('"{"""","" ab a"",aba,""a b a"",NULL}"')
             ->string($converter->toCsv([true, true, false, null], 'bool', $session))
             ->isEqualTo('"{t,t,f,NULL}"')
             ->string(

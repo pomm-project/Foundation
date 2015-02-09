@@ -68,7 +68,7 @@ class PgArray implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toCsv($data, $type, Session $session)
+    public function toPgStandardFormat($data, $type, Session $session)
     {
         if ($data === null) {
             return null;
@@ -79,7 +79,7 @@ class PgArray implements ConverterInterface
 
         return
              sprintf('"{%s}"', str_replace('"', '""', join(',', array_map(function ($val) use ($converter, $type) {
-                    $val = $converter->toCsv($val, $type);
+                    $val = $converter->toPgStandardFormat($val, $type);
 
                     return $val !== null ? $val : 'NULL';
                 }, $data)), $type))
@@ -128,5 +128,4 @@ class PgArray implements ConverterInterface
 
         return $this->subtype_converter[$type];
     }
-
 }

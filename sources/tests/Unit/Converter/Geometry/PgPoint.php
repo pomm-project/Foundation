@@ -50,20 +50,20 @@ class PgPoint extends BaseConverter
             ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $session = $this->buildSession();
         $point = new Point('(1.2345, -9.87654)');
         $this
-            ->string($this->newTestedInstance()->toCsv($point, 'point', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat($point, 'point', $session))
             ->isEqualTo('(1.2345,-9.87654)')
-            ->string($this->newTestedInstance()->toCsv('(1.2345,-9.87654)', 'point', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat('(1.2345,-9.87654)', 'point', $session))
             ->isEqualTo('(1.2345,-9.87654)')
             ->exception(function() use ($session) {
-                return $this->newTestedInstance()->toCsv('azsdf', 'point', $session);
+                return $this->newTestedInstance()->toPgStandardFormat('azsdf', 'point', $session);
             })
             ->isInstanceOf('PommProject\Foundation\Exception\ConverterException')
-            ->variable($this->newTestedInstance()->toCsv(null, 'subpoint', $session))
+            ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'subpoint', $session))
             ->isNull()
             ;
     }

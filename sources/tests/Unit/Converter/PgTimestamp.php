@@ -35,13 +35,13 @@ class PgTimestamp extends BaseConverter
             ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $session = $this->buildSession();
         $this
-            ->string($this->newTestedInstance()->toCsv(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz', $session))
             ->isEqualTo('"2014-09-27 18:51:35.678406+00:00"')
-            ->variable($this->newTestedInstance()->toCsv(null, 'timestamptz', $session))
+            ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'timestamptz', $session))
             ->isNull()
             ;
     }

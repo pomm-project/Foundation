@@ -45,16 +45,16 @@ class PgTsRange extends BaseConverter
             ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $session = $this->buildSession();
         $text_range = '["2014-08-15 15:29:24.395639+00","2014-10-15 15:29:24.395639+00")';
         $range = $this->newTestedInstance()->fromPg($text_range, 'tstzrange', $session);
 
         $this
-            ->string($this->newTestedInstance()->toCsv($range, 'tstzrange', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat($range, 'tstzrange', $session))
             ->isEqualTo('[""2014-08-15 15:29:24.395639+00"",""2014-10-15 15:29:24.395639+00"")')
-            ->variable($this->newTestedInstance()->toCsv(null, 'mytsrange', $session))
+            ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'mytsrange', $session))
             ->isNull()
             ;
     }

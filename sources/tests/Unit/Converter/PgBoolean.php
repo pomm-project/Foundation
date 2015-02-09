@@ -42,15 +42,15 @@ class PgBoolean extends BaseConverter
             ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $session = $this->buildSession();
         $this
-            ->string($this->newTestedInstance()->toCsv(true, 'bool', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat(true, 'bool', $session))
             ->isEqualTo("t")
-            ->string($this->newTestedInstance()->toCsv(false, 'bool', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat(false, 'bool', $session))
             ->isEqualTo("f")
-            ->variable($this->newTestedInstance()->toCsv(null, 'bool', $session))
+            ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'bool', $session))
             ->isNull()
             ;
     }

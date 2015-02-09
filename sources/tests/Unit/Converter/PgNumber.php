@@ -44,15 +44,15 @@ class PgNumber extends BaseConverter
         ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $session = $this->buildSession();
         $this
-            ->string($this->newTestedInstance()->toCsv(2014, 'int4', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat(2014, 'int4', $session))
             ->isEqualTo("2014")
-            ->string($this->newTestedInstance()->toCsv(1.6180339887499, 'float8', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat(1.6180339887499, 'float8', $session))
             ->isEqualTo("1.6180339887499")
-            ->variable($this->newTestedInstance()->toCsv(null, 'int4', $session))
+            ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'int4', $session))
             ->isNull()
             ;
     }

@@ -49,22 +49,22 @@ _;
             ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $session = $this->buildSession();
         $string = <<<_
 \\"\t!'\n
 _;
         $this
-            ->string($this->newTestedInstance()->toCsv($string, 'varchar', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat($string, 'varchar', $session))
             ->isEqualTo("\"\\\"\"\t!'\n\"")
-            ->variable($this->newTestedInstance()->toCsv(null, 'varchar', $session))
+            ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'varchar', $session))
             ->isNull()
-            ->string($this->newTestedInstance()->toCsv('', 'bpchar', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat('', 'bpchar', $session))
             ->isEqualTo('""')
-            ->string($this->newTestedInstance()->toCsv('10.2.3.4', 'inet', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat('10.2.3.4', 'inet', $session))
             ->isEqualTo('10.2.3.4')
-            ->string($this->newTestedInstance()->toCsv('This is a "quoted" text.', 'text', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat('This is a "quoted" text.', 'text', $session))
             ->isEqualTo('"This is a ""quoted"" text."')
             ;
     }

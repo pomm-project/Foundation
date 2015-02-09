@@ -49,13 +49,14 @@ class PgBoolean implements ConverterInterface
     public function toPg($data, $type, Session $session)
     {
         if ($data === null) return sprintf("NULL::%s", $type);
+
         return sprintf("%s '%s'", $type, $data === true ? "true" : "false");
     }
 
     /**
      * @see ConverterInterface
      */
-    public function toCsv($data, $type, Session $session)
+    public function toPgStandardFormat($data, $type, Session $session)
     {
         return
             $data !== null

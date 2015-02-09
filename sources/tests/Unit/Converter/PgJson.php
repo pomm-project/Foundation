@@ -61,7 +61,7 @@ JSON;
             ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $session = $this->buildSession();
         $data = ['a' => ['b' => [' c ', 'd'], 'e' => 'f'], 'g' => ['h', 'i']];
@@ -69,13 +69,13 @@ JSON;
             ->string(
                 $this
                     ->newTestedInstance()
-                    ->toCsv($data, 'json', $session)
+                    ->toPgStandardFormat($data, 'json', $session)
                 )
             ->isEqualTo('"{""a"":{""b"":["" c "",""d""],""e"":""f""},""g"":[""h"",""i""]}"')
             ->variable(
                 $this
                     ->newTestedInstance()
-                    ->toCsv(null, 'json', $session)
+                    ->toPgStandardFormat(null, 'json', $session)
                 )
             ->isNull()
             ;

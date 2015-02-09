@@ -104,7 +104,7 @@ class ConverterClient extends Client
     }
 
     /**
-     * toCsv
+     * toPgStandardFormat
      *
      * Export data as CSV representation
      *
@@ -114,9 +114,9 @@ class ConverterClient extends Client
      * @return string
      * @see ConverterInterface
      */
-    public function toCsv($value, $type = null)
+    public function toPgStandardFormat($value, $type = null)
     {
-        return $this->converter->toCsv(
+        return $this->converter->toPgStandardFormat(
             $value,
             $type === null ? $this->getClientIdentifier() : $type,
             $this->getSession()

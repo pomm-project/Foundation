@@ -24,7 +24,7 @@ class DumbConverter implements ConverterInterface
         return $value;
     }
 
-    public function toCsv($value, $type, Session $session)
+    public function toPgStandardFormat($value, $type, Session $session)
     {
         return $value;
     }

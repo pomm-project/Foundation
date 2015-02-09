@@ -58,13 +58,13 @@ class PgNumRange extends BaseConverter
             ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $session = $this->buildSession();
         $this
-            ->string($this->newTestedInstance()->toCsv(new NumRange('[1,3)'), 'myrange', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat(new NumRange('[1,3)'), 'myrange', $session))
             ->isEqualTo("[1,3)")
-            ->variable($this->newTestedInstance()->toCsv(null, 'myrange', $session))
+            ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'myrange', $session))
             ->isNull()
             ;
     }

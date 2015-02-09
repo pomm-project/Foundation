@@ -54,7 +54,7 @@ class PgInterval implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toCsv($data, $type, Session $session)
+    public function toPgStandardFormat($data, $type, Session $session)
     {
         return $data !== null
             ? sprintf('"%s"', $this->checkData($data)->format('%Y years %M months %D days %H:%i:%S'))

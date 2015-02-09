@@ -41,16 +41,16 @@ class PgBytea extends BaseConverter
             ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $binary = chr(0).chr(27).chr(92).chr(39).chr(32).chr(13);
         $output = '\x001b5c27200d';
         $session = $this->buildSession();
 
         $this
-            ->string($this->newTestedInstance()->toCsv($binary, 'bytea', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat($binary, 'bytea', $session))
             ->isEqualTo(sprintf('"%s"', $output))
-            ->variable($this->newTestedInstance()->toCsv(null, 'bytea', $session))
+            ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'bytea', $session))
             ->isNull()
             ;
     }

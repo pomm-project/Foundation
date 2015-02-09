@@ -55,11 +55,11 @@ class PgNumber implements ConverterInterface
     }
 
     /**
-     * toCsv
+     * toPgStandardFormat
      *
      * @see ConverterInterface
      */
-    public function toCsv($data, $type, Session $session)
+    public function toPgStandardFormat($data, $type, Session $session)
     {
         return
             $data !== null

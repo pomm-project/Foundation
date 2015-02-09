@@ -64,7 +64,7 @@ interface ConverterInterface
     public function toPg($data, $type, Session $session);
 
     /**
-     * toCsv
+     * toPgStandardFormat
      *
      * Convert a PHP representation into short Postgresql format like used in
      * COPY values list.
@@ -73,7 +73,7 @@ interface ConverterInterface
      * @param mixed     $data
      * @param string    $type
      * @param Session   $session
-     * @return string   Postgrsql Csv representation.
+     * @return string   Postgrsql standard representation.
      */
-    public function toCsv($data, $type, Session $session);
+    public function toPgStandardFormat($data, $type, Session $session);
 }

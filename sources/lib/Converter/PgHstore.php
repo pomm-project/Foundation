@@ -60,7 +60,7 @@ class PgHstore implements ConverterInterface
     /**
      * @see \Pomm\Converter\ConverterInterface
      */
-    public function toCsv($data, $type, Session $session)
+    public function toPgStandardFormat($data, $type, Session $session)
     {
         if ($data === null) {
             return null;
@@ -83,7 +83,7 @@ class PgHstore implements ConverterInterface
     protected function checkArray($data)
     {
         if (!is_array($data)) {
-            throw new \InvalidParameterException(sprintf("HStore::toPg and toCsv take an associative array as parameter ('%s' given).", gettype($data)));
+            throw new \InvalidParameterException(sprintf("HStore::toPg and toPgStandardFormat take an associative array as parameter ('%s' given).", gettype($data)));
         }
     }
 

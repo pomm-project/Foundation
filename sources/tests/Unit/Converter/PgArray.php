@@ -77,25 +77,25 @@ class PgArray extends BaseConverter
         ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $converter  = $this->newTestedInstance();
         $session    = $this->buildSession();
         $this
-            ->variable($converter->toCsv(null, 'int4', $session))
+            ->variable($converter->toPgStandardFormat(null, 'int4', $session))
             ->isNull()
-            ->string($converter->toCsv([null], 'int4', $session))
+            ->string($converter->toPgStandardFormat([null], 'int4', $session))
             ->isEqualTo('"{NULL}"')
-            ->string($converter->toCsv([1, 2, 3, null], 'int4', $session))
+            ->string($converter->toPgStandardFormat([1, 2, 3, null], 'int4', $session))
             ->isEqualTo('"{1,2,3,NULL}"')
-            ->string($converter->toCsv([1.634, 2.000, 3.99999, null], 'float4', $session))
+            ->string($converter->toPgStandardFormat([1.634, 2.000, 3.99999, null], 'float4', $session))
             ->isEqualTo('"{1.634,2,3.99999,NULL}"')
-            ->string($converter->toCsv(['', ' ab a', 'aba', 'a b a', null], 'varchar', $session))
+            ->string($converter->toPgStandardFormat(['', ' ab a', 'aba', 'a b a', null], 'varchar', $session))
             ->isEqualTo('"{"""","" ab a"",aba,""a b a"",NULL}"')
-            ->string($converter->toCsv([true, true, false, null], 'bool', $session))
+            ->string($converter->toPgStandardFormat([true, true, false, null], 'bool', $session))
             ->isEqualTo('"{t,t,f,NULL}"')
             ->string(
-                $converter->toCsv(
+                $converter->toPgStandardFormat(
                     [
                         new \DateTime('2014-09-29 18:24:54.591767'),
                         new \DateTime('2014-07-29 14:50:01'),

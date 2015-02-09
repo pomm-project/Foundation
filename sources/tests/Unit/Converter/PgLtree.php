@@ -43,17 +43,17 @@ class PgLtree extends BaseConverter
         ;
     }
 
-    public function testToCsv()
+    public function testToPgStandardFormat()
     {
         $session = $this->buildSession();
         $converter = $this->newTestedInstance();
         $this
             ->string(
                 $converter
-                    ->toCsv(['_a_b_', 'c', 'd'], 'ltree', $session)
+                    ->toPgStandardFormat(['_a_b_', 'c', 'd'], 'ltree', $session)
             )
             ->isEqualTo('_a_b_.c.d')
-            ->variable($converter->toCsv(null, 'ltree', $session))
+            ->variable($converter->toPgStandardFormat(null, 'ltree', $session))
             ->isNull()
         ;
     }

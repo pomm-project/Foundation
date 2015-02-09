@@ -51,7 +51,7 @@ class PgBytea implements ConverterInterface
     /**
      * @see Pomm\Converter\ConverterInterface
      */
-    public function toCsv($data, $type, Session $session)
+    public function toPgStandardFormat($data, $type, Session $session)
     {
         if ($data === null) return null;
 

@@ -10,9 +10,9 @@
 namespace PommProject\Foundation\QueryManager;
 
 use PommProject\Foundation\Client\Client;
-use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\ConvertedResultIterator;
 use PommProject\Foundation\Listener\SendNotificationTrait;
+use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
 
 /**
  * SimpleQueryManager
@@ -27,6 +27,7 @@ use PommProject\Foundation\Listener\SendNotificationTrait;
 class SimpleQueryManager extends Client
 {
     use SendNotificationTrait;
+    use QueryParameterParserTrait;
 
     /**
      * query
@@ -49,7 +50,7 @@ class SimpleQueryManager extends Client
             ]
         );
         $start    = microtime(true);
-        $resource = $this->doQuery($sql, QueryParameterExpander::prepareValues($parameters));
+        $resource = $this->doQuery($sql, $parameters);
         $end      = microtime(true);
 
         $iterator = new ConvertedResultIterator(
@@ -82,8 +83,38 @@ class SimpleQueryManager extends Client
         return $this
             ->getSession()
             ->getConnection()
-            ->sendQueryWithParameters(QueryParameterExpander::order($sql), $parameters)
+            ->sendQueryWithParameters(
+                $this->orderParameters($sql),
+                $this->prepareArguments($sql, $parameters)
+            )
             ;
+    }
+
+    /**
+     * prepareArguments
+     *
+     * Prepare and convert $parameters if needed.
+     *
+     * @access protected
+     * @param  string   $sql
+     * @param  array    $parameters
+     * @return array    $parameters
+     */
+    protected function prepareArguments($sql, array $parameters)
+    {
+        $types = $this->getParametersType($sql);
+
+        foreach ($parameters as $index => $value) {
+            if ($types[$index] !== null) {
+                $parameters[$index] = $this
+                    ->getSession()
+                    ->getClientUsingPooler('converter', $types[$index])
+                    ->toPgStandardFormat($value, $types[$index])
+                    ;
+            }
+        }
+
+        return $parameters;
     }
 
     /**

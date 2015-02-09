@@ -53,7 +53,7 @@ from (values
     (3, 'three', '2001-10-25 15:43'::timestamp),
     (4, 'four', '2002-01-01 01:10'::timestamp)
 ) p (id, pika, a_timestamp)
-where (p.id = $* or p.pika = $*) and p.a_timestamp > $*
+where (p.id = $* or p.pika = $*) and p.a_timestamp > $*::timestamp
 SQL;
         $iterator = $this->getQueryManager($session)->query($sql, [2, 'three', new \DateTime('2000-01-01')]);
         $this

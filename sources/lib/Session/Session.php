@@ -241,9 +241,16 @@ class Session implements LoggerAwareInterface
     public function getPoolerForType($type)
     {
         if (!$this->hasPoolerForType($type)) {
+            $error_message = <<<ERROR
+No pooler registered for type '%s'. Poolers available: {%s}.
+If the pooler you are asking for is not listed there, maybe you have not used
+the correct session builder. Use the "class:session_builder" parameter in the
+configuration to associate each session with a session builder. A good practice
+is to define your own project's session builders.
+ERROR;
             throw new FoundationException(
                 sprintf(
-                    "No pooler registered for type '%s'. Poolers available: {%s}.",
+                    $error_message,
                     $type,
                     join(', ', $this->getRegisterPoolersNames())
                 )

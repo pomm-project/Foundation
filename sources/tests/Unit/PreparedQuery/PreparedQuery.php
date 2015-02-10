@@ -10,7 +10,7 @@
 namespace PommProject\Foundation\Test\Unit\PreparedQuery;
 
 use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Converter\Type\NumRange;
+use PommProject\Foundation\Converter\Type\Circle;
 use PommProject\Foundation\Tester\FoundationSessionAtoum;
 use PommProject\Foundation\PreparedQuery\PreparedQuery as testedClass;
 
@@ -38,18 +38,18 @@ class PreparedQuery extends FoundationSessionAtoum
         $session = $this->buildSession();
         $sql = <<<SQL
 select
-  p.id, p.pika, p.a_timestamp, p.a_range
+  p.id, p.pika, p.a_timestamp, p.a_point
 from (values
-    (1, 'one', '1999-08-08'::timestamp, numrange(1.3, 1.8)),
-    (2, 'two', '2000-09-07'::timestamp, numrange(1.1, 1.5)),
-    (3, 'three', '2001-10-25 15:43'::timestamp, numrange(1.6, 1.9)),
-    (4, 'four', '2002-01-01 01:10'::timestamp, numrange(1.8, 2.3))
-) p (id, pika, a_timestamp, a_range)
-where (p.id >= $* or p.pika = $*) and p.a_timestamp > $*::timestamp and p.a_range && $*::numrange
+    (1, 'one', '1999-08-08'::timestamp, point(1.3, 1.6)),
+    (2, 'two', '2000-09-07'::timestamp, point(1.5, 1.5)),
+    (3, 'three', '2001-10-25 15:43'::timestamp, point(1.6, 1.4)),
+    (4, 'four', '2002-01-01 01:10'::timestamp, point(1.8, 2.3))
+) p (id, pika, a_timestamp, a_point)
+where (p.id >= $* or p.pika = $*) and p.a_timestamp > $*::timestamp and p.a_point <@ $*::circle
 SQL;
         $query = $this->newTestedInstance($sql);
         $session->registerClient($query);
-        $result = $query->execute([2, 'three', new \DateTime('2000-01-01'), new NumRange('[1.0, 1.7)')]);
+        $result = $query->execute([2, 'three', new \DateTime('2000-01-01'), new Circle('<(1.5,1.5), 0.3>')]);
 
         $this
             ->integer($result->countRows())

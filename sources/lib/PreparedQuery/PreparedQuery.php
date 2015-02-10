@@ -206,7 +206,7 @@ class PreparedQuery extends Client
     {
         foreach ($this->getParametersType($sql) as $index => $type) {
             if ($type === '') {
-                $ths->converters[$index] = null;
+                $this->converters[$index] = null;
             } else {
                 $this->converters[$index] = $this
                     ->getSession()

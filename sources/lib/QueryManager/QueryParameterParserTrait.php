@@ -70,6 +70,6 @@ trait QueryParameterParserTrait
     {
         preg_match_all('/\$\*(?:::([\w]+(?:\[\])?))?/', $string, $matchs);
 
-        return array_map(function($val) { return $val === '' ? null : $val; }, $matchs[1]);
+        return $matchs[1];
     }
 }

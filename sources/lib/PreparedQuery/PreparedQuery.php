@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\PreparedQuery;
 
+use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\Client\Client;
@@ -23,9 +24,12 @@ use PommProject\Foundation\Client\Client;
  */
 class PreparedQuery extends Client
 {
+    use QueryParameterParserTrait;
+
     protected $sql;
     private $is_prepared = false;
     private $identifier;
+    private $converters = null;
 
     /**
      * getSignatureFor
@@ -124,7 +128,7 @@ class PreparedQuery extends Client
             ->getConnection()
             ->sendExecuteQuery(
                 $this->getClientIdentifier(),
-                QueryParameterExpander::prepareValues($values),
+                $this->prepareValues($this->sql, $values),
                 $this->sql
             );
     }
@@ -144,7 +148,7 @@ class PreparedQuery extends Client
             ->getConnection()
             ->sendPrepareQuery(
                 $this->getClientIdentifier(),
-                QueryParameterExpander::order($this->sql)
+                $this->orderParameters($this->sql)
             );
         $this->is_prepared = true;
 
@@ -162,5 +166,56 @@ class PreparedQuery extends Client
     public function getSql()
     {
         return $this->sql;
+    }
+
+    /**
+     * prepareValues
+     *
+     * Prepare parameters to be sent.
+     *
+     * @access protected
+     * @param  mixed    $sql
+     * @param  array    $values
+     * @return array    $prepared_values
+     */
+    protected function prepareValues($sql, array $values)
+    {
+        if ($this->converters === null ) {
+            $this->prepareConverters($sql);
+        }
+
+        foreach ($values as $index => $value) {
+            if (isset($this->converters[$index])) {
+                $values[$index] = $this->converters[$index]->toPgStandardFormat($value, '', $this->getSession());
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * prepareConverters
+     *
+     * Store converters needed for the query parameters.
+     *
+     * @access protected
+     * @param mixed             $sql
+     * @return PreparedQuery    $this
+     */
+    protected function prepareConverters($sql)
+    {
+        foreach ($this->getParametersType($sql) as $index => $type) {
+            if ($type === '') {
+                $ths->converters[$index] = null;
+            } else {
+                $this->converters[$index] = $this
+                    ->getSession()
+                    ->getClientUsingPooler('converter', $type)
+                    ->getConverter()
+                    ;
+            }
+        }
+
+        return $this;
     }
 }

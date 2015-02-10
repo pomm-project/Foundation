@@ -105,7 +105,7 @@ class SimpleQueryManager extends Client
         $types = $this->getParametersType($sql);
 
         foreach ($parameters as $index => $value) {
-            if ($types[$index] !== null) {
+            if ($types[$index] !== '') {
                 $parameters[$index] = $this
                     ->getSession()
                     ->getClientUsingPooler('converter', $types[$index])

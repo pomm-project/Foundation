@@ -36,11 +36,12 @@ class ConverterHolder
      * @param  string             $name
      * @param  ConverterInterface $converter
      * @param  array              $types
+     * @param  bool               $strict
      * @return ConverterHolder    $this
      */
-    public function registerConverter($name, ConverterInterface $converter, array $types)
+    public function registerConverter($name, ConverterInterface $converter, array $types, $strict = null)
     {
-        $this->addConverter($name, $converter);
+        $this->addConverter($name, $converter, $strict);
 
         foreach ($types as $type) {
             $this->addTypeToConverter($name, $type);
@@ -57,13 +58,22 @@ class ConverterHolder
      * @access protected
      * @param  string             $name
      * @param  ConverterInterface $converter
-     * @throw  ConverterException if $name already exists.
+     * @param  bool               $strict (default true)
+     * @throw  ConverterException if $name already exists and strict.
      * @return ConverterHolder    $this
      */
-    protected function addConverter($name, ConverterInterface $converter)
+    protected function addConverter($name, ConverterInterface $converter, $strict = null)
     {
-        if ($this->hasConverterName($name)) {
-            throw new ConverterException(sprintf("A converter named '%s' already exists. (Known converters are {%s}).", $name, join(', ', $this->getConverterNames())));
+        $strict = $strict === null ? true : (bool) $strict;
+
+        if ($strict && $this->hasConverterName($name)) {
+            throw new ConverterException(
+                sprintf(
+                    "A converter named '%s' already exists. (Known converters are {%s}).",
+                    $name,
+                    join(', ', $this->getConverterNames())
+                )
+            );
         }
 
         $this->converters[$name] = $converter;

@@ -59,12 +59,13 @@ class SessionBuilder extends VanillaSessionBuilder
     protected function initializeConverterHolder(ConverterHolder $converter_holder)
     {
         $converter_holder
-            ->registerConverter('Array', new Converter\PgArray(), ['array'])
-            ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool'])
+            ->registerConverter('Array', new Converter\PgArray(), ['array'], false)
+            ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool'], false)
             ->registerConverter(
                 'Number',
                 new Converter\PgNumber(),
-                ['int2', 'int4', 'int8', 'numeric', 'float4', 'float8', 'oid']
+                ['int2', 'int4', 'int8', 'numeric', 'float4', 'float8', 'oid'],
+                false
             )
             ->registerConverter(
                 'String',
@@ -83,20 +84,22 @@ class SessionBuilder extends VanillaSessionBuilder
                     'inet',
                     'cidr',
                     'macaddr',
-                ]
+                ],
+                false
             )
             ->registerConverter(
                 'Timestamp',
                 new Converter\PgTimestamp(),
-                ['timestamp', 'date', 'time', 'timestamptz']
+                ['timestamp', 'date', 'time', 'timestamptz'],
+                false
             )
-            ->registerConverter('Interval', new Converter\PgInterval(), ['interval'])
-            ->registerConverter('Binary', new Converter\PgBytea(), ['bytea'])
-            ->registerConverter('Point', new Converter\Geometry\PgPoint(), ['point'])
-            ->registerConverter('Circle', new Converter\Geometry\PgCircle(), ['circle'])
-            ->registerConverter('JSON', new Converter\PgJson(), ['json', 'jsonb'])
-            ->registerConverter('NumberRange', new Converter\PgNumRange(), ['int4range', 'int8range', 'numrange'])
-            ->registerConverter('TsRange', new Converter\PgTsRange(), ['tsrange', 'daterange', 'tstzrange'])
+            ->registerConverter('Interval', new Converter\PgInterval(), ['interval'], false)
+            ->registerConverter('Binary', new Converter\PgBytea(), ['bytea'], false)
+            ->registerConverter('Point', new Converter\Geometry\PgPoint(), ['point'], false)
+            ->registerConverter('Circle', new Converter\Geometry\PgCircle(), ['circle'], false)
+            ->registerConverter('JSON', new Converter\PgJson(), ['json', 'jsonb'], false)
+            ->registerConverter('NumberRange', new Converter\PgNumRange(), ['int4range', 'int8range', 'numrange'], false)
+            ->registerConverter('TsRange', new Converter\PgTsRange(), ['tsrange', 'daterange', 'tstzrange'], false)
             ;
 
         return $this;

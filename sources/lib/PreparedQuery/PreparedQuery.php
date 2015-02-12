@@ -30,7 +30,6 @@ class PreparedQuery extends Client
     private $is_prepared = false;
     private $identifier;
     private $converters = null;
-    private $types = [];
 
     /**
      * getSignatureFor
@@ -187,7 +186,7 @@ class PreparedQuery extends Client
 
         foreach ($values as $index => $value) {
             if (isset($this->converters[$index])) {
-                $values[$index] = $this->converters[$index]->toPgStandardFormat($value, $this->types[$index], $this->getSession());
+                $values[$index] = call_user_func($this->converters[$index], $value);
             }
         }
 
@@ -208,14 +207,16 @@ class PreparedQuery extends Client
         foreach ($this->getParametersType($sql) as $index => $type) {
             if ($type === '') {
                 $this->converters[$index] = null;
-                $this->types[$index] = null;
             } else {
-                $this->types[$index] = $type;
-                $this->converters[$index] = $this
+                $converter = $this
                     ->getSession()
                     ->getClientUsingPooler('converter', $type)
                     ->getConverter()
                     ;
+
+                $this->converters[$index] = function ($value) use ($converter, $type) {
+                    return $converter->toPgStandardFormat($value, $type, $this->getSession());
+                };
             }
         }
 

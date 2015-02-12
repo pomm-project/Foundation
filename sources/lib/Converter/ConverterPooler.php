@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
+use PommProject\Foundation\Converter\PgArray;
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Exception\ConverterException;
 
@@ -49,6 +50,20 @@ class ConverterPooler extends ClientPooler
     public function getPoolerType()
     {
         return 'converter';
+    }
+
+    /**
+     * getClient
+     *
+     * @see ClientPoolerInterface
+     */
+    public function getClient($identifier)
+    {
+        if ($identifier !== PgArray::getSubType($identifier)) {
+            return parent::getClient('array');
+        } else {
+            return parent::getClient($identifier);
+        }
     }
 
     /**

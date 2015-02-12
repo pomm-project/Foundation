@@ -85,15 +85,15 @@ class PgArray extends BaseConverter
             ->variable($converter->toPgStandardFormat(null, 'int4', $session))
             ->isNull()
             ->string($converter->toPgStandardFormat([null], 'int4', $session))
-            ->isEqualTo('"{NULL}"')
+            ->isEqualTo('{NULL}')
             ->string($converter->toPgStandardFormat([1, 2, 3, null], 'int4', $session))
-            ->isEqualTo('"{1,2,3,NULL}"')
+            ->isEqualTo('{1,2,3,NULL}')
             ->string($converter->toPgStandardFormat([1.634, 2.000, 3.99999, null], 'float4', $session))
-            ->isEqualTo('"{1.634,2,3.99999,NULL}"')
+            ->isEqualTo('{1.634,2,3.99999,NULL}')
             ->string($converter->toPgStandardFormat(['', ' ab a', 'aba', 'a b a', null], 'varchar', $session))
-            ->isEqualTo('"{"""","" ab a"",aba,""a b a"",NULL}"')
+            ->isEqualTo('{""," ab a",aba,"a b a",NULL}')
             ->string($converter->toPgStandardFormat([true, true, false, null], 'bool', $session))
-            ->isEqualTo('"{t,t,f,NULL}"')
+            ->isEqualTo('{t,t,f,NULL}')
             ->string(
                 $converter->toPgStandardFormat(
                     [

@@ -29,6 +29,25 @@ class PgArray implements ConverterInterface
     protected $subtype_converter = [];
 
     /**
+     * getSubType
+     *
+     * Extact subtype from a formatted string (ie int4[] or _text).
+     *
+     * @static
+     * @access public
+     * @param  string $type
+     * @return string
+     */
+    public static function getSubType($type)
+    {
+        if (preg_match('/^(.+)\[\]$/', $type, $matchs) || preg_match('/^_(.+)$/', $type, $matchs)) {
+            return $matchs[1];
+        }
+
+        return $type;
+    }
+
+    /**
      * @see ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
@@ -36,6 +55,8 @@ class PgArray implements ConverterInterface
         if ($data === null || $data === 'NULL') {
             return null;
         }
+
+        $type = $this->getSubType($type);
 
         if ($data !== "{}") {
             $converter = $this->getSubtypeConverter($type, $session);
@@ -53,6 +74,8 @@ class PgArray implements ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
+        $type = $this->getSubType($type);
+
         if ($data === null) {
                 return sprintf("NULL::%s[]", $type);
         }
@@ -74,16 +97,18 @@ class PgArray implements ConverterInterface
             return null;
         }
 
+        $type = $this->getSubType($type);
         $converter = $this->getSubtypeConverter($type, $session);
         $data = $this->checkArray($data);
 
         return
-             sprintf('"{%s}"', str_replace('"', '""', join(',', array_map(function ($val) use ($converter, $type) {
+            sprintf('{%s}', join(',',
+                array_map(function ($val) use ($converter, $type) {
                     $val = $converter->toPgStandardFormat($val, $type);
 
                     return $val !== null ? $val : 'NULL';
-                }, $data)), $type))
-            ;
+                }, $data)
+                ));
     }
 
     /**

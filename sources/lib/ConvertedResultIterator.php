@@ -102,23 +102,15 @@ class ConvertedResultIterator extends ResultIterator
     {
         $type = $this->result->getFieldType($name);
 
-        if (preg_match('/^_(.+)$/', $type, $matchs)) {
-            return $this
-                ->session
-                ->getClientUsingPooler('converter', 'array')
-                ->fromPg($value, $matchs[1])
-            ;
-        } else {
-            if ($type === null) {
-                $type = 'text';
-            }
-
-            return $this
-                ->session
-                ->getClientUsingPooler('converter', $type)
-                ->fromPg($value)
-                ;
+        if ($type === null) {
+            $type = 'text';
         }
+
+        return $this
+            ->session
+            ->getClientUsingPooler('converter', $type)
+            ->fromPg($value, $type)
+            ;
     }
 
     /**

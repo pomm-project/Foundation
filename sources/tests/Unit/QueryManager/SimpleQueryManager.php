@@ -49,14 +49,16 @@ class SimpleQueryManager extends FoundationSessionAtoum
 select
   p.id, p.pika, p.a_timestamp, p.a_point
 from (values
-    (1, 'one', '1999-08-08'::timestamp, point(1.3, 1.6)),
-    (2, 'two', '2000-09-07'::timestamp, point(1.5, 1.5)),
-    (3, 'three', '2001-10-25 15:43'::timestamp, point(1.6, 1.4)),
-    (4, 'four', '2002-01-01 01:10'::timestamp, point(1.8, 2.3))
+    (1, 'one', '1999-08-08'::timestamp, ARRAY[point(1.3, 1.6)]),
+    (2, 'two', '2000-09-07'::timestamp, ARRAY[point(1.5, 1.5)]),
+    (3, 'three', '2001-10-25 15:43'::timestamp, ARRAY[point(1.6, 1.4)]),
+    (4, 'four', '2002-01-01 01:10'::timestamp, ARRAY[point(1.8, 2.3)])
 ) p (id, pika, a_timestamp, a_point)
-where (p.id = ANY($*::int4[]) or p.pika = $*) and p.a_timestamp > $*::timestamp and p.a_point <@ $*::circle
+where (p.id >= $* or p.pika = ANY($*::text[])) and p.a_timestamp > $*::timestamp and $*::circle @> ANY (p.a_point)
 SQL;
-        $iterator = $this->getQueryManager($session)->query($sql, [[2,3,4], 'three', new \DateTime('2000-01-01'), new Circle('<(1.5,1.5), 0.3>')]);
+        $iterator = $this
+            ->getQueryManager($session)
+            ->query($sql, [2, ['chu', 'three'], new \DateTime('2000-01-01'), new Circle('<(1.5,1.5), 0.3>')]);
         $this
             ->array($iterator->slice('id'))
             ->isIdenticalTo([2, 3])

@@ -59,8 +59,8 @@ class PgArray extends BaseConverter
             ->isEqualTo("ARRAY[int4 '1',int4 '2',int4 '3',NULL::int4]::int4[]")
             ->string($converter->toPg([1.634, 2.000, 3.99999, null], 'float4', $session))
             ->isEqualTo("ARRAY[float4 '1.634',float4 '2',float4 '3.99999',NULL::float4]::float4[]")
-            ->string($converter->toPg(['', ' ab a', 'aba', 'a b a', null], 'varchar', $session))
-            ->isEqualTo("ARRAY[varchar '',varchar ' ab a',varchar 'aba',varchar 'a b a',NULL::varchar]::varchar[]")
+            ->string($converter->toPg(['', ' ab a', 'aba', 'a \'b\' a', null], 'varchar', $session))
+            ->isEqualTo("ARRAY[varchar '',varchar ' ab a',varchar 'aba',varchar 'a ''b'' a',NULL::varchar]::varchar[]")
             ->string($converter->toPg([true, true, false, null], 'bool', $session))
             ->isEqualTo("ARRAY[bool 'true',bool 'true',bool 'false',NULL::bool]::bool[]")
             ->string(
@@ -90,21 +90,22 @@ class PgArray extends BaseConverter
             ->isEqualTo('{1,2,3,NULL}')
             ->string($converter->toPgStandardFormat([1.634, 2.000, 3.99999, null], 'float4', $session))
             ->isEqualTo('{1.634,2,3.99999,NULL}')
-            ->string($converter->toPgStandardFormat(['', ' ab a', 'aba', 'a b a', null], 'varchar', $session))
-            ->isEqualTo('{""," ab a",aba,"a b a",NULL}')
+            ->string($converter->toPgStandardFormat(['', ' ab a', 'aba', 'a "b" a', null], 'varchar', $session))
+            ->isEqualTo('{""," ab a",aba,"a ""b"" a",NULL}')
             ->string($converter->toPgStandardFormat([true, true, false, null], 'bool', $session))
             ->isEqualTo('{t,t,f,NULL}')
             ->string(
                 $converter->toPgStandardFormat(
                     [
-                        new \DateTime('2014-09-29 18:24:54.591767'),
-                        new \DateTime('2014-07-29 14:50:01'),
-                        new \DateTime('2012-12-14 04:17:09.063948'),
+                        new \DateTime('2014-09-29 18:24:54.591767+02:00'),
+                        new \DateTime('2014-07-29 14:50:01+02:00'),
+                        new \DateTime('2012-12-14 04:17:09.063948+01:00'),
                     ],
                     'timestamp',
                     $session
                 )
             )
+            ->isEqualTo('{"2014-09-29 18:24:54.591767+02:00","2014-07-29 14:50:01.000000+02:00","2012-12-14 04:17:09.063948+01:00"}')
         ;
     }
 }

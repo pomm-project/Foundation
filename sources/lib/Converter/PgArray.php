@@ -104,9 +104,21 @@ class PgArray implements ConverterInterface
         return
             sprintf('{%s}', join(',',
                 array_map(function ($val) use ($converter, $type) {
+                    if ($val === null) {
+                        return 'NULL';
+                    }
+
                     $val = $converter->toPgStandardFormat($val, $type);
 
-                    return $val !== null ? $val : 'NULL';
+                    if (strlen($val) !== 0) {
+                        if (preg_match('/[,\s]/', $val)) {
+                            $val = sprintf('"%s"', str_replace('"', '""', $val));
+                        }
+                    } else {
+                        $val = '""';
+                    }
+
+                    return $val;
                 }, $data)
                 ));
     }

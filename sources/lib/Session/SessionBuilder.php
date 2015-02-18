@@ -143,6 +143,7 @@ class SessionBuilder
                     'bytea_output'  => 'hex',
                     'intervalstyle' => 'ISO_8601',
                     'datestyle'     => 'ISO',
+                    'standard_conforming_strings' => 'true',
                 ]
             ];
     }

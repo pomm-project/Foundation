@@ -40,7 +40,7 @@ class PgTimestamp extends BaseConverter
         $session = $this->buildSession();
         $this
             ->string($this->newTestedInstance()->toPgStandardFormat(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz', $session))
-            ->isEqualTo('"2014-09-27 18:51:35.678406+00:00"')
+            ->isEqualTo('2014-09-27 18:51:35.678406+00:00')
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'timestamptz', $session))
             ->isNull()
             ;

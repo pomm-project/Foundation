@@ -57,15 +57,13 @@ _;
 _;
         $this
             ->string($this->newTestedInstance()->toPgStandardFormat($string, 'varchar', $session))
-            ->isEqualTo("\"\\\"\"\t!'\n\"")
+            ->isEqualTo($string)
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'varchar', $session))
             ->isNull()
             ->string($this->newTestedInstance()->toPgStandardFormat('', 'bpchar', $session))
-            ->isEqualTo('""')
+            ->isEqualTo('')
             ->string($this->newTestedInstance()->toPgStandardFormat('10.2.3.4', 'inet', $session))
             ->isEqualTo('10.2.3.4')
-            ->string($this->newTestedInstance()->toPgStandardFormat('This is a "quoted" text.', 'text', $session))
-            ->isEqualTo('"This is a ""quoted"" text."')
             ;
     }
 }

@@ -60,7 +60,7 @@ class PgTimestamp implements ConverterInterface
     {
         return
             $data !== null
-           ? sprintf('"%s"', $this->checkData($data)->format('Y-m-d H:i:s.uP'))
+            ? $this->checkData($data)->format('Y-m-d H:i:s.uP')
             : null
             ;
     }

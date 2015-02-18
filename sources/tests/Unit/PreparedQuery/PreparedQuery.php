@@ -49,7 +49,7 @@ where (p.id >= $* or p.pika = ANY($*::text[])) and p.a_timestamp > $*::timestamp
 SQL;
         $query = $this->newTestedInstance($sql);
         $session->registerClient($query);
-        $result = $query->execute([2, ['chu','three'], new \DateTime('2000-01-01'), new Circle('<(1.5,1.5), 0.3>')]);
+        $result = $query->execute([2, ['pika, chu','three'], new \DateTime('2000-01-01'), new Circle('<(1.5,1.5), 0.3>')]);
 
         $this
             ->integer($result->countRows())

@@ -80,7 +80,7 @@ class PgTimestamp implements ConverterInterface
         if (!$data instanceof \DateTime) {
             try {
                 $data = new \DateTime($data);
-            } catch (\InvalidParameterException $e) {
+            } catch (\Exception $e) {
                 throw new ConverterException(
                     sprintf(
                         "Cannot convert data from invalid datetime representation '%s'.",

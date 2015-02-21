@@ -34,9 +34,10 @@ class PgHstore implements ConverterInterface
             return null;
         }
 
-        @eval(sprintf("\$hstore = [%s];", $data));
+        $hstore = null;
+        $code = @eval(sprintf("\$hstore = [%s];", $data));
 
-        if (!(isset($hstore) && is_array($hstore))) {
+        if ($code !== null || !is_array($hstore)) {
             throw new ConverterException(sprintf("Could not parse hstore string '%s' to array.", $data));
         }
 

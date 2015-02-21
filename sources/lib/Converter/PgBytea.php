@@ -28,12 +28,14 @@ class PgBytea implements ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
-        if ($data === null) return sprintf("NULL::%s", $type);
-        return sprintf(
-            "%s '%s'",
-            $type,
-            preg_replace(["/\\\\/", "/''/"], ["\\", "'"], $session->getConnection()->escapeBytea($data))
-        );
+        return $data !== null
+            ? sprintf(
+                "%s '%s'",
+                $type,
+                $this->escapeByteString($session, $data)
+            )
+            : sprintf("NULL::%s", $type)
+            ;
     }
 
     /**
@@ -41,11 +43,10 @@ class PgBytea implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
-        if ($data === null) {
-            return null;
-        }
-
-        return $session->getConnection()->unescapeBytea($data);
+        return $data !== null
+            ? $session->getConnection()->unescapeBytea($data)
+            : null
+            ;
     }
 
     /**
@@ -53,11 +54,27 @@ class PgBytea implements ConverterInterface
      */
     public function toPgStandardFormat($data, $type, Session $session)
     {
-        if ($data === null) return null;
+        return $data !== null
+            ? sprintf(
+                '"%s"',
+                $this->escapeByteString($session, $data)
+            )
+            : null
+            ;
+    }
 
-        return sprintf(
-            '"%s"',
-            preg_replace(["/\\\\/", '/"/'], ["\\", '""'], $session->getConnection()->escapeBytea($data))
-        );
+    /**
+     * escapeByteString
+     *
+     * Escape a binary string to postgres.
+     *
+     * @access protected
+     * @param  mixed     $string
+     * @param  Session   $session
+     * @return string
+     */
+    protected function escapeByteString(Session $session, $string)
+    {
+        return preg_replace(["/\\\\/", '/"/'], ["\\", '""'], $session->getConnection()->escapeBytea($string));
     }
 }

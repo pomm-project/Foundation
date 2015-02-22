@@ -103,12 +103,12 @@ class PgArray implements ConverterInterface
 
         return
             sprintf('{%s}', join(',',
-                array_map(function ($val) use ($converter, $type) {
+                array_map(function ($val) use ($converter, $type, $session) {
                     if ($val === null) {
                         return 'NULL';
                     }
 
-                    $val = $converter->toPgStandardFormat($val, $type);
+                    $val = $converter->toPgStandardFormat($val, $type, $session);
 
                     if (strlen($val) !== 0) {
                         if (preg_match('/[,\s]/', $val)) {

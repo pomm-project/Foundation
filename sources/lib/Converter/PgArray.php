@@ -61,8 +61,8 @@ class PgArray implements ConverterInterface
         if ($data !== "{}") {
             $converter = $this->getSubtypeConverter($type, $session);
 
-            return array_map(function ($val) use ($converter, $type) {
-                    return $val !== "NULL" ? $converter->fromPg($val, $type) : null;
+            return array_map(function ($val) use ($converter, $type, $session) {
+                    return $val !== "NULL" ? $converter->fromPg($val, $type, $session) : null;
                 }, str_getcsv(trim($data, "{}")));
         } else {
             return [];
@@ -83,8 +83,8 @@ class PgArray implements ConverterInterface
         $converter = $this->getSubtypeConverter($type, $session);
         $data = $this->checkArray($data);
 
-        return sprintf('ARRAY[%s]::%s[]', join(',', array_map(function ($val) use ($converter, $type) {
-                    return $converter->toPg($val, $type);
+        return sprintf('ARRAY[%s]::%s[]', join(',', array_map(function ($val) use ($converter, $type, $session) {
+                    return $converter->toPg($val, $type, $session);
                 }, $data)), $type);
     }
 

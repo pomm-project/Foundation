@@ -18,12 +18,12 @@ use PommProject\Foundation\Session\Session;
  * HStore converter
  *
  * @package Foundation
- * @copyright 2014 Grégoire HUBERT
+ * @copyright 2014 - 2015 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- * @see ConverterInterface
+ * @see ArrayTypeConverter
  */
-class PgHstore implements ConverterInterface
+class PgHstore extends ArrayTypeConverter
 {
     /**
      * @see \Pomm\Converter\ConverterInterface
@@ -53,9 +53,7 @@ class PgHstore implements ConverterInterface
             return sprintf("NULL::%s", $type);
         }
 
-        $this->checkArray($data);
-
-        return sprintf("%s('%s')", $type, join(', ', $this->buildArray($data, $session)));
+        return sprintf("%s('%s')", $type, join(', ', $this->buildArray($this->checkArray($data), $session)));
     }
 
     /**
@@ -67,25 +65,7 @@ class PgHstore implements ConverterInterface
             return null;
         }
 
-        $this->checkArray($data);
-
-        return sprintf('"%s"', join(', ', $this->buildArray($data, $session, '"')));
-    }
-
-    /**
-     * checkArray
-     *
-     * Ensure the data is an array.
-     *
-     * @access protected
-     * @param  mixed $data
-     * @return null
-     */
-    protected function checkArray($data)
-    {
-        if (!is_array($data)) {
-            throw new \InvalidParameterException(sprintf("HStore::toPg and toPgStandardFormat take an associative array as parameter ('%s' given).", gettype($data)));
-        }
+        return sprintf('"%s"', join(', ', $this->buildArray($this->checkArray($data), $session, '"')));
     }
 
     /**

@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Exception\ConverterException;
+use PommProject\Foundation\Converter\ArrayTypeConverter;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -18,12 +18,12 @@ use PommProject\Foundation\Session\Session;
  * Ltree converter.
  *
  * @package Foundation
- * @copyright 2014 Grégoire HUBERT
+ * @copyright 2014 - 2015 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see ConverterInterface
  */
-class PgLtree implements ConverterInterface
+class PgLtree extends ArrayTypeConverter
 {
     /**
      * fromPg
@@ -50,7 +50,7 @@ class PgLtree implements ConverterInterface
     {
         return
             $data !== null
-            ? sprintf("ltree '%s'", join('.', $this->checkData($data)))
+            ? sprintf("ltree '%s'", join('.', $this->checkArray($data)))
             : sprintf("NULL::%s", $type)
             ;
     }
@@ -65,33 +65,8 @@ class PgLtree implements ConverterInterface
     {
         return
             $data !== null
-            ? sprintf("%s", join('.', $this->checkData($data)))
+            ? sprintf("%s", join('.', $this->checkArray($data)))
             : null
             ;
-    }
-
-    /**
-     * checkData
-     *
-     * Check if data is a suitable LTree PHP representation.
-     *
-     * @access protected
-     * @param  mixed $data
-     * @throw  ConverterException
-     * @return array
-     */
-    protected function checkData($data)
-    {
-        if (!is_array($data)) {
-
-            throw new ConverterException(
-                sprintf(
-                    "Ltree output converter expects data to be an array, '%s' given.",
-                    gettype($data)
-                )
-            );
-        }
-
-        return $data;
     }
 }

@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Exception\ConverterException;
+use PommProject\Foundation\Converter\ArrayTypeConverter;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -21,11 +21,10 @@ use PommProject\Foundation\Session\Session;
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- * @see ConverterInterface
+ * @see ArrayTypeConverter
  */
-class PgArray implements ConverterInterface
+class PgArray extends ArrayTypeConverter
 {
-
     protected $subtype_converter = [];
 
     /**
@@ -121,29 +120,6 @@ class PgArray implements ConverterInterface
                     return $val;
                 }, $data)
                 ));
-    }
-
-    /**
-     * checkArray
-     *
-     * Check if the data is an array.
-     *
-     * @access protected
-     * @param  mixed    $data
-     * @return array    $data
-     */
-    protected function checkArray($data)
-    {
-        if (!is_array($data)) {
-            throw new ConverterException(
-                sprintf(
-                    "Array converter data must be an array ('%s' given).",
-                    gettype($data)
-                )
-            );
-        }
-
-        return $data;
     }
 
     /**

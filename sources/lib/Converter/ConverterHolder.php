@@ -138,7 +138,13 @@ class ConverterHolder
     public function addTypeToConverter($name, $type)
     {
         if (!$this->hasConverterName($name)) {
-            throw new ConverterException(sprintf("No such converter name '%s'. Registered converters are {%s}.", $name, join(', ', $this->getConverterNames())));
+            throw new ConverterException(
+                sprintf(
+                    "No such converter name '%s'. Registered converters are {%s}.",
+                    $name,
+                    join(', ', $this->getConverterNames())
+                )
+            );
         }
 
         $this->types[$type] = $name;
@@ -159,7 +165,13 @@ class ConverterHolder
     public function getConverterForType($type)
     {
         if (!$this->hasType($type)) {
-            throw new ConverterException(sprintf("No converters associated with type '%s'. Handled types are {%s}.", $type, join(', ', $this->getTypes())));
+            throw new ConverterException(
+                sprintf(
+                    "No converters associated with type '%s'. Handled types are {%s}.",
+                    $type,
+                    join(', ', $this->getTypes())
+                )
+            );
         }
 
         return $this->converters[$this->types[$type]];

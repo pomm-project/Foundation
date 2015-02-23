@@ -68,7 +68,7 @@ trait QueryParameterParserTrait
      */
     public function getParametersType($string)
     {
-        preg_match_all('/\$\*(?:::([\w]+(?:\[\])?))?/', $string, $matchs);
+        preg_match_all('/\$\*(?:::([\w\.]+(?:\[\])?))?/', $string, $matchs);
 
         return $matchs[1];
     }

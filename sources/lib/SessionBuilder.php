@@ -60,46 +60,70 @@ class SessionBuilder extends VanillaSessionBuilder
     {
         $converter_holder
             ->registerConverter('Array', new Converter\PgArray(), ['array'], false)
-            ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool'], false)
+            ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool', 'pg_catalog.bool'], false)
             ->registerConverter(
                 'Number',
                 new Converter\PgNumber(),
-                ['int2', 'int4', 'int8', 'numeric', 'float4', 'float8', 'oid'],
+                [
+                    'int2', 'pg_catalog.int2',
+                    'int4', 'pg_catalog.int4',
+                    'int8', 'pg_catalog.int8',
+                    'numeric', 'pg_catalog.numeric',
+                    'float4', 'pg_catalog.float4',
+                    'float8', 'pg_catalog.float8',
+                    'oid', 'pg_catalog.oid',
+                ],
                 false
             )
             ->registerConverter(
                 'String',
                 new Converter\PgString(),
                 [
-                    'varchar',
-                    'char',
-                    'text',
-                    'uuid',
-                    'tsvector',
-                    'xml',
-                    'bpchar',
-                    'name',
+                    'varchar', 'pg_catalog.varchar',
+                    'char', 'pg_catalog.char',
+                    'text', 'pg_catalog.text',
+                    'uuid', 'pg_catalog.uuid',
+                    'tsvector', 'pg_catalog.tsvector',
+                    'xml', 'pg_catalog.xml',
+                    'bpchar', 'pg_catalog.bpchar',
+                    'name', 'pg_catalog.name',
                     'character varying',
-                    'regclass',
-                    'inet',
-                    'cidr',
-                    'macaddr',
+                    'regclass', 'pg_catalog.regclass',
+                    'inet', 'pg_catalog.inet',
+                    'cidr', 'pg_catalog.cidr',
+                    'macaddr', 'pg_catalog.macaddr',
                 ],
                 false
             )
             ->registerConverter(
                 'Timestamp',
                 new Converter\PgTimestamp(),
-                ['timestamp', 'date', 'time', 'timestamptz'],
+                [
+                    'timestamp', 'pg_catalog.timestamp',
+                    'date', 'pg_catalog.date',
+                    'time', 'pg_catalog.time',
+                    'timestamptz', 'pg_catalog.timestamptz',
+                ],
                 false
             )
-            ->registerConverter('Interval', new Converter\PgInterval(), ['interval'], false)
-            ->registerConverter('Binary', new Converter\PgBytea(), ['bytea'], false)
-            ->registerConverter('Point', new Converter\Geometry\PgPoint(), ['point'], false)
-            ->registerConverter('Circle', new Converter\Geometry\PgCircle(), ['circle'], false)
-            ->registerConverter('JSON', new Converter\PgJson(), ['json', 'jsonb'], false)
-            ->registerConverter('NumberRange', new Converter\PgNumRange(), ['int4range', 'int8range', 'numrange'], false)
-            ->registerConverter('TsRange', new Converter\PgTsRange(), ['tsrange', 'daterange', 'tstzrange'], false)
+            ->registerConverter('Interval', new Converter\PgInterval(), ['interval', 'pg_catalog.interval'], false)
+            ->registerConverter('Binary', new Converter\PgBytea(), ['bytea', 'pg_catalog.bytea'], false)
+            ->registerConverter('Point', new Converter\Geometry\PgPoint(), ['point', 'pg_catalog.point'], false)
+            ->registerConverter('Circle', new Converter\Geometry\PgCircle(), ['circle', 'pg_catalog.circle'], false)
+            ->registerConverter('JSON', new Converter\PgJson(), ['json', 'jsonb', 'pg_catalog.json', 'pg_catalog.jsonb'], false)
+            ->registerConverter('NumberRange', new Converter\PgNumRange(),
+            [
+                'int4range', 'pg_catalog.int4range',
+                'int8range', 'pg_catalog.int8range',
+                'numrange', 'pg_catalog.numrange',
+            ],
+            false)
+            ->registerConverter('TsRange', new Converter\PgTsRange(), [
+                'tsrange', 'pg_catalog.tsrange',
+                'daterange', 'pg_catalog.daterange',
+                'tstzrange', 'pg_catalog.tstzrange',
+            ],
+            false)
             ;
 
         return $this;

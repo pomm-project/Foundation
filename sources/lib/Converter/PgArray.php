@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Exception\ConverterException;
+use PommProject\Foundation\Converter\ArrayTypeConverter;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -21,11 +21,10 @@ use PommProject\Foundation\Session\Session;
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- * @see ConverterInterface
+ * @see ArrayTypeConverter
  */
-class PgArray implements ConverterInterface
+class PgArray extends ArrayTypeConverter
 {
-
     protected $subtype_converter = [];
 
     /**
@@ -61,8 +60,8 @@ class PgArray implements ConverterInterface
         if ($data !== "{}") {
             $converter = $this->getSubtypeConverter($type, $session);
 
-            return array_map(function ($val) use ($converter, $type) {
-                    return $val !== "NULL" ? $converter->fromPg($val, $type) : null;
+            return array_map(function ($val) use ($converter, $type, $session) {
+                    return $val !== "NULL" ? $converter->fromPg($val, $type, $session) : null;
                 }, str_getcsv(trim($data, "{}")));
         } else {
             return [];
@@ -83,8 +82,8 @@ class PgArray implements ConverterInterface
         $converter = $this->getSubtypeConverter($type, $session);
         $data = $this->checkArray($data);
 
-        return sprintf('ARRAY[%s]::%s[]', join(',', array_map(function ($val) use ($converter, $type) {
-                    return $converter->toPg($val, $type);
+        return sprintf('ARRAY[%s]::%s[]', join(',', array_map(function ($val) use ($converter, $type, $session) {
+                    return $converter->toPg($val, $type, $session);
                 }, $data)), $type);
     }
 
@@ -103,12 +102,12 @@ class PgArray implements ConverterInterface
 
         return
             sprintf('{%s}', join(',',
-                array_map(function ($val) use ($converter, $type) {
+                array_map(function ($val) use ($converter, $type, $session) {
                     if ($val === null) {
                         return 'NULL';
                     }
 
-                    $val = $converter->toPgStandardFormat($val, $type);
+                    $val = $converter->toPgStandardFormat($val, $type, $session);
 
                     if (strlen($val) !== 0) {
                         if (preg_match('/[,\s]/', $val)) {
@@ -121,29 +120,6 @@ class PgArray implements ConverterInterface
                     return $val;
                 }, $data)
                 ));
-    }
-
-    /**
-     * checkArray
-     *
-     * Check if the data is an array.
-     *
-     * @access protected
-     * @param  mixed    $data
-     * @return array    $data
-     */
-    protected function checkArray($data)
-    {
-        if (!is_array($data)) {
-            throw new ConverterException(
-                sprintf(
-                    "Array converter data must be an array ('%s' given).",
-                    gettype($data)
-                )
-            );
-        }
-
-        return $data;
     }
 
     /**
@@ -160,7 +136,10 @@ class PgArray implements ConverterInterface
     protected function getSubtypeConverter($type, Session $session)
     {
         if (!isset($this->subtype_converter[$type])) {
-            $this->subtype_converter[$type] = $session->getClientUsingPooler('converter', $type);
+            $this->subtype_converter[$type] = $session
+                ->getClientUsingPooler('converter', $type)
+                ->getConverter()
+                ;
         }
 
         return $this->subtype_converter[$type];

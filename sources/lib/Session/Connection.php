@@ -47,7 +47,6 @@ class Connection
      *
      * @access public
      * @param  string $dsn
-     * @return void
      */
     public function __construct($dsn, array $configuration = [])
     {

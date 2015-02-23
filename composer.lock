@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8554e194f507acc8ddc474f02da2f26b",
+    "hash": "af2f1b6df7d2904b59e73c1eef006e37",
     "packages": [
         {
             "name": "psr/log",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "a78d6504ff5d4367497785ab2ade91db3a9fbe11"
+                "reference": "1af1529b49a6e065ae6802e70192aba35d79b7d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/a78d6504ff5d4367497785ab2ade91db3a9fbe11",
-                "reference": "a78d6504ff5d4367497785ab2ade91db3a9fbe11",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/1af1529b49a6e065ae6802e70192aba35d79b7d8",
+                "reference": "1af1529b49a6e065ae6802e70192aba35d79b7d8",
                 "shasum": ""
             },
             "type": "library",
@@ -47,7 +47,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2014-01-18 15:33:09"
+            "time": "2015-02-05 09:32:11"
         }
     ],
     "packages-dev": [
@@ -57,12 +57,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/atoum/atoum.git",
-                "reference": "f70d90155768a2d8552f3d0b473f6731652edfde"
+                "reference": "9670f1cd83140ecb1eca65ca8f62ca48c06daf84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atoum/atoum/zipball/f70d90155768a2d8552f3d0b473f6731652edfde",
-                "reference": "f70d90155768a2d8552f3d0b473f6731652edfde",
+                "url": "https://api.github.com/repos/atoum/atoum/zipball/9670f1cd83140ecb1eca65ca8f62ca48c06daf84",
+                "reference": "9670f1cd83140ecb1eca65ca8f62ca48c06daf84",
                 "shasum": ""
             },
             "require": {
@@ -128,7 +128,7 @@
                 "test",
                 "unit testing"
             ],
-            "time": "2014-12-10 09:22:13"
+            "time": "2015-02-13 11:09:18"
         }
     ],
     "aliases": [],
@@ -137,6 +137,7 @@
         "atoum/atoum": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.4.4",
         "ext-pgsql": "*"

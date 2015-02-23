@@ -79,12 +79,13 @@ class PgHstore implements ConverterInterface
      *
      * @access protected
      * @param  mixed $data
+     * @throws ConverterException
      * @return null
      */
     protected function checkArray($data)
     {
         if (!is_array($data)) {
-            throw new \InvalidParameterException(sprintf("HStore::toPg and toPgStandardFormat take an associative array as parameter ('%s' given).", gettype($data)));
+            throw new ConverterException(sprintf("HStore::toPg and toPgStandardFormat take an associative array as parameter ('%s' given).", gettype($data)));
         }
     }
 

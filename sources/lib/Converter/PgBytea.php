@@ -56,7 +56,7 @@ class PgBytea implements ConverterInterface
     {
         return $data !== null
             ? sprintf(
-                '"%s"',
+                '%s',
                 $this->escapeByteString($session, $data)
             )
             : null

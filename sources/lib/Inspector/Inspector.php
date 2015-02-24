@@ -413,16 +413,12 @@ SQL;
      */
     public function getVersion()
     {
-        $sql = "select version()";
-        $row = $this->executeSql($sql)->current();
+        $row = $this
+            ->executeSql("show server_version")
+            ->current()
+            ;
 
-        if (preg_match('/^postgresql ([^ ]+) /i', $row['version'], $match) === false) {
-            throw new FoundationException(
-                sprintf("Invalid version string returned by the server '%s'.", $string)
-            );
-        }
-
-        return $match[1];
+        return $row['server_version'];
     }
 
     /**

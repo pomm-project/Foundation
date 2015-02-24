@@ -90,8 +90,8 @@ class PgArray extends BaseConverter
             ->isEqualTo('{1,2,3,NULL}')
             ->string($converter->toPgStandardFormat([1.634, 2.000, 3.99999, null], 'float4', $session))
             ->isEqualTo('{1.634,2,3.99999,NULL}')
-            ->string($converter->toPgStandardFormat(['', ' ab a', 'aba', 'a "b" a', null], 'varchar', $session))
-            ->isEqualTo('{""," ab a",aba,"a ""b"" a",NULL}')
+            ->string($converter->toPgStandardFormat(["", " ab a", "aba", "a \"\\b\" a", null], "varchar", $session))
+            ->isEqualTo('{""," ab a",aba,"a \"\\\\b\" a",NULL}')
             ->string($converter->toPgStandardFormat([true, true, false, null], 'bool', $session))
             ->isEqualTo('{t,t,f,NULL}')
             ->string(
@@ -106,6 +106,10 @@ class PgArray extends BaseConverter
                 )
             )
             ->isEqualTo('{"2014-09-29 18:24:54.591767+02:00","2014-07-29 14:50:01.000000+02:00","2012-12-14 04:17:09.063948+01:00"}')
+            ->array($this->sendToPostgres([true, null, false], 'bool[]', $session))
+            ->isIdenticalTo([true, null, false])
+            ->array($this->sendToPostgres([' a varchar ', 'another one with "\\quotes\\"', null], 'varchar[]', $session))
+            ->isIdenticalTo([' a varchar ', 'another one with "\\quotes\\"', null])
         ;
     }
 }

@@ -86,13 +86,11 @@ JSON;
             return;
         }
 
-
-        $result = $session->getQueryManager()->query('select $*::json as my_field', [$data])->current();
-
         $this
-            ->array($result['my_field'])
+            ->array($this->sendToPostgres($data, 'json', $session))
             ->isIdenticalTo($data)
             ;
+
     }
 }
 

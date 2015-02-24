@@ -49,9 +49,11 @@ class PgBytea extends BaseConverter
 
         $this
             ->string($this->newTestedInstance()->toPgStandardFormat($binary, 'bytea', $session))
-            ->isEqualTo(sprintf('"%s"', $output))
+            ->isEqualTo(sprintf('%s', $output))
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'bytea', $session))
             ->isNull()
+            ->string($this->sendToPostgres($binary, 'bytea', $session))
+            ->isEqualTo($binary)
             ;
     }
 }

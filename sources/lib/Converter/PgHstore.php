@@ -53,7 +53,7 @@ class PgHstore extends ArrayTypeConverter
             return sprintf("NULL::%s", $type);
         }
 
-        return sprintf("%s('%s')", $type, join(', ', $this->buildArray($this->checkArray($data), $session)));
+        return sprintf("%s(\$hs\$%s\$hs\$)", $type, join(', ', $this->buildArray($this->checkArray($data), $session)));
     }
 
     /**
@@ -65,7 +65,7 @@ class PgHstore extends ArrayTypeConverter
             return null;
         }
 
-        return sprintf('"%s"', join(', ', $this->buildArray($this->checkArray($data), $session, '"')));
+        return sprintf('%s', join(', ', $this->buildArray($this->checkArray($data), $session)));
     }
 
     /**
@@ -77,22 +77,41 @@ class PgHstore extends ArrayTypeConverter
      * @param  array $data
      * @return array
      */
-    protected function buildArray(array $data, Session $session, $quote = "'")
+    protected function buildArray(array $data, Session $session)
     {
         $insert_values = [];
+        $connection = $session->getConnection();
 
         foreach ($data as $key => $value) {
             if ($value === null) {
-                $insert_values[] = sprintf('%s => NULL', str_replace($quote, $quote.$quote, $session->getConnection()->escapeIdentifier($key)));
+                $insert_values[] = sprintf('%s => NULL', $this->escape($key));
             } else {
                 $insert_values[] = sprintf(
                     '%s => %s',
-                    str_replace($quote, $quote.$quote, $session->getConnection()->escapeIdentifier($key)),
-                    str_replace($quote, $quote.$quote, $session->getConnection()->escapeIdentifier($value))
+                    $this->escape($key),
+                    $this->escape($value)
                 );
             }
         }
 
         return $insert_values;
+    }
+
+    /**
+     * escape
+     *
+     * Escape a string.
+     *
+     * @access protected
+     * @param  string $string
+     * @return string
+     */
+    protected function escape($string)
+    {
+        if (preg_match('/["\s,]/', $string) === false) {
+            return addslashes($string);
+        } else {
+            return sprintf('"%s"', addcslashes($string, '"\\'));
+        }
     }
 }

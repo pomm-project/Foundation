@@ -10,9 +10,22 @@
 namespace PommProject\Foundation\Test\Unit\Converter;
 
 use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
+use PommProject\Foundation\Session\Session;
+use PommProject\Foundation\Converter\PgHstore as PommHstore;
 
 class PgHstore extends BaseConverter
 {
+    protected function initializeSession(Session $session)
+    {
+        parent::initializeSession($session);
+
+        $session
+            ->getPoolerForType('converter')
+            ->getConverterHolder()
+            ->registerConverter('hstore', new PommHstore(), ['hstore', 'public.hstore'])
+            ;
+    }
+
     public function testFromPg()
     {
         $converter = $this->newTestedInstance();
@@ -20,9 +33,9 @@ class PgHstore extends BaseConverter
         $this
             ->array(
                 $converter
-                    ->fromPg('"a"=>"b", "b"=>NULL, "a b c"=>"d \'é\' f"', 'hstore', $session)
+                    ->fromPg('"a"=>"b", "b"=>NULL, "a \\\\b\\\\ c"=>"d \'é\' f"', 'hstore', $session)
             )
-            ->isIdenticalTo(['a' => 'b', 'b' => null, 'a b c' => 'd \'é\' f'])
+            ->isIdenticalTo(['a' => 'b', 'b' => null, 'a \\b\\ c' => 'd \'é\' f'])
             ->variable(
                 $converter
                     ->fromPg(null, 'hstore', $session)
@@ -45,7 +58,7 @@ class PgHstore extends BaseConverter
                 $converter
                     ->toPg(['a' => 'b', 'b' => null, 'a b c' => 'd \'é\' f'], 'hstore', $session)
                 )
-            ->isEqualTo('hstore(\'"a" => "b", "b" => NULL, "a b c" => "d \'\'é\'\' f"\')')
+            ->isEqualTo('hstore($hs$"a" => "b", "b" => NULL, "a b c" => "d \'é\' f"$hs$)')
             ;
     }
 
@@ -53,6 +66,7 @@ class PgHstore extends BaseConverter
     {
         $session   = $this->buildSession();
         $converter = $this->newTestedInstance();
+        $hstore    = ['a' => 'b', 'b' => null, 'a \b\ c' => 'd \'é\' f'];
         $this
             ->variable(
                 $converter
@@ -61,9 +75,19 @@ class PgHstore extends BaseConverter
             ->isNull()
             ->string(
                 $converter
-                    ->toPgStandardFormat(['a' => 'b', 'b' => null, 'a b c' => 'd \'é\' f'], 'hstore', $session)
+                    ->toPgStandardFormat($hstore, 'hstore', $session)
                 )
-                ->isEqualTo('"""a"" => ""b"", ""b"" => NULL, ""a b c"" => ""d \'é\' f"""')
+            ->isEqualTo('"a" => "b", "b" => NULL, "a \\\\b\\\\ c" => "d \'é\' f"')
+            ;
+        if ($this->doesTypeExist('hstore', $session) === false) {
+            $this->skip("HSTORE extension is not installed, skipping tests.");
+
+            return;
+        }
+
+        $this
+            ->array($this->sendToPostgres($hstore, 'hstore', $session))
+            ->isIdenticalTo($hstore)
             ;
     }
 }

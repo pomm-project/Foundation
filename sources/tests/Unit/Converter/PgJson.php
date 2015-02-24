@@ -80,7 +80,15 @@ JSON;
             ->isNull()
             ;
 
+        if ($this->isPgVersionAtLeast('9.2', $session) === false) {
+            $this->skip("Pg Version must be at least 9.2.");
+
+            return;
+        }
+
+
         $result = $session->getQueryManager()->query('select $*::json as my_field', [$data])->current();
+
         $this
             ->array($result['my_field'])
             ->isIdenticalTo($data)

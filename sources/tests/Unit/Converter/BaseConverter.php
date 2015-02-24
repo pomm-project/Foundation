@@ -17,4 +17,21 @@ abstract class BaseConverter extends FoundationSessionAtoum
     protected function initializeSession(Session $session)
     {
     }
+
+    /**
+     * isPgVersionAtLeast
+     *
+     * Return true if the server version meets client expectations.
+     *
+     * @access public
+     * @param  string   $version
+     * @param  Session  $session
+     * @return bool
+     */
+    public function isPgVersionAtLeast($version, Session $session)
+    {
+        $result = $session->getQueryManager()->query('show server_version', [])->current();
+
+        return (bool) (version_compare($version, $result['server_version']) <= 0);
+    }
 }

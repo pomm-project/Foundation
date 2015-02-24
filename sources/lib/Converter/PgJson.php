@@ -95,7 +95,7 @@ class PgJson implements ConverterInterface
     {
         return
             $data !== null
-            ? sprintf('"%s"', str_replace('"', '""', $this->jsonEncode($data)))
+            ? $this->jsonEncode($data)
             : null
             ;
     }

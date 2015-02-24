@@ -71,13 +71,19 @@ JSON;
                     ->newTestedInstance()
                     ->toPgStandardFormat($data, 'json', $session)
                 )
-            ->isEqualTo('"{""a"":{""b"":["" c "",""d""],""e"":""f""},""g"":[""h"",""i""]}"')
+            ->isEqualTo('{"a":{"b":[" c ","d"],"e":"f"},"g":["h","i"]}')
             ->variable(
                 $this
                     ->newTestedInstance()
                     ->toPgStandardFormat(null, 'json', $session)
                 )
             ->isNull()
+            ;
+
+        $result = $session->getQueryManager()->query('select $*::json as my_field', [$data])->current();
+        $this
+            ->array($result['my_field'])
+            ->isIdenticalTo($data)
             ;
     }
 }

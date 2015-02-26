@@ -80,7 +80,6 @@ class PgHstore extends ArrayTypeConverter
     protected function buildArray(array $data, Session $session)
     {
         $insert_values = [];
-        $connection = $session->getConnection();
 
         foreach ($data as $key => $value) {
             if ($value === null) {

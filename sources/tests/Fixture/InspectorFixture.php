@@ -51,6 +51,16 @@ Class InspectorFixture extends Client
         $this->executeAnonymousQuery(join('; ', $sql));
     }
 
+    public function renamePks()
+    {
+        $sql = [
+            "alter table inspector_test.with_simple_pk rename with_simple_pk_id to with_simple_pk_id_renamed",
+            "alter table inspector_test.with_complex_pk rename another_id to another_id_renamed",
+        ];
+
+        $this->executeAnonymousQuery(join('; ', $sql));
+    }
+
     public function dropSchema()
     {
         $sql = "drop schema if exists inspector_test cascade";

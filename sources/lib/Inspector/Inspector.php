@@ -199,7 +199,7 @@ with
             att.attname as field
         from
             pg_catalog.pg_attribute att
-                join pg_catalog.pg_index ind on att.attrelid = ind.indexrelid
+                join pg_catalog.pg_index ind on att.attrelid = ind.indrelid AND att.attnum = ANY(ind.indkey)
         where
             :condition
         order by att.attnum asc

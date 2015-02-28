@@ -128,6 +128,18 @@ class Inspector extends FoundationSessionAtoum
             ->array($inspector->getPrimaryKey($this->getTableOid('with_complex_pk')))
             ->isIdenticalTo(['another_id', 'with_complex_pk_id'])
             ;
+
+        $this->getFixture()->renamePks();
+
+        $this
+            ->array($inspector->getPrimaryKey($this->getTableOid('no_pk')))
+            ->isEmpty()
+            ->array($inspector->getPrimaryKey($this->getTableOid('with_simple_pk')))
+            ->isIdenticalTo(['with_simple_pk_id_renamed'])
+            ->array($inspector->getPrimaryKey($this->getTableOid('with_complex_pk')))
+            ->isIdenticalTo(['another_id_renamed', 'with_complex_pk_id'])
+        ;
+
     }
 
     public function testGetSchemaOid()

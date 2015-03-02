@@ -14,6 +14,9 @@ use PommProject\Foundation\Test\Fixture\InspectorFixture;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Tester\FoundationSessionAtoum;
 
+/**
+ * @engine inline
+ */
 class Inspector extends FoundationSessionAtoum
 {
     protected $session;
@@ -73,6 +76,26 @@ class Inspector extends FoundationSessionAtoum
         $this->getFixture()->dropSchema();
     }
 
+    public function beforeTestMethod($method)
+    {
+        switch ($method) {
+        case 'testChangePrimaryKey':
+            $this->getFixture()->renamePks('with_simple_pk', 'with_simple_pk_id', 'with_simple_pk_id_renamed');
+            $this->getFixture()->renamePks('with_complex_pk', 'another_id', 'another_id_renamed');
+            return;
+        }
+    }
+
+    public function afterTestMethod($method)
+    {
+        switch ($method) {
+        case 'testChangePrimaryKey':
+            $this->getFixture()->renamePks('with_simple_pk', 'with_simple_pk_id_renamed', 'with_simple_pk_id');
+            $this->getFixture()->renamePks('with_complex_pk', 'another_id_renamed', 'another_id');
+            return;
+        }
+    }
+
     public function testGetSchemas()
     {
         $this
@@ -114,7 +137,6 @@ class Inspector extends FoundationSessionAtoum
             ->array($fields_info->slice('type'))
             ->isIdenticalTo(['int4', 'inspector_test._someone', '_timestamptz'])
             ;
-
     }
 
     public function testGetPrimaryKey()
@@ -128,9 +150,11 @@ class Inspector extends FoundationSessionAtoum
             ->array($inspector->getPrimaryKey($this->getTableOid('with_complex_pk')))
             ->isIdenticalTo(['another_id', 'with_complex_pk_id'])
             ;
+    }
 
-        $this->getFixture()->renamePks();
-
+    public function testChangePrimaryKey()
+    {
+        $inspector = $this->getInspector();
         $this
             ->array($inspector->getPrimaryKey($this->getTableOid('no_pk')))
             ->isEmpty()
@@ -139,7 +163,6 @@ class Inspector extends FoundationSessionAtoum
             ->array($inspector->getPrimaryKey($this->getTableOid('with_complex_pk')))
             ->isIdenticalTo(['another_id_renamed', 'with_complex_pk_id'])
         ;
-
     }
 
     public function testGetSchemaOid()

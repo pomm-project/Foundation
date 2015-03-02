@@ -64,7 +64,8 @@ select
     count(c)      as "relations"
 from pg_catalog.pg_namespace n
     left join pg_catalog.pg_description d on n.oid = d.objoid
-    left join pg_catalog.pg_class c on c.relnamespace = n.oid and c.relkind in ('r', 'v')
+    left join pg_catalog.pg_class c on
+        c.relnamespace = n.oid and c.relkind in ('r', 'v')
 where :condition
 group by 1, 2, 3
 order by 1;
@@ -199,7 +200,8 @@ with
             att.attname as field
         from
             pg_catalog.pg_attribute att
-                join pg_catalog.pg_index ind on att.attrelid = ind.indrelid AND att.attnum = ANY(ind.indkey)
+                join pg_catalog.pg_index ind on
+                    att.attrelid = ind.indrelid and att.attnum = any(ind.indkey)
         where
             :condition
         order by att.attnum asc

@@ -70,7 +70,7 @@ class PgInterval implements ConverterInterface
      *
      * @access protected
      * @param  mixed $data
-     * @throw \InvalidParameterException
+     * @throws ConverterException
      * @return DateInterval $data
      */
     protected function checkData($data)
@@ -79,7 +79,7 @@ class PgInterval implements ConverterInterface
             try {
                 $data = new \DateInterval($data);
             } catch (\Exception $e) {
-                throw new \InvalidParameterException(sprintf("First argument is not a \DateInterval instance."), null, $e);
+                throw new ConverterException(sprintf("First argument is not a \DateInterval instance."), null, $e);
             }
         }
 

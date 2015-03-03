@@ -15,7 +15,7 @@ use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Tester\FoundationSessionAtoum;
 
 /**
- * @engine inline
+ * @engine isolate
  */
 class Inspector extends FoundationSessionAtoum
 {

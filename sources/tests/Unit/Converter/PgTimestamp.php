@@ -38,11 +38,15 @@ class PgTimestamp extends BaseConverter
     public function testToPgStandardFormat()
     {
         $session = $this->buildSession();
+        $date_time = new \DateTime('2014-09-27 18:51:35.678406+00');
         $this
-            ->string($this->newTestedInstance()->toPgStandardFormat(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz', $session))
+            ->string($this->newTestedInstance()->toPgStandardFormat($date_time, 'timestamptz', $session))
             ->isEqualTo('2014-09-27 18:51:35.678406+00:00')
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'timestamptz', $session))
             ->isNull()
+            ->object($this->sendToPostgres($date_time, 'timestamptz', $session))
+            ->isInstanceof('\DateTime')
+            ->isEqualTo($date_time)
             ;
     }
 }

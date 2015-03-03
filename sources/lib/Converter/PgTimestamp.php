@@ -25,6 +25,8 @@ use PommProject\Foundation\Exception\ConverterException;
  */
 class PgTimestamp implements ConverterInterface
 {
+    const TS_FORMAT = 'Y-m-d H:i:s.uP';
+
     /**
      * fromPg
      *
@@ -46,7 +48,7 @@ class PgTimestamp implements ConverterInterface
     {
         return
             $data !== null
-            ? sprintf("%s '%s'", $type, $this->checkData($data)->format('Y-m-d H:i:s.uP'))
+            ? sprintf("%s '%s'", $type, $this->checkData($data)->format(static::TS_FORMAT))
             : sprintf("NULL::%s", $type)
             ;
     }
@@ -60,7 +62,7 @@ class PgTimestamp implements ConverterInterface
     {
         return
             $data !== null
-            ? $this->checkData($data)->format('Y-m-d H:i:s.uP')
+            ? $this->checkData($data)->format(static::TS_FORMAT)
             : null
             ;
     }

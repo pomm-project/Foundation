@@ -56,8 +56,14 @@ class PgTsRange extends BaseConverter
             ->isEqualTo('[""2014-08-15 15:29:24.395639+00"",""2014-10-15 15:29:24.395639+00"")')
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'mytsrange', $session))
             ->isNull()
-            ->object($this->sendToPostgres($range, 'tsrange', $session))
-            ->isInstanceOf('\PommProject\Foundation\Converter\Type\TsRange')
             ;
+        if ($this->isPgVersionAtLeast('9.2', $session)) {
+            $this
+                ->object($this->sendToPostgres($range, 'tsrange', $session))
+                ->isInstanceOf('\PommProject\Foundation\Converter\Type\TsRange')
+                ;
+        } else {
+            $this->skip('Skipping some PgTsRange tests because Pg version < 9.2.');
+        }
     }
 }

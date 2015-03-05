@@ -60,7 +60,13 @@ class SessionBuilder extends VanillaSessionBuilder
     {
         $converter_holder
             ->registerConverter('Array', new Converter\PgArray(), ['array'], false)
-            ->registerConverter('Boolean', new Converter\PgBoolean(), ['bool', 'pg_catalog.bool'], false)
+            ->registerConverter('Boolean', new Converter\PgBoolean(), 
+                [
+                    'bool',
+                    'pg_catalog.bool',
+                    'boolean',
+                ],
+            false)
             ->registerConverter(
                 'Number',
                 new Converter\PgNumber(),

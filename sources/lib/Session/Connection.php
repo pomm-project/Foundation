@@ -43,7 +43,7 @@ class Connection
     /**
      * __construct
      *
-     * Constructor. Test if the givn DSN is valid.
+     * Constructor. Test if the given DSN is valid.
      *
      * @access public
      * @param  string $dsn
@@ -421,7 +421,7 @@ class Connection
      *
      * Send a prepare query statement to the server.
      *
-     * @access publci
+     * @access public
      * @param  string     $identifier
      * @param  string     $sql
      * @return Connection $this
@@ -461,7 +461,7 @@ class Connection
      * sendExecuteQuery
      *
      * Execute a prepared statement.
-     * The optional SQL parameter is for debuging purpose only.
+     * The optional SQL parameter is for debuging purposes only.
      *
      * @access public
      * @param  string        $identifier

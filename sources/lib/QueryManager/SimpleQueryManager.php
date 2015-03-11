@@ -2,16 +2,16 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace PommProject\Foundation\QueryManager;
 
-use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\ConvertedResultIterator;
 use PommProject\Foundation\Listener\SendNotificationTrait;
+use PommProject\Foundation\QueryManager\QueryManagerClient;
 use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
 
 /**
@@ -20,11 +20,11 @@ use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
  * Query system as a client.
  *
  * @package Foundation
- * @copyright 2014 Grégoire HUBERT
+ * @copyright 2014 - 2015 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  */
-class SimpleQueryManager extends Client
+class SimpleQueryManager extends QueryManagerClient
 {
     use SendNotificationTrait;
     use QueryParameterParserTrait;
@@ -41,6 +41,7 @@ class SimpleQueryManager extends Client
      */
     public function query($sql, array $parameters = [])
     {
+        $parameters = $this->prepareArguments($sql, $parameters);
         $this->sendNotification(
             'query:pre',
             [
@@ -85,7 +86,7 @@ class SimpleQueryManager extends Client
             ->getConnection()
             ->sendQueryWithParameters(
                 $this->orderParameters($sql),
-                $this->prepareArguments($sql, $parameters)
+                $parameters
             )
             ;
     }
@@ -115,25 +116,5 @@ class SimpleQueryManager extends Client
         }
 
         return $parameters;
-    }
-
-    /**
-     * getClientType
-     *
-     * @see ClientInterface
-     */
-    public function getClientType()
-    {
-        return 'query_manager';
-    }
-
-    /**
-     * getClientIdentifier
-     *
-     * @see ClientInterface
-     */
-    public function getClientIdentifier()
-    {
-        return get_class($this);
     }
 }

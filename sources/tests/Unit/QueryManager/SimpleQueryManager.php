@@ -79,7 +79,7 @@ SQL;
             ->string($listener_tester->sql)
             ->isEqualTo('select $*::bool as one')
             ->array($listener_tester->parameters)
-            ->isIdenticalTo([true])
+            ->isIdenticalTo(['t'])
             ->string($listener_tester->session_stamp)
             ->isEqualTo('test session')
             ->integer($listener_tester->result_count)

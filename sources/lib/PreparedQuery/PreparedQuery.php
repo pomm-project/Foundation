@@ -2,7 +2,7 @@
 /*
  * This file is part of the PommProject/Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\PreparedQuery;
 
 use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
+use PommProject\Foundation\Listener\SendNotificationTrait;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\Client\Client;
@@ -17,14 +18,15 @@ use PommProject\Foundation\Client\Client;
 /**
  * PreparedQuery
  *
- * @package Pomm
- * @copyright 2014 Grégoire HUBERT
+ * @package Foundation
+ * @copyright 2014 - 2015 Grégoire HUBERT
  * @author Grégoire HUBERT <hubert.greg@gmail.com>
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  */
 class PreparedQuery extends Client
 {
     use QueryParameterParserTrait;
+    use SendNotificationTrait;
 
     protected $sql;
     private $is_prepared = false;
@@ -123,14 +125,35 @@ class PreparedQuery extends Client
             $this->prepare();
         }
 
-        return $this
+        $values = $this->prepareValues($this->sql, $values);
+        $this->sendNotification(
+            'query:pre',
+            [
+                'sql'           => $this->sql,
+                'parameters'    => $values,
+                'session_stamp' => $this->getSession()->getStamp(),
+            ]
+        );
+
+        $start    = microtime(true);
+        $resource = $this
             ->getSession()
             ->getConnection()
             ->sendExecuteQuery(
                 $this->getClientIdentifier(),
-                $this->prepareValues($this->sql, $values),
+                $values,
                 $this->sql
             );
+        $end      = microtime(true);
+        $this->sendNotification(
+            'query:post',
+            [
+                'result_count' => $resource->countRows(),
+                'time_ms'      => sprintf("%03.1f", ($end - $start) * 1000),
+            ]
+        );
+
+        return $resource;
     }
 
     /**

@@ -107,7 +107,7 @@ class ConvertedResultIterator extends ResultIterator
             $type = 'text';
         }
 
-        if (!isset($this->converter[$type])) {
+        if (!isset($this->converters[$type])) {
             $this->converters[$type] = $this
             ->session
             ->getClientUsingPooler('converter', $type)

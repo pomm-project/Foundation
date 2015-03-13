@@ -22,7 +22,7 @@ class PgComposite extends BaseConverter
         $session
             ->getPoolerForType('converter')
             ->getConverterHolder()
-            ->registerConverter('MyComposite', new PommComposite(['a' => 'int4', 'b' => 'varchar[]']), ['pomm_test.test_type'])
+            ->registerConverter('MyComposite', new PommComposite(['a' => 'int4', 'b' => 'varchar[]']), ['test_type'])
             ;
     }
 
@@ -31,7 +31,7 @@ class PgComposite extends BaseConverter
         $this
             ->buildSession()
             ->getConnection()
-            ->executeAnonymousQuery('create schema pomm_test; create type pomm_test.test_type as (a int4, b varchar[])')
+            ->executeAnonymousQuery('create type test_type as (a int4, b varchar[])')
             ;
     }
 
@@ -40,7 +40,7 @@ class PgComposite extends BaseConverter
         $this
             ->buildSession()
             ->getConnection()
-            ->executeAnonymousQuery('drop schema pomm_test cascade')
+            ->executeAnonymousQuery('drop type test_type cascade')
             ;
     }
 
@@ -51,11 +51,11 @@ class PgComposite extends BaseConverter
         $string    = '(3,"{pika,chu}")';
 
         $this
-            ->array($converter->fromPg($string, 'pomm_test.test_type', $session))
+            ->array($converter->fromPg($string, 'test_type', $session))
             ->isIdenticalTo(['a' => 3, 'b' => ['pika', 'chu']])
-            ->variable($converter->fromPg(null, 'pomm_test.test_type', $session))
+            ->variable($converter->fromPg(null, 'test_type', $session))
             ->isNull()
-            ->array($converter->fromPg('(,{})', 'pomm_test.test_type', $session))
+            ->array($converter->fromPg('(,{})', 'test_type', $session))
             ->isIdenticalTo(['a' => null, 'b' => []])
             ;
     }
@@ -66,12 +66,12 @@ class PgComposite extends BaseConverter
         $session   = $this->buildSession();
 
         $this
-            ->string($converter->toPg(['a' => 3, 'b' => ['pika', 'chu']], 'pomm_test.test_type', $session))
-            ->isEqualTo("ROW(int4 '3',ARRAY[varchar 'pika',varchar 'chu']::varchar[])::pomm_test.test_type")
-            ->string($converter->toPg(['a' => null, 'b' => []], 'pomm_test.test_type', $session))
-            ->isEqualTo("ROW(NULL::int4,ARRAY[]::varchar[])::pomm_test.test_type")
-            ->string($converter->toPg(null, 'pomm_test.test_type', $session))
-            ->isEqualTo("NULL::pomm_test.test_type")
+            ->string($converter->toPg(['a' => 3, 'b' => ['pika', 'chu']], 'test_type', $session))
+            ->isEqualTo("ROW(int4 '3',ARRAY[varchar 'pika',varchar 'chu']::varchar[])::test_type")
+            ->string($converter->toPg(['a' => null, 'b' => []], 'test_type', $session))
+            ->isEqualTo("ROW(NULL::int4,ARRAY[]::varchar[])::test_type")
+            ->string($converter->toPg(null, 'test_type', $session))
+            ->isEqualTo("NULL::test_type")
             ;
     }
 
@@ -82,12 +82,14 @@ class PgComposite extends BaseConverter
         $data      = ['a' => 3, 'b' => ['pika', 'chu']];
 
         $this
-            ->string($converter->toPgStandardFormat($data, 'pomm_test.test_type', $session))
+            ->string($converter->toPgStandardFormat($data, 'test_type', $session))
             ->isEqualTo('(3,"{pika,chu}")')
-            ->string($converter->toPgStandardFormat(['a' => null, 'b' => []], 'pomm_test.test_type', $session))
+            ->string($converter->toPgStandardFormat(['a' => null, 'b' => []], 'test_type', $session))
             ->isEqualTo('(,{})')
-            ->variable($converter->toPgStandardFormat(null, 'pomm_test.test_type', $session))
+            ->variable($converter->toPgStandardFormat(null, 'test_type', $session))
             ->isNull()
+            ->array($this->sendToPostgres($data, 'test_type', $session))
+            ->isIdenticalTo($data)
             ;
     }
 }

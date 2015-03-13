@@ -27,6 +27,7 @@ class ConvertedResultIterator extends ResultIterator
 {
     protected $types = [];
     protected $session;
+    protected $converters = [];
 
     public function __construct(ResultHandler $result, Session $session)
     {
@@ -106,9 +107,15 @@ class ConvertedResultIterator extends ResultIterator
             $type = 'text';
         }
 
-        return $this
+        if (!isset($this->converter[$type])) {
+            $this->converters[$type] = $this
             ->session
             ->getClientUsingPooler('converter', $type)
+            ;
+        }
+
+        return $this
+            ->converters[$type]
             ->fromPg($value, $type)
             ;
     }

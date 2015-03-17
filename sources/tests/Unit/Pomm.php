@@ -29,6 +29,7 @@ class Pomm extends Atoum
                     "db_two"   => [
                         "dsn" => "pgsql://user:pass@host:port/db_name",
                         "class:session_builder" => "PommProject\\Foundation\\Test\\Fixture\\PommTestSessionBuilder",
+                        "pomm:default" => true,
                     ],
                 ];
         }
@@ -130,6 +131,24 @@ class Pomm extends Atoum
         $this
             ->boolean($pomm['db_two']->hasClient('listener', 'pika'))
             ->isTrue()
+            ;
+    }
+
+    public function testDefault()
+    {
+        $this
+            ->exception(function() { return $this->newTestedInstance()->getDefaultSession(); })
+            ->message->contains("No default session builder set.")
+            ->object($this->getPomm()->getDefaultSession())
+            ->isInstanceOf('\PommProject\Foundation\Session\Session')
+            ->string($this->getPomm()->getDefaultSession()->getStamp())
+            ->contains('db_two')
+            ->string($this->newTestedInstance(['one' => ['dsn' => 'pgsql://user/db']])->getDefaultSession()->getStamp())
+            ->contains('one')
+            ->exception(function() { return $this->getPomm()->setDefaultBuilder('none'); })
+            ->message->contains("No such builder")
+            ->string($this->getPomm()->setDefaultBuilder('db_one')->getDefaultSession()->getStamp())
+            ->contains('db_one')
             ;
     }
 }

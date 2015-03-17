@@ -31,6 +31,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     protected $builders = [];
     protected $post_configurations = [];
     protected $sessions = [];
+    protected $default;
 
     use LoggerAwareTrait;
 
@@ -79,7 +80,56 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
             }
 
             $this->addBuilder($name, new $builder_class($configuration));
+
+            if ($this->default === null || (isset($configuration['pomm:default']) && $configuration['pomm:default'] === true)) {
+                $this->setDefaultBuilder($name);
+            }
         }
+    }
+
+    /**
+     * setDefaultBuilder
+     *
+     * Set the name for the default session builder.
+     *
+     * @access public
+     * @param  string   $name
+     * @return Pomm     $this
+     */
+    public function setDefaultBuilder($name)
+    {
+        if (!$this->hasBuilder($name)) {
+            throw new FoundationException(
+                sprintf(
+                    "No such builder '%s'.",
+                    $name
+                )
+            );
+        }
+
+        $this->default = $name;
+
+        return $this;
+    }
+
+    /**
+     * getDefaultSession
+     *
+     * Return a session built by the default session builder.
+     *
+     * @access public
+     * @return Session
+     */
+    public function getDefaultSession()
+    {
+        if ($this->default === null) {
+            throw new FoundationException(
+                sprintf("No default session builder set.")
+            )
+            ;
+        }
+
+        return $this->getSession($this->default);
     }
 
     /**

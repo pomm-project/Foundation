@@ -1,3 +1,30 @@
+
+== VERSION 2.0.0-RC.1
+
+ *  Added default session builder (close #25).
+ *  Added PgComposite converter.
+ *  Refactored Query Manager (close #17).
+ *  Fixing tests for Pg 9.1.
+ *  Added boolean type to bool converter.
+ *  update exception in interval and hstore
+ *  Fixed a bug in the query for retrieving the primary key column names.
+ *  Handling parameters type quoting in queries (close #20).
+ *  Added Pg version control for tests.
+ *  Added schema support in type definition.
+ *  PgArray now caches ConverterInterface.
+ *  Fixed array conversion escaping.
+ *  Parametrized work with arrays.
+ *  Migrated PreparedQuery to new parameters system.
+ *  ConverterInterface::toPgStandardFormat().
+ *  Added toCsv to ConverterInterface.
+ *  Added strict parameter to registerConverter.
+ *  More informative error message (close #17).
+ *  Session builder needs array in SessionAtoum classes.
+ *  Bug, PreparedQuery not prepared.
+ *  PgJson can cast StdObject instances.
+ *  Updated ParameterHolder::hasParameter().
+ *  Put SQL at the end of the error msg in SqlException.
+
 == VERSION 2.0.0-beta.2
 
  * Added inspector::getVersion.

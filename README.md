@@ -4,7 +4,7 @@
 
 This is the foundation component for the Pomm database framework. It works only with PHP >= 5.4.4.
 
-Pomm Foundation is in beta state, code may change without notice, but should never be broken. This is the version to choose to test Pomm or to use in small projects. If you are looking for a stable library, look at [Pomm 1.x](http://www.pomm-project.org).
+Pomm Foundation is in Release Candidate (RC) state. This version will go in stable state soon and may be used for test purposes or to start new projects. 
 
 ## Installation
 

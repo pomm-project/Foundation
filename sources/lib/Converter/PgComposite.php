@@ -32,6 +32,7 @@ class PgComposite extends ArrayTypeConverter
      * __construct
      *
      * Takes the composite type structure as parameter.
+     * The structure is $name => $type.
      *
      * @access public
      * @param array $structure structure definition.
@@ -53,16 +54,8 @@ class PgComposite extends ArrayTypeConverter
         }
 
         $values = str_getcsv(stripcslashes(trim($data, '()')));
-        $out_values = array_flip(array_keys($this->structure));
 
-        foreach ($out_values as $key => $value) {
-            $out_values[$key] = $this
-                ->getConverter($key, $session)
-                ->fromPg($values[$value], $this->structure[$key], $session)
-                ;
-        }
-
-        return $out_values;
+        return $this->convertArray(array_combine(array_keys($this->structure), $values), $session, 'fromPg');
     }
 
     /**
@@ -85,6 +78,11 @@ class PgComposite extends ArrayTypeConverter
         );
     }
 
+    /**
+     * toPgStandardFormat
+     *
+     * @see ConverterInterface
+     */
     public function toPgStandardFormat($data, $type, Session $session)
     {
         if ($data === null) {
@@ -111,28 +109,6 @@ class PgComposite extends ArrayTypeConverter
     }
 
     /**
-     * getConverter
-     *
-     * Return the converter for the given field.
-     *
-     * @access private
-     * @param  string $key
-     * @param  Session $session
-     * @return ConverterInterface
-     */
-    private function getConverter($key, Session $session)
-    {
-        if (!isset($this->converters[$key])) {
-            $this->converters[$key] = $session
-                    ->getClientUsingPooler('converter', $this->structure[$key])
-                    ->getConverter()
-                    ;
-        }
-
-        return $this->converters[$key];
-    }
-
-    /**
      * convertArray
      *
      * Convert the given array of values.
@@ -148,9 +124,9 @@ class PgComposite extends ArrayTypeConverter
 
         foreach ($this->structure as $name => $subtype) {
             $values[$name] = isset($data[$name])
-                ? $this->getConverter($name, $session)
+                ? $this->getSubtypeConverter($subtype, $session)
                     ->$method($data[$name], $subtype, $session)
-                : $this->getConverter($name, $session)
+                : $this->getSubtypeConverter($subtype, $session)
                     ->$method(null, $subtype, $session)
                 ;
         }

@@ -11,6 +11,7 @@ namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Converter\ConverterInterface;
+use PommProject\Foundation\Session\Session;
 
 /**
  * ArrayTypeConverter
@@ -26,6 +27,8 @@ use PommProject\Foundation\Converter\ConverterInterface;
  */
 abstract class ArrayTypeConverter implements ConverterInterface
 {
+    protected $converters = [];
+
     /**
      * checkArray
      *
@@ -48,5 +51,54 @@ abstract class ArrayTypeConverter implements ConverterInterface
         }
 
         return $data;
+    }
+
+    /**
+     * convertArray
+     *
+     * Convert the given array of values.
+     *
+     * @access private
+     * @param  array $data
+     * @param  Session $session
+     * @return array
+     */
+    private function convertArray(array $data, Session $session, $method)
+    {
+        $values = [];
+
+        foreach ($this->structure as $name => $subtype) {
+            $values[$name] = isset($data[$name])
+                ? $this->getConverter($name, $session)
+                    ->$method($data[$name], $subtype, $session)
+                : $this->getConverter($name, $session)
+                    ->$method(null, $subtype, $session)
+                ;
+        }
+
+        return $values;
+    }
+
+    /**
+     * getSubtypeConverter
+     *
+     * Since the arrays in Postgresql have the same sub type, it is useful to
+     * cache it here to ovoid summoning the ClientHolder all the time.
+     *
+     * @access protected
+     * @param  string   $type
+     * @param  Session  $session
+     * @return ConverterInterface
+     */
+    protected function getSubtypeConverter($type, Session $session)
+    {
+        if (!isset($this->subtype_converter[$type])) {
+            $this->converters[$type] = $session
+                ->getClientUsingPooler('converter', $type)
+                ->getConverter()
+                ;
+        }
+
+        return $this->converters[$type];
     }
 }

@@ -25,8 +25,6 @@ use PommProject\Foundation\Session\Session;
  */
 class PgArray extends ArrayTypeConverter
 {
-    protected $subtype_converter = [];
-
     /**
      * getSubType
      *
@@ -126,28 +124,5 @@ class PgArray extends ArrayTypeConverter
                     return $val;
                 }, $data)
                 ));
-    }
-
-    /**
-     * getSubtypeConverter
-     *
-     * Since the arrays in Postgresql have the same sub type, it is useful to
-     * cache it here to ovoid summoning the ClientHolder all the time.
-     *
-     * @access protected
-     * @param  string   $type
-     * @param  Session  $session
-     * @return ConverterInterface
-     */
-    protected function getSubtypeConverter($type, Session $session)
-    {
-        if (!isset($this->subtype_converter[$type])) {
-            $this->subtype_converter[$type] = $session
-                ->getClientUsingPooler('converter', $type)
-                ->getConverter()
-                ;
-        }
-
-        return $this->subtype_converter[$type];
     }
 }

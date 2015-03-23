@@ -95,7 +95,7 @@ class ConvertedResultIterator extends ResultIterator
      * Return converted value for a result field.
      *
      * @access protected
-     * @param  int    $field_no
+     * @param  string $name
      * @param  string $value
      * @return mixed
      */

@@ -30,6 +30,26 @@ $pomm = new Pomm(['my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name']]);
 
 // get a session from the service:
 $session = $pomm['my_db'];
+
+// or get a default session from the service:
+$session = $pomm->getDefaultSession();
+```
+
+If you have multiple session builders, you can specify a default one :
+
+```php
+// instantiate the service with the configuration as parameter:
+$pomm = new Pomm([
+    'my_db' => ['dsn' => 'pgsql://user:pass@host:port/db_name'],
+    'my_db2' => 
+        [
+            'dsn'          => 'pgsql://user:pass@host:port/db_name2',
+            'pomm:default' => true
+        ]
+    ]);
+
+// get a default session (my_db2) from the service:
+$session = $pomm->getDefaultSession();
 ```
 
 ## Sessions, clients and poolers

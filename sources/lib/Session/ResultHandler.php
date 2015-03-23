@@ -9,6 +9,8 @@
  */
 namespace PommProject\Foundation\Session;
 
+use PommProject\Foundation\Exception\FoundationException;
+
 /**
  * ResultHandler
  *
@@ -67,7 +69,8 @@ class ResultHandler
      */
     public function free()
     {
-        @pg_free_result($this->handler);
+        $result = @pg_free_result($this->handler);
+        $this->handler = null;
 
         return $this;
     }

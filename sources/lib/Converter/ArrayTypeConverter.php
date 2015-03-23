@@ -54,32 +54,6 @@ abstract class ArrayTypeConverter implements ConverterInterface
     }
 
     /**
-     * convertArray
-     *
-     * Convert the given array of values.
-     *
-     * @access private
-     * @param  array $data
-     * @param  Session $session
-     * @return array
-     */
-    private function convertArray(array $data, Session $session, $method)
-    {
-        $values = [];
-
-        foreach ($this->structure as $name => $subtype) {
-            $values[$name] = isset($data[$name])
-                ? $this->getConverter($name, $session)
-                    ->$method($data[$name], $subtype, $session)
-                : $this->getConverter($name, $session)
-                    ->$method(null, $subtype, $session)
-                ;
-        }
-
-        return $values;
-    }
-
-    /**
      * getSubtypeConverter
      *
      * Since the arrays in Postgresql have the same sub type, it is useful to

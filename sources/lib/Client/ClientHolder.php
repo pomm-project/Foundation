@@ -125,25 +125,23 @@ class ClientHolder
      */
     public function shutdown()
     {
-        $exception = null;
+        $exceptions = [];
+
         foreach ($this->clients as $type => $names) {
             foreach ($names as $name => $client) {
 
                 try {
                     $client->shutdown();
                 } catch (PommException $e) {
-                    $exception = $exception === null
-                        ? $e
-                        : new FoundationException($e->getMessage(), $e->getCode(), $e)
-                        ;
+                    $exceptions[] = $e;
                 }
             }
         }
 
         $this->clients = [];
 
-        if ($exception !== null) {
-            throw $e;
+        if (count($exceptions) > 0) {
+            throw $exceptions[0]; // I wish I could embed all those exceptions.
         }
 
         return $this;

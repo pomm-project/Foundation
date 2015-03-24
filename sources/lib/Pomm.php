@@ -52,29 +52,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     {
         foreach ($configurations as $name => $configuration) {
             if (isset($configuration['class:session_builder'])) {
-                $builder_class = $configuration['class:session_builder'];
-
-                try {
-                    $reflection = new \ReflectionClass($builder_class);
-
-                    if (!$reflection->isSubClassOf('\PommProject\Foundation\Session\SessionBuilder')) {
-                        throw new FoundationException(
-                            sprintf(
-                                "Class '%s' is not a subclass of \Pomm\Foundation\Session\SessionBuilder.",
-                                $builder_class
-                            )
-                        );
-                    }
-                } catch (\ReflectionException $e) {
-                    throw new FoundationException(
-                        sprintf(
-                            "Could not instanciate class '%s'.",
-                            $builder_class
-                        ),
-                        null,
-                        $e
-                    );
-                }
+                $builder_class = $this->checkSessionBuilderClass($configuration['class:session_builder']);
             } else {
                 $builder_class = '\PommProject\Foundation\SessionBuilder';
             }
@@ -85,6 +63,43 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
                 $this->setDefaultBuilder($name);
             }
         }
+    }
+
+    /**
+     * checkSessionBuilderClass
+     *
+     * Check if the given builder class is valid.
+     *
+     * @access private
+     * @param  string               $builder_class
+     * @throws FoundationException  if not valid
+     * @return string               $builder_class
+     */
+    private function checkSessionBuilderClass($builder_class)
+    {
+        try {
+            $reflection = new \ReflectionClass($builder_class);
+
+            if (!$reflection->isSubClassOf('\PommProject\Foundation\Session\SessionBuilder')) {
+                throw new FoundationException(
+                    sprintf(
+                        "Class '%s' is not a subclass of \Pomm\Foundation\Session\SessionBuilder.",
+                        $builder_class
+                    )
+                );
+            }
+        } catch (\ReflectionException $e) {
+            throw new FoundationException(
+                sprintf(
+                    "Could not instanciate class '%s'.",
+                    $builder_class
+                ),
+                null,
+                $e
+            );
+        }
+
+        return $builder_class;
     }
 
     /**

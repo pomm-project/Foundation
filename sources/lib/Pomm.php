@@ -46,7 +46,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * @access public
      * @param  array $configurations
-     * @return void
      */
     public function __construct(array $configurations = [])
     {
@@ -59,7 +58,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
 
             $this->addBuilder($name, new $builder_class($configuration));
 
-            if ($this->default === null || (isset($configuration['pomm:default']) && $configuration['pomm:default'] === true)) {
+            if (isset($configuration['pomm:default']) && $configuration['pomm:default'] === true) {
                 $this->setDefaultBuilder($name);
             }
         }
@@ -162,6 +161,10 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     {
         $this->builders[$builder_name] = $builder;
         $this->post_configurations[$builder_name] = [];
+
+        if ($this->default === null) {
+            $this->setDefaultBuilder($builder_name);
+        }
 
         return $this;
     }

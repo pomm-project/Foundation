@@ -107,7 +107,7 @@ class ConnectionConfigurator
     private function parseDsn()
     {
         $dsn = $this->configuration->mustHave('dsn')->getParameter('dsn');
-        if (!preg_match('#([a-z]+)://([^:@]+)(?::([^@]+))?(?:@([\w\.-]+|!/.+[^/]!)(?::(\w+))?)?/(.+)#', $dsn, $matchs)) {
+        if (!preg_match('#([a-z]+)://([^:@]+)(?::([^@]*))?(?:@([\w\.-]+|!/.+[^/]!)(?::(\w+))?)?/(.+)#', $dsn, $matchs)) {
             throw new ConnectionException(sprintf('Could not parse DSN "%s".', $dsn));
         }
 

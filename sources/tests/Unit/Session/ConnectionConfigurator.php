@@ -47,6 +47,10 @@ class ConnectionConfigurator extends \Atoum
                 'user=user dbname=dbname host=a_host password=p4ssW0rD',
             ],
             [
+                'pgsql://user:@a_host/dbname',
+                'user=user dbname=dbname host=a_host',
+            ],
+            [
                 'pgsql://user@a_host/dbname',
                 'user=user dbname=dbname host=a_host',
             ],

@@ -26,56 +26,6 @@ class Connection extends Atoum
         return $this->newTestedInstance($dsn);
     }
 
-    public function badDsnDataProvider()
-    {
-        return
-            [
-                'azertyuiop',
-                'abcde://user:pass/host:1234/dbname',
-                'pgsql://toto',
-                'pgsql://toto:p4ssW0rD',
-            ];
-    }
-
-    public function goodDsnDataProvider()
-    {
-        return
-            [
-                'pgsql://user:p4ssW0rD/a_host:5432/dbname',
-                'pgsql://user:p4ssW0rD/a_host:postgres/dbname',
-                'pgsql://user:p4ssW0rD/a_host/dbname',
-                'pgsql://user/a_host/dbname',
-                'pgsql://user/dbname',
-                'pgsql://user:p4ssW0rD/172.18.210.109:5432/dbname',
-                'pgsql://user:p4ssW0rD/172.18.210.109/dbname',
-                'pgsql://user:p4ssW0rD/!/var/run/pgsql!:5432/dbname',
-                'pgsql://user:p4ssW0rD/!/var/run/pgsql!/dbname',
-            ];
-    }
-
-    /**
-     * @dataProvider badDsnDataProvider
-     */
-    public function testBadConstructor($dsn)
-    {
-        $this
-            ->exception(function() use ($dsn) { $this->getConnection($dsn); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\ConnectionException')
-            ;
-    }
-
-    /**
-     * @dataProvider goodDsnDataProvider
-     */
-    public function testGoodConstructor($dsn)
-    {
-        $connection = $this->getConnection($dsn);
-        $this->object($connection)
-            ->integer($connection->getConnectionStatus())
-            ->isEqualTo(PommConnection::CONNECTION_STATUS_NONE)
-            ;
-    }
-
     public function testExecuteAnonymousQuery()
     {
         $connection = $this->getConnection($this->getDsn());

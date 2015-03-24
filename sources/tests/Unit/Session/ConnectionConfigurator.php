@@ -76,4 +76,36 @@ class ConnectionConfigurator extends \Atoum
             ],
         ];
     }
+
+    public function testGetConfiguration()
+    {
+        $configurator = $this->newTestedInstance('pgsql://user/dbname');
+
+        $this->array($configurator->getConfiguration())
+            ->isEmpty();
+    }
+
+    public function testAddConfiguration()
+    {
+        $configurator = $this->newTestedInstance('pgsql://user/dbname');
+        $configuration = ['encoding' => 'utf-8'];
+
+        $this->object($configurator->addConfiguration($configuration))
+            ->isInstanceOf($this->getTestedClassName());
+
+        $this->array($configurator->getConfiguration())
+            ->isIdenticalTo($configuration);
+    }
+
+    public function testSet()
+    {
+        $configurator = $this->newTestedInstance('pgsql://user/dbname');
+        $configuration = ['encoding' => 'utf-8'];
+
+        $this->object($configurator->set('encoding', 'utf-8'))
+            ->isInstanceOf($this->getTestedClassName());
+
+        $this->array($configurator->getConfiguration())
+            ->isIdenticalTo($configuration);
+    }
 }

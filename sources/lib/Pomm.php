@@ -147,6 +147,19 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     }
 
     /**
+     * isDefaultSession
+     *
+     * Check if $name is a default session builder
+     *
+     * @param  string $name
+     * @return bool
+     */
+    public function isDefaultSession($name)
+    {
+        return (bool) ($this->default == $name);
+    }
+
+    /**
      * addBuilder
      *
      * Add a new session builder. Override any previously existing builder with

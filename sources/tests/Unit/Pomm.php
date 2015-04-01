@@ -151,4 +151,21 @@ class Pomm extends Atoum
             ->contains('db_one')
             ;
     }
+
+    public function testIsDefault()
+    {
+        $pomm = $this->newTestedInstance([
+            'one' => ['dsn' => 'pgsql://user/db'],
+            'two' => ['dsn' => 'pgsql://user/db']
+        ]);
+
+        $this
+            ->boolean($pomm->isDefaultSession('one'))
+            ->isTrue()
+            ->boolean($pomm->isDefaultSession('two'))
+            ->isFalse()
+            ->boolean($pomm->isDefaultSession('three'))
+            ->isFalse()
+        ;
+    }
 }

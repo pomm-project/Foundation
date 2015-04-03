@@ -52,7 +52,7 @@ class Inspector extends Client
      * Return a list of available schemas in the current database.
      *
      * @access public
-     * @return ConvertedResultIterator
+     * @return \PommProject\Foundation\ConvertedResultIterator
      */
     public function getSchemas()
     {
@@ -115,7 +115,7 @@ SQL;
      *
      * @access public
      * @param  int                 $oid
-     * @return ResultIterator|null
+     * @return \PommProject\Foundation\ConvertedResultIterator|null
      */
     public function getTableFieldInformation($oid)
     {
@@ -158,7 +158,7 @@ SQL;
      * Return the given schema oid, null if the schema is not found.
      *
      * @access public
-     * @param  string   $name
+     * @param  string   $schema
      * @param  Where    $where optionnal where clause.
      * @return int|null
      */
@@ -227,7 +227,7 @@ SQL;
      * @access public
      * @param  int                     $schema_oid
      * @param  Where                   $where
-     * @return ConvertedResultIterator
+     * @return \PommProject\Foundation\ConvertedResultIterator
      */
     public function getSchemaRelations($schema_oid, Where $where = null)
     {
@@ -384,7 +384,7 @@ SQL;
      *
      * @access public
      * @param  int                     $oid
-     * @return ConvertedResultIterator
+     * @return \PommProject\Foundation\ConvertedResultIterator
      */
     public function getCompositeInformation($oid)
     {
@@ -410,7 +410,7 @@ SQL;
      * Return server version.
      *
      * @access public
-     * @throw  FoundationException if invalid string.
+     * @throws  FoundationException if invalid string.
      * @return string
      */
     public function getVersion()
@@ -431,7 +431,7 @@ SQL;
      * @access protected
      * @param  string         $sql
      * @param  Where          $condition
-     * @return ResultIterator
+     * @return \PommProject\Foundation\ConvertedResultIterator
      */
     protected function executeSql($sql, Where $condition = null)
     {

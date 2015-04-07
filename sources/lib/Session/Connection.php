@@ -457,6 +457,7 @@ class Connection
 
         return $this;
     }
+    
     /**
      * sendExecuteQuery
      *

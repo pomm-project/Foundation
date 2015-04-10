@@ -4,28 +4,23 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "af2f1b6df7d2904b59e73c1eef006e37",
+    "hash": "bd0227c0de4e01dc674f9ac7d764a70c",
     "packages": [
         {
             "name": "psr/log",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "1af1529b49a6e065ae6802e70192aba35d79b7d8"
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/1af1529b49a6e065ae6802e70192aba35d79b7d8",
-                "reference": "1af1529b49a6e065ae6802e70192aba35d79b7d8",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "shasum": ""
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Psr\\Log\\": ""
@@ -47,7 +42,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2015-02-05 09:32:11"
+            "time": "2012-12-21 11:40:51"
         }
     ],
     "packages-dev": [
@@ -57,12 +52,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/atoum/atoum.git",
-                "reference": "9670f1cd83140ecb1eca65ca8f62ca48c06daf84"
+                "reference": "fd4dd699a80471289131ac432a73f1f78ee9d67b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atoum/atoum/zipball/9670f1cd83140ecb1eca65ca8f62ca48c06daf84",
-                "reference": "9670f1cd83140ecb1eca65ca8f62ca48c06daf84",
+                "url": "https://api.github.com/repos/atoum/atoum/zipball/fd4dd699a80471289131ac432a73f1f78ee9d67b",
+                "reference": "fd4dd699a80471289131ac432a73f1f78ee9d67b",
                 "shasum": ""
             },
             "require": {
@@ -85,7 +80,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.x-dev"
+                    "dev-master": "2.x-dev"
                 }
             },
             "autoload": {
@@ -128,11 +123,11 @@
                 "test",
                 "unit testing"
             ],
-            "time": "2015-02-13 11:09:18"
+            "time": "2015-04-09 13:30:52"
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "RC",
     "stability-flags": {
         "atoum/atoum": 20
     },

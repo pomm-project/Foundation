@@ -2,7 +2,7 @@
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/pomm-project/Foundation/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pomm-project/Foundation/?branch=master) [![Build Status](https://travis-ci.org/pomm-project/Foundation.svg?branch=master)](https://travis-ci.org/pomm-project/Foundation) [![Monthly Downloads](https://poser.pugx.org/pomm-project/foundation/d/monthly.png)](https://packagist.org/packages/pomm-project/foundation) [![License](https://poser.pugx.org/pomm-project/foundation/license.svg)](https://packagist.org/packages/pomm-project/foundation)
 
-This is the foundation component for the Pomm database framework. It works only with PHP >= 5.4.4.
+This is the foundation component for the Pomm database framework. It works only with PHP >= 5.4.4 and Postgresql >= 9.1.
 
 Pomm Foundation is in Release Candidate (RC) state. This version will go in stable state soon and may be used for test purposes or to start new projects. 
 

@@ -49,7 +49,6 @@ class Where
      *
      * Create an escaped IN clause.
      *
-     * @static
      * @access public
      * @param  string $element
      * @param  array  $values
@@ -57,36 +56,79 @@ class Where
      */
     public static function createWhereIn($element, array $values)
     {
-        $escape = function ($values) use (&$escape) {
-                $escaped_values = [];
-
-                foreach ($values as $value) {
-                    if (is_array($value)) {
-                        $escaped_values[] =
-                            sprintf("(%s)", join(', ', $escape($value)));
-                    } else {
-                        $escaped_values[] = '$*';
-                    }
-                }
-
-                return $escaped_values;
-            };
-
-        $get_values = function ($values) {
-                $array = [];
-
-                foreach (new \RecursiveIteratorIterator(new \RecursiveArrayIterator($values)) as $value) {
-                    $array[] = $value;
-                }
-
-                return $array;
-            };
-
         return new self(sprintf(
             "%s IN (%s)",
-            $element, join(", ", $escape($values))),
-            $get_values($values)
+            $element, join(", ", static::escapeSet($values))),
+            static::extractValues($values)
         );
+    }
+
+    /**
+     * createWhereNotIn
+     *
+     * Create an escpaed NOT IN clause.
+     *
+     * @access public
+     * @param  string $element
+     * @param  array $values
+     * @return Where
+     */
+    public static function createWhereNotIn($element, array $values)
+    {
+        return new self(sprintf(
+            "%s NOT IN (%s)",
+            $element, join(", ", static::escapeSet($values))),
+            static::extractValues($values)
+        );
+    }
+
+    /**
+     * extractValues
+     *
+     * Extract values with consistent keys.
+     *
+     * @access protected
+     * @param  array $values
+     * @return array
+     */
+    protected static function extractValues(array $values)
+    {
+        $array = [];
+
+        foreach (new \RecursiveIteratorIterator(new \RecursiveArrayIterator($values)) as $value) {
+            $array[] = $value;
+        }
+
+        return $array;
+    }
+
+    /**
+     * escapeSet
+     *
+     * Create an array of escaped strings from a value set.
+     *
+     * @access protected
+     * @param  array $values
+     * @return array
+     */
+    protected static function escapeSet(array $values)
+    {
+        $escaped_values = [];
+
+        foreach ($values as $value) {
+            if (is_array($value)) {
+                $escaped_values[] =
+                    sprintf("(%s)", join(', ', static::escapeSet($value)));
+            } else {
+                $escaped_values[] = '$*';
+            }
+        }
+
+        return $escaped_values;
+    }
+
+    protected static function variableSet(array $values)
+    {
     }
 
     /**

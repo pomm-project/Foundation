@@ -26,9 +26,26 @@ class Where extends Atoum
 
     public function testCreateWhereIn()
     {
+        $where1 = PommWhere::createWhereIn('b', [1, 2, 3, 4]);
+        $where2 = PommWhere::createWhereIn('(a, b)', [[1, 2], [3, 4]]);
         $this
-            ->object(PommWhere::createWhereIn('b', [1, 2, 3, 4]))
+            ->object($where1)
             ->isInstanceOf('\PommProject\Foundation\Where')
+            ->string($where1->__toString())
+            ->isEqualTo('b IN ($*, $*, $*, $*)')
+            ->string($where2->__toString())
+            ->isEqualTo('(a, b) IN (($*, $*), ($*, $*))')
+            ;
+    }
+
+    public function testCreateWhereNotIn()
+    {
+        $where = PommWhere::createWhereNotIn('(a, b)', [[1, 2], [3, 4]]);
+        $this
+            ->object($where)
+            ->isInstanceOf('\PommProject\Foundation\Where')
+            ->string($where->__toString())
+            ->isEqualTo('(a, b) NOT IN (($*, $*), ($*, $*))')
             ;
     }
 

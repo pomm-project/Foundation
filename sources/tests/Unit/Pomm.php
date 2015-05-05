@@ -122,6 +122,27 @@ class Pomm extends Atoum
             ;
     }
 
+    public function testRemoveSession()
+    {
+        $pomm = $this->getPomm();
+        $pomm->getSession('db_one');
+        $this
+            ->object($pomm->removeSession('db_one'))
+            ->isInstanceOf('\PommProject\Foundation\Pomm')
+            ->boolean($pomm->hasSession('db_one'))
+            ->isFalse()
+            ->object($pomm->removeSession('db_two'))
+            ->isInstanceOf('\PommProject\Foundation\Pomm')
+            ->boolean($pomm->hasSession('db_one'))
+            ->isFalse()
+            ->exception(function() use ($pomm) {
+                $pomm->removeSession('unknown');
+            })
+            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->message->contains("{'db_one', 'db_two'}")
+            ;
+    }
+
     public function testPostConfiguration()
     {
         $pomm = $this

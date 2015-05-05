@@ -127,10 +127,6 @@ class Where
         return $escaped_values;
     }
 
-    protected static function variableSet(array $values)
-    {
-    }
-
     /**
      * __construct
      *

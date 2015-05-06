@@ -1,3 +1,16 @@
+== VERSION 2.0.0-RC.2
+
+ *  Add Pomm::removeSession() method.
+ *  Fix ResultHandler constructor argument validation.
+ *  Add missing Where::createWhereNotIn() method.
+ *  Add Pg minimum supported version to README.
+ *  Set default session builder with addBuilder().
+ *  Refactor Pomm service constructor code.
+ *  Handle exception in ClientHolder::shutdown better.
+ *  Allow empty password in DSN.
+ *  Refactor Array like converters code.
+ *  Really unset unused result handlers.
+ *  Add default session.
 
 == VERSION 2.0.0-RC.1
 

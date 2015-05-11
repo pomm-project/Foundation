@@ -299,7 +299,7 @@ ERROR;
      */
     public function getQueryManager($identifier = null)
     {
-        return $this->getClientUsingPooler('prepared_query', $identifier);
+        return $this->getClientUsingPooler('query_manager', $identifier);
     }
 
     /**
@@ -311,7 +311,7 @@ ERROR;
      */
     public function getPreparedQueryManager($identifier = null)
     {
-        return $this->getClientUsingPooler('prepared_query_manager', $identifier);
+        return $this->getClientUsingPooler('prepared_query', $identifier);
     }
 
     /**

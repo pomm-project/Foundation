@@ -11,7 +11,6 @@
 namespace PommProject\Foundation\Tester;
 
 use PommProject\Foundation\Tester\VanillaSessionAtoum;
-use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\SessionBuilder;
 
 /**
@@ -28,6 +27,15 @@ use PommProject\Foundation\SessionBuilder;
  */
 abstract class FoundationSessionAtoum extends VanillaSessionAtoum
 {
+    /**
+     * createSessionBuilder
+     *
+     * Override VanillaSessionAtoum to return a Foundation Session builder.
+     *
+     * @access  protected
+     * @param   array $configuration
+     * @return  SessionBuilder
+     */
     protected function createSessionBuilder(array $configuration)
     {
         return new SessionBuilder($configuration);

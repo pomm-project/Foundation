@@ -9,7 +9,10 @@
  */
 namespace PommProject\Foundation;
 
+use PommProject\Foundation\Session as FoundationSession;
 use PommProject\Foundation\Session\Session;
+use PommProject\Foundation\Session\Connection;
+use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Session\SessionBuilder as VanillaSessionBuilder;
 use PommProject\Foundation\Observer\ObserverPooler;
 use PommProject\Foundation\Listener\ListenerPooler;
@@ -49,6 +52,20 @@ class SessionBuilder extends VanillaSessionBuilder
             ;
 
         return $this;
+    }
+
+
+    /**
+     * createSession
+     *
+     * @return  FoundationSession
+     * @see     VanillaSessionBuilder
+     */
+    protected function createSession(Connection $connection, ClientHolder $client_holder, $stamp)
+    {
+        $this->configuration->setDefaultValue('class:session', '\PommProject\Foundation\Session');
+
+        return parent::createSession($connection, $client_holder, $stamp);
     }
 
     /**

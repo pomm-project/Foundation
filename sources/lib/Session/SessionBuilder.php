@@ -190,7 +190,9 @@ class SessionBuilder
      */
     protected function createSession(Connection $connection, ClientHolder $client_holder, $stamp)
     {
-        return new Session($connection, $client_holder, $stamp);
+        $session_class = $this->configuration->getParameter('class:session', '\PommProject\Foundation\Session\Session');
+
+        return new $session_class($connection, $client_holder, $stamp);
     }
 
     /**

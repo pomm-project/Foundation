@@ -88,9 +88,9 @@ abstract class VanillaSessionAtoum extends Atoum
      * If the test needs special poolers and/or client configuration, it goes
      * here.
      *
-     * @access protected
-     * @param Session $session
-     * @return null
+     * @access  protected
+     * @param   Session $session
+     * @return  null
      */
     abstract protected function initializeSession(Session $session);
 }

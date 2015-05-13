@@ -11,7 +11,7 @@ namespace PommProject\Foundation;
 
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Session\SessionBuilder as VanillaSessionBuilder;
-use PommProject\Foundation\Session\Session;
+use PommProject\Foundation\Session\Session as BaseSession;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -132,7 +132,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * Return a session built by the default session builder.
      *
      * @access  public
-     * @return  Session
+     * @return  BaseSession
      */
     public function getDefaultSession()
     {
@@ -257,7 +257,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * @access  public
      * @param   string  $name
-     * @return  Session
+     * @return  BaseSession
      */
     public function getSession($name)
     {
@@ -277,7 +277,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * @access  public
      * @param   string  $name
      * @throws  FoundationException if builder does not exist.
-     * @return  Session
+     * @return  BaseSession
      */
     public function createSession($name)
     {

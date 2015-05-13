@@ -10,7 +10,7 @@
 namespace PommProject\Foundation;
 
 use PommProject\Foundation\Session\ResultHandler;
-use PommProject\Foundation\Session\Session;
+use PommProject\Foundation\Session\Session as BaseSession;
 
 /**
  * ConvertedResultIterator
@@ -29,7 +29,7 @@ class ConvertedResultIterator extends ResultIterator
     protected $session;
     protected $converters = [];
 
-    public function __construct(ResultHandler $result, Session $session)
+    public function __construct(ResultHandler $result, BaseSession $session)
     {
         parent::__construct($result);
         $this->session = $session;

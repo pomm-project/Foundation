@@ -56,9 +56,9 @@ abstract class BaseConverter extends FoundationSessionAtoum
      * retreived.
      *
      * @access protected
-     * @param mixed $value
-     * @param mixed $type
-     * @param Session $session
+     * @param  mixed $value
+     * @param  mixed $type
+     * @param  Session $session
      * @return mixed query result
      */
     protected function sendToPostgres($value, $type, Session $session)

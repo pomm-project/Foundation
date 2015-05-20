@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "hash": "bd0227c0de4e01dc674f9ac7d764a70c",
@@ -52,12 +52,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/atoum/atoum.git",
-                "reference": "1495c79032edbe3ab16af99df150b59b2e194e9a"
+                "reference": "9f17fa0a729294f4fcbb1a085f99ae612dc36cb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atoum/atoum/zipball/1495c79032edbe3ab16af99df150b59b2e194e9a",
-                "reference": "1495c79032edbe3ab16af99df150b59b2e194e9a",
+                "url": "https://api.github.com/repos/atoum/atoum/zipball/9f17fa0a729294f4fcbb1a085f99ae612dc36cb5",
+                "reference": "9f17fa0a729294f4fcbb1a085f99ae612dc36cb5",
                 "shasum": ""
             },
             "require": {
@@ -123,7 +123,7 @@
                 "test",
                 "unit testing"
             ],
-            "time": "2015-04-15 18:21:56"
+            "time": "2015-05-08 21:54:35"
         }
     ],
     "aliases": [],

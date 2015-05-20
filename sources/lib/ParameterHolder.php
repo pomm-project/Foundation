@@ -72,7 +72,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function hasParameter($name)
     {
-        return isset($this->parameters['name']) || array_key_exists($name, $this->parameters);
+        return isset($this->parameters[$name]) || array_key_exists($name, $this->parameters);
     }
 
     /**

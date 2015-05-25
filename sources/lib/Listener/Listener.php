@@ -38,7 +38,7 @@ class Listener extends Client
      *
      * @access public
      * @param  string $name
-     * @return null
+     * @return void
      */
     public function __construct($name)
     {

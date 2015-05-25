@@ -110,7 +110,7 @@ class Observer extends Client
      * transaction.
      *
      * @access public
-     * @return Otherwise $this
+     * @return Observer $this
      */
     public function restartListening()
     {
@@ -127,7 +127,7 @@ class Observer extends Client
      *
      * @access protected
      * @param  string    $channel
-     * @return Otherwise $this
+     * @return Observer $this
      */
     protected function listen($channel)
     {

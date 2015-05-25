@@ -116,6 +116,7 @@ class PgComposite extends ArrayTypeConverter
      * @access private
      * @param  array $data
      * @param  Session $session
+     * @param  string $method
      * @return array
      */
     private function convertArray(array $data, Session $session, $method)

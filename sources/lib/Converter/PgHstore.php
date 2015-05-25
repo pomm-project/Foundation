@@ -75,6 +75,7 @@ class PgHstore extends ArrayTypeConverter
      *
      * @access protected
      * @param  array $data
+     * @param  Session $session
      * @return array
      */
     protected function buildArray(array $data, Session $session)

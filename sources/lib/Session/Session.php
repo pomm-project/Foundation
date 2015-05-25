@@ -50,6 +50,7 @@ class Session implements LoggerAwareInterface
      *
      * @access  public
      * @param   Connection       $connection
+     * @param   ClientHolder     $client_holder
      * @param   string           $stamp
      * @return  null
      */
@@ -141,7 +142,7 @@ class Session implements LoggerAwareInterface
      * client holder.
      *
      * @access  public
-     * @param   Client  $client
+     * @param   ClientInterface $client
      * @return  Session $this
      */
     public function registerClient(ClientInterface $client)

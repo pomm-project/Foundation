@@ -34,7 +34,7 @@ class ConverterClient extends Client
      *
      * @access public
      * @param  string    $name
-     * @param  Converter $converter
+     * @param  ConverterInterface $converter
      * @return void
      */
     public function __construct($name, ConverterInterface $converter)

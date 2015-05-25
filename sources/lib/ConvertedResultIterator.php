@@ -56,7 +56,7 @@ class ConvertedResultIterator extends ResultIterator
      *
      * Get the result types from the result handler.
      *
-     * @access protectd
+     * @access protected
      * @return ResultIterator $this
      */
     protected function initTypes()

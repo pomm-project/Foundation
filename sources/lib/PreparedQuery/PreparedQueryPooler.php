@@ -57,7 +57,7 @@ class PreparedQueryPooler extends ClientPooler
      * createClient
      *
      * @see    ClientPooler
-     * @param  string  SQL query
+     * @param  string $sql SQL query
      * @return PreparedQuery
      */
     public function createClient($sql)

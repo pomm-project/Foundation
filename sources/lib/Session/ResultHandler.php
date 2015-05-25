@@ -102,7 +102,7 @@ class ResultHandler
      * Return the number of fields of a result.
      *
      * @access public
-     * @return long
+     * @return int long
      */
     public function countFields()
     {
@@ -115,7 +115,7 @@ class ResultHandler
      * Return the number of rows in a result.
      *
      * @access public
-     * @return long
+     * @return int long
      */
     public function countRows()
     {
@@ -147,7 +147,7 @@ class ResultHandler
      * Return the associated type of a field.
      *
      * @access public
-     * @param  int    $field_no
+     * @param  int $name
      * @return string
      */
     public function getFieldType($name)
@@ -183,7 +183,7 @@ class ResultHandler
      *
      * @access protected
      * @param  string $name
-     * @return long
+     * @return int long
      */
     protected function getFieldNumber($name)
     {

@@ -35,7 +35,7 @@ class SimpleQueryManager extends QueryManagerClient
      * Perform a simple escaped query and return converted result iterator.
      *
      * @access public
-     * @param  sting $sql
+     * @param  string $sql
      * @param  array $parameters
      * @return ConvertedResultIterator
      */

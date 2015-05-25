@@ -55,7 +55,7 @@ class QueryManagerPooler extends ClientPooler
      * createClient
      *
      * @see    ClientPooler
-     * @param  string   $client_class_name
+     * @param  string $client Client class name
      * @throws  FoundationException
      * @return ClientInterface
      */

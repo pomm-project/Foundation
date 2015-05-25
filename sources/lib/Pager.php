@@ -164,7 +164,7 @@ class Pager
      * Get maximum result per page.
      *
      * @access public
-     * @return Interger
+     * @return int
      */
     public function getMaxPerPage()
     {

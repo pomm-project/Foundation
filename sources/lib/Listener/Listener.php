@@ -72,7 +72,7 @@ class Listener extends Client
      *
      * @access public
      * @param  callable $action
-     * @throw  FoundationException if $action is not a callable.
+     * @throws  FoundationException if $action is not a callable.
      * @return Listener $this
      */
     public function attachAction(callable $action)

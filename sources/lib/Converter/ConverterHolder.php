@@ -59,7 +59,7 @@ class ConverterHolder
      * @param  string             $name
      * @param  ConverterInterface $converter
      * @param  bool               $strict (default true)
-     * @throw  ConverterException if $name already exists and strict.
+     * @throws  ConverterException if $name already exists and strict.
      * @return ConverterHolder    $this
      */
     protected function addConverter($name, ConverterInterface $converter, $strict = null)
@@ -132,7 +132,7 @@ class ConverterHolder
      * @access public
      * @param  string          $name
      * @param  string          $type
-     * @throw  ConverterException if $name does not exist.
+     * @throws  ConverterException if $name does not exist.
      * @return ConverterHolder $this
      */
     public function addTypeToConverter($name, $type)
@@ -159,7 +159,7 @@ class ConverterHolder
      *
      * @access public
      * @param  string             $type
-     * @throw  ConverterException if there are no converters associated.
+     * @throws  ConverterException if there are no converters associated.
      * @return ConverterInterface
      */
     public function getConverterForType($type)

@@ -73,7 +73,7 @@ class ConverterPooler extends ClientPooler
      * If not, an exception is thrown.
      *
      * @see   ClientPooler
-     * @throw ConverterException
+     * @throws ConverterException
      */
     public function createClient($identifier)
     {

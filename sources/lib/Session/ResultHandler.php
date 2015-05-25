@@ -82,7 +82,7 @@ class ResultHandler
      *
      * @access public
      * @param  int   $index
-     * @throw OutOfBoundsException if $index out of bounds.
+     * @throws OutOfBoundsException if $index out of bounds.
      * @return array
      */
     public function fetchRow($index)
@@ -230,7 +230,7 @@ class ResultHandler
      *
      * @access public
      * @param  string   $name
-     * @throw  FoundationException on error
+     * @throws  FoundationException on error
      * @return int|null
      */
     public function getTypeOid($name)

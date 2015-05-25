@@ -79,7 +79,7 @@ class Connection
      *
      * @access public
      * @param  array               $configuration
-     * @throw  ConnectionException if connection is already up.
+     * @throws  ConnectionException if connection is already up.
      * @return Connection          $this
      */
     public function addConfiguration(array $configuration)
@@ -187,7 +187,7 @@ class Connection
      * Open a connection on the database.
      *
      * @access private
-     * @throw  ConnectionException if connection fails.
+     * @throws  ConnectionException if connection fails.
      * return  Connection $this
      */
     private function launch()

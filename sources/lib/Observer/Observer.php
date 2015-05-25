@@ -170,7 +170,7 @@ class Observer extends Client
      * Check if a notification is pending. If so, a NotificationException is thrown.
      *
      * @access public
-     * @throw  NotificationException
+     * @throws  NotificationException
      * @return Observer $this
      */
     public function throwNotification()

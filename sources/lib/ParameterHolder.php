@@ -96,7 +96,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * Throw an exception if a param is not set
      *
      * @access public
-     * @throw  FoundationException
+     * @throws  FoundationException
      * @param  string          $name the parameter's name
      * @return ParameterHolder $this
      */
@@ -135,7 +135,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * not, an exception is thrown.
      *
      * @access public
-     * @throw  FoundationException
+     * @throws  FoundationException
      * @param  string          $name   the parameter's name
      * @param  array           $values
      * @return ParameterHolder $this

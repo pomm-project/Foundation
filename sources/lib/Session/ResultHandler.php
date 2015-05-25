@@ -82,7 +82,7 @@ class ResultHandler
      *
      * @access public
      * @param  int   $index
-     * @throws OutOfBoundsException if $index out of bounds.
+     * @throws \OutOfBoundsException if $index out of bounds.
      * @return array
      */
     public function fetchRow($index)
@@ -165,6 +165,7 @@ class ResultHandler
      * @access public
      * @param  int    $field_no
      * @return string
+     * @throws \Exception
      */
     public function getFieldName($field_no)
     {

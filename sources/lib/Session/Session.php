@@ -298,7 +298,7 @@ ERROR;
      * @access  public
      * @param   string                   $method
      * @param   array                    $arguments
-     * @throws  BadFunctionCallException if unknown method
+     * @throws  \BadFunctionCallException if unknown method
      * @throws  FoundationException      if no poolers found
      * @return  ClientInterface
      */

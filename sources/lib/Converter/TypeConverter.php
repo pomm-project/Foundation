@@ -128,6 +128,7 @@ abstract class TypeConverter implements ConverterInterface
      * @access protected
      * @param  mixed $data
      * @return BaseRange
+     * @throws ConverterException
      */
     protected function createObjectFrom($data)
     {

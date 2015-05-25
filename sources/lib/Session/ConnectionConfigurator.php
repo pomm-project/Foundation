@@ -101,8 +101,8 @@ class ConnectionConfigurator
      * Sets the different parameters from the DSN.
      *
      * @access private
-     * @param  string         DSN
      * @return Connection $this
+     * @throws ConnectionException
      */
     private function parseDsn()
     {
@@ -118,7 +118,7 @@ class ConnectionConfigurator
         $adapter = $matchs[1];
 
         if ($matchs[2] === null) {
-            throw ConnectionException(sprintf('No user information in dsn "%s".', $dsn));
+            throw new ConnectionException(sprintf('No user information in dsn "%s".', $dsn));
         }
 
         $user = $matchs[2];
@@ -199,6 +199,7 @@ class ConnectionConfigurator
      *
      * @access public
      * @return array
+     * @throws ConnectionException
      */
     public function getConfiguration()
     {

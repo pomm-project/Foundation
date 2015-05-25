@@ -74,7 +74,7 @@ class PgTimestamp implements ConverterInterface
      *
      * @access protected
      * @param  mixed $data
-     * @throws  \ConverterException
+     * @throws ConverterException
      * @return \DateTime
      */
     protected function checkData($data)

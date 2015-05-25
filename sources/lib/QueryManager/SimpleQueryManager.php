@@ -13,6 +13,7 @@ use PommProject\Foundation\ConvertedResultIterator;
 use PommProject\Foundation\Listener\SendNotificationTrait;
 use PommProject\Foundation\QueryManager\QueryManagerClient;
 use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
+use PommProject\Foundation\Session\ResultHandler;
 
 /**
  * SimpleQueryManager

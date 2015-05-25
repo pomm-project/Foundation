@@ -47,6 +47,7 @@ class Connection
      *
      * @access public
      * @param  string $dsn
+     * @param  array $configuration
      */
     public function __construct($dsn, array $configuration = [])
     {
@@ -114,7 +115,7 @@ class Connection
      * Return the connection handler. If no connection are open, it opens one.
      *
      * @access protected
-     * @throw  ConnectionException if connection is open in a bad state.
+     * @throws  ConnectionException if connection is open in a bad state.
      * @return resource
      */
     protected function getHandler()
@@ -248,7 +249,8 @@ class Connection
      * Check if the handler is set and throw an Exception if yes.
      *
      * @access private
-     * @param  string         error_message
+     * @param  string     $error_message
+     * @throws ConnectionException
      * @return Connection $this
      */
     private function checkConnectionUp($error_message = '')
@@ -292,8 +294,8 @@ class Connection
      *
      * @access protected
      * @param  string (default null)
-     * @throw  ConnectionException if no response are available.
-     * @throw  SqlException if the result is an error.
+     * @throws  ConnectionException if no response are available.
+     * @throws  SqlException if the result is an error.
      * @return ResultHandler|array
      */
     protected function getQueryResult($sql = null)
@@ -345,7 +347,7 @@ class Connection
      * Escape a text value.
      *
      * @access public
-     * @param  string The string to be escaped
+     * @param  string $string The string to be escaped
      * @return string the escaped string.
      */
     public function escapeLiteral($string)
@@ -389,6 +391,7 @@ class Connection
      * @access public
      * @param  string        $query
      * @param  array         $parameters
+     * @throws ConnectionException
      * @return ResultHandler query result wrapper
      */
     public function sendQueryWithParameters($query, array $parameters = [])
@@ -447,6 +450,7 @@ class Connection
      * @access protected
      * @param  mixed      $query_return
      * @param  string     $sql
+     * @throws ConnectionException
      * @return Connection $this
      */
     protected function testQuery($query_return, $sql)

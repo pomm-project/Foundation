@@ -35,7 +35,6 @@ class ConverterPooler extends ClientPooler
      *
      * @access public
      * @param  ConverterHolder $converter_holder
-     * @return \PommProject\Foundation\Client\ClientPoolerInterface
      */
     public function __construct(ConverterHolder $converter_holder)
     {

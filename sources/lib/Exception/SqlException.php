@@ -30,9 +30,10 @@ class SqlException extends FoundationException
      * __construct
      *
      * @access public
-     * @param  resource $result_resource
-     * @param  string   $sql
-     * @return void
+     * @param  resource   $result_resource
+     * @param  string     $sql
+     * @param  string     $code
+     * @param  \Exception $e
      */
     public function __construct($result_resource, $sql, $code = null, \Exception $e = null)
     {

@@ -46,7 +46,6 @@ abstract class TypeConverter implements ConverterInterface
      *
      * @access public
      * @param  string $class_name
-     * @return void
      */
     public function __construct($class_name = null)
     {

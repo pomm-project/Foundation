@@ -45,7 +45,6 @@ class SessionBuilder
      * @access public
      * @param array             $configuration
      * @param ConverterHolder   $converter_holder
-     * @return null
      */
     public function __construct(array $configuration, ConverterHolder $converter_holder = null)
     {

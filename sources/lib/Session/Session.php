@@ -52,7 +52,6 @@ class Session implements LoggerAwareInterface
      * @param   Connection       $connection
      * @param   ClientHolder     $client_holder
      * @param   string           $stamp
-     * @return  null
      */
     public function __construct(
         Connection      $connection,

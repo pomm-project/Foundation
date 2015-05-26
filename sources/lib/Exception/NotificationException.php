@@ -32,7 +32,6 @@ class NotificationException extends FoundationException
      *
      * @access public
      * @param  array $notification
-     * @return void
      */
     public function __construct(array $notification)
     {

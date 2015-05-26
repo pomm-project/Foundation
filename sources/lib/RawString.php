@@ -33,7 +33,6 @@ class RawString
      *
      * @access public
      * @param  string $expression
-     * @return null
      */
     public function __construct($expression)
     {

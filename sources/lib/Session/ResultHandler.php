@@ -32,7 +32,6 @@ class ResultHandler
      *
      * @access public
      * @param  resource $result_resource
-     * @return void
      */
     public function __construct($result_resource)
     {

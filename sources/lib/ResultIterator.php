@@ -35,8 +35,6 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
      *
      * @access public
      * @param  ResultHandler $result
-     * @param  Session       $session
-     * @return void
      */
     public function __construct(ResultHandler $result)
     {

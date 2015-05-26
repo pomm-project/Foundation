@@ -31,7 +31,6 @@ class Point
      *
      * @access public
      * @param  string $description
-     * @return void
      */
     public function __construct($description)
     {

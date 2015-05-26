@@ -34,8 +34,7 @@ class ConnectionConfigurator
      * Initialize configuration.
      *
      * @access public
-     * @param  array $configuration
-     * @return null
+     * @param  array $dsn
      */
     public function __construct($dsn)
     {

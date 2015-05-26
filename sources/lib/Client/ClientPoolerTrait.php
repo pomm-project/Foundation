@@ -113,6 +113,7 @@ trait ClientPoolerTrait
      *
      * @access protected
      * @return Session
+     * @throws FoundationException
      */
     protected function getSession()
     {

@@ -56,6 +56,7 @@ class PreparedQuery extends Client
      * @access public
      * @param  string $sql SQL query
      * @return void
+     * @throws FoundationException
      */
     public function __construct($sql)
     {

@@ -107,7 +107,7 @@ class PgJson implements ConverterInterface
      *
      * @access protected
      * @param  mixed $data
-     * @throw  ConverterException
+     * @throws  ConverterException
      * @return string
      */
     protected function jsonEncode($data)

@@ -71,7 +71,7 @@ class PgInterval implements ConverterInterface
      * @access protected
      * @param  mixed $data
      * @throws ConverterException
-     * @return DateInterval $data
+     * @return \DateInterval $data
      */
     protected function checkData($data)
     {

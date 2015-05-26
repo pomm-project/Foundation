@@ -65,7 +65,7 @@ trait QueryParameterParserTrait
      * PHP representation to Postgresql data value.
      *
      * @access  public
-     * @param   mixed   SQL query.
+     * @param   mixed $string SQL query.
      * @return  array
      */
     public function getParametersType($string)

@@ -11,6 +11,7 @@ namespace PommProject\Foundation\Inspector;
 
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Client\ClientPoolerInterface;
+use PommProject\Foundation\Exception\FoundationException;
 
 /**
  * InspectorPooler
@@ -55,6 +56,7 @@ class InspectorPooler extends ClientPooler
      *
      * @see    ClientPooler
      * @return Inspector
+     * @throws FoundationException
      */
     protected function createClient($identifier)
     {

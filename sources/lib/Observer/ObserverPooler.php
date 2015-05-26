@@ -25,7 +25,7 @@ use PommProject\Foundation\Client\ClientPooler;
  */
 class ObserverPooler extends ClientPooler
 {
-    /*
+    /**
      * getPoolerType
      *
      * @see ClientPoolerInterface

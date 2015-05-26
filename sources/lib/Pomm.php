@@ -109,6 +109,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * @access  public
      * @param   string  $name
      * @return  Pomm    $this
+     * @throws FoundationException
      */
     public function setDefaultBuilder($name)
     {
@@ -133,6 +134,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * @access  public
      * @return  BaseSession
+     * @throws FoundationException
      */
     public function getDefaultSession()
     {

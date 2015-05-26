@@ -13,6 +13,7 @@ use PommProject\Foundation\ConvertedResultIterator;
 use PommProject\Foundation\Listener\SendNotificationTrait;
 use PommProject\Foundation\QueryManager\QueryManagerClient;
 use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
+use PommProject\Foundation\Session\ResultHandler;
 
 /**
  * SimpleQueryManager
@@ -35,7 +36,7 @@ class SimpleQueryManager extends QueryManagerClient
      * Perform a simple escaped query and return converted result iterator.
      *
      * @access public
-     * @param  sting $sql
+     * @param  string $sql
      * @param  array $parameters
      * @return ConvertedResultIterator
      */

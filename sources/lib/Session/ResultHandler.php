@@ -82,7 +82,7 @@ class ResultHandler
      *
      * @access public
      * @param  int   $index
-     * @throw OutOfBoundsException if $index out of bounds.
+     * @throws \OutOfBoundsException if $index out of bounds.
      * @return array
      */
     public function fetchRow($index)
@@ -102,7 +102,7 @@ class ResultHandler
      * Return the number of fields of a result.
      *
      * @access public
-     * @return long
+     * @return int long
      */
     public function countFields()
     {
@@ -115,7 +115,7 @@ class ResultHandler
      * Return the number of rows in a result.
      *
      * @access public
-     * @return long
+     * @return int long
      */
     public function countRows()
     {
@@ -147,7 +147,7 @@ class ResultHandler
      * Return the associated type of a field.
      *
      * @access public
-     * @param  int    $field_no
+     * @param  int $name
      * @return string
      */
     public function getFieldType($name)
@@ -165,6 +165,7 @@ class ResultHandler
      * @access public
      * @param  int    $field_no
      * @return string
+     * @throws \Exception
      */
     public function getFieldName($field_no)
     {
@@ -182,7 +183,7 @@ class ResultHandler
      *
      * @access protected
      * @param  string $name
-     * @return long
+     * @return int long
      */
     protected function getFieldNumber($name)
     {
@@ -230,7 +231,7 @@ class ResultHandler
      *
      * @access public
      * @param  string   $name
-     * @throw  FoundationException on error
+     * @throws  FoundationException on error
      * @return int|null
      */
     public function getTypeOid($name)

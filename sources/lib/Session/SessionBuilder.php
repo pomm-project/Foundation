@@ -169,7 +169,7 @@ class SessionBuilder
      *
      * @access protected
      * @param  string   $dsn
-     * @param  array  $connection_configuration
+     * @param  string|array $connection_configuration
      * @return Connection
      */
     protected function createConnection($dsn, $connection_configuration)

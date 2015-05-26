@@ -87,7 +87,7 @@ The point here is to understand that the instantiated clients are automatically 
 
 ## Query manager and converter system.
 
-With foundation, performing a query and return a converted result iterator is performed by the `QueryManager` client.
+With Foundation, performing a query and return a converted result iterator is performed by the `QueryManager` client.
 
 ```php
 <?php

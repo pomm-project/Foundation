@@ -36,7 +36,6 @@ class Observer extends Client
      *
      * @access public
      * @param  string $channel
-     * @return void
      */
     public function __construct($channel)
     {

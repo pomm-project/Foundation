@@ -31,7 +31,6 @@ class Circle
      *
      * @access public
      * @param  string $description
-     * @return void
      * @throws \InvalidArgumentException
      */
     public function __construct($description)

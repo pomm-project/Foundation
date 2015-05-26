@@ -45,7 +45,6 @@ class SessionBuilder
      * @access public
      * @param array             $configuration
      * @param ConverterHolder   $converter_holder
-     * @return null
      */
     public function __construct(array $configuration, ConverterHolder $converter_holder = null)
     {
@@ -169,7 +168,7 @@ class SessionBuilder
      *
      * @access protected
      * @param  string   $dsn
-     * @param  array  $connection_configuration
+     * @param  string|array $connection_configuration
      * @return Connection
      */
     protected function createConnection($dsn, $connection_configuration)

@@ -56,17 +56,13 @@ class Where
      */
     public static function createWhereIn($element, array $values)
     {
-        return new self(sprintf(
-            "%s IN (%s)",
-            $element, join(", ", static::escapeSet($values))),
-            static::extractValues($values)
-        );
+        return self::createGroupCondition($element, 'IN', $values);
     }
 
     /**
      * createWhereNotIn
      *
-     * Create an escpaed NOT IN clause.
+     * Create an escaped NOT IN clause.
      *
      * @access public
      * @param  string $element
@@ -75,9 +71,30 @@ class Where
      */
     public static function createWhereNotIn($element, array $values)
     {
-        return new self(sprintf(
-            "%s NOT IN (%s)",
-            $element, join(", ", static::escapeSet($values))),
+        return self::createGroupCondition($element, 'NOT IN', $values);
+    }
+
+    /**
+     * createGroupCondition
+     *
+     * Create a Where instance with multiple escaped parameters. This is mainly
+     * useful for IN or NOT IN clauses.
+     *
+     * @access public
+     * @param  string $element
+     * @param  string $operation
+     * @param  array  $values
+     * @return Where
+     */
+    public static function createGroupCondition($element, $operation, array $values)
+    {
+        return new self(
+            sprintf(
+                "%s %s (%s)",
+                $element,
+                $operation,
+                join(", ", static::escapeSet($values))
+            ),
             static::extractValues($values)
         );
     }

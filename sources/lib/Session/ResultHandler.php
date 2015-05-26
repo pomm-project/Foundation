@@ -68,7 +68,7 @@ class ResultHandler
      */
     public function free()
     {
-        $result = @pg_free_result($this->handler);
+        @pg_free_result($this->handler);
         $this->handler = null;
 
         return $this;

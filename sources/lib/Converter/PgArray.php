@@ -37,8 +37,8 @@ class PgArray extends ArrayTypeConverter
      */
     public static function getSubType($type)
     {
-        if (preg_match('/^(.+)\[\]$/', $type, $matchs) || preg_match('/^_(.+)$/', $type, $matchs)) {
-            return $matchs[1];
+        if (preg_match('/^(.+)\[\]$/', $type, $matches) || preg_match('/^_(.+)$/', $type, $matches)) {
+            return $matches[1];
         }
 
         return $type;

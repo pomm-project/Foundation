@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Test\Unit\Session;
 
 use Atoum;
+use PommProject\Foundation\Exception\SqlException;
 use PommProject\Foundation\Session\Connection as PommConnection;
 
 class Connection extends Atoum
@@ -36,6 +37,8 @@ class Connection extends Atoum
                     $connection->executeAnonymousQuery('bad query');
                 })
             ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
+            ->string($this->exception->getSQLErrorState())
+            ->isIdenticalTo(SqlException::SYNTAX_ERROR)
             ->array($connection->executeAnonymousQuery('select true; select false; select null'))
             ->hasSize(3)
             ->exception(function() use ($connection) {

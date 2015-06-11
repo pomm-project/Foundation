@@ -67,6 +67,7 @@ class Connection
     {
         if ($this->hasHandler()) {
             pg_close($this->handler);
+            $this->handler = null;
         }
 
         return $this;
@@ -158,7 +159,7 @@ class Connection
             return static::CONNECTION_STATUS_NONE;
         }
 
-        switch (pg_connection_status($this->handler)) {
+        switch (@pg_connection_status($this->handler)) {
             case \PGSQL_CONNECTION_OK:
                 return static::CONNECTION_STATUS_GOOD;
             default:

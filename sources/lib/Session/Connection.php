@@ -29,6 +29,7 @@ class Connection
     const CONNECTION_STATUS_NONE    = 0;
     const CONNECTION_STATUS_GOOD    = 1;
     const CONNECTION_STATUS_BAD     = 2;
+    const CONNECTION_STATUS_CLOSED  = 3;
     const ISOLATION_READ_COMMITTED  = "READ COMMITTED";  // default
     const ISOLATION_READ_REPEATABLE = "READ REPEATABLE"; // from Pg 9.1
     const ISOLATION_SERIALIZABLE    = "SERIALIZABLE";    // changes in 9.1
@@ -39,6 +40,7 @@ class Connection
 
     protected $handler = null;
     protected $configurator;
+    private   $is_closed = false;
 
     /**
      * __construct
@@ -68,6 +70,7 @@ class Connection
         if ($this->hasHandler()) {
             pg_close($this->handler);
             $this->handler = null;
+            $this->is_closed = true;
         }
 
         return $this;
@@ -128,7 +131,15 @@ class Connection
             case static::CONNECTION_STATUS_GOOD:
                 return $this->handler;
             case static::CONNECTION_STATUS_BAD:
-                throw new ConnectionException(sprintf("Connection problem. Read your server's log about this, I have no more informations."));
+                throw new ConnectionException(
+                    sprintf(
+                        "Connection problem. Read your server's log about this, I have no more informations."
+                    )
+                );
+            case static::CONNECTION_STATUS_CLOSED:
+                throw new ConnectionException(
+                    sprintf("Connection has been closed, no further queries can be sent.")
+                );
         }
     }
 
@@ -156,7 +167,11 @@ class Connection
     public function getConnectionStatus()
     {
         if (!$this->hasHandler()) {
-            return static::CONNECTION_STATUS_NONE;
+            if ($this->is_closed) {
+                return static::CONNECTION_STATUS_CLOSED;
+            } else {
+                return static::CONNECTION_STATUS_NONE;
+            }
         }
 
         switch (@pg_connection_status($this->handler)) {

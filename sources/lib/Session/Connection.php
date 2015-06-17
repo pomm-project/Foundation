@@ -402,21 +402,10 @@ class Connection
             $parameters
         );
 
-        try {
-            return $this
-                ->testQuery($res, $query)
-                ->getQueryResult($query)
-                ;
-        } catch (SqlException $e) {
-            throw new ConnectionException(
-                sprintf(
-                    "Parameters = {%s}.",
-                    print_r($parameters, true)
-                ),
-                null,
-                $e
-            );
-        }
+        return $this
+            ->testQuery($res, $query)
+            ->getQueryResult($query)
+            ;
     }
 
     /**

@@ -12,7 +12,7 @@ namespace PommProject\Foundation\Converter\Type;
 /**
  * Point
  *
- * PHP type for postgresql's point type.
+ * PHP type for PostgreSQL's point type.
  *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT
@@ -36,7 +36,7 @@ class Point
     {
         $description = trim($description, ' ()');
 
-        if (!preg_match('/([0-9e\-+\.]+), *([0-9e\-+\.]+)/', $description, $matchs)) {
+        if (!preg_match('/([0-9e\-+\.]+), *([0-9e\-+\.]+)/', $description, $matches)) {
 
             throw new \InvalidArgumentException(
                 sprintf(
@@ -46,8 +46,8 @@ class Point
             );
         }
 
-        $this->x = (float) $matchs[1];
-        $this->y = (float) $matchs[2];
+        $this->x = (float) $matches[1];
+        $this->y = (float) $matches[2];
     }
 
     /**

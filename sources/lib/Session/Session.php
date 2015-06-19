@@ -304,12 +304,12 @@ ERROR;
      */
     public function __call($method, $arguments)
     {
-        if (!preg_match('/get([A-Z][A-Za-z]+)/', $method, $matchs)) {
+        if (!preg_match('/get([A-Z][A-Za-z]+)/', $method, $matches)) {
             throw new \BadFunctionCallException(sprintf("Unknown method 'Session::%s()'.", $method));
         }
 
         return $this->getClientUsingPooler(
-            Inflector::underscore($matchs[1]),
+            Inflector::underscore($matches[1]),
             count($arguments) > 0 ? $arguments[0] : null
         );
     }

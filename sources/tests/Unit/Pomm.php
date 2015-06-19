@@ -65,7 +65,7 @@ class Pomm extends Atoum
                         ],
                     ]); })
                 ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
-                ->message->contains('Could not instanciate')
+                ->message->contains('Could not instantiate')
                 ;
     }
 

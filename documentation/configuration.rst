@@ -5,15 +5,15 @@ Pomm-project Foundation
 Overview
 --------
 
-Foundation is a light, fast and versatile PHP Postgresql database framework. It can either be used on its own (to replace a DBAL by example) or to build a more complex `model manager`_. It is the first stone of `Pomm project`_ version 2.
+Foundation is a light, fast and versatile PHP PostgreSQL database framework. It can either be used on its own (to replace a DBAL by example) or to build a more complex `model manager`_. It is the first stone of `Pomm project`_ version 2.
 
 ..  _`Pomm project`: http://www.pomm-project.org
 ..  _`model manager`: https://github.com/pomm-project/ModelManager
 
 Foundation manages relations between a database *connection* and *clients* through *sessions*. It consists of several classes to configure, open, deal with and close *sessions*.
 
- - ``Pomm`` is the service class, it registers *session builders* and cache spawned *sessions*.
- - ``SessionBuilder`` configure and build *sessions*.
+ - ``Pomm`` is the service class, it registers *session builders* and caches spawned *sessions*.
+ - ``SessionBuilder`` configures and builds *sessions*.
  - ``Session`` holds *clients* and *poolers* and the *connection*.
  - ``Client`` abstract class that implements ``ClientInterface``. Instances are *session*'s *clients*.
  - ``ClientPooler`` abstract class that implements ``ClientPoolerInterface``. They manage *clients* in *sessions*.
@@ -67,7 +67,7 @@ It is possible to declare session builders either using ``Pomm``'s class constru
     $pomm = new Pomm(['first_db' => ['dsn' => 'pgsql://user:pass@host/first_db']]);
     $pomm->addBuilder('second_db', new MySessionBuilder(['dsn' => 'pgsql://user:pass@host/second_db']));
 
-It is often more practial to declare all *sessions* configuration from the constructor directly even if the builder is a custom class:
+It is often more practical to declare all *sessions* configuration from the constructor directly even if the builder is a custom class:
 
 .. code:: php
     <?php
@@ -88,7 +88,7 @@ It is often more practial to declare all *sessions* configuration from the const
 
 Each session builder has a name. This name is important, it represents a configuration and is not coupled with the DSN. This is particularly useful when an application has to switch from a database to another with the same configuration.
 
-Spanwing sessions
+Spawning sessions
 ~~~~~~~~~~~~~~~~~
 
 The easiest way to get a session from the *service* is to use the ``ArrayAccess`` implementation:
@@ -108,7 +108,7 @@ The ``getSession($name)`` method checks if a *session* using this *session build
 Context dependent configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Session builders do configure session but in some cases, configuration options may be context dependent like development options or production options. This kind of configuration occures directly in Pomm service passing anonymous functions:
+Session builders do configure session but in some cases, configuration options may be context dependent like development options or production options. This kind of configuration occurs directly in Pomm service passing anonymous functions:
 
 .. code:: php
 
@@ -116,7 +116,7 @@ Session builders do configure session but in some cases, configuration options m
     // …
     $pomm->addPostConfiguration('first_db', function($session) { /* … */ });
 
-When the session is created, the post configuration functions are launched and the session is returned.
+When the session is created, the post-configuration functions are launched and the session is returned.
 
 Session builder
 ---------------
@@ -126,7 +126,7 @@ Session builder
 Configuration
 ~~~~~~~~~~~~~
 
-There are several ways set configuration:
+There are several ways to set the configuration:
 
 .. code:: php
 
@@ -135,7 +135,7 @@ There are several ways set configuration:
     $session_builder = new SessionBuilder(['dsn' => 'pgsql://user:pass@host:port/db_name']);
     $session_builder->addParameter('my_parameter', 'my_value');
 
-In a more general way, ``SessionBuilder`` class is made to be overloaded by a project dedicated *session builder* class. It is then possible to overload the ``getDefaultConfiguration()`` method. It keeps the class configurable with a custom default configuration.
+In a more general way, ``SessionBuilder`` class is made to be overloaded by a project-dedicated *session builder* class. It is then possible to overload the ``getDefaultConfiguration()`` method. It keeps the class configurable with a custom default configuration.
 
 Session customization
 ~~~~~~~~~~~~~~~~~~~~~
@@ -145,7 +145,7 @@ The ``SessionBuilder`` class is made to be overloaded. Foundation package incide
  - ``PommProject\Foundation\Session\SessionBuilder`` blank session builder.
  - ``PommProject\Foundation\SessionBuilder`` builder with Foundation *clients* and *poolers* loaded and configured.
 
-It is a encouraged to create a project dedicated *session builder* that overload one of these classes. Several methods are available to change a *session builder* behavior:
+It is encouraged to create a project-dedicated *session builder* that overloads one of these classes. Several methods are available to change a *session builder* behavior:
 
 :``preConfigure()``:    Change the configuration just before a session is instantiated.
 :``postConfigure($session)``:  Place where default *session poolers* and *clients* are registered into a brand new *session*.
@@ -167,16 +167,16 @@ The *converter holder* is a special configuration setting. It holds all the conv
         new MyConverterHolder()
         );
 
-The ``initializeConverterHolder()`` method is used internally to register default Postgresql types converters, use it to add your own default converters. The ``ConverterHolder`` instance is passed as reference. Remember this converter holder will be used for **all** sessions created by the builder whatever their DSN. If a database specific converter is to be registered, the best place might be the ``postConfigure`` method, dealing directly with the `converter pooler`_.
+The ``initializeConverterHolder()`` method is used internally to register default PostgreSQL types converters, use it to add your own default converters. The ``ConverterHolder`` instance is passed as reference. Remember, this converter holder will be used for **all** sessions created by the builder whatever their DSN. If a database specific converter is to be registered, the best place for it might be the ``postConfigure`` method, dealing directly with the `converter pooler`_.
 
 Session
 -------
 
 *Session* is the keystone of the Foundation package. It provides a *connection* API to *clients*. To be able to do this, *clients* must register to the *session* using the ``registerClient(ClientInterface)`` method. The *session* adds the *client* in the *client pool*. In exchange, it injects itself in the *client* using the ``initialize(Session)`` method (see `Client`_). Starting from this, the *client* can use the *connection* and other *clients*.
 
-*Clients* are accessed using the ``getClient($type, $identifier)`` method. If no clients match the corresponding type and identifier, ``null`` is returned. This can be a problem when you expect a client to be present or to manage to instantiate one when needed. This is the role of the *client poolers* (aka *poolers*). *Poolers* are, in a way, *clients* manager for a given type. Not all types need a *pooler*, by example, the ``fixture`` clients type manage database test structures and data. They are here to create tables and types needed by tests on startup and to drop them on shutdown. Alternatively, the `prepared query pooler`_ takes the sql query as client identifier. If the given query has already been performed, it is re used. Otherwise, a new statement is prepared and then executed. When the *connection* goes down, all statements are deallocated.
+*Clients* are accessed using the ``getClient($type, $identifier)`` method. If no clients match the corresponding type and identifier, ``null`` is returned. This can be a problem when you expect a client to be present or to manage to instantiate one when needed. This is the role of the *client poolers* (aka *poolers*). *Poolers* are, in a way, *clients* manager for a given type. Not all types need a *pooler*, for example, the ``fixture`` clients type manage database test structures and data. They are here to create tables and types needed by tests on startup and to drop them on shutdown. Alternatively, the `prepared query pooler`_ takes the SQL query as client identifier. If the given query has already been performed, it is re used. Otherwise, a new statement is prepared and then executed. When the *connection* goes down, all statements are deallocated.
 
-Some *clients* may use *clients* from different types using their respective *poolers*. By example, the ``PreparedQueryManager`` *client* uses the `query manager pooler`_ and then the `converter pooler`_.
+Some *clients* may use *clients* from different types using their respective *poolers*. For example, the ``PreparedQueryManager`` *client* uses the `query manager pooler`_ and then the `converter pooler`_.
 
 There are several ways to access *clients* and *poolers* using the *session*:
 
@@ -215,9 +215,9 @@ All *clients* must implement ``ClientInterface``. Because a part of this impleme
 Client pooler
 -------------
 
-A *client pooler* manage *clients* of a given type. Its role is to return a client or throw an exception otherwise.
+A *client pooler* manages *clients* of a given type. Its role is to return a client or throw an exception otherwise.
 
-All *client poolers* must implement ``ClientPoolerInterface``. It is possible to easily implements this either by extending ``ClientPooler`` or using ``ClientPoolerTrait`` (the abstract class uses the trait). The interface defines three methods:
+All *client poolers* must implement ``ClientPoolerInterface``. It is possible to easily implement this either by extending ``ClientPooler`` or using ``ClientPoolerTrait`` (the abstract class uses the trait). The interface defines three methods:
 
 :``getPoolerType()``:   Return the type of *clients* managed by this *pooler*, not implemented in ``ClientPoolerTrait``.
 :``register(Session)``:  When the *pooler* is registered to the session, the session injects itself in the *pooler* using this method.
@@ -240,7 +240,7 @@ Converter pooler
 
 :Type:  converter
 
-Responsible of proposing converter *clients*. If a client is not found, it checks in the *converter holder* if the given type has a converter. If yes, it wrap the *converter* in a ``ConverterClient`` and register it to the session. There are as many ``ConverterClient`` as registered types but they can share the same *converter* instances.
+Responsible of proposing converter *clients*. If a client is not found, it checks in the *converter holder* if the given type has a converter. If yes, it wraps the *converter* in a ``ConverterClient`` and registers it to the session. There are as many ``ConverterClient`` as registered types but they can share the same *converter* instances.
 
 This way, it is possible to add custom converters or converters for database specific types like composite types. The best place to do that is in a `Session builder`_'s ``postConfigure(Session)`` method:
 
@@ -258,7 +258,7 @@ This way, it is possible to add custom converters or converters for database spe
             ;
     }
 
-Even though the converters coming with Foundation cover a broad range of Postgresql's type, it is possible to write custom converters as soon as they implement ``ConverterInterface``. Be aware that the format of the data coming from Postgres may be configuration dependant (dates, money, number etc.). Default converters fit the default configuration set in the `Session builder`_.
+Even though the converters coming with Foundation cover a broad range of PostgreSQL's types, it is possible to write custom converters as long as they implement ``ConverterInterface``. Be aware that the format of the data coming from Postgres may be configuration dependent (dates, money, number etc.). Default converters fit the default configuration set in the `Session builder`_.
 
 
 Inspector pooler
@@ -275,7 +275,7 @@ Listener pooler
 
 :Type:  listener
 
-A ``Listener`` is a class that can hold anonymous functions that are triggered when the listener receive a notification with the listener's name.
+A ``Listener`` is a class that can hold anonymous functions that are triggered when the listener receives a notification with the listener's name.
 
 Foundation owns a basic event dispatcher mechanism.
 
@@ -308,7 +308,7 @@ Observer pooler
 
 :Type:  observer
 
-Observer *pooler* aims at leveraging the ``LISTEN/NOTIFY`` mechanism in Postgresql. An observer *client* can be used to listen to Postgresql events sent with the ``NOTIFY`` SQL command. It is possible to ask the observer either to send back the event payload if any or to throw a ``NotificationException`` when a notification is caught.
+Observer *pooler* aims at leveraging the ``LISTEN/NOTIFY`` mechanism in PostgreSQL. An observer *client* can be used to listen to PostgreSQL events sent with the ``NOTIFY`` SQL command. It is possible to ask the observer either to send back the event payload if any or to throw a ``NotificationException`` when a notification is caught.
 
 
 Prepared query pooler
@@ -316,7 +316,7 @@ Prepared query pooler
 
 :Type: prepared_query
 
-This *pooler* prepares statements if they do not already exist and execute them with parameters:
+This *pooler* prepares statements if they do not already exist and executes them with parameters:
 
 .. code:: php
 

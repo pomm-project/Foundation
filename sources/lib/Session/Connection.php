@@ -94,7 +94,7 @@ class Connection
     /**
      * addConfigurationSetting
      *
-     * Add or everride a configuration definition.
+     * Add or override a configuration definition.
      *
      * @access public
      * @param  string     $name
@@ -127,7 +127,7 @@ class Connection
             case static::CONNECTION_STATUS_GOOD:
                 return $this->handler;
             case static::CONNECTION_STATUS_BAD:
-                throw new ConnectionException(sprintf("Connection problem. Read your server's log about this, I have no more informations."));
+                throw new ConnectionException(sprintf("Connection problem. Read your server's log about this, I have no more information."));
         }
     }
 
@@ -372,7 +372,7 @@ class Connection
     /**
      * unescapeBytea
      *
-     * Unescape postgresql bytea.
+     * Unescape PostgreSQL bytea.
      *
      * @access public
      * @param  string $bytea
@@ -461,12 +461,12 @@ class Connection
 
         return $this;
     }
-    
+
     /**
      * sendExecuteQuery
      *
      * Execute a prepared statement.
-     * The optional SQL parameter is for debuging purposes only.
+     * The optional SQL parameter is for debugging purposes only.
      *
      * @access public
      * @param  string        $identifier

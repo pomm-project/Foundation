@@ -121,8 +121,8 @@ class Observer extends Client
      *
      * Start to listen on the given channel. The observer automatically starts
      * listening when registered against the session.
-     * NOTE: When listen is issued in a tranaction it is unlisten when the
-     * transation is commited or rollback.
+     * NOTE: When listen is issued in a transaction it is unlisten when the
+     * transaction is committed or rollback.
      *
      * @access protected
      * @param  string    $channel

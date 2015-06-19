@@ -2,7 +2,7 @@
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/pomm-project/Foundation/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pomm-project/Foundation/?branch=master) [![Build Status](https://travis-ci.org/pomm-project/Foundation.svg?branch=master)](https://travis-ci.org/pomm-project/Foundation) [![Monthly Downloads](https://poser.pugx.org/pomm-project/foundation/d/monthly.png)](https://packagist.org/packages/pomm-project/foundation) [![License](https://poser.pugx.org/pomm-project/foundation/license.svg)](https://packagist.org/packages/pomm-project/foundation)
 
-This is the foundation component for the Pomm database framework. It works only with PHP >= 5.4.4 and Postgresql >= 9.1.
+This is the foundation component for the Pomm database framework. It works only with PHP >= 5.4.4 and PostgreSQL >= 9.1.
 
 Pomm Foundation is in Release Candidate (RC) state. This version will go in stable state soon and may be used for test purposes or to start new projects. 
 
@@ -12,7 +12,7 @@ Pomm components are available on [packagist](https://packagist.org/packages/pomm
 
 ## What is Foundation ?
 
-It is the main block of Pomm database framework. It handles connection configuration and sessions. If you are looking for a library to use Postgresql in your web development, you might want to look at [Pomm's model manager](https://github.com/pomm-project/ModelManager). If you want to create a database access layer, Foundation is the right tool.
+It is the main block of Pomm database framework. It handles connection configuration and sessions. If you are looking for a library to use PostgreSQL in your web development, you might want to look at [Pomm's model manager](https://github.com/pomm-project/ModelManager). If you want to create a database access layer, Foundation is the right tool.
 
 The easiest way to open a connection to the database server:
 
@@ -87,7 +87,7 @@ The point here is to understand that the instantiated clients are automatically 
 
 ## Query manager and converter system.
 
-With Foundation, performing a query and return a converted result iterator is performed by the `QueryManager` client.
+With Foundation, performing a query and returning a converted result iterator is performed by the `QueryManager` client.
 
 ```php
 <?php
@@ -107,7 +107,7 @@ foreach($iterator as $student) {
 }
 ```
 
-The `query` method returns an iterator on results. Data can then be fetched on demand from the database. All values are **converted** using Foundation converter system. It is also possible to fetch column oriented results instead of row oriented using the `slice()` method:
+The `query` method returns an iterator on results. Data can then be fetched on demand from the database. All values are **converted** using Foundation converter system. It is also possible to fetch column-oriented results instead of row-oriented using the `slice()` method:
 
 ```php
 <?php
@@ -120,7 +120,7 @@ $iterator = $pomm['my_db']
 printf("Names are: %s.\n", join(', ', $iterator->slice('name')));
 ```
 
-It is possible to use your own Query class as soon as it implements `QueryInterface`:
+It is possible to use your own Query class as long as it implements `QueryInterface`:
 
 ```php
 $result = $pomm['my_db']
@@ -129,7 +129,7 @@ $result = $pomm['my_db']
     ;
 ```
 
-The prepared query query manager stores prepared statements and re-use them when needed.
+The prepared query manager stores prepared statements and re-uses them when needed.
 
 ## Session builder
 
@@ -145,16 +145,16 @@ $pomm = new Pomm([
     ]);
 ```
 
-For convenience, it exists two `SessionBuilder`, one that just creates a blank session and the other that registers all poolers and clients needed for foundation to work:
+For convenience, there are two `SessionBuilder`s, one that just creates a blank session and the other that registers all poolers and clients needed for foundation to work:
 
  * `PommProject\Foundation\Session\SessionBuilder` vanilla session builder.
  * `PommProject\Foundation\SessionBuilder` full featured session builder.
 
 ## Tests
 
-This package uses Atoum as unit test framework. The tests are located in `sources/tests`. The test suite needs to access the database to ensure read and write operations are made in a consistent manner. You need to set up a database for that and fill the `sources/tests/config.php` file with the according DSN. For convenience, Foundation provides two classes that extend `Atoum` with a `Session`:
+This package uses Atoum as unit test framework. The tests are located in `sources/tests`. The test suite needs to access the database to ensure that read and write operations are made in a consistent manner. You need to set up a database for that and fill the `sources/tests/config.php` file with the according DSN. For convenience, Foundation provides two classes that extend `Atoum` with a `Session`:
 
  * `PommProject\Foundation\Tester\VanillaSessionAtoum`
  * `PommProject\Foundation\Tester\FoundationSessionAtoum`
 
-Make your test class to extend one of these will grant them with a `buildSession` method that returns a newly created session. Clients of these classe must implement a `initializeSession(Session $session)` method (even a blank one). It is often a good idea to provide a fixture class as a session client, this method is the right place to register it.
+Making your test class to extend one of these will grant them with a `buildSession` method that returns a newly created session. Clients of these classes must implement a `initializeSession(Session $session)` method (even a blank one). It is often a good idea to provide a fixture class as a session client, this method is the right place to register it.

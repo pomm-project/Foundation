@@ -20,7 +20,7 @@ use PommProject\Foundation\Converter\ConverterHolder;
  * SessionBuilder
  *
  * Session factory.
- * This clas is responsible of creating and configuring a session. It is a
+ * This class is responsible of creating and configuring a session. It is a
  * default configuration for session and is dedicated to be overloaded.
  *
  * @package Foundation
@@ -36,7 +36,7 @@ class SessionBuilder
     /**
      * __construct
      *
-     * Instanciate builder.
+     * Instantiate builder.
      *
      * Mandatory configuration options are:
      * dsn:  connection parameters
@@ -164,7 +164,7 @@ class SessionBuilder
     /**
      * createConnection
      *
-     * Connection instanciation.
+     * Connection instantiation.
      *
      * @access protected
      * @param  string   $dsn
@@ -179,7 +179,7 @@ class SessionBuilder
     /**
      * createSession
      *
-     * Session instanciation.
+     * Session instantiation.
      *
      * @access protected
      * @param  Connection   $connection
@@ -197,7 +197,7 @@ class SessionBuilder
     /**
      * createClientHolder
      *
-     * Instanciate ClientHolder.
+     * Instantiate ClientHolder.
      *
      * @access protected
      * @return ClientHolder

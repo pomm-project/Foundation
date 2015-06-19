@@ -65,7 +65,7 @@ class PgInterval implements ConverterInterface
     /**
      * checkData
      *
-     * Check if Data is a DateInterval. If not, it tries to instanciate a
+     * Check if Data is a DateInterval. If not, it tries to instantiate a
      * DateInterval with the given data.
      *
      * @access protected

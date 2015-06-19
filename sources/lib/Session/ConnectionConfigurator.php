@@ -16,7 +16,7 @@ use PommProject\Foundation\Exception\ConnectionException;
  * ConnectionConfigurator
  *
  * This class is responsible of configuring the connection.
- * It has to extract informations from the DSN and ensure required arguments
+ * It has to extract information from the DSN and ensure required arguments
  * are present.
  *
  * @package Foundation
@@ -106,36 +106,36 @@ class ConnectionConfigurator
     private function parseDsn()
     {
         $dsn = $this->configuration->mustHave('dsn')->getParameter('dsn');
-        if (!preg_match('#([a-z]+)://([^:@]+)(?::([^@]*))?(?:@([\w\.-]+|!/.+[^/]!)(?::(\w+))?)?/(.+)#', $dsn, $matchs)) {
+        if (!preg_match('#([a-z]+)://([^:@]+)(?::([^@]*))?(?:@([\w\.-]+|!/.+[^/]!)(?::(\w+))?)?/(.+)#', $dsn, $matches)) {
             throw new ConnectionException(sprintf('Could not parse DSN "%s".', $dsn));
         }
 
-        if ($matchs[1] == null || $matchs[1] !== 'pgsql') {
-            throw new ConnectionException(sprintf("bad protocol information '%s' in dsn '%s'. Pomm does only support 'pgsql' for now.", $matchs[1], $dsn));
+        if ($matches[1] == null || $matches[1] !== 'pgsql') {
+            throw new ConnectionException(sprintf("bad protocol information '%s' in dsn '%s'. Pomm does only support 'pgsql' for now.", $matches[1], $dsn));
         }
 
-        $adapter = $matchs[1];
+        $adapter = $matches[1];
 
-        if ($matchs[2] === null) {
+        if ($matches[2] === null) {
             throw new ConnectionException(sprintf('No user information in dsn "%s".', $dsn));
         }
 
-        $user = $matchs[2];
-        $pass = $matchs[3];
+        $user = $matches[2];
+        $pass = $matches[3];
 
-        if (preg_match('/!(.*)!/', $matchs[4], $host_matchs)) {
-            $host = $host_matchs[1];
+        if (preg_match('/!(.*)!/', $matches[4], $host_matches)) {
+            $host = $host_matches[1];
         } else {
-            $host = $matchs[4];
+            $host = $matches[4];
         }
 
-        $port = $matchs[5];
+        $port = $matches[5];
 
-        if ($matchs[6] === null) {
+        if ($matches[6] === null) {
             throw new ConnectionException(sprintf('No database name in dsn "%s".', $dsn));
         }
 
-        $database = $matchs[6];
+        $database = $matches[6];
         $this->configuration
             ->setParameter('adapter',  $adapter)
             ->setParameter('user',     $user)

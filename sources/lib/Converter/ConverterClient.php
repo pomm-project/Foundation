@@ -125,7 +125,7 @@ class ConverterClient extends Client
     /**
      * getConverter
      *
-     * Return the embeded converter.
+     * Return the embedded converter.
      *
      * @access public
      * @return ConverterInterface

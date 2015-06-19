@@ -38,11 +38,11 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     /**
      * __construct
      *
-     * Instanciate a new Pomm Service class. It takes an array of
-     * configurations as parameter. Following configurations settings are
+     * Instantiate a new Pomm Service class. It takes an array of
+     * configurations as parameter. Following configuration settings are
      * supported by this service for each configuration:
      *
-     * class_name   name of the DatabaseConfiguration class to instanciate.
+     * class_name   name of the DatabaseConfiguration class to instantiate.
      *
      * @access  public
      * @param   array $configurations
@@ -79,7 +79,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
         try {
             $reflection = new \ReflectionClass($builder_class);
 
-            if (!$reflection->isSubClassOf('\PommProject\Foundation\Session\SessionBuilder')) {
+            if (!$reflection->isSubclassOf('\PommProject\Foundation\Session\SessionBuilder')) {
                 throw new FoundationException(
                     sprintf(
                         "Class '%s' is not a subclass of \Pomm\Foundation\Session\SessionBuilder.",
@@ -90,7 +90,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
         } catch (\ReflectionException $e) {
             throw new FoundationException(
                 sprintf(
-                    "Could not instanciate class '%s'.",
+                    "Could not instantiate class '%s'.",
                     $builder_class
                 ),
                 null,

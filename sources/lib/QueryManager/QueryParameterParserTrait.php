@@ -60,9 +60,9 @@ trait QueryParameterParserTrait
      *
      * Return an array of the type specified with the parameters if any. It is
      * possible to give the type when passing parameters like « SELECT … WHERE
-     * field = $*::timestamptz ». In this case, Postgresql will assume the
+     * field = $*::timestamptz ». In this case, PostgreSQL will assume the
      * given parameter is a timestamp. Pomm uses these type hints to convert
-     * PHP representation to Postgresql data value.
+     * PHP representation to PostgreSQL data value.
      *
      * @access  public
      * @param   mixed $string SQL query.
@@ -70,8 +70,8 @@ trait QueryParameterParserTrait
      */
     public function getParametersType($string)
     {
-        preg_match_all('/\$\*(?:::([\w\."]+(?:\[\])?))?/', $string, $matchs);
+        preg_match_all('/\$\*(?:::([\w\."]+(?:\[\])?))?/', $string, $matches);
 
-        return str_replace('"','', $matchs[1]);
+        return str_replace('"','', $matches[1]);
     }
 }

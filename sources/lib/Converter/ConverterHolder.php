@@ -14,7 +14,7 @@ use PommProject\Foundation\Exception\ConverterException;
 /**
  * ConverterHolder
  *
- * Reponsible of holding all converters associated with their corresponding
+ * Responsible of holding all converters associated with their corresponding
  * types.
  *
  * @package Foundation
@@ -126,7 +126,7 @@ class ConverterHolder
     /**
      * addTypeToConverter
      *
-     * Make the given converter to support a new postgresql type. If the given
+     * Make the given converter to support a new PostgreSQL type. If the given
      * type is already defined, it is overrided with the new converter.
      *
      * @access public

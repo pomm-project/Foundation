@@ -78,7 +78,7 @@ SQL;
     /**
      * getTableOid
      *
-     * Return the table oid from postgresql catalog. If no table is found, null
+     * Return the table oid from PostgreSQL catalog. If no table is found, null
      * is returned.
      *
      * @access public
@@ -110,7 +110,7 @@ SQL;
     /**
      * getTableFieldInformation
      *
-     * Get table's field informations. If no fields are found, null is
+     * Get table's field information. If no fields are found, null is
      * returned.
      *
      * @access public
@@ -159,7 +159,7 @@ SQL;
      *
      * @access public
      * @param  string   $schema
-     * @param  Where    $where optionnal where clause.
+     * @param  Where    $where optional where clause.
      * @return int|null
      */
     public function getSchemaOid($schema, Where $where = null)
@@ -221,8 +221,8 @@ SQL;
     /**
      * getSchemaRelations
      *
-     * Return informations on relations in a given schema. An additional Where
-     * condition can be passed to filter against other criterias.
+     * Return information on relations in a given schema. An additional Where
+     * condition can be passed to filter against other criteria.
      *
      * @access public
      * @param  int                     $schema_oid

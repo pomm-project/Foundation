@@ -208,7 +208,7 @@ class Connection
 
         if ($this->getConnectionStatus() !== static::CONNECTION_STATUS_GOOD) {
             throw new ConnectionException(
-                sprintf("Connection open but in a bad state. Read your database server log to lear more about this.")
+                sprintf("Connection open but in a bad state. Read your database server log to learn more about this.")
             );
         }
 

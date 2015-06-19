@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Test\Unit\Session;
 
 use PommProject\Foundation\Session\Session                   as VanillaSession;
+use PommProject\Foundation\Session\Connection;
 use PommProject\Foundation\Tester\VanillaSessionAtoum;
 use Mock\PommProject\Foundation\Client\ClientInterface       as ClientInterfaceMock;
 use Mock\PommProject\Foundation\Client\ClientPoolerInterface as ClientPoolerInterfaceMock;
@@ -167,6 +168,28 @@ class Session extends VanillaSessionAtoum
             ->call('getClient')
             ->withArguments('ok')
             ->once()
+            ;
+    }
+
+    public function testShutdown()
+    {
+        $client_pooler_mock = $this->getClientPoolerInterfaceMock('test');
+        $session            = $this->buildSession()->registerClientPooler($client_pooler_mock);
+        $session->shutdown();
+
+        $this
+            ->exception(function() use ($session) { return $session->getTest('ok'); })
+            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->message->contains('is shutdown')
+            ->integer($session->getConnection()->getConnectionStatus())
+            ->isEqualTo(Connection::CONNECTION_STATUS_NONE)
+            ;
+        $session = $this->buildSession();
+        $session->getConnection()->executeAnonymousQuery('select true');
+        $session->shutdown();
+        $this
+            ->integer($session->getConnection()->getConnectionStatus())
+            ->isEqualTo(Connection::CONNECTION_STATUS_CLOSED)
             ;
     }
 }

@@ -121,7 +121,7 @@ class ClientHolder
      * see http://fr2.php.net/manual/en/class.recursivearrayiterator.php#106519
      *
      * @access public
-     * @return ClientHolder $this
+     * @return array exceptions caught during the shutdown
      */
     public function shutdown()
     {
@@ -140,10 +140,6 @@ class ClientHolder
 
         $this->clients = [];
 
-        if (count($exceptions) > 0) {
-            throw $exceptions[0]; // I wish I could embed all those exceptions.
-        }
-
-        return $this;
+        return $exceptions;
     }
 }

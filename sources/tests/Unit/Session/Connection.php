@@ -47,4 +47,28 @@ class Connection extends Atoum
             ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
             ;
     }
+
+    public function testSendQueryWithParameters()
+    {
+        $badQuery = 'select n where true = $1';
+        $parameters = array(true);
+
+        $connection = $this->getConnection($this->getDsn());
+        $this
+            ->object($connection->sendQueryWithParameters('select true where true = $1', $parameters))
+            ->isInstanceOf('\PommProject\Foundation\Session\ResultHandler')
+            ->exception(function() use ($connection, $badQuery, $parameters) {
+                $connection->sendQueryWithParameters($badQuery, $parameters);
+            })
+            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
+            ->string($this->exception->getSQLErrorState())
+            ->isIdenticalTo(SqlException::UNDEFINED_COLUMN)
+            ->and
+            ->array($this->exception->getQueryParameters())
+            ->isIdenticalTo($parameters)
+            ->and
+            ->string($this->exception->getQuery())
+            ->isIdenticalTo($badQuery)
+        ;
+    }
 }

@@ -407,16 +407,10 @@ class Connection
                 ->testQuery($res, $query)
                 ->getQueryResult($query)
                 ;
-        } catch (SqlException $e) {
-            throw new ConnectionException(
-                sprintf(
-                    "Parameters = {%s}.",
-                    print_r($parameters, true)
-                ),
-                null,
-                $e
-            );
+        } catch(SqlException $e) {
+            throw $e->setQueryParameters($parameters);
         }
+
     }
 
     /**

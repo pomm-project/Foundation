@@ -50,15 +50,15 @@ class Connection extends Atoum
 
     public function testSendQueryWithParameters()
     {
-        $badQuery = 'select n where true = $1';
-        $parameters = array(true);
+        $bad_query = 'select n where true = $1';
+        $parameters = [true];
 
         $connection = $this->getConnection($this->getDsn());
         $this
             ->object($connection->sendQueryWithParameters('select true where true = $1', $parameters))
             ->isInstanceOf('\PommProject\Foundation\Session\ResultHandler')
-            ->exception(function() use ($connection, $badQuery, $parameters) {
-                $connection->sendQueryWithParameters($badQuery, $parameters);
+            ->exception(function() use ($connection, $bad_query, $parameters) {
+                $connection->sendQueryWithParameters($bad_query, $parameters);
             })
             ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
             ->string($this->exception->getSQLErrorState())
@@ -68,7 +68,7 @@ class Connection extends Atoum
             ->isIdenticalTo($parameters)
             ->and
             ->string($this->exception->getQuery())
-            ->isIdenticalTo($badQuery)
+            ->isIdenticalTo($bad_query)
         ;
     }
 }

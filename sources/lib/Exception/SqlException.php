@@ -300,7 +300,7 @@ class SqlException extends FoundationException
 
     protected $result_resource;
     protected $sql;
-    protected $queryParameters;
+    protected $query_parameters = [];
 
     /**
      * __construct
@@ -326,7 +326,6 @@ class SqlException extends FoundationException
             $code,
             $e
         );
-        $this->queryParameters = array();
     }
 
     /**
@@ -381,19 +380,45 @@ class SqlException extends FoundationException
         return sprintf("«%s»\n%s\n(%s)", pg_result_error_field($this->result_resource, \PGSQL_DIAG_MESSAGE_PRIMARY), pg_result_error_field($this->result_resource, \PGSQL_DIAG_MESSAGE_DETAIL), pg_result_error_field($this->result_resource, \PGSQL_DIAG_MESSAGE_HINT));
     }
 
+    /**
+     * getQuery
+     *
+     * Return the associated query.
+     *
+     * @access public
+     * @return string
+     */
     public function getQuery()
     {
         return $this->sql;
     }
 
+    /**
+     * setQueryParameters
+     *
+     * Set the query parameters sent with the query.
+     *
+     * @access public
+     * @param  array    $parameters
+     * @return SqlException $this
+     */
     public function setQueryParameters(array $parameters)
     {
-        $this->queryParameters = $parameters;
+        $this->query_parameters = $parameters;
+
         return $this;
     }
 
+    /**
+     * getQueryParameters
+     *
+     * Return the query parameters sent with the query.
+     *
+     * @access public
+     * @return array
+     */
     public function getQueryParameters()
     {
-        return $this->queryParameters;
+        return $this->query_parameters;
     }
 }

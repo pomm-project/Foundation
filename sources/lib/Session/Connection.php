@@ -294,8 +294,8 @@ class Connection
      *
      * @access protected
      * @param  string (default null)
-     * @throws  ConnectionException if no response are available.
-     * @throws  SqlException if the result is an error.
+     * @throws ConnectionException if no response are available.
+     * @throws SqlException if the result is an error.
      * @return ResultHandler|array
      */
     protected function getQueryResult($sql = null)
@@ -391,7 +391,7 @@ class Connection
      * @access public
      * @param  string        $query
      * @param  array         $parameters
-     * @throws ConnectionException
+     * @throws SqlException
      * @return ResultHandler query result wrapper
      */
     public function sendQueryWithParameters($query, array $parameters = [])

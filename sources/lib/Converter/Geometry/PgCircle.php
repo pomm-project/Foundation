@@ -16,7 +16,7 @@ use PommProject\Foundation\Session\Session;
 /**
  * PgCircle
  *
- * Converter for Postgresql Circle type.
+ * Converter for PostgreSQL Circle type.
  *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT

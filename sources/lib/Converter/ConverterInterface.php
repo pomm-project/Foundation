@@ -27,7 +27,7 @@ use PommProject\Foundation\Session\Session;
  * Example: array[int4 '8',int4 '12']::int4[]
  *
  * Complex types with an existing constructor must use it.
- * Exemple: circle(point(1.23,2.34), 5.67), hstore('"a" => "b"')
+ * Example: circle(point(1.23,2.34), 5.67), hstore('"a" => "b"')
  *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT
@@ -39,7 +39,7 @@ interface ConverterInterface
     /**
      * fromPg
      *
-     * Parse the output string from Postgresql and returns the converted value
+     * Parse the output string from PostgreSQL and returns the converted value
      * into an according PHP representation.
      *
      * @access public
@@ -66,14 +66,14 @@ interface ConverterInterface
     /**
      * toPgStandardFormat
      *
-     * Convert a PHP representation into short Postgresql format like used in
+     * Convert a PHP representation into short PostgreSQL format like used in
      * COPY values list.
      *
      * @access public
      * @param mixed     $data
      * @param string    $type
      * @param Session   $session
-     * @return string   Postgrsql standard representation.
+     * @return string   PostgreSQL standard representation.
      */
     public function toPgStandardFormat($data, $type, Session $session);
 }

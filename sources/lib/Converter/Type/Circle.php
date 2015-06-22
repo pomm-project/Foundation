@@ -12,7 +12,7 @@ namespace PommProject\Foundation\Converter\Type;
 /**
  * Circle
  *
- * PHP representation of Postgresql circle type.
+ * PHP representation of PostgreSQL circle type.
  *
  * @package Foundation
  * @copyright 2014 Grégoire HUBERT
@@ -68,7 +68,7 @@ class Circle
     /**
      * __toString
      *
-     * Create a string representation of the Cicle.
+     * Create a string representation of the Circle.
      * Actually, it dumps a SQL compatible circle representation.
      *
      * @access public

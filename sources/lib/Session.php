@@ -31,7 +31,7 @@ class Session extends VanillaSession
      *
      * @access  public
      * @param   string $query
-     * @return  PreparedQueryQuery
+     * @return  \PommProject\Foundation\PreparedQuery\PreparedQuery
      */
     public function getPreparedQuery($query)
     {
@@ -45,7 +45,7 @@ class Session extends VanillaSession
      *
      * @access  public
      * @param   string              $query_manager
-     * @return  QueryManagerClient
+     * @return  \PommProject\Foundation\QueryManager\QueryManagerClient
      */
     public function getQueryManager($query_manager = null)
     {
@@ -59,7 +59,7 @@ class Session extends VanillaSession
      *
      * @access  public
      * @param   string          $name
-     * @return  ConverterClient
+     * @return  \PommProject\Foundation\Converter\ConverterClient
      */
     public function getConverter($name)
     {
@@ -73,7 +73,7 @@ class Session extends VanillaSession
      *
      * @access  public
      * @param   string      $name
-     * @return  Observer
+     * @return  \PommProject\Foundation\Observer\Observer
      */
     public function getObserver($name)
     {
@@ -87,7 +87,7 @@ class Session extends VanillaSession
      *
      * @access  public
      * @param   string $name (null)
-     * @return  Inspector
+     * @return  \PommProject\Foundation\Inspector\Inspector
      */
     public function getInspector($name = null)
     {
@@ -101,7 +101,7 @@ class Session extends VanillaSession
      *
      * @access  public
      * @param   string $name
-     * @return  Listener
+     * @return  \PommProject\Foundation\Listener\Listener
      */
     public function getListener($name)
     {

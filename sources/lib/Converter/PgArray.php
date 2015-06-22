@@ -28,7 +28,7 @@ class PgArray extends ArrayTypeConverter
     /**
      * getSubType
      *
-     * Extact subtype from a formatted string (ie int4[] or _text).
+     * Extract subtype from a formatted string (ie int4[] or _text).
      *
      * @static
      * @access public
@@ -37,8 +37,8 @@ class PgArray extends ArrayTypeConverter
      */
     public static function getSubType($type)
     {
-        if (preg_match('/^(.+)\[\]$/', $type, $matchs) || preg_match('/^_(.+)$/', $type, $matchs)) {
-            return $matchs[1];
+        if (preg_match('/^(.+)\[\]$/', $type, $matches) || preg_match('/^_(.+)$/', $type, $matches)) {
+            return $matches[1];
         }
 
         return $type;

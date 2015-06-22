@@ -56,8 +56,8 @@ abstract class ArrayTypeConverter implements ConverterInterface
     /**
      * getSubtypeConverter
      *
-     * Since the arrays in Postgresql have the same sub type, it is useful to
-     * cache it here to ovoid summoning the ClientHolder all the time.
+     * Since the arrays in PostgreSQL have the same subtype, it is useful to
+     * cache it here to avoid summoning the ClientHolder all the time.
      *
      * @access protected
      * @param  string   $type

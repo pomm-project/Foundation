@@ -12,7 +12,7 @@ namespace PommProject\Foundation\Test\Fixture;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Session\Session;
 
-Class InspectorFixture extends Client
+class InspectorFixture extends Client
 {
     protected function executeAnonymousQuery($sql)
     {

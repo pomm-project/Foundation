@@ -60,7 +60,7 @@ abstract class BaseRange
      * __construct
      *
      * Create an instance from a string definition. This string definition
-     * matches Postgresql range definition.
+     * matches PostgreSQL range definition.
      *
      * @access public
      * @param  string $description
@@ -69,7 +69,7 @@ abstract class BaseRange
 
     public function __construct($description)
     {
-        if (!preg_match($this->getRegexp(), $description, $matchs)) {
+        if (!preg_match($this->getRegexp(), $description, $matches)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "Could not parse NumRange description '%s'.",
@@ -78,10 +78,10 @@ abstract class BaseRange
             );
         }
 
-        $this->start_limit = $this->getSubElement($matchs[2]);
-        $this->end_limit   = $this->getSubElement($matchs[3]);
-        $this->start_incl  = (bool) ($matchs[1] === '[');
-        $this->end_incl    = (bool) ($matchs[4] === ']');
+        $this->start_limit = $this->getSubElement($matches[2]);
+        $this->end_limit   = $this->getSubElement($matches[3]);
+        $this->start_incl  = (bool) ($matches[1] === '[');
+        $this->end_incl    = (bool) ($matches[4] === ']');
         $this->description = $description;
     }
 

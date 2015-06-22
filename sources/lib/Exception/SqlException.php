@@ -300,7 +300,7 @@ class SqlException extends FoundationException
 
     protected $result_resource;
     protected $sql;
-    protected $queryParamters;
+    protected $queryParameters;
 
     /**
      * __construct
@@ -326,7 +326,7 @@ class SqlException extends FoundationException
             $code,
             $e
         );
-        $this->queryParamters = array();
+        $this->queryParameters = array();
     }
 
     /**
@@ -388,12 +388,12 @@ class SqlException extends FoundationException
 
     public function setQueryParameters(array $parameters)
     {
-        $this->queryParamters = $parameters;
+        $this->queryParameters = $parameters;
         return $this;
     }
 
     public function getQueryParameters()
     {
-        return $this->queryParamters;
+        return $this->queryParameters;
     }
 }

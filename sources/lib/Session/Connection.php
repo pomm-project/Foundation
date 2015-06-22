@@ -402,10 +402,15 @@ class Connection
             $parameters
         );
 
-        return $this
-            ->testQuery($res, $query)
-            ->getQueryResult($query)
-            ;
+        try {
+            return $this
+                ->testQuery($res, $query)
+                ->getQueryResult($query)
+                ;
+        } catch(SqlException $e) {
+            throw $e->setQueryParameters($parameters);
+        }
+
     }
 
     /**

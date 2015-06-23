@@ -189,4 +189,26 @@ class Pomm extends Atoum
             ->isFalse()
         ;
     }
+
+    public function testShutdown()
+    {
+        $pomm = $this->newTestedInstance([
+            'one' => ['dsn' => 'pgsql://user/db', 'class:session' => '\Mock\PommProject\Foundation\Session\Session'],
+            'two' => ['dsn' => 'pgsql://user/db']
+        ]);
+        $session_mock = $pomm['one'];
+
+        $this
+            ->object($pomm->shutdown())
+            ->isInstanceOf('\PommProject\Foundation\Pomm')
+            ->mock($session_mock)
+            ->call('shutdown')
+            ->once()
+            ->object($pomm->shutdown(['one', 'two']))
+            ->isInstanceOf('\PommProject\Foundation\Pomm')
+            ->exception(function() use ($pomm) { return $pomm->shutdown(['one', 'four']); })
+            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->message->contains("No such builder")
+            ;
+    }
 }

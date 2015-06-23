@@ -382,6 +382,37 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     }
 
     /**
+     * shutdown
+     *
+     * Shutdown and remove sessions from the service. If no arguments are
+     * given, all the instantiated sessions are shutdown. Otherwise, only given
+     * sessions are shutdown.
+     *
+     * @access public
+     * @param  array $session_names
+     * @return Pomm  $this
+     */
+    public function shutdown(array $session_names = [])
+    {
+        if (empty($session_names)) {
+            $sessions = array_keys($this->sessions);
+        } else {
+            array_map(function($name) { $this->builderMustExist($name); }, $session_names);
+            $sessions = array_intersect(
+                array_keys($this->sessions),
+                $session_names
+            );
+        }
+
+        foreach ($sessions as $session_name) {
+            $this->getSession($session_name)->shutdown();
+            $this->removeSession($session_name);
+        }
+
+        return $this;
+    }
+
+    /**
      * builderMustExist
      *
      * Throw a FoundationException if the given builder does not exist.

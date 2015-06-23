@@ -38,6 +38,7 @@ class Session implements LoggerAwareInterface
     protected $client_holder;
     protected $client_poolers = [];
     protected $stamp;
+    protected $is_shutdown = false;
 
     use LoggerAwareTrait;
 
@@ -69,17 +70,45 @@ class Session implements LoggerAwareInterface
     /**
      * __destruct
      *
+     * A short description here
+     *
+     * @access public
+     * @return null
+     */
+    public function __destruct()
+    {
+        if (!$this->is_shutdown) {
+            $this->shutdown();
+        }
+    }
+
+    /**
+     * shutdown
+     *
      * Gently shutdown all clients when the Session is getting down prior to
      * connection termination.
      *
      * @access  public
      * @return  null
      */
-    public function __destruct()
+    public function shutdown()
     {
-        $this->client_holder->shutdown();
+        $exceptions = $this->client_holder->shutdown();
+
+        if ($this->hasLogger()) {
+            foreach ($exceptions as $exception) {
+                    printf(
+                        "Exception caught during shutdown: %s\n",
+                        $exception->__toString()
+                );
+            }
+
+            $this->logger = null;
+        }
+
         $this->client_poolers = [];
         $this->connection->close();
+        $this->is_shutdown = true;
     }
 
     /**
@@ -241,6 +270,9 @@ class Session implements LoggerAwareInterface
     public function getPoolerForType($type)
     {
         if (!$this->hasPoolerForType($type)) {
+            if ($this->is_shutdown) {
+                $error_message = 'There are no poolers in the session because it is shutdown.';
+            } else {
             $error_message = <<<ERROR
 No pooler registered for type '%s'. Poolers available: {%s}.
 If the pooler you are asking for is not listed there, maybe you have not used
@@ -248,6 +280,8 @@ the correct session builder. Use the "class:session_builder" parameter in the
 configuration to associate each session with a session builder. A good practice
 is to define your own project's session builders.
 ERROR;
+            }
+
             throw new FoundationException(
                 sprintf(
                     $error_message,

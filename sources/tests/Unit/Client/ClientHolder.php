@@ -89,9 +89,9 @@ class ClientHolder extends Atoum
             ->add($client_2)
             ;
         $this
-            ->exception(function() use ($client_holder) { $client_holder->shutdown(); })
+            ->object($exception = ($client_holder->shutdown()[0]))
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
-            ->message->contains('plop')
+            ->string($exception->getMessage())->contains('plop')
             ->mock($client_1)
             ->call('shutdown')
             ->once()

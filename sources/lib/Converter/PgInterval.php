@@ -79,7 +79,7 @@ class PgInterval implements ConverterInterface
             try {
                 $data = new \DateInterval($data);
             } catch (\Exception $e) {
-                throw new ConverterException(sprintf("First argument is not a \DateInterval instance."), null, $e);
+                throw new ConverterException("First argument is not a \DateInterval instance.", null, $e);
             }
         }
 

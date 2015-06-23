@@ -230,7 +230,7 @@ class Session implements LoggerAwareInterface
     public function registerClientPooler(ClientPoolerInterface $client_pooler)
     {
         if ($client_pooler->getPoolerType() == null) {
-            throw new \InvalidArgumentException(sprintf("Can not register a pooler for the empty type."));
+            throw new \InvalidArgumentException("Can not register a pooler for the empty type.");
         }
 
         $client_pooler->register($this);

@@ -140,7 +140,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     {
         if ($this->default === null) {
             throw new FoundationException(
-                sprintf("No default session builder set.")
+                "No default session builder set."
             )
             ;
         }

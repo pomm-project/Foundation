@@ -132,13 +132,11 @@ class Connection
                 return $this->handler;
             case static::CONNECTION_STATUS_BAD:
                 throw new ConnectionException(
-                    sprintf(
-                        "Connection problem. Read your server's log about this, I have no more informations."
-                    )
+                    "Connection problem. Read your server's log about this, I have no more informations."
                 );
             case static::CONNECTION_STATUS_CLOSED:
                 throw new ConnectionException(
-                    sprintf("Connection has been closed, no further queries can be sent.")
+                    "Connection has been closed, no further queries can be sent."
                 );
         }
     }
@@ -224,7 +222,7 @@ class Connection
 
         if ($this->getConnectionStatus() !== static::CONNECTION_STATUS_GOOD) {
             throw new ConnectionException(
-                sprintf("Connection open but in a bad state. Read your database server log to learn more about this.")
+                "Connection open but in a bad state. Read your database server log to learn more about this."
             );
         }
 

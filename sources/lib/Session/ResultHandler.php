@@ -48,14 +48,16 @@ class ResultHandler
     /**
      * __destruct
      *
-     * Call free()
+     * Call free() if handler is set.
      *
      * @access public
      * @return void
      */
     public function __destruct()
     {
-        $this->free();
+        if ($this->handler !== null) {
+            $this->free();
+        }
     }
 
     /**

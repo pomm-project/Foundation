@@ -15,7 +15,6 @@ use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Exception\FoundationException;
-
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
@@ -97,7 +96,7 @@ class Session implements LoggerAwareInterface
 
         if ($this->hasLogger()) {
             foreach ($exceptions as $exception) {
-                    printf(
+                printf(
                         "Exception caught during shutdown: %s\n",
                         $exception->__toString()
                 );
@@ -273,7 +272,7 @@ class Session implements LoggerAwareInterface
             if ($this->is_shutdown) {
                 $error_message = 'There are no poolers in the session because it is shutdown.';
             } else {
-            $error_message = <<<ERROR
+                $error_message = <<<ERROR
 No pooler registered for type '%s'. Poolers available: {%s}.
 If the pooler you are asking for is not listed there, maybe you have not used
 the correct session builder. Use the "class:session_builder" parameter in the

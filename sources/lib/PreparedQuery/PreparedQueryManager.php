@@ -43,6 +43,5 @@ class PreparedQueryManager extends QueryManagerClient
             $resource,
             $this->getSession()
         );
-
     }
 }

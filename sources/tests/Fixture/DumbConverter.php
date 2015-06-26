@@ -29,4 +29,3 @@ class DumbConverter implements ConverterInterface
         return $value;
     }
 }
-

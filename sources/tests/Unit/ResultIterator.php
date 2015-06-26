@@ -67,7 +67,7 @@ SQL;
             ->isIdenticalTo(['id' => '3', 'pika' => 'c'])
             ->array($iterator->get(1))
             ->isIdenticalTo(['id' => '2', 'pika' => 'b'])
-            ->exception(function() use ($iterator) { return $iterator->get(5); })
+            ->exception(function () use ($iterator) { return $iterator->get(5); })
             ->isInstanceOf('\OutOfBoundsException')
             ->message->contains('Cannot jump to non existing row')
             ;
@@ -112,7 +112,7 @@ SQL;
             $this->getResultResource($sql)
         );
 
-        foreach($iterator as $index => $element) {
+        foreach ($iterator as $index => $element) {
             if ($index === 0) {
                 $this
                     ->boolean($iterator->isFirst())
@@ -148,7 +148,7 @@ SQL;
             ->isIdenticalTo(['a', 'b', 'c', 'd'])
             ->array($iterator->slice('id'))
             ->isIdenticalTo(['1', '2', '3', '4'])
-            ->exception(function() use ($iterator) { return $iterator->slice('no_such_key'); })
+            ->exception(function () use ($iterator) { return $iterator->slice('no_such_key'); })
             ->isInstanceOf('\InvalidArgumentException')
             ->message->contains('Could not find field')
             ;

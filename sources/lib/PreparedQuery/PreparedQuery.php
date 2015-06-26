@@ -203,7 +203,7 @@ class PreparedQuery extends Client
      */
     protected function prepareValues($sql, array $values)
     {
-        if ($this->converters === null ) {
+        if ($this->converters === null) {
             $this->prepareConverters($sql);
         }
 

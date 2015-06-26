@@ -12,7 +12,6 @@ namespace PommProject\Foundation;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Session\SessionBuilder as VanillaSessionBuilder;
 use PommProject\Foundation\Session\Session as BaseSession;
-
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -397,7 +396,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
         if (empty($session_names)) {
             $sessions = array_keys($this->sessions);
         } else {
-            array_map(function($name) { $this->builderMustExist($name); }, $session_names);
+            array_map(function ($name) { $this->builderMustExist($name); }, $session_names);
             $sessions = array_intersect(
                 array_keys($this->sessions),
                 $session_names

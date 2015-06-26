@@ -129,7 +129,6 @@ class ClientHolder
 
         foreach ($this->clients as $type => $names) {
             foreach ($names as $name => $client) {
-
                 try {
                     $client->shutdown();
                 } catch (PommException $e) {

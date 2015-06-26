@@ -93,7 +93,7 @@ class PgComposite extends ArrayTypeConverter
 
         return
             sprintf("(%s)",
-                join(',', array_map(function($val) {
+                join(',', array_map(function ($val) {
                     if ($val === null) {
                         return '';
                     } elseif (strlen($val) === 0) {

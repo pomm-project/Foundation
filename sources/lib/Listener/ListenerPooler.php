@@ -98,8 +98,8 @@ class ListenerPooler extends ClientPooler
         foreach (
             $this->getSession()->getAllClientForType($this->getPoolerType())
             as $client) {
-                $client->notify('*', $data);
-            }
+            $client->notify('*', $data);
+        }
 
         return $this;
     }

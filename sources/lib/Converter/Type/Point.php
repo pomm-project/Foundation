@@ -37,7 +37,6 @@ class Point
         $description = trim($description, ' ()');
 
         if (!preg_match('/([0-9e\-+\.]+), *([0-9e\-+\.]+)/', $description, $matches)) {
-
             throw new \InvalidArgumentException(
                 sprintf(
                     "Could not parse point representation '%s'.",

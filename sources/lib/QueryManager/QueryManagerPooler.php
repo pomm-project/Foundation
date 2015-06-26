@@ -63,7 +63,6 @@ class QueryManagerPooler extends ClientPooler
     {
         try {
             new \ReflectionClass($client);
-
         } catch (\ReflectionException $e) {
             throw new FoundationException(sprintf("Could not load class '%s'.", $client), null, $e);
         }

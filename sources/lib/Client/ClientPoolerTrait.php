@@ -124,4 +124,3 @@ trait ClientPoolerTrait
         return $this->session;
     }
 }
-

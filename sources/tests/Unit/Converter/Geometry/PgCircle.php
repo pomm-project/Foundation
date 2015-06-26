@@ -45,7 +45,7 @@ class PgCircle extends BaseConverter
             ->isEqualTo('circle(point(1.2345,-9.87654),3.141596)')
             ->string($this->newTestedInstance()->toPg(null, 'mycircle', $session))
             ->isEqualTo('NULL::mycircle')
-            ->exception(function() use ($session) {
+            ->exception(function () use ($session) {
                 return $this->newTestedInstance()->toPg('azsdf', 'circle', $session);
             })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
@@ -63,7 +63,7 @@ class PgCircle extends BaseConverter
             ->isEqualTo('<(1.2345,-9.87654),3.141596>')
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'mycircle', $session))
             ->isNull()
-            ->exception(function() use ($session) {
+            ->exception(function () use ($session) {
                 return $this->newTestedInstance()->toPgStandardFormat('azsdf', 'circle', $session);
             })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')

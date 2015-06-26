@@ -80,7 +80,7 @@ class PgArray extends ArrayTypeConverter
         $type = $this->getSubType($type);
 
         if ($data === null) {
-                return sprintf("NULL::%s[]", $type);
+            return sprintf("NULL::%s[]", $type);
         }
 
         $converter = $this->getSubtypeConverter($type, $session);

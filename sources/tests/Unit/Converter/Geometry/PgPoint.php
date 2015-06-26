@@ -41,7 +41,7 @@ class PgPoint extends BaseConverter
             ->isEqualTo('point(1.2345,-9.87654)')
             ->string($this->newTestedInstance()->toPg('(1.2345,-9.87654)', 'point', $session))
             ->isEqualTo('point(1.2345,-9.87654)')
-            ->exception(function() use ($session) {
+            ->exception(function () use ($session) {
                 return $this->newTestedInstance()->toPg('azsdf', 'point', $session);
             })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
@@ -59,7 +59,7 @@ class PgPoint extends BaseConverter
             ->isEqualTo('(1.2345,-9.87654)')
             ->string($this->newTestedInstance()->toPgStandardFormat('(1.2345,-9.87654)', 'point', $session))
             ->isEqualTo('(1.2345,-9.87654)')
-            ->exception(function() use ($session) {
+            ->exception(function () use ($session) {
                 return $this->newTestedInstance()->toPgStandardFormat('azsdf', 'point', $session);
             })
             ->isInstanceOf('PommProject\Foundation\Exception\ConverterException')
@@ -68,4 +68,3 @@ class PgPoint extends BaseConverter
             ;
     }
 }
-

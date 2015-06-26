@@ -224,7 +224,9 @@ class Where
             $element = new self($element, $values);
         }
 
-        if ($element->isEmpty()) return $this;
+        if ($element->isEmpty()) {
+            return $this;
+        }
 
         if ($this->isEmpty()) {
             $this->transmute($element);

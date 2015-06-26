@@ -13,7 +13,7 @@ use Atoum;
 
 class ParameterHolder extends Atoum
 {
-    function testConstructorEmpty()
+    public function testConstructorEmpty()
     {
         $parameter_holder = $this->newTestedInstance();
         $this
@@ -82,7 +82,7 @@ class ParameterHolder extends Atoum
         $this
             ->object($parameter_holder->mustHave('pika'))
             ->isInstanceOf('\PommProject\Foundation\ParameterHolder')
-            ->exception(function() use ($parameter_holder) { $parameter_holder->mustHave('chu'); })
+            ->exception(function () use ($parameter_holder) { $parameter_holder->mustHave('chu'); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('mandatory')
             ->object($parameter_holder->setParameter('chu', 'whatever')->mustHave('chu'))
@@ -108,10 +108,10 @@ class ParameterHolder extends Atoum
         $this
             ->object($parameter_holder->mustBeOneOf('pika', [ 'one', 'two', 'tree']))
             ->isInstanceOf('\PommProject\Foundation\ParameterHolder')
-            ->exception(function() use ($parameter_holder) { $parameter_holder->mustBeOneOf('pika', ['four', 'five']); })
+            ->exception(function () use ($parameter_holder) { $parameter_holder->mustBeOneOf('pika', ['four', 'five']); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('must be one of')
-            ->exception(function() use ($parameter_holder) { $parameter_holder->mustBeOneOf('chu', ['four', 'five']); })
+            ->exception(function () use ($parameter_holder) { $parameter_holder->mustBeOneOf('chu', ['four', 'five']); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('must be one of')
             ;

@@ -40,7 +40,7 @@ class Connection
 
     protected $handler = null;
     protected $configurator;
-    private   $is_closed = false;
+    private $is_closed = false;
 
     /**
      * __construct
@@ -421,10 +421,9 @@ class Connection
                 ->testQuery($res, $query)
                 ->getQueryResult($query)
                 ;
-        } catch(SqlException $e) {
+        } catch (SqlException $e) {
             throw $e->setQueryParameters($parameters);
         }
-
     }
 
     /**

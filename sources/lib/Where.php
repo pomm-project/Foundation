@@ -153,7 +153,7 @@ class Where
      */
     public function __construct($element = null, array $values = [])
     {
-        if (!is_null($element)) {
+        if ($element !== null) {
             $this->element = $element;
             $this->values = $values;
         }
@@ -187,7 +187,7 @@ class Where
      */
     public function isEmpty()
     {
-        return (bool) (is_null($this->element) && count($this->stack) == 0);
+        return (bool) ($this->element === null && count($this->stack) == 0);
     }
 
     /**
@@ -224,7 +224,9 @@ class Where
             $element = new self($element, $values);
         }
 
-        if ($element->isEmpty()) return $this;
+        if ($element->isEmpty()) {
+            return $this;
+        }
 
         if ($this->isEmpty()) {
             $this->transmute($element);
@@ -317,7 +319,7 @@ class Where
      */
     public function hasElement()
     {
-        return ! is_null($this->element);
+        return $this->element !== null;
     }
 
     /**
@@ -371,10 +373,10 @@ class Where
 
         $values = [];
 
-        foreach ($this->stack as $offset => $where) {
-            $values = array_merge($values, $where->getValues());
+        foreach ($this->stack as $where) {
+            $values[] = $where->getValues();
         }
 
-        return $values;
+        return call_user_func_array('array_merge', $values);
     }
 }

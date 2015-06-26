@@ -11,8 +11,6 @@ namespace PommProject\Foundation\Listener;
 
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Client\ClientPooler;
-use PommProject\Foundation\Listener\Listener;
-use PommProject\Foundation\Session\Session;
 
 /**
  * ListenerPooler
@@ -98,8 +96,8 @@ class ListenerPooler extends ClientPooler
         foreach (
             $this->getSession()->getAllClientForType($this->getPoolerType())
             as $client) {
-                $client->notify('*', $data);
-            }
+            $client->notify('*', $data);
+        }
 
         return $this;
     }

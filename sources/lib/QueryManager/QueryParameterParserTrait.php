@@ -9,9 +9,6 @@
  */
 namespace PommProject\Foundation\QueryManager;
 
-use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Client\Client;
-
 /**
  * QueryParameterParserTrait
  *
@@ -52,7 +49,7 @@ trait QueryParameterParserTrait
      */
     public function orderParameters($string)
     {
-        return preg_replace_callback('/\$\*/', function () { static $nb = 0; return sprintf("$%d", ++$nb); }, $string );
+        return preg_replace_callback('/\$\*/', function () { static $nb = 0; return sprintf("$%d", ++$nb); }, $string);
     }
 
     /**
@@ -72,6 +69,6 @@ trait QueryParameterParserTrait
     {
         preg_match_all('/\$\*(?:::([\w\."]+(?:\[\])?))?/', $string, $matches);
 
-        return str_replace('"','', $matches[1]);
+        return str_replace('"', '', $matches[1]);
     }
 }

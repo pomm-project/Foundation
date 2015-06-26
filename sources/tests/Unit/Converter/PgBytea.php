@@ -57,6 +57,3 @@ class PgBytea extends BaseConverter
             ;
     }
 }
-
-
-

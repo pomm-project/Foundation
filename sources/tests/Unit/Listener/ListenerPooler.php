@@ -11,7 +11,6 @@ namespace PommProject\Foundation\Test\Unit\Listener;
 
 use PommProject\Foundation\Tester\FoundationSessionAtoum;
 use PommProject\Foundation\Session\Session;
-
 use Mock\PommProject\Foundation\Listener\Listener as MockListener;
 
 class ListenerPooler extends FoundationSessionAtoum

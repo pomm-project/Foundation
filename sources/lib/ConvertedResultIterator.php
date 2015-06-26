@@ -29,6 +29,10 @@ class ConvertedResultIterator extends ResultIterator
     protected $session;
     protected $converters = [];
 
+    /**
+     * @param ResultHandler $result
+     * @param BaseSession   $session
+     */
     public function __construct(ResultHandler $result, BaseSession $session)
     {
         parent::__construct($result);

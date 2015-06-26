@@ -13,6 +13,17 @@ use PommProject\Foundation\Converter\TypeConverter;
 use PommProject\Foundation\Converter\ConverterInterface;
 use PommProject\Foundation\Session\Session;
 
+/**
+ * PgPoint
+ *
+ * Converter for PostgreSQL point type.
+ *
+ * @package Foundation
+ * @copyright 2014 Grégoire HUBERT
+ * @author Grégoire HUBERT
+ * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see ConverterInterface
+ */
 class PgPoint extends TypeConverter
 {
     /**
@@ -22,7 +33,7 @@ class PgPoint extends TypeConverter
      */
     public function getTypeClassName()
     {
-        return  '\PommProject\Foundation\Converter\Type\Point';
+        return '\PommProject\Foundation\Converter\Type\Point';
     }
 
     /**

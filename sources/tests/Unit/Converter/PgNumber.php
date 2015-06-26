@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
-
 use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
 class PgNumber extends BaseConverter

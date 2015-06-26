@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Client;
 
-use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Exception\PommException;
 
 /**
@@ -129,7 +128,6 @@ class ClientHolder
 
         foreach ($this->clients as $type => $names) {
             foreach ($names as $name => $client) {
-
                 try {
                     $client->shutdown();
                 } catch (PommException $e) {

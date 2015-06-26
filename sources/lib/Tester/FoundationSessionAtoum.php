@@ -10,7 +10,6 @@
 
 namespace PommProject\Foundation\Tester;
 
-use PommProject\Foundation\Tester\VanillaSessionAtoum;
 use PommProject\Foundation\SessionBuilder;
 
 /**

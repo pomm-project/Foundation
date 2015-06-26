@@ -15,7 +15,6 @@ use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Exception\FoundationException;
-
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
@@ -97,9 +96,9 @@ class Session implements LoggerAwareInterface
 
         if ($this->hasLogger()) {
             foreach ($exceptions as $exception) {
-                    printf(
-                        "Exception caught during shutdown: %s\n",
-                        $exception->__toString()
+                printf(
+                    "Exception caught during shutdown: %s\n",
+                    (string) $exception
                 );
             }
 
@@ -121,7 +120,7 @@ class Session implements LoggerAwareInterface
      */
     public function getStamp()
     {
-        return is_null($this->stamp) ? null : (string) $this->stamp;
+        return $this->stamp === null ? null : (string) $this->stamp;
     }
 
     /**
@@ -270,9 +269,6 @@ class Session implements LoggerAwareInterface
     public function getPoolerForType($type)
     {
         if (!$this->hasPoolerForType($type)) {
-            if ($this->is_shutdown) {
-                $error_message = 'There are no poolers in the session because it is shutdown.';
-            } else {
             $error_message = <<<ERROR
 No pooler registered for type '%s'. Poolers available: {%s}.
 If the pooler you are asking for is not listed there, maybe you have not used
@@ -280,6 +276,8 @@ the correct session builder. Use the "class:session_builder" parameter in the
 configuration to associate each session with a session builder. A good practice
 is to define your own project's session builders.
 ERROR;
+            if ($this->is_shutdown) {
+                $error_message = 'There are no poolers in the session because it is shutdown.';
             }
 
             throw new FoundationException(

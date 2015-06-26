@@ -53,7 +53,7 @@ class PgHstore extends ArrayTypeConverter
             return sprintf("NULL::%s", $type);
         }
 
-        return sprintf("%s(\$hs\$%s\$hs\$)", $type, join(', ', $this->buildArray($this->checkArray($data), $session)));
+        return sprintf("%s(\$hs\$%s\$hs\$)", $type, join(', ', $this->buildArray($this->checkArray($data))));
     }
 
     /**
@@ -65,7 +65,7 @@ class PgHstore extends ArrayTypeConverter
             return null;
         }
 
-        return sprintf('%s', join(', ', $this->buildArray($this->checkArray($data), $session)));
+        return sprintf('%s', join(', ', $this->buildArray($this->checkArray($data))));
     }
 
     /**
@@ -73,12 +73,11 @@ class PgHstore extends ArrayTypeConverter
      *
      * Return an array of HStore elements.
      *
-     * @access protected
+     * @access   protected
      * @param  array $data
-     * @param  Session $session
      * @return array
      */
-    protected function buildArray(array $data, Session $session)
+    protected function buildArray(array $data)
     {
         $insert_values = [];
 

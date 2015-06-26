@@ -57,7 +57,7 @@ class Pomm extends Atoum
                     ],
                 ])->getSessionBuilders())
                 ->size->isEqualTo(2)
-                ->exception(function() { return $this->newTestedInstance(
+                ->exception(function () { return $this->newTestedInstance(
                     [
                         "db_three" => [
                             "dsn" => "pgsql://user:pass@host:port/db_name",
@@ -89,7 +89,7 @@ class Pomm extends Atoum
             ->isInstanceOf('\PommProject\Foundation\Session\SessionBuilder')
             ->object($pomm->getBuilder('db_two'))
             ->isInstanceOf('\PommProject\Foundation\Test\Fixture\PommTestSessionBuilder')
-            ->exception(function() use ($pomm) { $pomm->getBuilder('whatever'); })
+            ->exception(function () use ($pomm) { $pomm->getBuilder('whatever'); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains("No such builder")
             ;
@@ -103,7 +103,7 @@ class Pomm extends Atoum
             ->isInstanceOf('\PommProject\Foundation\Session\Session')
             ->object($pomm->getSession('db_two'))
             ->isInstanceOf('\PommProject\Foundation\Test\Fixture\PommTestSession')
-            ->exception(function() use ($pomm) { return $pomm->getSession('whatever'); })
+            ->exception(function () use ($pomm) { return $pomm->getSession('whatever'); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains("{'db_one', 'db_two'}")
             ->array($pomm->getSession('db_one')->getRegisterPoolersNames())
@@ -135,7 +135,7 @@ class Pomm extends Atoum
             ->isInstanceOf('\PommProject\Foundation\Pomm')
             ->boolean($pomm->hasSession('db_one'))
             ->isFalse()
-            ->exception(function() use ($pomm) {
+            ->exception(function () use ($pomm) {
                 $pomm->removeSession('unknown');
             })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
@@ -147,7 +147,7 @@ class Pomm extends Atoum
     {
         $pomm = $this
             ->getPomm()
-            ->addPostConfiguration('db_two', function($session) { $session->getListener('pika'); });
+            ->addPostConfiguration('db_two', function ($session) { $session->getListener('pika'); });
 
         $this
             ->boolean($pomm['db_two']->hasClient('listener', 'pika'))
@@ -158,7 +158,7 @@ class Pomm extends Atoum
     public function testDefault()
     {
         $this
-            ->exception(function() { return $this->newTestedInstance()->getDefaultSession(); })
+            ->exception(function () { return $this->newTestedInstance()->getDefaultSession(); })
             ->message->contains("No default session builder set.")
             ->object($this->getPomm()->getDefaultSession())
             ->isInstanceOf('\PommProject\Foundation\Session\Session')
@@ -166,7 +166,7 @@ class Pomm extends Atoum
             ->contains('db_two')
             ->string($this->newTestedInstance(['one' => ['dsn' => 'pgsql://user/db']])->getDefaultSession()->getStamp())
             ->contains('one')
-            ->exception(function() { return $this->getPomm()->setDefaultBuilder('none'); })
+            ->exception(function () { return $this->getPomm()->setDefaultBuilder('none'); })
             ->message->contains("No such builder")
             ->string($this->getPomm()->setDefaultBuilder('db_one')->getDefaultSession()->getStamp())
             ->contains('db_one')
@@ -206,7 +206,7 @@ class Pomm extends Atoum
             ->once()
             ->object($pomm->shutdown(['one', 'two']))
             ->isInstanceOf('\PommProject\Foundation\Pomm')
-            ->exception(function() use ($pomm) { return $pomm->shutdown(['one', 'four']); })
+            ->exception(function () use ($pomm) { return $pomm->shutdown(['one', 'four']); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains("No such builder")
             ;

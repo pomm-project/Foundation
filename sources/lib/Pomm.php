@@ -12,7 +12,6 @@ namespace PommProject\Foundation;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Session\SessionBuilder as VanillaSessionBuilder;
 use PommProject\Foundation\Session\Session as BaseSession;
-
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -50,10 +49,9 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     public function __construct(array $configurations = [])
     {
         foreach ($configurations as $name => $configuration) {
+            $builder_class = '\PommProject\Foundation\SessionBuilder';
             if (isset($configuration['class:session_builder'])) {
                 $builder_class = $this->checkSessionBuilderClass($configuration['class:session_builder']);
-            } else {
-                $builder_class = '\PommProject\Foundation\SessionBuilder';
             }
 
             $this->addBuilder($name, new $builder_class($configuration));
@@ -231,8 +229,10 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      */
     public function removeBuilder($name)
     {
-        unset($this->builderMustExist($name)->builders[$name]);
-        unset($this->post_configurations[$name]);
+        unset(
+            $this->builderMustExist($name)->builders[$name],
+            $this->post_configurations[$name]
+        );
 
         return $this;
     }
@@ -397,7 +397,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
         if (empty($session_names)) {
             $sessions = array_keys($this->sessions);
         } else {
-            array_map(function($name) { $this->builderMustExist($name); }, $session_names);
+            array_map(function ($name) { $this->builderMustExist($name); }, $session_names);
             $sessions = array_intersect(
                 array_keys($this->sessions),
                 $session_names

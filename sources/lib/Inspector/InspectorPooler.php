@@ -40,6 +40,7 @@ class InspectorPooler extends ClientPooler
      * getClient
      *
      * @see     ClientPooler
+     * @param null|string $identifier
      * @return Inspector
      */
     public function getClient($identifier = null)

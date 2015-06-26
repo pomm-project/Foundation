@@ -9,8 +9,6 @@
  */
 namespace PommProject\Foundation;
 
-use PommProject\Foundation\ResultIterator;
-
 /**
  * Pager
  *
@@ -79,7 +77,7 @@ class Pager
      */
     public function getResultMin()
     {
-        return min(( 1 + $this->max_per_page * ( $this->page - 1)), $this->count);
+        return min((1 + $this->max_per_page * ($this->page - 1)), $this->count);
     }
 
     /**

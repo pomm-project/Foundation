@@ -52,7 +52,7 @@ abstract class BaseConverter extends FoundationSessionAtoum
     /**
      * sendToPostgres
      *
-     * To test toPgStandardFormat, values can be sent to Postgres and 
+     * To test toPgStandardFormat, values can be sent to Postgres and
      * retreived.
      *
      * @access protected

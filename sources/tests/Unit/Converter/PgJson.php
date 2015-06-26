@@ -90,7 +90,5 @@ JSON;
             ->array($this->sendToPostgres($data, 'json', $session))
             ->isIdenticalTo($data)
             ;
-
     }
 }
-

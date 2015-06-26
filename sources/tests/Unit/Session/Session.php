@@ -125,7 +125,7 @@ class Session extends VanillaSessionAtoum
         $client_pooler_mock = $this->getClientPoolerInterfaceMock('test');
 
         $this
-            ->exception(function() use ($session) { $session->getPoolerForType('test'); })
+            ->exception(function () use ($session) { $session->getPoolerForType('test'); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('No pooler registered for type')
             ->object($session
@@ -144,7 +144,7 @@ class Session extends VanillaSessionAtoum
         $this
             ->object($session->getClientUsingPooler('test', 'ok'))
             ->isInstanceOf('\PommProject\Foundation\Client\ClientInterface')
-            ->exception(function() use ($session) {$session->getClientUsingPooler('whatever', 'ok');})
+            ->exception(function () use ($session) {$session->getClientUsingPooler('whatever', 'ok');})
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('No pooler registered for type')
             ;
@@ -156,10 +156,10 @@ class Session extends VanillaSessionAtoum
         $session            = $this->buildSession()->registerClientPooler($client_pooler_mock);
 
         $this
-            ->exception(function() use ($session) { $session->azerty('ok', 'what'); })
+            ->exception(function () use ($session) { $session->azerty('ok', 'what'); })
             ->isInstanceOf('\BadFunctionCallException')
             ->message->contains('Unknown method')
-            ->exception(function() use ($session) { $session->getPika('ok'); })
+            ->exception(function () use ($session) { $session->getPika('ok'); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('No pooler registered for type')
             ->object($session->getTest('ok'))
@@ -178,7 +178,7 @@ class Session extends VanillaSessionAtoum
         $session->shutdown();
 
         $this
-            ->exception(function() use ($session) { return $session->getTest('ok'); })
+            ->exception(function () use ($session) { return $session->getTest('ok'); })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('is shutdown')
             ->integer($session->getConnection()->getConnectionStatus())

@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -26,7 +25,6 @@ use PommProject\Foundation\Session\Session;
 class PgComposite extends ArrayTypeConverter
 {
     protected $structure;
-    protected $converters;
 
     /**
      * __construct
@@ -93,16 +91,16 @@ class PgComposite extends ArrayTypeConverter
 
         return
             sprintf("(%s)",
-                join(',', array_map(function($val) {
+                join(',', array_map(function ($val) {
                     if ($val === null) {
                         return '';
-                    } elseif (strlen($val) === 0) {
+                    } elseif ($val === '') {
                         return '""';
                     } elseif (preg_match('/[,\s]/', $val)) {
                         return sprintf('"%s"', str_replace('"', '""', $val));
                     } else {
                         return $val;
-                    };
+                    }
                 }, $this->convertArray($data, $session, 'toPgStandardFormat')
                 ))
             );

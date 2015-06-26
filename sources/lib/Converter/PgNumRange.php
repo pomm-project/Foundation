@@ -9,8 +9,17 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Session\Session;
-
+/**
+ * PgNumRange
+ *
+ * Range of numbers.
+ *
+ * @package Foundation
+ * @copyright 2014 Grégoire HUBERT
+ * @author Grégoire HUBERT
+ * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see TypeConverter
+ */
 class PgNumRange extends TypeConverter
 {
     /**

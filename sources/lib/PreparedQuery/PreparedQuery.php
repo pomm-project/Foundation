@@ -12,7 +12,6 @@ namespace PommProject\Foundation\PreparedQuery;
 use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
 use PommProject\Foundation\Listener\SendNotificationTrait;
 use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\Client\Client;
 
 /**
@@ -31,7 +30,7 @@ class PreparedQuery extends Client
     protected $sql;
     private $is_prepared = false;
     private $identifier;
-    private $converters = null;
+    private $converters;
 
     /**
      * getSignatureFor
@@ -203,7 +202,7 @@ class PreparedQuery extends Client
      */
     protected function prepareValues($sql, array $values)
     {
-        if ($this->converters === null ) {
+        if ($this->converters === null) {
             $this->prepareConverters($sql);
         }
 

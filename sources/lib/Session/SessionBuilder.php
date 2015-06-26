@@ -11,8 +11,6 @@ namespace PommProject\Foundation\Session;
 
 use PommProject\Foundation\Converter;
 use PommProject\Foundation\ParameterHolder;
-use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Session\Connection;
 use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Converter\ConverterHolder;
 
@@ -104,24 +102,24 @@ class SessionBuilder
      * @return Session
      */
    final public function buildSession($stamp = null)
-    {
-        $this->preConfigure();
-        $dsn = $this
+   {
+       $this->preConfigure();
+       $dsn = $this
             ->configuration->mustHave('dsn')->getParameter('dsn');
-        $connection_configuration =
+       $connection_configuration =
             $this->configuration
             ->mustHave('connection:configuration')
             ->getParameter('connection:configuration')
             ;
-        $session    = $this->createSession(
+       $session = $this->createSession(
             $this->createConnection($dsn, $connection_configuration),
             $this->createClientHolder(),
             $stamp
         );
-        $this->postConfigure($session);
+       $this->postConfigure($session);
 
-        return $session;
-    }
+       return $session;
+   }
 
     /**
      * getDefaultConfiguration

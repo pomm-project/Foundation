@@ -9,8 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Converter\TypeConverter;
-
 /**
  * PgTsRange
  *
@@ -24,6 +22,11 @@ use PommProject\Foundation\Converter\TypeConverter;
  */
 class PgTsRange extends TypeConverter
 {
+    /**
+     * getTypeClassName
+     *
+     * @see TypeConverter
+     */
     public function getTypeClassName()
     {
         return '\PommProject\Foundation\Converter\Type\TsRange';

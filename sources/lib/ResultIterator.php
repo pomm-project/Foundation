@@ -25,7 +25,7 @@ use PommProject\Foundation\Session\ResultHandler;
  */
 class ResultIterator implements \Iterator, \Countable, \JsonSerializable
 {
-    private   $position;
+    private $position;
     protected $result;
 
     /**
@@ -212,7 +212,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
      */
     public function getOddEven()
     {
-        return $this->position % 2 ? 'odd' : 'even';
+        return $this->position % 2 === 1 ? 'odd' : 'even';
     }
 
     /**

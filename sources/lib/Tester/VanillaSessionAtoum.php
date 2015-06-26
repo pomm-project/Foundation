@@ -12,7 +12,6 @@ namespace PommProject\Foundation\Tester;
 
 use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Session\SessionBuilder;
-
 use Atoum;
 
 /**

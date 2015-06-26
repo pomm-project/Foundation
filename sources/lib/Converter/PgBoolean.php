@@ -48,7 +48,9 @@ class PgBoolean implements ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
-        if ($data === null) return sprintf("NULL::%s", $type);
+        if ($data === null) {
+            return sprintf("NULL::%s", $type);
+        }
 
         return sprintf("%s '%s'", $type, $data === true ? "true" : "false");
     }
@@ -58,10 +60,10 @@ class PgBoolean implements ConverterInterface
      */
     public function toPgStandardFormat($data, $type, Session $session)
     {
-        return
-            $data !== null
-            ? $data === true ? 't' : 'f'
-            : null
-            ;
+        if ($data !== null) {
+            return $data === true ? 't' : 'f';
+        }
+
+        return null;
     }
 }

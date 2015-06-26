@@ -7,7 +7,7 @@ class ConnectionConfigurator extends \Atoum
     public function testBadDsn($dsn)
     {
         $this
-            ->exception(function() use ($dsn) {
+            ->exception(function () use ($dsn) {
                 $this->newTestedInstance($dsn);
             })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConnectionException');

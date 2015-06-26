@@ -166,12 +166,15 @@ class ResultHandler
      * @access public
      * @param  int    $field_no
      * @return string
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function getFieldName($field_no)
     {
-        if (!is_integer($field_no)) {
-            throw new \Exception(sprintf("getFieldType::field_no = '%s' is not an integer.\n", $field_no));
+        if (!is_int($field_no)) {
+            throw new \InvalidArgumentException(sprintf(
+                "getFieldType::field_no = '%s' is not an integer.\n",
+                $field_no
+            ));
         }
 
         return pg_field_name($this->handler, $field_no);

@@ -12,7 +12,6 @@ namespace PommProject\Foundation\PreparedQuery;
 use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
 use PommProject\Foundation\Listener\SendNotificationTrait;
 use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\QueryParameterExpander;
 use PommProject\Foundation\Client\Client;
 
 /**

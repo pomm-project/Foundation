@@ -11,8 +11,6 @@ namespace PommProject\Foundation\Session;
 
 use PommProject\Foundation\Converter;
 use PommProject\Foundation\ParameterHolder;
-use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Session\Connection;
 use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Converter\ConverterHolder;
 

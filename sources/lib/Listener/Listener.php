@@ -11,7 +11,6 @@ namespace PommProject\Foundation\Listener;
 
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Client\ClientInterface;
-use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Client\Client;
 
 /**

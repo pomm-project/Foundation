@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Converter\ArrayTypeConverter;
 use PommProject\Foundation\Session\Session;
 
 /**

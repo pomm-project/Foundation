@@ -11,8 +11,6 @@ namespace PommProject\Foundation\Listener;
 
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Client\ClientPooler;
-use PommProject\Foundation\Listener\Listener;
-use PommProject\Foundation\Session\Session;
 
 /**
  * ListenerPooler

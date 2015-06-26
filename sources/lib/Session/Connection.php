@@ -11,8 +11,6 @@ namespace PommProject\Foundation\Session;
 
 use PommProject\Foundation\Exception\ConnectionException;
 use PommProject\Foundation\Exception\SqlException;
-use PommProject\Foundation\Session\ConnectionConfigurator;
-use PommProject\Foundation\Session\ResultHandler;
 
 /**
  * Connection

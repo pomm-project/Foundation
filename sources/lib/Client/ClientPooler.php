@@ -9,9 +9,6 @@
  */
 namespace PommProject\Foundation\Client;
 
-use PommProject\Foundation\Client\ClientPoolerTrait;
-use PommProject\Foundation\Client\ClientPoolerInterface;
-
 /**
  * ClientPooler
  *

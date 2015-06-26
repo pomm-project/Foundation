@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\Converter;
 
-use PommProject\Foundation\Session\Session;
 
 class PgNumRange extends TypeConverter
 {

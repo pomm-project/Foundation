@@ -10,7 +10,6 @@
 namespace PommProject\Foundation\PreparedQuery;
 
 use PommProject\Foundation\Client\ClientPooler;
-use PommProject\Foundation\Exception\FoundationException;
 
 /**
  * PreparedQueryPooler

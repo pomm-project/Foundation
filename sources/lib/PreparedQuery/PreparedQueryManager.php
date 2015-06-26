@@ -9,7 +9,6 @@
  */
 namespace PommProject\Foundation\PreparedQuery;
 
-use PommProject\Foundation\ResultHandler;
 use PommProject\Foundation\ConvertedResultIterator;
 use PommProject\Foundation\QueryManager\QueryManagerClient;
 

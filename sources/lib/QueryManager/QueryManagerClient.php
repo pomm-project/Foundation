@@ -10,10 +10,6 @@
 namespace PommProject\Foundation\QueryManager;
 
 use PommProject\Foundation\Client\Client;
-use PommProject\Foundation\ConvertedResultIterator;
-use PommProject\Foundation\Listener\SendNotificationTrait;
-use PommProject\Foundation\QueryManager\QueryManagerInterface;
-use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
 
 /**
  * SimpleQueryManager

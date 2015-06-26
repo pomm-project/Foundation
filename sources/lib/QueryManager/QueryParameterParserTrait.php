@@ -9,9 +9,6 @@
  */
 namespace PommProject\Foundation\QueryManager;
 
-use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Client\Client;
-
 /**
  * QueryParameterParserTrait
  *

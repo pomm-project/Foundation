@@ -9,8 +9,6 @@
  */
 namespace PommProject\Foundation;
 
-use PommProject\Foundation\ResultIterator;
-
 /**
  * Pager
  *

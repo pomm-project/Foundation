@@ -48,7 +48,7 @@ class Connection
      * @access public
      * @param  string $dsn
      * @param  array $configuration
-     * @throws  ConnectionException if pgsql extension is missing
+     * @throws ConnectionException if pgsql extension is missing
      */
     public function __construct($dsn, array $configuration = [])
     {

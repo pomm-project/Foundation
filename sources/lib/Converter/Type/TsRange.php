@@ -9,6 +9,16 @@
  */
 namespace PommProject\Foundation\Converter\Type;
 
+/**
+ * TsRange
+ *
+ * Type for range of timestamps.
+ *
+ * @package Foundation
+ * @copyright 2014 Grégoire HUBERT
+ * @author Grégoire HUBERT
+ * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ */
 class TsRange extends BaseRange
 {
     /**

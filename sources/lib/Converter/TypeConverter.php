@@ -101,7 +101,8 @@ abstract class TypeConverter implements ConverterInterface
     /**
      * checkData
      *
-     * Check if data is suitable for Pg conversion. If not an attempt is made to build the object from the given definition.
+     * Check if data is suitable for Pg conversion. If not an attempt is made
+     * to build the object from the given definition.
      *
      * @access public
      * @param  mixed    $data

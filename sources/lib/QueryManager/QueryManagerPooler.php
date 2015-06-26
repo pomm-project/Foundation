@@ -76,6 +76,8 @@ class QueryManagerPooler extends ClientPooler
      * getPoolerType
      *
      * @see ClientPooler
+     * @param null|string $client
+     * @return \PommProject\Foundation\Client\Client
      */
     public function getClient($client = null)
     {

@@ -48,9 +48,13 @@ class Connection
      * @access public
      * @param  string $dsn
      * @param  array $configuration
+     * @throws ConnectionException if pgsql extension is missing
      */
     public function __construct($dsn, array $configuration = [])
     {
+        if (!function_exists('pg_connection_status')) {
+            throw new ConnectionException("`pgsql` PHP extension's functions are unavailable in your environment, please make sure PostgreSQL support is enabled in PHP.");  
+        }
         $this->configurator = new ConnectionConfigurator($dsn);
         $this->configurator->addConfiguration($configuration);
     }

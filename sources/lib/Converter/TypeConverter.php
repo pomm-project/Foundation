@@ -79,7 +79,7 @@ abstract class TypeConverter implements ConverterInterface
     {
         return
             $data !== null
-            ? sprintf("%s('%s')", $type, $this->checkData($data)->__toString())
+            ? sprintf("%s('%s')", $type, $this->checkData($data))
             : sprintf("NULL::%s", $type)
             ;
     }
@@ -93,7 +93,7 @@ abstract class TypeConverter implements ConverterInterface
     {
         return
             $data !== null
-            ? sprintf("%s", str_replace('"', '""', $this->checkData($data)->__toString()))
+            ? sprintf("%s", str_replace('"', '""', (string) $this->checkData($data)))
             : null
             ;
     }

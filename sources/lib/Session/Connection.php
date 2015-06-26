@@ -170,12 +170,11 @@ class Connection
             }
         }
 
-        switch (@pg_connection_status($this->handler)) {
-            case \PGSQL_CONNECTION_OK:
-                return static::CONNECTION_STATUS_GOOD;
-            default:
-                return static::CONNECTION_STATUS_BAD;
+        if (@pg_connection_status($this->handler) === \PGSQL_CONNECTION_OK) {
+            return static::CONNECTION_STATUS_GOOD;
         }
+
+        return static::CONNECTION_STATUS_BAD;
     }
 
     /**
@@ -268,7 +267,9 @@ class Connection
     private function checkConnectionUp($error_message = '')
     {
         if ($this->hasHandler()) {
-            $error_message == null ? "Connection is already made with the server" : $error_message;
+            if ($error_message === '') {
+                $error_message = "Connection is already made with the server";
+            }
 
             throw new ConnectionException($error_message);
         }

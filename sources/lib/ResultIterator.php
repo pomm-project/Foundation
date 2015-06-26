@@ -212,7 +212,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
      */
     public function getOddEven()
     {
-        return $this->position % 2 ? 'odd' : 'even';
+        return $this->position % 2 === 1 ? 'odd' : 'even';
     }
 
     /**

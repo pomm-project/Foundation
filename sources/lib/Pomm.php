@@ -49,10 +49,9 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
     public function __construct(array $configurations = [])
     {
         foreach ($configurations as $name => $configuration) {
+            $builder_class = '\PommProject\Foundation\SessionBuilder';
             if (isset($configuration['class:session_builder'])) {
                 $builder_class = $this->checkSessionBuilderClass($configuration['class:session_builder']);
-            } else {
-                $builder_class = '\PommProject\Foundation\SessionBuilder';
             }
 
             $this->addBuilder($name, new $builder_class($configuration));
@@ -230,8 +229,10 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      */
     public function removeBuilder($name)
     {
-        unset($this->builderMustExist($name)->builders[$name]);
-        unset($this->post_configurations[$name]);
+        unset(
+            $this->builderMustExist($name)->builders[$name],
+            $this->post_configurations[$name]
+        );
 
         return $this;
     }

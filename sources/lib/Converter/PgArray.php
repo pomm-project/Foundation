@@ -52,7 +52,7 @@ class PgArray extends ArrayTypeConverter
             return null;
         }
 
-        $type = $this->getSubType($type);
+        $type = static::getSubType($type);
 
         if ($data !== "{}") {
             $converter = $this->getSubtypeConverter($type, $session);
@@ -65,7 +65,7 @@ class PgArray extends ArrayTypeConverter
                 } else {
                     return null;
                 }
-                }, str_getcsv(trim($data, "{}")));
+            }, str_getcsv(trim($data, "{}")));
         } else {
             return [];
         }
@@ -76,7 +76,7 @@ class PgArray extends ArrayTypeConverter
      */
     public function toPg($data, $type, Session $session)
     {
-        $type = $this->getSubType($type);
+        $type = static::getSubType($type);
 
         if ($data === null) {
             return sprintf("NULL::%s[]", $type);
@@ -99,7 +99,7 @@ class PgArray extends ArrayTypeConverter
             return null;
         }
 
-        $type = $this->getSubType($type);
+        $type = static::getSubType($type);
         $converter = $this->getSubtypeConverter($type, $session);
         $data = $this->checkArray($data);
 
@@ -112,7 +112,7 @@ class PgArray extends ArrayTypeConverter
 
                     $val = $converter->toPgStandardFormat($val, $type, $session);
 
-                    if (strlen($val) !== 0) {
+                    if ($val !== '') {
                         if (preg_match('/[,\\"\s]/', $val)) {
                             $val = sprintf('"%s"', addcslashes($val, '"\\'));
                         }
@@ -122,6 +122,6 @@ class PgArray extends ArrayTypeConverter
 
                     return $val;
                 }, $data)
-                ));
+            ));
     }
 }

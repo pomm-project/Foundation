@@ -95,13 +95,13 @@ class PgComposite extends ArrayTypeConverter
                 join(',', array_map(function ($val) {
                     if ($val === null) {
                         return '';
-                    } elseif (strlen($val) === 0) {
+                    } elseif ($val === '') {
                         return '""';
                     } elseif (preg_match('/[,\s]/', $val)) {
                         return sprintf('"%s"', str_replace('"', '""', $val));
                     } else {
                         return $val;
-                    };
+                    }
                 }, $this->convertArray($data, $session, 'toPgStandardFormat')
                 ))
             );

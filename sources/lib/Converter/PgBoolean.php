@@ -60,10 +60,10 @@ class PgBoolean implements ConverterInterface
      */
     public function toPgStandardFormat($data, $type, Session $session)
     {
-        return
-            $data !== null
-            ? $data === true ? 't' : 'f'
-            : null
-            ;
+        if ($data !== null) {
+            return $data === true ? 't' : 'f';
+        }
+
+        return null;
     }
 }

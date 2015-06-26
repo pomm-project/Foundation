@@ -65,7 +65,7 @@ abstract class ArrayTypeConverter implements ConverterInterface
      */
     protected function getSubtypeConverter($type, Session $session)
     {
-        if (!isset($this->subtype_converter[$type])) {
+        if (!isset($this->converters[$type])) {
             $this->converters[$type] = $session
                 ->getClientUsingPooler('converter', $type)
                 ->getConverter()

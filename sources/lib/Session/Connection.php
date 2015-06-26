@@ -36,7 +36,7 @@ class Connection
     const ACCESS_MODE_READ_ONLY     = "READ ONLY";
     const ACCESS_MODE_READ_WRITE    = "READ WRITE";      // default
 
-    protected $handler = null;
+    protected $handler;
     protected $configurator;
     private $is_closed = false;
 

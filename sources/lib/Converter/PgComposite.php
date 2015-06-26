@@ -25,7 +25,6 @@ use PommProject\Foundation\Session\Session;
 class PgComposite extends ArrayTypeConverter
 {
     protected $structure;
-    protected $converters;
 
     /**
      * __construct

@@ -38,7 +38,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * @access public
      * @param  array $parameters (optional)
      */
-    public function __construct(array $parameters = array())
+    public function __construct(array $parameters = [])
     {
         $this->parameters = $parameters;
     }

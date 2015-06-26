@@ -30,7 +30,7 @@ class PreparedQuery extends Client
     protected $sql;
     private $is_prepared = false;
     private $identifier;
-    private $converters = null;
+    private $converters;
 
     /**
      * getSignatureFor

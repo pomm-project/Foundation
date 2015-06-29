@@ -1,3 +1,32 @@
+== VERSION 2.0.0-RC.3
+
+ *  Fix a performance bug in ArrayTypeConverter
+ *  Specify exception
+ *  Fix default values
+ *  Remove unused parameter
+ *  Fix unused imports
+ *  Fix #55 - Handling missing pgsql w/ appropriate error msg
+ *  Make code pass through php-cs
+ *  Remove a warning due to closing an unset result
+ *  fixed a typo in queryParameters
+ *  add query exception setter / getter
+ *  remove try catch for method sendQueryWithParameters
+ *  Add Pomm::shutdown
+ *  Add Session::shutdown
+ *  Add a CLOSED connection status.
+ *  Reset connection handler when closing
+ *  Add sql error code
+ *  Factorize Where code
+ *  Remove unused code (close #46)
+ *  Fix #43 #44 - @return annotation to constructors "not recommended"
+ *  Fix #42, PHPDoc param type fixed
+ *  fix #41
+ *  fixing params names or types
+ *  massive s/@throw /@throws /g find & replace
+ *  PHPDoc improved: fixing missing tags, params & var
+ *  Fix a bug in the ParameterHolder
+ *  Add Session proxy methods.
+
 == VERSION 2.0.0-RC.2
 
  *  Add Pomm::removeSession() method.

@@ -36,6 +36,11 @@ class PgHstore extends BaseConverter
                     ->fromPg('"a"=>"b", "b"=>NULL, "a \\\\b\\\\ c"=>"d \'é\' f"', 'hstore', $session)
             )
             ->isIdenticalTo(['a' => 'b', 'b' => null, 'a \\b\\ c' => 'd \'é\' f'])
+            ->array(
+                $converter
+                ->fromPg('"pika"=>"\\"chu, rechu"', 'hstore', $session)
+            )
+            ->isIdenticalTo(['pika' => '"chu, rechu'])
             ->variable(
                 $converter
                     ->fromPg(null, 'hstore', $session)

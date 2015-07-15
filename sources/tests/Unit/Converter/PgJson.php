@@ -17,7 +17,7 @@ class PgJson extends BaseConverter
     {
         $session = $this->buildSession();
         $json  = <<<JSON
-{"az": {"b": [" c ", "d"], "e": {"fé": "gù"}}, "h": ["'i'", "j"]}
+{"az": {"b": [" c ", "d\\\\\\":"], "e": {"fé": "gù:\\"pika\\""}}, "h": ["'i'", "j"]}
 JSON;
         $converter = $this->newTestedInstance();
         $this
@@ -29,7 +29,7 @@ JSON;
                     $session
                 )
             )
-            ->isIdenticalTo(["az" => ['b' => [' c ', 'd'], 'e' => ['fé' => 'gù']], 'h' => ['\'i\'', 'j']])
+            ->isIdenticalTo(["az" => ['b' => [' c ', 'd\\":'], 'e' => ['fé' => 'gù:"pika"']], 'h' => ['\'i\'', 'j']])
             ->variable($converter->fromPg(null, 'json', $session))
             ;
         $object = $this->newTestedInstance(false)->fromPg($json, 'json', $session);
@@ -38,7 +38,7 @@ JSON;
             ->isInstanceOf((object) [])
             ->object($object->az)
             ->array($object->az->b)
-            ->isIdenticalTo([' c ', 'd'])
+            ->isIdenticalTo([' c ', 'd\\":'])
             ;
     }
 

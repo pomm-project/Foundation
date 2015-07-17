@@ -80,7 +80,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
             if (!$reflection->isSubclassOf('\PommProject\Foundation\Session\SessionBuilder')) {
                 throw new FoundationException(
                     sprintf(
-                        "Class '%s' is not a subclass of \Pomm\Foundation\Session\SessionBuilder.",
+                        "Class '%s' is not a subclass of \PommProject\Foundation\Session\SessionBuilder.",
                         $builder_class
                     )
                 );

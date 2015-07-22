@@ -29,7 +29,7 @@ class Connection
     const CONNECTION_STATUS_BAD     = 2;
     const CONNECTION_STATUS_CLOSED  = 3;
     const ISOLATION_READ_COMMITTED  = "READ COMMITTED";  // default
-    const ISOLATION_READ_REPEATABLE = "READ REPEATABLE"; // from Pg 9.1
+    const ISOLATION_REPEATABLE_READ = "REPEATABLE READ"; // from Pg 9.1
     const ISOLATION_SERIALIZABLE    = "SERIALIZABLE";    // changes in 9.1
     const CONSTRAINTS_DEFERRED      = "DEFERRED";
     const CONSTRAINTS_IMMEDIATE     = "IMMEDIATE";       // default

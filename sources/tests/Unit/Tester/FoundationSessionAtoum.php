@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PommProject\Foundation\Tester;
+namespace PommProject\Foundation\Test\Unit\Tester;
 
 use PommProject\Foundation\SessionBuilder;
 

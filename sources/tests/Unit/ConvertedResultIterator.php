@@ -10,7 +10,7 @@
 namespace PommProject\Foundation\Test\Unit;
 
 use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Tester\FoundationSessionAtoum;
+use PommProject\Foundation\Test\Unit\Tester\FoundationSessionAtoum;
 
 class ConvertedResultIterator extends FoundationSessionAtoum
 {

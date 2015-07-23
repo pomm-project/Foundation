@@ -12,7 +12,7 @@ namespace PommProject\Foundation\Test\Unit\QueryManager;
 use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Converter\Type\Circle;
 use PommProject\Foundation\Converter\ConverterPooler;
-use PommProject\Foundation\Tester\FoundationSessionAtoum;
+use PommProject\Foundation\Test\Unit\Tester\FoundationSessionAtoum;
 
 class SimpleQueryManager extends FoundationSessionAtoum
 {

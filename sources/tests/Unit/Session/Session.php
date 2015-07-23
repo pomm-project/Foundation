@@ -11,7 +11,7 @@ namespace PommProject\Foundation\Test\Unit\Session;
 
 use PommProject\Foundation\Session\Session                   as VanillaSession;
 use PommProject\Foundation\Session\Connection                as FoundationConnection;
-use PommProject\Foundation\Tester\VanillaSessionAtoum;
+use PommProject\Foundation\Test\Unit\Tester\VanillaSessionAtoum;
 use Mock\PommProject\Foundation\Client\ClientInterface       as ClientInterfaceMock;
 use Mock\PommProject\Foundation\Client\ClientPoolerInterface as ClientPoolerInterfaceMock;
 

@@ -10,7 +10,7 @@
 namespace PommProject\Foundation\Test\Unit;
 
 use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Tester\VanillaSessionAtoum;
+use PommProject\Foundation\Test\Unit\Tester\VanillaSessionAtoum;
 
 class ResultIterator extends VanillaSessionAtoum
 {

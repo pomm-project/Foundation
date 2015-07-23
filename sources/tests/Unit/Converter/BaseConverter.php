@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
-use PommProject\Foundation\Tester\FoundationSessionAtoum;
+use PommProject\Foundation\Test\Unit\Tester\FoundationSessionAtoum;
 use PommProject\Foundation\Session\Session;
 
 abstract class BaseConverter extends FoundationSessionAtoum

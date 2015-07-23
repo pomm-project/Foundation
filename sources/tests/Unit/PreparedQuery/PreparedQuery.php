@@ -11,7 +11,7 @@ namespace PommProject\Foundation\Test\Unit\PreparedQuery;
 
 use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Converter\Type\Circle;
-use PommProject\Foundation\Tester\FoundationSessionAtoum;
+use PommProject\Foundation\Test\Unit\Tester\FoundationSessionAtoum;
 use PommProject\Foundation\PreparedQuery\PreparedQuery as testedClass;
 
 class PreparedQuery extends FoundationSessionAtoum

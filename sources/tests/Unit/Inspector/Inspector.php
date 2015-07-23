@@ -12,7 +12,7 @@ namespace PommProject\Foundation\Test\Unit\Inspector;
 use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Test\Fixture\InspectorFixture;
 use PommProject\Foundation\Exception\FoundationException;
-use PommProject\Foundation\Tester\FoundationSessionAtoum;
+use PommProject\Foundation\Test\Unit\Tester\FoundationSessionAtoum;
 
 /**
  * @engine isolate

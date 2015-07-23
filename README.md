@@ -154,7 +154,7 @@ For convenience, there are two `SessionBuilder`s, one that just creates a blank 
 
 This package uses Atoum as unit test framework. The tests are located in `sources/tests`. The test suite needs to access the database to ensure that read and write operations are made in a consistent manner. You need to set up a database for that and fill the `sources/tests/config.php` file with the according DSN. For convenience, Foundation provides two classes that extend `Atoum` with a `Session`:
 
- * `PommProject\Foundation\Tester\VanillaSessionAtoum`
- * `PommProject\Foundation\Tester\FoundationSessionAtoum`
+ * `PommProject\Foundation\Test\Unit\Tester\VanillaSessionAtoum`
+ * `PommProject\Foundation\Test\Unit\Tester\FoundationSessionAtoum`
 
 Making your test class to extend one of these will grant them with a `buildSession` method that returns a newly created session. Clients of these classes must implement a `initializeSession(Session $session)` method (even a blank one). It is often a good idea to provide a fixture class as a session client, this method is the right place to register it.

@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Test\Unit\Listener;
 
-use PommProject\Foundation\Tester\FoundationSessionAtoum;
+use PommProject\Foundation\Test\Unit\Tester\FoundationSessionAtoum;
 use PommProject\Foundation\Session\Session;
 
 class Listener extends FoundationSessionAtoum

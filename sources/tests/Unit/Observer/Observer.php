@@ -9,7 +9,7 @@
  */
 namespace PommProject\Foundation\Test\Unit\Observer;
 
-use PommProject\Foundation\Tester\VanillaSessionAtoum;
+use PommProject\Foundation\Test\Unit\Tester\VanillaSessionAtoum;
 use PommProject\Foundation\Observer\ObserverPooler;
 use PommProject\Foundation\Session\Session;
 

@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,12 +16,13 @@ use PommProject\Foundation\Session\ResultHandler;
  *
  * Iterator on database results.
  *
- * @package Foundation
- * @copyright 2014 Grégoire HUBERT
- * @author Grégoire HUBERT
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- * @see \Iterator
- * @see \Countable
+ * @package     Foundation
+ * @copyright   2014 - 2015 Grégoire HUBERT
+ * @author      Grégoire HUBERT
+ * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see         \Iterator
+ * @see         \Countable
+ * @see         \JsonSerializable
  */
 class ResultIterator implements \Iterator, \Countable, \JsonSerializable
 {
@@ -83,7 +84,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
     /**
      * count
      *
-     * @see \Countable
+     * @see    \Countable
      * @return integer
      */
     public function count()
@@ -108,7 +109,10 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
      */
     public function current()
     {
-        return $this->isEmpty() ? null : $this->get($this->position);
+        return !$this->isEmpty()
+            ? $this->get($this->position)
+            : null
+            ;
     }
 
     /**
@@ -135,7 +139,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
      * valid
      *
      * @see \Iterator
-     * @return Boolean
+     * @return boolean
      */
     public function valid()
     {
@@ -145,24 +149,32 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
     /**
      * isFirst
      * Is the iterator on the first element ?
+     * Returns null if the iterator is empty.
      *
-     * @return Boolean
+     * @return boolean|null
      */
     public function isFirst()
     {
-        return $this->position === 0;
+        return !$this->isEmpty()
+            ? $this->position === 0
+            : null
+            ;
     }
 
     /**
      * isLast
      *
      * Is the iterator on the last element ?
+     * Returns null if the iterator is empty.
      *
-     * @return Boolean
+     * @return boolean|null
      */
     public function isLast()
     {
-        return $this->position === $this->count() - 1;
+        return !$this->isEmpty()
+            ? $this->position === $this->count() - 1
+            : null
+            ;
     }
 
     /**
@@ -170,7 +182,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
      *
      * Is the collection empty (no element) ?
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isEmpty()
     {
@@ -182,7 +194,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
      *
      * Is the iterator on an even position ?
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isEven()
     {
@@ -194,7 +206,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
      *
      * Is the iterator on an odd position ?
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isOdd()
     {

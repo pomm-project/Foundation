@@ -2,7 +2,7 @@
 /*
  * This file is part of the PommProject/Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -81,7 +81,7 @@ JSON;
             ;
 
         if ($this->isPgVersionAtLeast('9.2', $session) === false) {
-            $this->skip("Pg Version must be at least 9.2.");
+            $this->skip("Skipping JSON tests as Json type does not exist for Pg < 9.2.");
 
             return;
         }

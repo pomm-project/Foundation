@@ -17,10 +17,10 @@ use PommProject\Foundation\Client\Client;
 /**
  * PreparedQuery
  *
- * @package Foundation
+ * @package   Foundation
  * @copyright 2014 - 2015 Grégoire HUBERT
- * @author Grégoire HUBERT <hubert.greg@gmail.com>
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @author    Grégoire HUBERT <hubert.greg@gmail.com>
+ * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
 class PreparedQuery extends Client
 {

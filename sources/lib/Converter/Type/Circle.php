@@ -36,7 +36,12 @@ class Circle
     public function __construct($description)
     {
         $description = trim($description, ' <>');
-        $elts = preg_split('/[,\s]*(\([^\)]+\))[,\s]*|[,\s]+/', $description, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $elts = preg_split(
+            '/[,\s]*(\([^\)]+\))[,\s]*|[,\s]+/',
+            $description,
+            0,
+            PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
+        );
 
         if (count($elts) !== 2) {
             throw new \InvalidArgumentException(
@@ -78,8 +83,8 @@ class Circle
     {
         return sprintf(
             "<%s,%s>",
-                (string) $this->center,
-                $this->radius
-            );
+            (string) $this->center,
+            $this->radius
+        );
     }
 }

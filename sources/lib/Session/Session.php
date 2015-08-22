@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,7 +26,7 @@ use Psr\Log\LoggerInterface;
  * clients which are stored in a ClientHolder.
  *
  * @package     Foundation
- * @copyright   2014 Grégoire HUBERT
+ * @copyright   2014 - 2015 Grégoire HUBERT
  * @author      Grégoire HUBERT
  * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see         LoggerAwareInterface
@@ -234,7 +234,9 @@ class Session implements LoggerAwareInterface
 
         $client_pooler->register($this);
         $this->client_poolers[$client_pooler->getPoolerType()] = $client_pooler;
-        $this->hasLogger() && $this->getLogger()->debug(
+        $this->hasLogger()
+            && $this->getLogger()
+            ->debug(
                 "Pomm: Registering new client pooler.",
                 ['type' => $client_pooler->getPoolerType()]
             );

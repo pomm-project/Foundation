@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,10 +19,10 @@ use PommProject\Foundation\Exception\ConnectionException;
  * It has to extract information from the DSN and ensure required arguments
  * are present.
  *
- * @package Foundation
- * @copyright 2014 Grégoire HUBERT
- * @author Grégoire HUBERT
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @package     Foundation
+ * @copyright   2014 - 2015 Grégoire HUBERT
+ * @author      Grégoire HUBERT
+ * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
  */
 class ConnectionConfigurator
 {
@@ -106,18 +106,33 @@ class ConnectionConfigurator
     private function parseDsn()
     {
         $dsn = $this->configuration->mustHave('dsn')->getParameter('dsn');
-        if (!preg_match('#([a-z]+)://([^:@]+)(?::([^@]*))?(?:@([\w\.-]+|!/.+[^/]!)(?::(\w+))?)?/(.+)#', $dsn, $matches)) {
+        if (!preg_match(
+            '#([a-z]+)://([^:@]+)(?::([^@]*))?(?:@([\w\.-]+|!/.+[^/]!)(?::(\w+))?)?/(.+)#',
+            $dsn,
+            $matches
+        )) {
             throw new ConnectionException(sprintf('Could not parse DSN "%s".', $dsn));
         }
 
         if ($matches[1] == null || $matches[1] !== 'pgsql') {
-            throw new ConnectionException(sprintf("bad protocol information '%s' in dsn '%s'. Pomm does only support 'pgsql' for now.", $matches[1], $dsn));
+            throw new ConnectionException(
+                sprintf(
+                    "bad protocol information '%s' in dsn '%s'. Pomm does only support 'pgsql' for now.",
+                    $matches[1],
+                    $dsn
+                )
+            );
         }
 
         $adapter = $matches[1];
 
         if ($matches[2] === null) {
-            throw new ConnectionException(sprintf('No user information in dsn "%s".', $dsn));
+            throw new ConnectionException(
+                sprintf(
+                    "No user information in dsn '%s'.",
+                    $dsn
+                )
+            );
         }
 
         $user = $matches[2];
@@ -132,16 +147,21 @@ class ConnectionConfigurator
         $port = $matches[5];
 
         if ($matches[6] === null) {
-            throw new ConnectionException(sprintf('No database name in dsn "%s".', $dsn));
+            throw new ConnectionException(
+                sprintf(
+                    "No database name in dsn '%s'.",
+                    $dsn
+                )
+            );
         }
 
         $database = $matches[6];
         $this->configuration
-            ->setParameter('adapter',  $adapter)
-            ->setParameter('user',     $user)
-            ->setParameter('pass',     $pass)
-            ->setParameter('host',     $host)
-            ->setParameter('port',     $port)
+            ->setParameter('adapter', $adapter)
+            ->setParameter('user', $user)
+            ->setParameter('pass', $pass)
+            ->setParameter('host', $host)
+            ->setParameter('port', $port)
             ->setParameter('database', $database)
             ->mustHave('user')
             ->mustHave('database')
@@ -161,7 +181,13 @@ class ConnectionConfigurator
     public function getConnectionString()
     {
         $this->parseDsn();
-        $connect_parameters = [sprintf("user=%s dbname=%s", $this->configuration['user'], $this->configuration['database'])];
+        $connect_parameters = [
+            sprintf(
+                "user=%s dbname=%s",
+                $this->configuration['user'],
+                $this->configuration['database']
+            )
+        ];
 
         if ($this->configuration['host'] !== '') {
             $connect_parameters[] = sprintf('host=%s', $this->configuration['host']);

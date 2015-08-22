@@ -17,11 +17,11 @@ use PommProject\Foundation\QueryManager\QueryManagerClient;
  *
  * Query manager using the prepared_statement client.
  *
- * @package Foundation
+ * @package   Foundation
  * @copyright 2014 - 2015 Grégoire HUBERT
- * @author Grégoire HUBERT
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- * @see SimpleQuery
+ * @author    Grégoire HUBERT
+ * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see       SimpleQuery
  */
 class PreparedQueryManager extends QueryManagerClient
 {

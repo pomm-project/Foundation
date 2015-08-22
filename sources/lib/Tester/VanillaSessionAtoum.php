@@ -2,12 +2,11 @@
 /*
  * This file is part of the PommProject/Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PommProject\Foundation\Tester;
 
 use PommProject\Foundation\Session\Session;
@@ -21,12 +20,12 @@ use Atoum;
  * hence produce session with no poolers nor clients.
  * It is intended to be overloaded by each package to add their own poolers.
  *
- * @package Foundation
- * @copyright 2014 Grégoire HUBERT
- * @author Grégoire HUBERT
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @package   Foundation
+ * @copyright 2014 - 2015 Grégoire HUBERT
+ * @author    Grégoire HUBERT
+ * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see       Atoum
  * @abstract
- * @see Atoum
  */
 abstract class VanillaSessionAtoum extends Atoum
 {

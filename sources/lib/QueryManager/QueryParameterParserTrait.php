@@ -15,10 +15,10 @@ namespace PommProject\Foundation\QueryManager;
  * Trait that makes query managers to parse, expand anc convert query
  * parameters.
  *
- * @package Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
- * @author Grégoire HUBERT
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @package     Foundation
+ * @copyright   2014 - 2015 Grégoire HUBERT
+ * @author      Grégoire HUBERT
+ * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
  */
 trait QueryParameterParserTrait
 {
@@ -49,7 +49,15 @@ trait QueryParameterParserTrait
      */
     public function orderParameters($string)
     {
-        return preg_replace_callback('/\$\*/', function () { static $nb = 0; return sprintf("$%d", ++$nb); }, $string);
+        return preg_replace_callback(
+            '/\$\*/',
+            function () {
+                static $nb = 0;
+
+                return sprintf("$%d", ++$nb);
+            },
+            $string
+        );
     }
 
     /**

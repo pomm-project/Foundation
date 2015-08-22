@@ -2,31 +2,22 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace PommProject\Foundation;
 
-/*
- * This file is part of Pomm's Foundation package.
- *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 use PommProject\Foundation\Exception\FoundationException;
 
 /**
  * ParameterHolder
  *
- * @package Foundation
- * @copyright 2014 Grégoire HUBERT
- * @author Grégoire HUBERT <hubert.greg@gmail.com>
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @package   Foundation
+ * @copyright 2014 - 2015 Grégoire HUBERT
+ * @author    Grégoire HUBERT <hubert.greg@gmail.com>
+ * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
 class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
 {

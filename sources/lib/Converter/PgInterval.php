@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,10 +16,11 @@ use PommProject\Foundation\Session\Session;
  * PgInterval
  *
  * Convert an ISO8601 interval from/to PHP.
- * @package Foundation
- * @copyright 2014 Grégoire HUBERT
- * @author Grégoire HUBERT <hubert.greg@gmail.com>
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ *
+ * @package   Foundation
+ * @copyright 2014 - 2015 Grégoire HUBERT
+ * @author    Grégoire HUBERT <hubert.greg@gmail.com>
+ * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
 class PgInterval implements ConverterInterface
 {
@@ -35,7 +36,7 @@ class PgInterval implements ConverterInterface
         try {
             return new \DateInterval(preg_replace('/\.[0-9]+S/', 'S', $data));
         } catch (\Exception $e) {
-            throw new ConverterException(sprintf("Data '%s' is not an ISO8601 interval representation.", $data));
+            throw new ConverterException(sprintf("Data '%s' is not an ISO8601 interval representation.", $data), null, $e);
         }
     }
 

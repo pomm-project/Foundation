@@ -2,7 +2,7 @@
 /*
  * This file is part of Pomm's Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,10 +17,10 @@ use PommProject\Foundation\Exception\ConverterException;
  * Responsible of holding all converters associated with their corresponding
  * types.
  *
- * @package Foundation
- * @copyright 2014 Grégoire HUBERT
- * @author Grégoire HUBERT
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @package   Foundation
+ * @copyright 2014 - 2015 Grégoire HUBERT
+ * @author    Grégoire HUBERT
+ * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
 class ConverterHolder
 {
@@ -53,13 +53,15 @@ class ConverterHolder
     /**
      * addConverter
      *
-     * Add a converter with a new name.
+     * Add a converter with a new name. If strict is set to true and the
+     * converter for this type has already been registered, then it throws and
+     * exception.
      *
      * @access protected
      * @param  string             $name
      * @param  ConverterInterface $converter
      * @param  bool               $strict (default true)
-     * @throws  ConverterException if $name already exists and strict.
+     * @throws ConverterException if $name already exists and strict.
      * @return ConverterHolder    $this
      */
     protected function addConverter($name, ConverterInterface $converter, $strict = null)

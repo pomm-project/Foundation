@@ -2,7 +2,7 @@
 /*
  * This file is part of the PommProject/Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@ use Psr\Log\LoggerAwareTrait;
  * The Pomm service manager.
  *
  * @package     Foundation
- * @copyright   2014 Grégoire HUBERT
+ * @copyright   2014 - 2015 Grégoire HUBERT
  * @author      Grégoire HUBERT
  * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -397,7 +397,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
         if (empty($session_names)) {
             $sessions = array_keys($this->sessions);
         } else {
-            array_map(function ($name) { $this->builderMustExist($name); }, $session_names);
+            array_map([ $this, 'builderMustExist' ], $session_names);
             $sessions = array_intersect(
                 array_keys($this->sessions),
                 $session_names
@@ -432,7 +432,9 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
                     join(
                         ', ',
                         array_map(
-                            function ($val) { return sprintf("'%s'", $val); },
+                            function ($val) {
+                                return sprintf("'%s'", $val);
+                            },
                             array_keys($this->getSessionBuilders())
                         )
                     )

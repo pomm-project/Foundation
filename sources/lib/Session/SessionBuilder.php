@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,10 +21,10 @@ use PommProject\Foundation\Converter\ConverterHolder;
  * This class is responsible of creating and configuring a session. It is a
  * default configuration for session and is dedicated to be overloaded.
  *
- * @package Foundation
- * @copyright 2014 Grégoire HUBERT
- * @author Grégoire HUBERT
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @package   Foundation
+ * @copyright 2014 - 2015 Grégoire HUBERT
+ * @author    Grégoire HUBERT
+ * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
 class SessionBuilder
 {
@@ -101,25 +101,25 @@ class SessionBuilder
      * @param  string   $stamp
      * @return Session
      */
-   final public function buildSession($stamp = null)
-   {
-       $this->preConfigure();
-       $dsn = $this
+    final public function buildSession($stamp = null)
+    {
+        $this->preConfigure();
+        $dsn = $this
             ->configuration->mustHave('dsn')->getParameter('dsn');
-       $connection_configuration =
+        $connection_configuration =
             $this->configuration
             ->mustHave('connection:configuration')
             ->getParameter('connection:configuration')
             ;
-       $session = $this->createSession(
+        $session = $this->createSession(
             $this->createConnection($dsn, $connection_configuration),
             $this->createClientHolder(),
             $stamp
         );
-       $this->postConfigure($session);
+        $this->postConfigure($session);
 
-       return $session;
-   }
+        return $session;
+    }
 
     /**
      * getDefaultConfiguration

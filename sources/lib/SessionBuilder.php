@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,11 +27,11 @@ use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
  *
  * Pre configured session builder.
  *
- * @package Foundation
- * @copyright 2014 Grégoire HUBERT
- * @author Grégoire HUBERT
- * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- * @see SessionBuilder
+ * @package   Foundation
+ * @copyright 2014 - 2015 Grégoire HUBERT
+ * @author    Grégoire HUBERT
+ * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see       SessionBuilder
  */
 class SessionBuilder extends VanillaSessionBuilder
 {
@@ -77,13 +77,16 @@ class SessionBuilder extends VanillaSessionBuilder
     {
         $converter_holder
             ->registerConverter('Array', new Converter\PgArray(), ['array'], false)
-            ->registerConverter('Boolean', new Converter\PgBoolean(),
+            ->registerConverter(
+                'Boolean',
+                new Converter\PgBoolean(),
                 [
                     'bool',
                     'pg_catalog.bool',
                     'boolean',
                 ],
-            false)
+                false
+            )
             ->registerConverter(
                 'Number',
                 new Converter\PgNumber(),
@@ -133,20 +136,40 @@ class SessionBuilder extends VanillaSessionBuilder
             ->registerConverter('Binary', new Converter\PgBytea(), ['bytea', 'pg_catalog.bytea'], false)
             ->registerConverter('Point', new Converter\Geometry\PgPoint(), ['point', 'pg_catalog.point'], false)
             ->registerConverter('Circle', new Converter\Geometry\PgCircle(), ['circle', 'pg_catalog.circle'], false)
-            ->registerConverter('JSON', new Converter\PgJson(), ['json', 'jsonb', 'pg_catalog.json', 'pg_catalog.jsonb'], false)
-            ->registerConverter('NumberRange', new Converter\PgNumRange(),
-            [
-                'int4range', 'pg_catalog.int4range',
-                'int8range', 'pg_catalog.int8range',
-                'numrange', 'pg_catalog.numrange',
-            ],
-            false)
-            ->registerConverter('TsRange', new Converter\PgTsRange(), [
-                'tsrange', 'pg_catalog.tsrange',
-                'daterange', 'pg_catalog.daterange',
-                'tstzrange', 'pg_catalog.tstzrange',
-            ],
-            false)
+            ->registerConverter(
+                'JSON',
+                new Converter\PgJson(),
+                [
+                    'json',
+                    'jsonb',
+                    'pg_catalog.json',
+                    'pg_catalog.jsonb'
+                ],
+                false
+            )
+            ->registerConverter(
+                'NumberRange',
+                new Converter\PgNumRange(),
+                [
+                    'int4range', 'pg_catalog.int4range',
+                    'int8range', 'pg_catalog.int8range',
+                    'numrange', 'pg_catalog.numrange',
+                ],
+                false
+            )
+            ->registerConverter(
+                'TsRange',
+                new Converter\PgTsRange(),
+                [
+                    'tsrange',
+                    'pg_catalog.tsrange',
+                    'daterange',
+                    'pg_catalog.daterange',
+                    'tstzrange',
+                    'pg_catalog.tstzrange',
+                ],
+                false
+            )
             ;
 
         return $this;

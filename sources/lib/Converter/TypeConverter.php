@@ -63,8 +63,10 @@ abstract class TypeConverter implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
+        $data = trim($data);
+
         return
-            $data !== null
+            $data !== ''
             ? $this->createObjectFrom($data)
             : null
             ;

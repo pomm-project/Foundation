@@ -21,7 +21,9 @@ class PgTsRange extends BaseConverter
         $this
             ->object($this->newTestedInstance()->fromPg($text_range, 'tstzrange', $session))
             ->isInstanceOf('\PommProject\Foundation\Converter\Type\TsRange')
-            ->variable($this->newTestedInstance()->fromPg(null, 'point', $session))
+            ->variable($this->newTestedInstance()->fromPg(null, 'whatever', $session))
+            ->isNull()
+            ->variable($this->newTestedInstance()->fromPg('', 'whatever', $session))
             ->isNull()
             ;
         $range = $this->newTestedInstance()->fromPg($text_range, 'tstzrange', $session);

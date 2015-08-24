@@ -28,7 +28,7 @@ class TsRange extends BaseRange
      */
     protected function getRegexp()
     {
-        return '/([\[\(])"?([0-9 :+\.-]+)"?, *"?([0-9 :+\.-]+)?"([\]\)])/';
+        return '/([\[\(])"?([0-9 :+\.-]+)"?, *"?([0-9 :+\.-]+)"?([\]\)])/';
     }
 
     /**

@@ -18,6 +18,7 @@ class PgTsRange extends BaseConverter
     {
         $session = $this->buildSession();
         $text_range = '["2014-08-15 15:29:24.395639+00","2014-10-15 15:29:24.395639+00")';
+        $text_range_without_double_quote = '[2014-08-15 15:29:24.395639+00,2014-10-15 15:29:24.395639+00)';
         $this
             ->object($this->newTestedInstance()->fromPg($text_range, 'tstzrange', $session))
             ->isInstanceOf('\PommProject\Foundation\Converter\Type\TsRange')
@@ -31,6 +32,11 @@ class PgTsRange extends BaseConverter
             ->object($range->start_limit)
             ->isInstanceOf('\DateTime')
             ;
+        $range_without_double_quote = $this->newTestedInstance()->fromPg($text_range_without_double_quote, 'tstzrange', $session);
+        $this
+            ->object($range_without_double_quote->start_limit)
+            ->isInstanceOf('\DateTime')
+        ;
     }
 
     public function testToPg()

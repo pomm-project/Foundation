@@ -2,6 +2,8 @@
 Pomm-project Foundation
 =======================
 
+  .. contents:: :local:
+
 Overview
 --------
 
@@ -15,7 +17,7 @@ Foundation manages relations between a database *connection* and *clients* throu
  - ``Pomm`` is the service class, it registers *session builders* and caches spawned *sessions*.
  - ``SessionBuilder`` configures and builds *sessions*.
  - ``Session`` holds *clients* and *poolers* and the *connection*.
- - ``Client`` abstract class that implements ``ClientInterface``. Instances are *session*'s *clients*.
+ - ``Client`` abstract class that implements ``ClientInterface``. Instances are *session*’s *clients*.
  - ``ClientPooler`` abstract class that implements ``ClientPoolerInterface``. They manage *clients* in *sessions*.
 
 This complexity is at first glance hidden. If one wants to open a connection, send a query and get converted results, it is as simple as:
@@ -44,11 +46,20 @@ This complexity is at first glance hidden. If one wants to open a connection, se
         }
     }
 
-:note 1: This returns a *session* using a *session builder*.
-:note 2: This returns the default ``query_manager`` *client* using the ``QueryManagerPooler``.
-:note 3: Issue the parametrized query and return a ``ConvertedResultIterator``.
-:note 4: Traverse the result as an array and fetch rows.
-:note 5: Access field result. Those results are converted to a PHP equivalent type (see `Converter pooler`_).
+:note 1:
+    This returns a *session* using a *session builder*.
+
+:note 2:
+    This returns the default ``query_manager`` *client* using the ``QueryManagerPooler``.
+
+:note 3:
+    Issue the parametrized query and return a ``ConvertedResultIterator``.
+
+:note 4:
+    Traverse the result as an array and fetch rows.
+
+:note 5:
+    Access field result. Those results are converted to a PHP equivalent type (see `Converter pooler`_).
 
 Pomm service
 ------------
@@ -58,7 +69,7 @@ Pomm service is an interface to easily declare and build *sessions* through *ses
 Using session builders
 ~~~~~~~~~~~~~~~~~~~~~~
 
-It is possible to declare session builders either using ``Pomm``'s class constructor or the ``addBuilder`` method:
+It is possible to declare session builders either using ``Pomm``’s class constructor or the ``addBuilder`` method:
 
 .. code:: php
 
@@ -70,6 +81,7 @@ It is possible to declare session builders either using ``Pomm``'s class constru
 It is often more practical to declare all *sessions* configuration from the constructor directly even if the builder is a custom class:
 
 .. code:: php
+
     <?php
 
     $pomm = new Pomm(
@@ -81,7 +93,8 @@ It is often more practical to declare all *sessions* configuration from the cons
             'second_db' =>
                 [
                     'dsn' => 'pgsql://user:pass@host/second_db',
-                    'class:session_builder' => '\Project\MySessionBuilder'
+                    'class:session_builder' => '\Project\MySessionBuilder',
+                    'pomm:default' => true,
                 ]
         ]
     );
@@ -105,6 +118,28 @@ The easiest way to get a session from the *service* is to use the ``ArrayAccess`
 
 The ``getSession($name)`` method checks if a *session* using this *session builder* has already been created. If yes, it is returned, otherwise a new one is created using the ``createSession($name)``. This last method creates a new session every time it is called. This implies a new database connection will be used.
 
+Default sessions
+~~~~~~~~~~~~~~~~
+
+It is possible not have to bother with session names (particularly if you only have one session) by using Pomm’s default session mechanism. By default, the first declared session is set as being the default:
+
+.. code:: php
+
+    <?php
+
+    $pomm = new Pomm(
+        [
+            'first_db' =>
+                [
+                    'dsn' =>  'pgsql://user:pass@host/first_db'
+                ],
+        ]
+    );
+
+    $session = $pomm->getDefaultSession(); // return a `first_db` session
+
+This still applies when several session builders are declared. It is still possible to explicitely declare a session builder as the default one by setting the ``pomm::default`` configuration setting to true.
+
 Context dependent configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -118,10 +153,39 @@ Session builders do configure session but in some cases, configuration options m
 
 When the session is created, the post-configuration functions are launched and the session is returned.
 
+Session builders management
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pomm does propose several methods to manage session builders:
+
+ - ``addBuilder($builder_name, VanillaSessionBuilder $builder)``
+ - ``hasBuilder($name)``
+ - ``removeBuilder($name)``
+ - ``getBuilder($name)``
+ - ``getSessionBuilders()``
+
 Session builder
 ---------------
 
 *Session builders* are meant to configure and instantiate *sessions*. It is possible to use them on their own without ``Pomm`` *service*.
+
+.. code:: php
+
+    use PommProject\Foundation\Session\SessionBuilder;
+
+    $session = (new SessionBuilder(['dsn' => 'pgsql://user:pass@host/db_name']))
+        ->buildSession()
+        ;
+
+The session builder shown above does create blank sessions with no poolers registered. Foundation does provide a functional builder with all poolers registered and a dedicated session class:
+
+.. code:: php
+
+    use PommProject\Foundation\SessionBuilder; // ← different session builder
+
+    $session = (new SessionBuilder(['dsn' => 'pgsql://user:pass@host/db_name']))
+        ->buildSession()
+        ;
 
 Configuration
 ~~~~~~~~~~~~~
@@ -132,10 +196,45 @@ There are several ways to set the configuration:
 
     <?php
 
-    $session_builder = new SessionBuilder(['dsn' => 'pgsql://user:pass@host:port/db_name']);
+    $session_builder = new SessionBuilder(
+        [
+            'dsn'   => 'pgsql://user:pass@host:port/db_name',
+            'param' => 'value',
+        ]
+    );
     $session_builder->addParameter('my_parameter', 'my_value');
 
 In a more general way, ``SessionBuilder`` class is made to be overloaded by a project-dedicated *session builder* class. It is then possible to overload the ``getDefaultConfiguration()`` method. It keeps the class configurable with a custom default configuration.
+
+Configuration options
+~~~~~~~~~~~~~~~~~~~~~
+
+The ``dsn`` is the only mandatory parameter expected by the builder but more parameters can be passed:
+
+ - ``connection:configuration`` (array) mandatory (see TODO: postgresql documentation link)
+    - ``bytea_output``                (string) default: ``hex``
+    - ``intervalstyle``               (string) default: ``ISO_8601``
+    - ``datestyle``                   (string) default: ``ISO``
+    - ``standard_conforming_strings`` (string) default: ``true``
+ - ``dsn`` (string) mandatory
+ - ``class:session`` (string) default:  ``\PommProject\Foundation\Session\Session``
+
+**dsn** is the only mandatory parameter, it is used to connect to the Postgresql database. The syntax is the following::
+
+    pgsql://user:password@host:port/db_name
+
+Examples::
+
+    pgsql://db_user/db_name
+    pgsql://db_user:p4sS@192.168.1.101/db_name
+    pgsql://db_user:p4sS@192.168.1.101:5433/db_name
+    pgsql://db_user@!/var/run/postgres!:5433/db_name
+
+Note:
+
+The Pgsql library is sensible to environment variables ``PGHOST`` ``PGPORT`` (see TODO: link to the documentation). When using PHP from the command line (or the builtin web server), theses variables will have an impact if they are not overridden by some of the DSN’s parameters.
+
+Note: The host part may be a path on the local file system surrounded by the ``!`` character. When this is the case, the unix socket present in the given directory is used to connect to the database.
 
 Session customization
 ~~~~~~~~~~~~~~~~~~~~~
@@ -147,16 +246,33 @@ The ``SessionBuilder`` class is made to be overloaded. Foundation package incide
 
 It is encouraged to create a project-dedicated *session builder* that overloads one of these classes. Several methods are available to change a *session builder* behavior:
 
-:``preConfigure()``:    Change the configuration just before a session is instantiated.
-:``postConfigure($session)``:  Place where default *session poolers* and *clients* are registered into a brand new *session*.
-:``createSession()``:  If a custom session class is to be instantiated.
-:``createClientHolder()``:  If a custom *session holder* is to be used from within the *session*.
-:``initializeConverterHolder()``:  Customize the *converter holder*. Remember all *sessions* created by the builder will have this converter holder whatever their DSN.
+:``getDefaultConfiguration``:
+    Overrides default configuration. The core default configuration is the `connection:configuration` parameter. Be aware it will break the default converter system if discarded.
+
+:``preConfigure()``:
+    Change the configuration just before a session is instantiated.
+
+:``postConfigure($session)``:
+    Place where default *session poolers* and *clients* are registered into a brand new *session*.
+
+:``createSession()``:
+    If a custom session class is to be instantiated.
+
+:``createClientHolder()``:
+    If a custom *session holder* is to be used from within the *session*.
+
+:``initializeConverterHolder()``:
+    Customize the *converter holder*. Remember all *sessions* created by the builder will have this converter holder whatever their DSN.
+
+:``createConnection()``:
+    How to create a ``Connection`` instance based on the configuration.
+
+
 
 Converter holder
 ~~~~~~~~~~~~~~~~
 
-The *converter holder* is a special configuration setting. It holds all the converters and is cloned when passed as parameter to the `converter pooler`_. A pre-configured customized *converter holder* can be passed as parameter to the *session builder*'s constructor:
+The *converter holder* is a special configuration setting. It holds all the converters and is cloned when passed as parameter to the `converter pooler`_. A pre-configured customized *converter holder* can be passed as parameter to the *session builder*’s constructor:
 
 .. code:: php
 
@@ -168,6 +284,8 @@ The *converter holder* is a special configuration setting. It holds all the conv
         );
 
 The ``initializeConverterHolder()`` method is used internally to register default PostgreSQL types converters, use it to add your own default converters. The ``ConverterHolder`` instance is passed as reference. Remember, this converter holder will be used for **all** sessions created by the builder whatever their DSN. If a database specific converter is to be registered, the best place for it might be the ``postConfigure`` method, dealing directly with the `converter pooler`_.
+
+
 
 Session
 -------
@@ -225,7 +343,7 @@ All *client poolers* must implement ``ClientPoolerInterface``. It is possible to
 
 Because most *poolers* behave the same way, the ``ClientPoolerTrait`` add methods to work like the following. When a *client* is requested:
 
-#. Retrieve the client from the *session*'s *client holder*.
+#. Retrieve the client from the *session*’s *client holder*.
 #. If null is returned, it launches ``createClient($identifier)`` method.
 #. If the *client* cannot be created, an exception must be thrown.
 #. Return the *client*.
@@ -242,7 +360,7 @@ Converter pooler
 
 Responsible of proposing converter *clients*. If a client is not found, it checks in the *converter holder* if the given type has a converter. If yes, it wraps the *converter* in a ``ConverterClient`` and registers it to the session. There are as many ``ConverterClient`` as registered types but they can share the same *converter* instances.
 
-This way, it is possible to add custom converters or converters for database specific types like composite types. The best place to do that is in a `Session builder`_'s ``postConfigure(Session)`` method:
+This way, it is possible to add custom converters or converters for database specific types like composite types. The best place to do that is in a `Session builder`_’s ``postConfigure(Session)`` method:
 
 .. code:: php
 
@@ -258,7 +376,7 @@ This way, it is possible to add custom converters or converters for database spe
             ;
     }
 
-Even though the converters coming with Foundation cover a broad range of PostgreSQL's types, it is possible to write custom converters as long as they implement ``ConverterInterface``. Be aware that the format of the data coming from Postgres may be configuration dependent (dates, money, number etc.). Default converters fit the default configuration set in the `Session builder`_.
+Even though the converters coming with Foundation cover a broad range of PostgreSQL’s types, it is possible to write custom converters as long as they implement ``ConverterInterface``. Be aware that the format of the data coming from Postgres may be configuration dependent (dates, money, number etc.). Default converters fit the default configuration set in the `Session builder`_.
 
 
 Inspector pooler
@@ -275,7 +393,7 @@ Listener pooler
 
 :Type:  listener
 
-A ``Listener`` is a class that can hold anonymous functions that are triggered when the listener receives a notification with the listener's name.
+A ``Listener`` is a class that can hold anonymous functions that are triggered when the listener receives a notification with the listener’s name.
 
 Foundation owns a basic event dispatcher mechanism.
 
@@ -334,7 +452,7 @@ Query manager pooler
 
 :Type:  query_manager
 
-The query manager *pooler* returns a traversable iterator on converted results. The default *client* is a simple parametrized query but Foundation also comes with a prepared query manager:
+The query manager *pooler* returns a traversable iterator (see `result iterators`_) on converted results. The default *client* is a simple parametrized query but Foundation also comes with a prepared query manager:
 
 .. code:: php
 
@@ -347,4 +465,168 @@ The query manager *pooler* returns a traversable iterator on converted results. 
 
 If no client class is provided, the default ``PommProject\Foundation\QueryManager\SimpleQueryManager`` is used.
 
+Adding custom poolers and clients
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Poolers and clients must implement ``ClientPoolerInterface`` and ``ClientInterface`` respectively. To make this process easier, it is somehow possible to extend the ``ClientPooler`` that uses the ``ClientPoolerTrait`` (or to use this trait directly). It will make custom class to work in a given way when a client is requested:
+
+1.  If the client exists, it is fetched from the pool and returned (``getClient($identifier)`` and ``getClientFromPool($identifier)``).
+2.  If the client does not exist, it is created, registered to the session and returned (``createClient($identifier)``)
+
+The methods above can of course be overloaded. The only methods let to the developer are:
+
+:``getPoolerType()``: That returns the client type handled by this pooler.
+:``createClient($identifier)``:: How to create a client of this type.
+
+
+Result iterators
+----------------
+
+basic usage
+~~~~~~~~~~~
+
+There are two kinds of iterators that can be used with Pomm:
+
+:``ResultIterator``:
+    Implements all the methods for ``\SeekableIterator``, ``\Countable`` and ``\JsonSerializable`` interfaces. It just returns the raw results as they are fetched from the driver.
+
+:``ConvertedResultIterator``:
+    It extends ``ResultIterator`` but uses the converter pooler (see `Converter pooler`_) to convert data to a PHP respresentation. This is the one used by default by the query managers.
+
+These iterators do fetch data lazily, this means rows are fetched on demand. This presents significant advantages in terms of performances and memory consumption. Furthermore, Pomm’s iterators are scrollable which means they are seekable and they can be traversed several times.
+
+.. code:: php
+
+    <?php
+    //…
+    $results = $session
+        ->getQueryManager()
+        ->query("select generate_series(1, $*::int4) as a_number", [10])
+        // ↑ generates from 1 to 10 (passed as parameter)
+        ;
+
+    $results->get(0); // returns ["a_number" => 1];
+    $results->get(9); // returns ["a_number" => 10];
+
+    try {
+        $results->get(10);
+    } catch (\OutOfBoundsException $e) {
+        // index starts from 0
+    }
+
+    foreach ($results as $index => $result) { // traverse results
+        printf("Result %02d => %d\n", $index, $result['a_number']);
+    }
+
+Expanding iterators
+~~~~~~~~~~~~~~~~~~~
+
+Even though iterators are lazy, it is possible to fetch all the results in one step and store them in memory.
+
+:``extract()``:
+    Simple dump an array of rows like ``PDO::fetchAll()``.
+
+:``slice($column_name)``:
+    return a one dimension array of the values stored in this result’s column.
+
+Since the iterators implement the ``\JsonSerializable`` interface it is possible to simply export them in the JSON format by calling ``json_encode($iterator)``.
+
+Other methods
+~~~~~~~~~~~~~
+
+Result iterators also propose handy methods 
+
+:``current()``:
+    Return the row pointed by the current curosor’s position in the result. This is used most of the time to extract a row in single result query like ``SELECT count(*) FROM …``.
+
+:``count()``:
+    Returns the number of rows of the result. Required by the ``\Countable`` interface.
+
+:``isEmpty()``:
+    Returns if the result set is empty (no results) or not.
+
+:``isFirst``:
+    If the result is not empty, it returns true if the iterator points on the first result. This is sometimes interesting if the iterator is traversed in the view (html templates or so) to add table informations prior to the first line.
+
+:``isLast()``:
+    If the result is not empty, it returns true if the iterator points on the last result. (see ``isFirst``).
+
+:``isOdd()``:
+    Returns true if the current cursor position is not divisible by two. Handy to easily change the background color of a result set a row on two.
+
+:``isEven()``:
+    Opposite of ``isOdd()``.
+
+Where: the condition builder
+----------------------------
+
+Basic usage
+~~~~~~~~~~~
+
+Pomm comes with a dedicated class to build SQL conditions dynamically: the ``Where`` class. It use is pretty straightforward:
+
+.. code:: php
+
+    <?php
+    use PommProject\Foundation\Where;
+    //…
+    $sql = "SELECT * FROM a_table WHERE :condition"
+    $where = new Where();
+    strtr($sql, [':condition' => $where]); // … WHERE true
+
+    $where->andWhere('a is null');
+    strtr($sql, [':condition' => $where]); // … WHERE a is null
+
+    $where->andWhere('b');
+    strtr($sql, [':condition' => $where]); // … WHERE a is null AND b
+
+    $where->orWhere('not c');
+    strtr($sql, [':condition' => $where]); // … WHERE (a is null AND b) OR not c
+
+The example above shows how it deals with operator precedence. For convenience, it is possible to directly pass a ``Where`` class as argument to the ``andWhere`` and ``orWhere`` methods:
+
+.. code:: php
+
+    $where = new Where('a is not null');
+    $where->orWhere(Where::create('b')->andWhere('not c'));
+    // a is not null OR (b AND not c)
+
+Dealing with parameters
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Most of the time, condition clauses do rely on external parameters. The ``Where`` clause allows them to be attached to the condition they belong to so they can be passed in the right order to a ``query`` method:
+
+.. code:: php
+
+    $where = Where::create("status = $*", [$parameter1])
+        ->andWhere("amount > $*", [$parameter2])
+        ;
+
+    $sql = strtr(
+        "select … from a_table where :condition",
+        [
+            ':condition' => $where,
+        ]
+    );
+
+    $results = $session
+        ->getQueryManager()
+        ->query($sql, $where->getValues())
+        ;
+
+There are special clauses to handle the SQL ``IN`` operator::
+
+.. code:: php
+
+    $where = Where::createWhereIn("status",
+        [
+            $parameter1,
+            $parameter2,
+            …,
+            $parameterN,
+        ]
+    );
+    // status IN ($*, $*, …, $*)
+
+There is obviously a complementary ``createWhereNotIn`` method.
 

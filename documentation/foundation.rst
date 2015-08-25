@@ -476,7 +476,7 @@ Poolers and clients must implement ``ClientPoolerInterface`` and ``ClientInterfa
 The methods above can of course be overloaded. The only methods let to the developer are:
 
 :``getPoolerType()``: That returns the client type handled by this pooler.
-:``createClient($identifier)``:: How to create a client of this type.
+:``createClient($identifier)``: How to create a client of this type.
 
 
 Result iterators
@@ -614,7 +614,7 @@ Most of the time, condition clauses do rely on external parameters. The ``Where`
         ->query($sql, $where->getValues())
         ;
 
-There are special clauses to handle the SQL ``IN`` operator::
+There are special clauses to handle the SQL ``IN`` operator:
 
 .. code:: php
 

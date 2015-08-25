@@ -24,7 +24,7 @@ use PommProject\Foundation\Session\ResultHandler;
  * @see       \Countable
  * @see       \JsonSerializable
  */
-class ResultIterator implements \Iterator, \Countable, \JsonSerializable
+class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \SeekableIterator
 {
     private $position;
     protected $result;
@@ -51,6 +51,19 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable
     public function __destruct()
     {
         $this->result->free();
+    }
+
+    /**
+     * seek
+     *
+     * Alias for get(), required to be a Seekable iterator.
+     *
+     * @param  int $index
+     * @return array
+     */
+    public function seek($index)
+    {
+        return $this->get($index);
     }
 
     /**

@@ -215,7 +215,7 @@ The ``dsn`` is the only mandatory parameter expected by the builder but more par
 - ``dsn`` (string) mandatory
 - ``class:session`` (string) default:  ``\PommProject\Foundation\Session\Session``
 
-The ``connection:configuration`` parameter contains a hashmap of postgresql settings (see `postgresql documentation<http://www.postgresql.org/docs/9.1/static/runtime-config-client.html>`_). The default settings are the following:
+The ``connection:configuration`` parameter contains a hashmap of postgresql settings (see `postgresql documentation <http://www.postgresql.org/docs/9.1/static/runtime-config-client.html>`_). The default settings are the following:
 
 - ``bytea_output``                (string) default: ``hex``
 - ``intervalstyle``               (string) default: ``ISO_8601``
@@ -235,7 +235,7 @@ Examples::
 
 
 :Note:
-    The Pgsql library is sensible to environment variables ``PGHOST`` ``PGPORT`` (see `the documentation<http://www.postgresql.org/docs/9.1/static/libpq-envars.html>`_). When using PHP from the command line (or the built-in web server), theses variables will have an impact if they are not overridden by some of the DSN’s parameters.
+    The Pgsql library is sensible to environment variables ``PGHOST`` ``PGPORT`` (see `the documentation <http://www.postgresql.org/docs/9.1/static/libpq-envars.html>`_). When using PHP from the command line (or the built-in web server), theses variables will have an impact if they are not overridden by some of the DSN’s parameters.
 
 :Note:
     The host part may be a path on the local file system surrounded by the ``!`` character. When this is the case, the Unix socket present in the given directory is used to connect to the database.

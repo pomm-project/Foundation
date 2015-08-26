@@ -138,7 +138,7 @@ It is possible not have to bother with session names (particularly if you only h
 
     $session = $pomm->getDefaultSession(); // return a `first_db` session
 
-This still applies when several session builders are declared. It is still possible to explicitely declare a session builder as the default one by setting the ``pomm::default`` configuration setting to true.
+This still applies when several session builders are declared. It is still possible to explicitly declare a session builder as being the default one by setting the ``pomm::default`` configuration setting to true.
 
 Context dependent configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -232,9 +232,9 @@ Examples::
 
 Note:
 
-The Pgsql library is sensible to environment variables ``PGHOST`` ``PGPORT`` (see TODO: link to the documentation). When using PHP from the command line (or the builtin web server), theses variables will have an impact if they are not overridden by some of the DSN’s parameters.
+The Pgsql library is sensible to environment variables ``PGHOST`` ``PGPORT`` (see TODO: link to the documentation). When using PHP from the command line (or the built-in web server), theses variables will have an impact if they are not overridden by some of the DSN’s parameters.
 
-Note: The host part may be a path on the local file system surrounded by the ``!`` character. When this is the case, the unix socket present in the given directory is used to connect to the database.
+Note: The host part may be a path on the local file system surrounded by the ``!`` character. When this is the case, the Unix socket present in the given directory is used to connect to the database.
 
 Session customization
 ~~~~~~~~~~~~~~~~~~~~~
@@ -491,9 +491,9 @@ There are two kinds of iterators that can be used with Pomm:
     Implements all the methods for ``\SeekableIterator``, ``\Countable`` and ``\JsonSerializable`` interfaces. It just returns the raw results as they are fetched from the driver.
 
 :``ConvertedResultIterator``:
-    It extends ``ResultIterator`` but uses the converter pooler (see `Converter pooler`_) to convert data to a PHP respresentation. This is the one used by default by the query managers.
+    It extends ``ResultIterator`` but uses the converter pooler (see `Converter pooler`_) to convert data to a PHP representation. This is the one used by default by the query managers.
 
-These iterators do fetch data lazily, this means rows are fetched on demand. This presents significant advantages in terms of performances and memory consumption. Furthermore, Pomm’s iterators are scrollable which means they are seekable and they can be traversed several times.
+These iterators do fetch data lazily, this means rows are fetched on demand. This presents significant advantages in terms of performances and memory consumption. Furthermore, Pomm’s iterators are scrollable which means they are seek-able and they can be traversed several times.
 
 .. code:: php
 
@@ -537,7 +537,7 @@ Other methods
 Result iterators also propose handy methods 
 
 :``current()``:
-    Return the row pointed by the current curosor’s position in the result. This is used most of the time to extract a row in single result query like ``SELECT count(*) FROM …``.
+    Return the row pointed by the current cursor’s position in the result. This is used most of the time to extract a row in single result query like ``SELECT count(*) FROM …``.
 
 :``count()``:
     Returns the number of rows of the result. Required by the ``\Countable`` interface.

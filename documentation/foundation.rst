@@ -121,7 +121,7 @@ The ``getSession($name)`` method checks if a *session* using this *session build
 Default sessions
 ~~~~~~~~~~~~~~~~
 
-It is possible not have to bother with session names (particularly if you only have one session) by using Pomm’s default session mechanism. By default, the first declared session is set as being the default:
+It is possible not have to bother with session names (particularly if there is only one session) by using Pomm’s default session mechanism. By default, the first declared session is set as being the default:
 
 .. code:: php
 
@@ -285,14 +285,12 @@ The *converter holder* is a special configuration setting. It holds all the conv
 
 The ``initializeConverterHolder()`` method is used internally to register default PostgreSQL types converters, use it to add your own default converters. The ``ConverterHolder`` instance is passed as reference. Remember, this converter holder will be used for **all** sessions created by the builder whatever their DSN. If a database specific converter is to be registered, the best place for it might be the ``postConfigure`` method, dealing directly with the `converter pooler`_.
 
-
-
 Session
 -------
 
 *Session* is the keystone of the Foundation package. It provides a *connection* API to *clients*. To be able to do this, *clients* must register to the *session* using the ``registerClient(ClientInterface)`` method. The *session* adds the *client* in the *client pool*. In exchange, it injects itself in the *client* using the ``initialize(Session)`` method (see `Client`_). Starting from this, the *client* can use the *connection* and other *clients*.
 
-*Clients* are accessed using the ``getClient($type, $identifier)`` method. If no clients match the corresponding type and identifier, ``null`` is returned. This can be a problem when you expect a client to be present or to manage to instantiate one when needed. This is the role of the *client poolers* (aka *poolers*). *Poolers* are, in a way, *clients* manager for a given type. Not all types need a *pooler*, for example, the ``fixture`` clients type manage database test structures and data. They are here to create tables and types needed by tests on startup and to drop them on shutdown. Alternatively, the `prepared query pooler`_ takes the SQL query as client identifier. If the given query has already been performed, it is re used. Otherwise, a new statement is prepared and then executed. When the *connection* goes down, all statements are deallocated.
+*Clients* are accessed using the ``getClient($type, $identifier)`` method. If no clients match the corresponding type and identifier, ``null`` is returned. This can be a problem because the Client must then be instantiated and registered to the Session. This is the role of the *client poolers* (aka *poolers*). *Poolers* are, in a way, *clients* manager for a given type. Not all types need a *pooler*, for example, the ``fixture`` clients type manage database test structures and data. They are here to create tables and types needed by tests on startup and to drop them on shutdown. Alternatively, the `prepared query pooler`_ takes the SQL query as client identifier. If the given query has already been performed, it is re used. Otherwise, a new statement is prepared and then executed. When the *connection* goes down, all statements are deallocated.
 
 Some *clients* may use *clients* from different types using their respective *poolers*. For example, the ``PreparedQueryManager`` *client* uses the `query manager pooler`_ and then the `converter pooler`_.
 
@@ -428,7 +426,6 @@ Observer pooler
 
 Observer *pooler* aims at leveraging the ``LISTEN/NOTIFY`` mechanism in PostgreSQL. An observer *client* can be used to listen to PostgreSQL events sent with the ``NOTIFY`` SQL command. It is possible to ask the observer either to send back the event payload if any or to throw a ``NotificationException`` when a notification is caught.
 
-
 Prepared query pooler
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -463,7 +460,25 @@ The query manager *pooler* returns a traversable iterator (see `result iterators
         ->query('select * from my_table where some_field = $*', ['some_content'])
         ;
 
-If no client class is provided, the default ``PommProject\Foundation\QueryManager\SimpleQueryManager`` is used.
+If no client class is provided, the default ``PommProject\Foundation\QueryManager\SimpleQueryManager`` is used. By default, parameters are passed as-is to the driver. It is somehow possible to explicitely declare the type of some or all the parameters in the query. The query manager will then use the `converter pooler`_ to convert them in a Postgresql format.
+
+.. code:: php
+
+    <?php
+    //…
+    use PommProject\Foundation\Converter\Type\Point;
+
+    // Are there open bike stations around me ?
+    $result = $session
+        ->getQueryManager()
+        ->query(
+            "select station_id, public_name, available_slots
+            from bike_station b
+            where b.coordinates <@ circle($*::point, $*) and b.status = any($*::varchar[])",
+            [new Point($position), $radius, ['full', 'reduced']]
+        );
+
+The example above shows how to pass simple but also complex parameters like geomtric types and arrays.
 
 Adding custom poolers and clients
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

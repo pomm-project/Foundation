@@ -14,11 +14,11 @@ Foundation is a light, fast and versatile PHP PostgreSQL database framework. It 
 
 Foundation manages relations between a database *connection* and *clients* through *sessions*. It consists of several classes to configure, open, deal with and close *sessions*.
 
- - ``Pomm`` is the service class, it registers *session builders* and caches spawned *sessions*.
- - ``SessionBuilder`` configures and builds *sessions*.
- - ``Session`` holds *clients* and *poolers* and the *connection*.
- - ``Client`` abstract class that implements ``ClientInterface``. Instances are *session*’s *clients*.
- - ``ClientPooler`` abstract class that implements ``ClientPoolerInterface``. They manage *clients* in *sessions*.
+- ``Pomm`` is the service class, it registers *session builders* and caches spawned *sessions*.
+- ``SessionBuilder`` configures and builds *sessions*.
+- ``Session`` holds *clients* and *poolers* and the *connection*.
+- ``Client`` abstract class that implements ``ClientInterface``. Instances are *session*’s *clients*.
+- ``ClientPooler`` abstract class that implements ``ClientPoolerInterface``. They manage *clients* in *sessions*.
 
 This complexity is at first glance hidden. If one wants to open a connection, send a query and get converted results, it is as simple as:
 
@@ -158,11 +158,11 @@ Session builders management
 
 Pomm does propose several methods to manage session builders:
 
- - ``addBuilder($builder_name, VanillaSessionBuilder $builder)``
- - ``hasBuilder($name)``
- - ``removeBuilder($name)``
- - ``getBuilder($name)``
- - ``getSessionBuilders()``
+- ``addBuilder($builder_name, VanillaSessionBuilder $builder)``
+- ``hasBuilder($name)``
+- ``removeBuilder($name)``
+- ``getBuilder($name)``
+- ``getSessionBuilders()``
 
 Session builder
 ---------------
@@ -211,13 +211,13 @@ Configuration options
 
 The ``dsn`` is the only mandatory parameter expected by the builder but more parameters can be passed:
 
- - ``connection:configuration`` (array) mandatory (see TODO: postgresql documentation link)
+- ``connection:configuration`` (array) mandatory (see TODO: postgresql documentation link)
     - ``bytea_output``                (string) default: ``hex``
     - ``intervalstyle``               (string) default: ``ISO_8601``
     - ``datestyle``                   (string) default: ``ISO``
     - ``standard_conforming_strings`` (string) default: ``true``
- - ``dsn`` (string) mandatory
- - ``class:session`` (string) default:  ``\PommProject\Foundation\Session\Session``
+- ``dsn`` (string) mandatory
+- ``class:session`` (string) default:  ``\PommProject\Foundation\Session\Session``
 
 **dsn** is the only mandatory parameter, it is used to connect to the Postgresql database. The syntax is the following::
 
@@ -241,8 +241,8 @@ Session customization
 
 The ``SessionBuilder`` class is made to be overloaded. Foundation package incidentally proposes two *session builders*:
 
- - ``PommProject\Foundation\Session\SessionBuilder`` blank session builder.
- - ``PommProject\Foundation\SessionBuilder`` builder with Foundation *clients* and *poolers* loaded and configured.
+- ``PommProject\Foundation\Session\SessionBuilder`` blank session builder.
+- ``PommProject\Foundation\SessionBuilder`` builder with Foundation *clients* and *poolers* loaded and configured.
 
 It is encouraged to create a project-dedicated *session builder* that overloads one of these classes. Several methods are available to change a *session builder* behavior:
 

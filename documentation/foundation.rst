@@ -2,7 +2,7 @@
 Pomm-project Foundation
 =======================
 
-  .. contents:: :local:
+.. contents::
 
 Overview
 --------

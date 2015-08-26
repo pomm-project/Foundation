@@ -211,13 +211,16 @@ Configuration options
 
 The ``dsn`` is the only mandatory parameter expected by the builder but more parameters can be passed:
 
-- ``connection:configuration`` (array) mandatory (see TODO: postgresql documentation link)
-    - ``bytea_output``                (string) default: ``hex``
-    - ``intervalstyle``               (string) default: ``ISO_8601``
-    - ``datestyle``                   (string) default: ``ISO``
-    - ``standard_conforming_strings`` (string) default: ``true``
+- ``connection:configuration`` (array)
 - ``dsn`` (string) mandatory
 - ``class:session`` (string) default:  ``\PommProject\Foundation\Session\Session``
+
+The ``connection:configuration`` parameter contains a hashmap of postgresql settings (see `postgresql documentation<http://www.postgresql.org/docs/9.1/static/runtime-config-client.html>`_). The default settings are the following:
+
+- ``bytea_output``                (string) default: ``hex``
+- ``intervalstyle``               (string) default: ``ISO_8601``
+- ``datestyle``                   (string) default: ``ISO``
+- ``standard_conforming_strings`` (string) default: ``true``
 
 **dsn** is the only mandatory parameter, it is used to connect to the Postgresql database. The syntax is the following::
 
@@ -230,11 +233,12 @@ Examples::
     pgsql://db_user:p4sS@192.168.1.101:5433/db_name
     pgsql://db_user@!/var/run/postgres!:5433/db_name
 
-Note:
 
-The Pgsql library is sensible to environment variables ``PGHOST`` ``PGPORT`` (see TODO: link to the documentation). When using PHP from the command line (or the built-in web server), theses variables will have an impact if they are not overridden by some of the DSN’s parameters.
+:Note:
+    The Pgsql library is sensible to environment variables ``PGHOST`` ``PGPORT`` (see `the documentation<http://www.postgresql.org/docs/9.1/static/libpq-envars.html>`_). When using PHP from the command line (or the built-in web server), theses variables will have an impact if they are not overridden by some of the DSN’s parameters.
 
-Note: The host part may be a path on the local file system surrounded by the ``!`` character. When this is the case, the Unix socket present in the given directory is used to connect to the database.
+:Note:
+    The host part may be a path on the local file system surrounded by the ``!`` character. When this is the case, the Unix socket present in the given directory is used to connect to the database.
 
 Session customization
 ~~~~~~~~~~~~~~~~~~~~~
@@ -370,7 +374,7 @@ This way, it is possible to add custom converters or converters for database spe
             ->getPoolerForType('converter')
             ->getConverterHolder()
             ->addTypeToConverter('my_schema.latlong', 'Point') // ← convert a domain of point
-            ->registerConverter('Hstore', new PgHstore(), ['hstore']) // ← register Hstore converter
+            ->registerConverter('Hstore', new PgHstore(), ['public.hstore']) // ← register Hstore converter
             ;
     }
 

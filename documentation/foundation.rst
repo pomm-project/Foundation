@@ -204,7 +204,7 @@ There are several ways to set the configuration:
     );
     $session_builder->addParameter('my_parameter', 'my_value');
 
-In a more general way, ``SessionBuilder`` class is made to be overloaded by a project-dedicated *session builder* class. It is then possible to overload the ``getDefaultConfiguration()`` method. It keeps the class configurable with a custom default configuration.
+In a more general way, ``SessionBuilder`` class is made to be extended by a project-dedicated *session builder* class. It is then possible to overload the ``getDefaultConfiguration()`` method. It keeps the class configurable with a custom default configuration.
 
 Configuration options
 ~~~~~~~~~~~~~~~~~~~~~
@@ -243,12 +243,12 @@ Examples::
 Session customization
 ~~~~~~~~~~~~~~~~~~~~~
 
-The ``SessionBuilder`` class is made to be overloaded. Foundation package incidentally provides two *session builders*:
+The ``SessionBuilder`` class is made to be extended. Foundation package incidentally proposes two *session builders*:
 
 - ``PommProject\Foundation\Session\SessionBuilder`` blank session builder.
 - ``PommProject\Foundation\SessionBuilder`` builder with Foundation *clients* and *poolers* loaded and configured.
 
-It is encouraged to create a project-dedicated *session builder* that overloads one of these classes. Several methods are available to change a *session builder* behavior:
+It is encouraged to create a project-dedicated *session builder* that extends one of these classes. Several methods are available to change a *session builder* behavior:
 
 :``getDefaultConfiguration``:
     Overrides default configuration. The core default configuration is the `connection:configuration` parameter. Be aware it will break the default converter system if discarded.

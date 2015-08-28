@@ -7,7 +7,7 @@ Pomm-project Foundation
 Overview
 --------
 
-Foundation is a light, fast and versatile PHP PostgreSQL database framework. It can either be used on its own (to replace a DBAL by example) or to build a more complex `model manager`_. It is the first stone of `Pomm project`_ version 2.
+Foundation is a light, fast and versatile PHP PostgreSQL database framework. It can either be used on its own (to replace a DBAL for example) or to build a more complex `model manager`_. It is the first stone of `Pomm project`_ version 2.
 
 ..  _`Pomm project`: http://www.pomm-project.org
 ..  _`model manager`: https://github.com/pomm-project/ModelManager
@@ -121,7 +121,7 @@ The ``getSession($name)`` method checks if a *session* using this *session build
 Default sessions
 ~~~~~~~~~~~~~~~~
 
-It is possible not have to bother with session names (particularly if there is only one session) by using Pomm’s default session mechanism. By default, the first declared session is set as being the default:
+Sometimes session names are not that important (especially if there is only one session), in this case it is possible to use Pomm’s default session mechanism. It will use the first first declared one:
 
 .. code:: php
 
@@ -156,7 +156,7 @@ When the session is created, the post-configuration functions are launched and t
 Session builders management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Pomm does propose several methods to manage session builders:
+Pomm provides several methods to manage session builders:
 
 - ``addBuilder($builder_name, VanillaSessionBuilder $builder)``
 - ``hasBuilder($name)``
@@ -177,7 +177,7 @@ Session builder
         ->buildSession()
         ;
 
-The session builder shown above does create blank sessions with no poolers registered. Foundation does provide a functional builder with all poolers registered and a dedicated session class:
+The session builder shown above creates blank sessions with no poolers registered. Foundation provides a functional builder with all poolers registered and a dedicated session class:
 
 .. code:: php
 
@@ -243,7 +243,7 @@ Examples::
 Session customization
 ~~~~~~~~~~~~~~~~~~~~~
 
-The ``SessionBuilder`` class is made to be overloaded. Foundation package incidentally proposes two *session builders*:
+The ``SessionBuilder`` class is made to be overloaded. Foundation package incidentally provides two *session builders*:
 
 - ``PommProject\Foundation\Session\SessionBuilder`` blank session builder.
 - ``PommProject\Foundation\SessionBuilder`` builder with Foundation *clients* and *poolers* loaded and configured.

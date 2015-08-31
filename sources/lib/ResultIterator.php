@@ -97,7 +97,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
     /**
      * count
      *
-     * @see \Countable
+     * @see    \Countable
      * @return integer
      */
     public function count()
@@ -122,7 +122,10 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      */
     public function current()
     {
-        return $this->isEmpty() ? null : $this->get($this->position);
+        return !$this->isEmpty()
+            ? $this->get($this->position)
+            : null
+            ;
     }
 
     /**
@@ -149,7 +152,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * valid
      *
      * @see \Iterator
-     * @return Boolean
+     * @return boolean
      */
     public function valid()
     {
@@ -159,24 +162,32 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
     /**
      * isFirst
      * Is the iterator on the first element ?
+     * Returns null if the iterator is empty.
      *
-     * @return Boolean
+     * @return boolean|null
      */
     public function isFirst()
     {
-        return $this->position === 0;
+        return !$this->isEmpty()
+            ? $this->position === 0
+            : null
+            ;
     }
 
     /**
      * isLast
      *
      * Is the iterator on the last element ?
+     * Returns null if the iterator is empty.
      *
-     * @return Boolean
+     * @return boolean|null
      */
     public function isLast()
     {
-        return $this->position === $this->count() - 1;
+        return !$this->isEmpty()
+            ? $this->position === $this->count() - 1
+            : null
+            ;
     }
 
     /**
@@ -184,7 +195,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      *
      * Is the collection empty (no element) ?
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isEmpty()
     {
@@ -196,7 +207,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      *
      * Is the iterator on an even position ?
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isEven()
     {
@@ -208,7 +219,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      *
      * Is the iterator on an odd position ?
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isOdd()
     {

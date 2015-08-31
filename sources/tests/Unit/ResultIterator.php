@@ -85,6 +85,10 @@ SQL;
             ->isTrue()
             ->variable($iterator->current())
             ->isNull()
+            ->variable($iterator->isLast())
+            ->isNull()
+            ->variable($iterator->isFirst())
+            ->isNull()
             ;
     }
 

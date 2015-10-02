@@ -49,16 +49,35 @@ class SimpleQueryManager extends FoundationSessionAtoum
 select
   p.id, p.pika, p.a_timestamp, p.a_point
 from (values
-    (1, 'one', '1999-08-08'::timestamp, ARRAY[point(1.3, 1.6)]),
-    (2, 'two', '2000-09-07'::timestamp, ARRAY[point(1.5, 1.5)]),
-    (3, 'three', '2001-10-25 15:43'::timestamp, ARRAY[point(1.6, 1.4)]),
-    (4, 'four', '2002-01-01 01:10'::timestamp, ARRAY[point(1.8, 2.3)])
-) p (id, pika, a_timestamp, a_point)
-where (p.id >= $* or p.pika = ANY($*::text[])) and p.a_timestamp > $*::timestamp and $*::pg_catalog."circle" @> ANY (p.a_point)
+    (1, 'one', '1999-08-08'::timestamp, ARRAY[point(1.3, 1.6)], 't'::bool),
+    (2, 'two', '2000-09-07'::timestamp, ARRAY[point(1.5, 1.5)], 'f'::bool),
+    (3, 'three', '2001-10-25 15:43'::timestamp, ARRAY[point(1.6, 1.4)], 'f'::bool),
+    (4, 'four', '2002-01-01 01:10'::timestamp, ARRAY[point(1.8, 2.3)], 't'::bool)
+) p (id, pika, a_timestamp, a_point, a_bool)
+where {condition}
 SQL;
         $iterator = $this
             ->getQueryManager($session)
-            ->query($sql, [2, ['chu', 'three'], new \DateTime('2000-01-01'), new Circle('<(1.5,1.5), 0.3>')]);
+            ->query(
+                strtr(
+                    $sql,
+                    ['{condition}' => '(p.id >= $* or p.pika = ANY($*::text[])) and p.a_timestamp > $*::timestamp and $*::pg_catalog."circle" @> ANY (p.a_point)']
+                ),
+                [2, ['chu', 'three'], new \DateTime('2000-01-01'), new Circle('<(1.5,1.5), 0.3>')]
+            );
+        $this
+            ->array($iterator->slice('id'))
+            ->isIdenticalTo([2, 3])
+            ;
+        $iterator = $this
+            ->getQueryManager($session)
+            ->query(
+                strtr(
+                    $sql,
+                    ['{condition}' => 'a_bool = $*::bool']
+                ),
+                [false]
+            );
         $this
             ->array($iterator->slice('id'))
             ->isIdenticalTo([2, 3])

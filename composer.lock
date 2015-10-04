@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bd0227c0de4e01dc674f9ac7d764a70c",
+    "hash": "eec484a7559511a3ae18f7d9a974f459",
+    "content-hash": "9d0c033ae292cb24afa5537f690c3860",
     "packages": [
         {
             "name": "psr/log",
@@ -52,12 +53,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/atoum/atoum.git",
-                "reference": "cb060c47c4ba356e5c75c67733158cc24fde9e00"
+                "reference": "bc1105cba8446bdd82d861d49096fa303aca49ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atoum/atoum/zipball/cb060c47c4ba356e5c75c67733158cc24fde9e00",
-                "reference": "cb060c47c4ba356e5c75c67733158cc24fde9e00",
+                "url": "https://api.github.com/repos/atoum/atoum/zipball/bc1105cba8446bdd82d861d49096fa303aca49ea",
+                "reference": "bc1105cba8446bdd82d861d49096fa303aca49ea",
                 "shasum": ""
             },
             "require": {
@@ -72,6 +73,7 @@
                 "mageekguy/atoum": "*"
             },
             "suggest": {
+                "atoum/stubs": "Provides IDE support (like autocompletion) for atoum",
                 "ext-mbstring": "Provides support for UTF-8 strings"
             },
             "bin": [
@@ -123,11 +125,11 @@
                 "test",
                 "unit testing"
             ],
-            "time": "2015-07-08 09:55:17"
+            "time": "2015-10-01 20:37:42"
         }
     ],
     "aliases": [],
-    "minimum-stability": "RC",
+    "minimum-stability": "stable",
     "stability-flags": {
         "atoum/atoum": 20
     },

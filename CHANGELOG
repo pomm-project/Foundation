@@ -1,3 +1,13 @@
+== VERSION 2.0.0
+
+ *  Update documentation
+ *  Make ResultIterator seekable
+ *  Correct regexp in tsRange
+ *  Fix type converter issue with nulls
+ *  Add travis tests for PHP 5.6
+ *  Make isFirst and isLast return consistent result
+ *  Fix wrong transaction isolation constant
+
 == VERSION 2.0.0-RC.3
 
  *  Fix a performance bug in ArrayTypeConverter

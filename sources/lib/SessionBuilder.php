@@ -92,10 +92,10 @@ class SessionBuilder extends VanillaSessionBuilder
                 new Converter\PgNumber(),
                 [
                     'int2', 'pg_catalog.int2',
-                    'int4', 'pg_catalog.int4',
+                    'int4', 'pg_catalog.int4', 'int', 'integer',
                     'int8', 'pg_catalog.int8',
                     'numeric', 'pg_catalog.numeric',
-                    'float4', 'pg_catalog.float4',
+                    'float4', 'pg_catalog.float4', 'float',
                     'float8', 'pg_catalog.float8',
                     'oid', 'pg_catalog.oid',
                 ],

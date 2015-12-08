@@ -9,9 +9,7 @@
  */
 namespace PommProject\Foundation\Inspector;
 
-use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Client\Client;
-use PommProject\Foundation\Where;
 
 /**
  * DatabaseInspector
@@ -58,7 +56,6 @@ class DatabaseInspector extends Client
      *
      * Return server version.
      *
-     * @throws  FoundationException if invalid string.
      * @return  string
      */
     public function getVersion()

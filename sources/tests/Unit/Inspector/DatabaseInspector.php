@@ -14,7 +14,7 @@ use PommProject\Foundation\Tester\FoundationSessionAtoum;
 /**
  * @engine isolate
  */
-class LegacyInspector extends FoundationSessionAtoum
+class DatabaseInspector extends FoundationSessionAtoum
 {
     use InspectorTestTrait;
 

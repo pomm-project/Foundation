@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Inspector;
 
+use PommProject\Foundation\Inflector;
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Exception\FoundationException;
@@ -64,14 +65,24 @@ class InspectorPooler extends ClientPooler
         try {
             new \ReflectionClass($identifier);
         } catch (\ReflectionException $e) {
-            throw new FoundationException(
-                sprintf(
-                    "Unable to load inspector '%s'.",
-                    $identifier
-                )
+
+            $class_name = sprintf(
+                "\PommProject\Foundation\Inspector\%sInspector",
+                Inflector::studlyCaps($identifier)
             );
+
+            if (!class_exists($class_name)) {
+                throw new FoundationException(
+                    sprintf(
+                        "Unable to load inspector '%s'.",
+                        $identifier
+                    )
+                );
+            }
+
+            return new $class_name;
         }
 
-        return new $identifier();
+        return new $identifier;
     }
 }

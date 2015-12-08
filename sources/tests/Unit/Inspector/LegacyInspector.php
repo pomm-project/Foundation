@@ -19,23 +19,7 @@ use PommProject\Foundation\Tester\FoundationSessionAtoum;
  */
 class LegacyInspector extends FoundationSessionAtoum
 {
-    protected $session;
-
-    protected function getSession()
-    {
-        if ($this->session === null) {
-            $this->session = $this->buildSession();
-        }
-
-        return $this->session;
-    }
-
-    protected function initializeSession(Session $session)
-    {
-        $session
-            ->registerClient(new InspectorFixture())
-            ;
-    }
+    use InspectorTestTrait;
 
     protected function getInspector()
     {
@@ -44,38 +28,12 @@ class LegacyInspector extends FoundationSessionAtoum
             ->getInspector();
     }
 
-    protected function getFixture()
-    {
-        $fixture = $this
-            ->getSession()
-            ->getClient('fixture', 'inspector')
-            ;
-
-        if ($fixture === null) {
-            throw new FoundationException(
-                "Unable to get client 'fixture'::'inspector' from the session's client pool.
-                ");
-        }
-
-        return $fixture;
-    }
-
     protected function getTableOid($table_name)
     {
         return $this
             ->getInspector()
             ->getTableOid('inspector_test', $table_name)
             ;
-    }
-
-    public function setUp()
-    {
-        $this->getFixture()->createSchema();
-    }
-
-    public function tearDown()
-    {
-        $this->getFixture()->dropSchema();
     }
 
     public function beforeTestMethod($method)

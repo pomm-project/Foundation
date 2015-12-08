@@ -14,18 +14,23 @@ use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Where;
 
 /**
- * Inspector
+ * LegacyInspector
  *
- * Database structure inspector.
+ * Pomm 2.0.x Database structure inspector.
+ * This class is deprected to be split in several smaller and more specialized
+ * clients.
  *
  * @package   Foundation
  * @copyright 2014 - 2015 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see       Client
+ * @deprecated
  */
-class Inspector extends Client
+class LegacyInspector extends Client
 {
+    use InspectorTrait;
+
     /**
      * getClientType
      *
@@ -51,8 +56,8 @@ class Inspector extends Client
      *
      * Return a list of available schemas in the current database.
      *
-     * @access public
      * @return \PommProject\Foundation\ConvertedResultIterator
+     * @deprecated
      */
     public function getSchemas()
     {
@@ -66,11 +71,14 @@ from pg_catalog.pg_namespace n
     left join pg_catalog.pg_description d on n.oid = d.objoid
     left join pg_catalog.pg_class c on
         c.relnamespace = n.oid and c.relkind in ('r', 'v')
-where :condition
+where {condition}
 group by 1, 2, 3
 order by 1;
 SQL;
-        $condition = new Where('n.nspname !~ $* and n.nspname <> $*', ['^pg_', 'information_schema']);
+        $condition = new Where(
+            'n.nspname !~ $* and n.nspname <> $*',
+            ['^pg_', 'information_schema']
+        );
 
         return $this->executeSql($sql, $condition);
     }
@@ -81,10 +89,10 @@ SQL;
      * Return the table oid from PostgreSQL catalog. If no table is found, null
      * is returned.
      *
-     * @access public
      * @param  string   $schema
      * @param  string   $table
      * @return int|null
+     * @deprecated
      */
     public function getTableOid($schema, $table)
     {
@@ -95,7 +103,7 @@ from
     pg_catalog.pg_class c
         left join pg_catalog.pg_namespace n on n.oid = c.relnamespace
 where
-:condition
+{condition}
 SQL;
 
         $where = Where::create('n.nspname =  $*', [$schema])
@@ -113,9 +121,9 @@ SQL;
      * Get table's field information. If no fields are found, null is
      * returned.
      *
-     * @access public
      * @param  int                 $oid
      * @return \PommProject\Foundation\ConvertedResultIterator|null
+     * @deprecated
      */
     public function getTableFieldInformation($oid)
     {
@@ -140,7 +148,7 @@ from
     left join pg_catalog.pg_index ind       on cla.oid = ind.indrelid and ind.indisprimary
     left join pg_catalog.pg_namespace name  on typ.typnamespace = name.oid
 where
-:condition
+{condition}
 order by
     att.attnum
 SQL;
@@ -157,10 +165,10 @@ SQL;
      *
      * Return the given schema oid, null if the schema is not found.
      *
-     * @access public
      * @param  string   $schema
      * @param  Where    $where optional where clause.
      * @return int|null
+     * @deprecated
      */
     public function getSchemaOid($schema, Where $where = null)
     {
@@ -174,7 +182,7 @@ select
 from
     pg_catalog.pg_namespace s
 where
-    :condition
+    {condition}
 SQL;
 
         $iterator = $this->executeSql($sql, $condition);
@@ -187,9 +195,9 @@ SQL;
      *
      * Get relation's primary key if any.
      *
-     * @access public
      * @param  int        $table_oid
      * @return array|null
+     * @deprecated
      */
     public function getPrimaryKey($table_oid)
     {
@@ -203,7 +211,7 @@ with
                 join pg_catalog.pg_index ind on
                     att.attrelid = ind.indrelid and att.attnum = any(ind.indkey)
         where
-            :condition
+            {condition}
         order by att.attnum asc
 )
 select array_agg(field) as fields from pk_field
@@ -213,7 +221,10 @@ SQL;
             ->andWhere('ind.indisprimary')
             ;
 
-        $pk = $this->executeSql($sql, $condition)->current();
+        $pk = $this
+            ->executeSql($sql, $condition)
+            ->current()
+            ;
 
         return $pk['fields'][0] === null ? [] : array_reverse($pk['fields']);
     }
@@ -224,10 +235,10 @@ SQL;
      * Return information on relations in a given schema. An additional Where
      * condition can be passed to filter against other criteria.
      *
-     * @access public
      * @param  int                     $schema_oid
      * @param  Where                   $where
      * @return \PommProject\Foundation\ConvertedResultIterator
+     * @deprecated
      */
     public function getSchemaRelations($schema_oid, Where $where = null)
     {
@@ -252,7 +263,7 @@ from
     pg_catalog.pg_class cl
         left join pg_catalog.pg_description des on
             cl.oid = des.objoid and des.objsubid = 0
-where :condition
+where {condition}
 order by name asc
 SQL;
 
@@ -264,14 +275,14 @@ SQL;
      *
      * Return the comment on a table if set. Null otherwise.
      *
-     * @access public
      * @param  int         $table_oid
      * @return string|null
+     * @deprecated
      */
     public function getTableComment($table_oid)
     {
         $sql      = <<<SQL
-select description from pg_catalog.pg_description where :condition
+select description from pg_catalog.pg_description where {condition}
 SQL;
 
         $where    = Where::create('objoid = $*', [$table_oid]);
@@ -286,10 +297,10 @@ SQL;
      * Return the Oid of the given type name.
      * It Additionally returns the type category.
      *
-     * @access public
      * @param  string     $type_name
      * @param  string     $type_schema
      * @return array|null
+     * @deprecated
      */
     public function getTypeInformation($type_name, $type_schema = null)
     {
@@ -301,7 +312,7 @@ select
 from
     pg_catalog.pg_type t :join
 where
-    :condition
+    {condition}
 SQL;
 
         if ($type_schema !== null) {
@@ -321,9 +332,9 @@ SQL;
      *
      * Get type category.
      *
-     * @access public
      * @param  int        $oid
      * @return array|null
+     * @deprecated
      */
     public function getTypeCategory($oid)
     {
@@ -338,7 +349,7 @@ from
     pg_catalog.pg_type t
         left join pg_namespace n on n.oid = t.typnamespace
 where
-    :condition
+    {condition}
 SQL;
         $iterator = $this->executeSql($sql, Where::create('t.oid = $*', [$oid]));
 
@@ -350,9 +361,9 @@ SQL;
      *
      * Return all possible values from an enumerated type in its natural order.
      *
-     * @access public
      * @param  int        $oid
      * @return array|null
+     * @deprecated
      */
     public function getTypeEnumValues($oid)
     {
@@ -364,7 +375,7 @@ with
         from
             pg_catalog.pg_enum e
         where
-            :condition
+            {condition}
     )
 select array_agg(label) as labels from enum_value
 SQL;
@@ -382,9 +393,9 @@ SQL;
      *
      * Return the structure of a composite row.
      *
-     * @access public
      * @param  int                     $oid
      * @return \PommProject\Foundation\ConvertedResultIterator
+     * @deprecated
      */
     public function getCompositeInformation($oid)
     {
@@ -398,7 +409,7 @@ from
         join pg_catalog.pg_attribute a  on a.attrelid = c.oid and a.attnum > 0
         join pg_catalog.pg_type t       on t.oid = a.atttypid
 where
-    :condition
+    {condition}
 SQL;
 
         return $this->executeSql($sql, Where::create('orig.oid = $*', [$oid]));
@@ -409,9 +420,9 @@ SQL;
      *
      * Return server version.
      *
-     * @access public
      * @throws  FoundationException if invalid string.
      * @return string
+     * @deprecated
      */
     public function getVersion()
     {
@@ -421,27 +432,5 @@ SQL;
             ;
 
         return $row['server_version'];
-    }
-
-    /**
-     * executeSql
-     *
-     * Launch query execution.
-     *
-     * @access protected
-     * @param  string         $sql
-     * @param  Where          $condition
-     * @return \PommProject\Foundation\ConvertedResultIterator
-     */
-    protected function executeSql($sql, Where $condition = null)
-    {
-        $condition = (new Where())->andWhere($condition);
-        $sql = strtr($sql, [':condition' => $condition]);
-
-        return $this
-            ->getSession()
-            ->getClientUsingPooler('query_manager', '\PommProject\Foundation\PreparedQuery\PreparedQueryManager')
-            ->query($sql, $condition->getValues())
-            ;
     }
 }

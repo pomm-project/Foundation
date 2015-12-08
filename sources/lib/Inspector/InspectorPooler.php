@@ -46,7 +46,7 @@ class InspectorPooler extends ClientPooler
     public function getClient($identifier = null)
     {
         if ($identifier === null) {
-            $identifier = '\PommProject\Foundation\Inspector\Inspector';
+            $identifier = '\PommProject\Foundation\Inspector\LegacyInspector';
         }
 
         return parent::getClient($identifier);

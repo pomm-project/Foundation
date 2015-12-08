@@ -17,7 +17,7 @@ use PommProject\Foundation\Tester\FoundationSessionAtoum;
 /**
  * @engine isolate
  */
-class Inspector extends FoundationSessionAtoum
+class LegacyInspector extends FoundationSessionAtoum
 {
     protected $session;
 
@@ -52,7 +52,9 @@ class Inspector extends FoundationSessionAtoum
             ;
 
         if ($fixture === null) {
-            throw new FoundationException("Unable to get client 'fixture'::'inspector' from the session's client pool.");
+            throw new FoundationException(
+                "Unable to get client 'fixture'::'inspector' from the session's client pool.
+                ");
         }
 
         return $fixture;
@@ -119,7 +121,10 @@ class Inspector extends FoundationSessionAtoum
 
     public function testGetTableFieldInformation()
     {
-        $fields_info = $this->getInspector()->getTableFieldInformation($this->getTableOid('with_complex_pk'));
+        $fields_info = $this
+            ->getInspector()
+            ->getTableFieldInformation($this->getTableOid('with_complex_pk'))
+            ;
         $this
             ->object($fields_info)
             ->isInstanceOf('\PommProject\Foundation\ResultIterator')
@@ -132,7 +137,9 @@ class Inspector extends FoundationSessionAtoum
             ->array(array_values($fields_info->get(0)))
             ->isIdenticalTo(['with_complex_pk_id', 'int4', null, true, 'Test comment', 1, true])
             ;
-        $fields_info = $this->getInspector()->getTableFieldInformation($this->getTableOid('with_simple_pk'));
+        $fields_info = $this
+            ->getInspector()
+            ->getTableFieldInformation($this->getTableOid('with_simple_pk'));
         $this
             ->array($fields_info->slice('type'))
             ->isIdenticalTo(['int4', 'inspector_test._someone', '_timestamptz'])
@@ -227,7 +234,10 @@ class Inspector extends FoundationSessionAtoum
 
     public function testGetTypeEnumValues()
     {
-        $result = $this->getInspector()->getTypeInformation('sponsor_rating', 'inspector_test');
+        $result = $this
+            ->getInspector()
+            ->getTypeInformation('sponsor_rating', 'inspector_test')
+            ;
         $this
             ->array($this->getInspector()->getTypeEnumValues($result['oid']))
             ->isIdenticalTo(['platinum', 'gold', 'silver', 'bronze', 'aluminium'])

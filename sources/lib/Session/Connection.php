@@ -311,7 +311,7 @@ class Connection
      * return an array of ResultHandler.
      *
      * @access protected
-     * @param  string (default null)
+     * @param  string $sql  (default null)
      * @throws ConnectionException if no response are available.
      * @throws SqlException if the result is an error.
      * @return ResultHandler|array

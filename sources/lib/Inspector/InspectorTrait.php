@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Inspector;
 
 use PommProject\Foundation\Where;
+use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\ConvertedResultIterator;
 
 /**
@@ -24,6 +25,15 @@ use PommProject\Foundation\ConvertedResultIterator;
  */
 trait InspectorTrait
 {
+
+    /**
+     * getSession
+     *
+     * This trait should be used by Session clients.
+     *
+     * @return Session
+     */
+    abstract protected function getSession();
 
     /**
      * executeSql

@@ -11,6 +11,7 @@ namespace PommProject\Foundation\Inspector;
 
 use PommProject\Foundation\Inflector;
 use PommProject\Foundation\Client\ClientPooler;
+use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Exception\FoundationException;
 
@@ -47,7 +48,7 @@ class InspectorPooler extends ClientPooler
     public function getClient($identifier = null)
     {
         if ($identifier === null) {
-            $identifier = '\PommProject\Foundation\Inspector\LegacyInspector';
+            $identifier = 'legacy';
         }
 
         return parent::getClient($identifier);
@@ -62,25 +63,76 @@ class InspectorPooler extends ClientPooler
      */
     protected function createClient($identifier)
     {
-        try {
-            new \ReflectionClass($identifier);
-        } catch (\ReflectionException $e) {
+        if (!class_exists($identifier)) {
+            return $this->createBuiltinClient($identifier);
+        }
 
-            $class_name = sprintf(
-                "\PommProject\Foundation\Inspector\%sInspector",
-                Inflector::studlyCaps($identifier)
+        return $this->createCustomClient($identifier);
+
+    }
+
+    /**
+     * createBuiltinClient
+     *
+     * Return an instance of a builtin inspector from its short name. Throws an
+     * exception if the built in inspector does not exist.
+     *
+     * @param   string $identifier
+     * @throws  FoundationException
+     * @return  ClientInterface
+     */
+    private function createBuiltinClient($identifier)
+    {
+        $class_name = sprintf(
+            "\PommProject\Foundation\Inspector\%sInspector",
+            Inflector::studlyCaps($identifier)
+        );
+
+        if (!class_exists($class_name)) {
+            throw new FoundationException(
+                sprintf(
+                    "Unknown built in inspector '%s'. Default inspector clients are {%s}.",
+                    $identifier,
+                    'database, schema, relation, type, role'
+                )
             );
+        }
 
-            if (!class_exists($class_name)) {
+        return new $class_name;
+    }
+
+    /**
+     * createCustomClient
+     *
+     * Load a custom inspector client. Throws an exception if class cannot be
+     * loaded or is not a ClientInterface.
+     *
+     * @param   string $identifier
+     * @throws  FoundationException
+     * @return  ClientInterface
+     */
+    private function createCustomClient($identifier)
+    {
+        try {
+            $refl = new \ReflectionClass($identifier);
+
+            if (!$refl->implementsInterface('\PommProject\Foundation\Client\ClientInterface')) {
                 throw new FoundationException(
                     sprintf(
-                        "Unable to load inspector '%s'.",
+                        "Class '%s' must implement '\PommProject\Foundation\Client\ClientInterface'.",
                         $identifier
                     )
                 );
             }
-
-            return new $class_name;
+        } catch (\ReflectionException $e) {
+            throw new FoundationException(
+                sprintf(
+                    "Cannot find inspector class '%s'.",
+                    $identifier
+                ),
+                null,
+                $e
+            );
         }
 
         return new $identifier;

@@ -75,10 +75,6 @@ class PgJson implements ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
-        if ($data === null) {
-            return sprintf("NULL::%s", $type);
-        }
-
         return
             $data !== null
             ? sprintf("json '%s'", $this->jsonEncode($data))

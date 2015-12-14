@@ -134,7 +134,7 @@ SQL;
      * Get table's field information. If no fields are found, null is
      * returned.
      *
-     * @param  int                 $oid
+     * @param  Where $where
      * @return ConvertedResultIterator
      */
     protected function getTableFieldInformationWhere(Where $where)

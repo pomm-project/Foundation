@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Test\Unit\Inspector;
 
+use PommProject\Foundation\ResultIterator;
 use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Test\Fixture\InspectorFixture;
 use PommProject\Foundation\Exception\FoundationException;
@@ -60,7 +61,7 @@ class LegacyInspector extends FoundationSessionAtoum
     {
         $this
             ->object($this->getInspector()->getSchemas())
-            ->isInstanceOf('\PommProject\Foundation\ResultIterator')
+            ->isInstanceOf(ConvertedResultIterator::class)
             ->array($this->getInspector()->getSchemas()->slice('name'))
             ->contains('inspector_test')
             ;
@@ -143,10 +144,11 @@ class LegacyInspector extends FoundationSessionAtoum
     {
         $tables_info = $this
             ->getInspector()
-            ->getSchemaRelations($this
-            ->getInspector()
-            ->getSchemaOid('inspector_test')
-        );
+            ->getSchemaRelations(
+                $this
+                ->getInspector()
+                ->getSchemaOid('inspector_test')
+            );
 
         $this
             ->object($tables_info)

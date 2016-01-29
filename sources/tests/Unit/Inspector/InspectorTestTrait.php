@@ -13,6 +13,16 @@ use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Test\Fixture\InspectorFixture;
 use PommProject\Foundation\Exception\FoundationException;
 
+/**
+ * InspectorTestTrait
+ *
+ * Setup the Fixture client needed by the inspector tests.
+ *
+ * @package     Pomm
+ * @copyright   2016 Grégoire HUBERT
+ * @author      Grégoire HUBERT
+ * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
+ */
 trait InspectorTestTrait
 {
     protected $session;

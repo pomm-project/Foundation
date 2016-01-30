@@ -4,27 +4,35 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eec484a7559511a3ae18f7d9a974f459",
-    "content-hash": "9d0c033ae292cb24afa5537f690c3860",
+    "hash": "deda29bad9a267f59997b43852885c4b",
+    "content-hash": "5615fffbce0d7a7717416fadc1e9654b",
     "packages": [
         {
             "name": "psr/log",
-            "version": "1.0.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+                "reference": "9e45edca52cc9c954680072c93e621f8b71fab26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/9e45edca52cc9c954680072c93e621f8b71fab26",
+                "reference": "9e45edca52cc9c954680072c93e621f8b71fab26",
                 "shasum": ""
             },
+            "require": {
+                "php": ">=5.3.0"
+            },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
-                "psr-0": {
-                    "Psr\\Log\\": ""
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -43,7 +51,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2012-12-21 11:40:51"
+            "time": "2015-06-02 13:48:41"
         }
     ],
     "packages-dev": [
@@ -53,12 +61,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/atoum/atoum.git",
-                "reference": "bc1105cba8446bdd82d861d49096fa303aca49ea"
+                "reference": "847bca7ab53a6cf4246fbef82f49874f55566684"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atoum/atoum/zipball/bc1105cba8446bdd82d861d49096fa303aca49ea",
-                "reference": "bc1105cba8446bdd82d861d49096fa303aca49ea",
+                "url": "https://api.github.com/repos/atoum/atoum/zipball/847bca7ab53a6cf4246fbef82f49874f55566684",
+                "reference": "847bca7ab53a6cf4246fbef82f49874f55566684",
                 "shasum": ""
             },
             "require": {
@@ -125,11 +133,11 @@
                 "test",
                 "unit testing"
             ],
-            "time": "2015-10-01 20:37:42"
+            "time": "2015-12-07 21:29:54"
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "atoum/atoum": 20
     },

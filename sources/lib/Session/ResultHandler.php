@@ -233,10 +233,10 @@ class ResultHandler
      *
      * Return the type oid of the given field.
      *
-     * @access public
-     * @param  string   $name
+     * @access  public
+     * @param   string   $name
      * @throws  FoundationException on error
-     * @return int|null
+     * @return  int
      */
     public function getTypeOid($name)
     {

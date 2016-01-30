@@ -12,6 +12,7 @@ namespace PommProject\Foundation\PreparedQuery;
 use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
 use PommProject\Foundation\Listener\SendNotificationTrait;
 use PommProject\Foundation\Exception\FoundationException;
+use PommProject\Foundation\Session\ResultHandler;
 use PommProject\Foundation\Client\Client;
 
 /**
@@ -116,7 +117,7 @@ class PreparedQuery extends Client
      *
      * @access public
      * @param  array    $values Query parameters
-     * @return Resource
+     * @return ResultHandler
      */
     public function execute(array $values = [])
     {
@@ -196,7 +197,7 @@ class PreparedQuery extends Client
      * Prepare parameters to be sent.
      *
      * @access protected
-     * @param  mixed    $sql
+     * @param  string   $sql
      * @param  array    $values
      * @return array    $prepared_values
      */
@@ -221,7 +222,7 @@ class PreparedQuery extends Client
      * Store converters needed for the query parameters.
      *
      * @access protected
-     * @param mixed             $sql
+     * @param  string           $sql
      * @return PreparedQuery    $this
      */
     protected function prepareConverters($sql)

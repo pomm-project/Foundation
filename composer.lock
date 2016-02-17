@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "9e45edca52cc9c954680072c93e621f8b71fab26"
+                "reference": "d8e60a5619fff77f9669da8997697443ef1a1d7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/9e45edca52cc9c954680072c93e621f8b71fab26",
-                "reference": "9e45edca52cc9c954680072c93e621f8b71fab26",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d8e60a5619fff77f9669da8997697443ef1a1d7e",
+                "reference": "d8e60a5619fff77f9669da8997697443ef1a1d7e",
                 "shasum": ""
             },
             "require": {
@@ -46,12 +46,13 @@
                 }
             ],
             "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
             "keywords": [
                 "log",
                 "psr",
                 "psr-3"
             ],
-            "time": "2015-06-02 13:48:41"
+            "time": "2016-01-06 21:40:42"
         }
     ],
     "packages-dev": [
@@ -61,12 +62,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/atoum/atoum.git",
-                "reference": "847bca7ab53a6cf4246fbef82f49874f55566684"
+                "reference": "74a51b83ae59a11a0c644d9bf27eead00d5d23fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atoum/atoum/zipball/847bca7ab53a6cf4246fbef82f49874f55566684",
-                "reference": "847bca7ab53a6cf4246fbef82f49874f55566684",
+                "url": "https://api.github.com/repos/atoum/atoum/zipball/74a51b83ae59a11a0c644d9bf27eead00d5d23fe",
+                "reference": "74a51b83ae59a11a0c644d9bf27eead00d5d23fe",
                 "shasum": ""
             },
             "require": {
@@ -100,7 +101,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -133,7 +134,7 @@
                 "test",
                 "unit testing"
             ],
-            "time": "2015-12-07 21:29:54"
+            "time": "2016-02-11 08:36:47"
         }
     ],
     "aliases": [],

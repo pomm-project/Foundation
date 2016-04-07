@@ -78,6 +78,10 @@ select
     n.nspname       as "schema",
     cl.oid          as "oid",
     o.rolname       as "owner",
+    case
+        when cl.relkind = 'r' then pg_size_pretty(pg_relation_size(cl.oid::regclass))
+        else null
+    end             as "size",
     des.description as "comment"
 from
     pg_catalog.pg_class cl

@@ -27,67 +27,56 @@ class RelationInspector extends FoundationSessionAtoum
 
     public function testGetRelations()
     {
-        $tables_info = $this
-            ->getInspector()
-            ->getRelations()
-            ;
-
         $this
-            ->array($tables_info->slice('name'))
-            ->contains('no_pk')
-            ->contains('pg_class')
-            ->contains('sql_parts')
-            ;
-
-        $tables_info = $this
-            ->getInspector()
-            ->getRelations(Where::create("cl.relname !~ $*", ['[pk]']))
-            ;
-
-        $this
-            ->array($tables_info->slice('name'))
-            ->notContains('no_pk')
-            ->notContains('pg_class')
-            ->notContains('sql_parts')
-            ->contains('sql_sizing')
+            ->assert("getRelations() returns the list of user defined relations.")
+            ->given($tables_info = $this->getInspector()->getRelations())
+                ->array($tables_info->slice('name'))
+                    ->contains('no_pk')
+                    ->contains('pg_class')
+                    ->contains('sql_parts')
+            ->assert("getRelations can apply a condition on relations.")
+            ->given($tables_info = $this->getInspector()->getRelations(Where::create("cl.relname !~ $*", ['[pk]'])))
+                ->array($tables_info->slice('name'))
+                    ->notContains('no_pk')
+                    ->notContains('pg_class')
+                    ->notContains('sql_parts')
+                    ->contains('sql_sizing')
+                ->array($tables_info->current())
+                    ->hasKeys(['name', 'type', 'schema', 'oid', 'owner', 'size', 'comment'])
             ;
     }
 
     public function testGetRelationsInSchema()
     {
-        $relations = $this->getInspector()
-            ->getRelationsInSchema('inspector_test')
-            ;
         $this
-            ->array($relations->slice('name'))
-            ->isIdenticalTo(['no_pk', 'with_complex_pk', 'with_simple_pk'])
-            ;
-
-        $relations = $this->getInspector()
-            ->getRelationsInSchema('inspector_test', Where::create("cl.relname ~ $*", ['^with']))
-            ;
-        $this
-            ->array($relations->slice('name'))
-            ->isIdenticalTo(['with_complex_pk', 'with_simple_pk'])
+            ->assert("getRelationsInSchema() returns the relations in a given schema.")
+            ->given($relations = $this->getInspector()->getRelationsInSchema('inspector_test'))
+                ->array($relations->slice('name'))
+                    ->isIdenticalTo(['no_pk', 'with_complex_pk', 'with_simple_pk'])
+            ->assert("getRelationsInSchema() can apply a condition on relations.")
+            ->given(
+                $relations = $this->getInspector()
+                    ->getRelationsInSchema('inspector_test', Where::create("cl.relname ~ $*", ['^with']))
+                )
+                ->array($relations->slice('name'))
+                    ->isIdenticalTo(['with_complex_pk', 'with_simple_pk'])
             ;
     }
 
     public function testGetDatabaseRelations()
     {
-        $relations = $this->getInspector()
-            ->getDatabaseRelations()
-            ;
-
         $this
-            ->array($relations->slice('name'))
-            ->isIdenticalTo(['no_pk', 'with_complex_pk', 'with_simple_pk'])
-            ;
-        $relations = $this->getInspector()
-            ->getDatabaseRelations(Where::create("cl.relname ~ $*", ['^with']))
-            ;
-        $this
-            ->array($relations->slice('name'))
-            ->isIdenticalTo(['with_complex_pk', 'with_simple_pk'])
+            ->assert("getDatabaseRelations() returns non system relations.")
+            ->given($relations = $this->getInspector()->getDatabaseRelations())
+                ->array($relations->slice('name'))
+                    ->isIdenticalTo(['no_pk', 'with_complex_pk', 'with_simple_pk'])
+            ->assert("getDatabaseRelations() can apply a condition on relations.")
+            ->given(
+                $relations = $this->getInspector()
+                    ->getDatabaseRelations(Where::create("cl.relname ~ $*", ['^with']))
+            )
+                ->array($relations->slice('name'))
+                    ->isIdenticalTo(['with_complex_pk', 'with_simple_pk'])
             ;
     }
 

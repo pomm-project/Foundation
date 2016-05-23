@@ -82,40 +82,42 @@ class RelationInspector extends FoundationSessionAtoum
 
     public function testGetTableFieldInformation()
     {
-        $relation_oid = $this
-            ->getInspector()
-            ->getRelationsInSchema(
-                'inspector_test',
-                Where::create("cl.relname = $*", ['with_simple_pk'])
-            )
-            ->slice('oid')[0]
-            ;
-
-        $relation_info = $this
-            ->getInspector()
-            ->getTableFieldInformation($relation_oid)
-            ;
-
         $this
-            ->object($relation_info)
-            ->isInstanceOf(ConvertedResultIterator::class)
-            ->array($relation_info->slice('name'))
-            ->isIdenticalTo(['with_simple_pk_id', 'a_patron', 'some_timestamps'])
-            ->array($relation_info->slice('type'))
-            ->isIdenticalTo(['int4', 'inspector_test._someone', '_timestamptz'])
+            ->assert("getTableFieldInformation() returns fields info upon OID.")
+            ->given(
+                $relation_oid = $this
+                    ->getInspector()
+                    ->getRelationsInSchema(
+                        'inspector_test',
+                        Where::create("cl.relname = $*", ['with_simple_pk'])
+                    )
+            ->slice('oid')[0]
+        )
+            ->given(
+                $relation_info = $this
+                    ->getInspector()
+                    ->getTableFieldInformation($relation_oid)
+                )
+                ->object($relation_info)
+                    ->isInstanceOf(ConvertedResultIterator::class)
+                ->array($relation_info->slice('name'))
+                    ->isIdenticalTo(['with_simple_pk_id', 'a_patron', 'some_timestamps'])
+                ->array($relation_info->slice('type'))
+                    ->isIdenticalTo(['int4', 'inspector_test._someone', '_timestamptz'])
             ;
     }
 
     public function testGetTableFieldInformationName()
     {
-        $relation_info = $this
-            ->getInspector()
-            ->getTableFieldInformationName('inspector_test', 'no_pk')
-            ;
-
         $this
-            ->array($relation_info->slice('name'))
-            ->isIdenticalTo(['a_boolean', 'varchar_array'])
+            ->assert("getTableFieldInformationName() returns field info.")
+            ->given(
+                $relation_info = $this
+                    ->getInspector()
+                    ->getTableFieldInformationName('inspector_test', 'no_pk')
+                )
+                ->array($relation_info->slice('name'))
+                    ->isIdenticalTo(['a_boolean', 'varchar_array'])
             ;
     }
 }

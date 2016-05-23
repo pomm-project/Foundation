@@ -20,11 +20,13 @@ use PommProject\Foundation\Session\ResultHandler;
  * @copyright 2014 - 2015 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
+ * @see       ResultIteratorInterface
  * @see       \Iterator
  * @see       \Countable
  * @see       \JsonSerializable
+ * @see       \SeekableIterator
  */
-class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \SeekableIterator
+class ResultIterator implements ResultIteratorInterface, \Iterator, \Countable, \JsonSerializable, \SeekableIterator
 {
     private $position;
     protected $result;

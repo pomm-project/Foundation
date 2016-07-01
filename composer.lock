@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eec484a7559511a3ae18f7d9a974f459",
-    "content-hash": "9d0c033ae292cb24afa5537f690c3860",
+    "hash": "629ddc0bd1d3301be38dd11ee2ad3cf9",
+    "content-hash": "bc8c2ec26d7a9692bc31923976e30de7",
     "packages": [
         {
             "name": "psr/log",
@@ -49,16 +49,16 @@
     "packages-dev": [
         {
             "name": "atoum/atoum",
-            "version": "dev-master",
+            "version": "2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atoum/atoum.git",
-                "reference": "bc1105cba8446bdd82d861d49096fa303aca49ea"
+                "reference": "1813c5f50d4727cc4be8ec9abe25befae78ce4c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atoum/atoum/zipball/bc1105cba8446bdd82d861d49096fa303aca49ea",
-                "reference": "bc1105cba8446bdd82d861d49096fa303aca49ea",
+                "url": "https://api.github.com/repos/atoum/atoum/zipball/1813c5f50d4727cc4be8ec9abe25befae78ce4c5",
+                "reference": "1813c5f50d4727cc4be8ec9abe25befae78ce4c5",
                 "shasum": ""
             },
             "require": {
@@ -92,7 +92,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -125,14 +125,12 @@
                 "test",
                 "unit testing"
             ],
-            "time": "2015-10-01 20:37:42"
+            "time": "2016-07-01 15:49:14"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "atoum/atoum": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

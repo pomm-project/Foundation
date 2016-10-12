@@ -49,7 +49,7 @@ SQL;
             ->object($iterator)
             ->isInstanceOf('\PommProject\Foundation\ResultIterator')
             ->isInstanceOf('\Countable')
-            ->isInstanceOf('\Iterator')
+            ->isInstanceOf('\PommProject\Foundation\ResultIteratorInterface')
             ;
     }
 

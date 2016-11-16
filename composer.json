@@ -12,7 +12,8 @@
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "atoum/atoum" : "dev-master"
+        "atoum/atoum" : "dev-master",
+        "squizlabs/php_codesniffer": "~2.7"
     },
     "autoload": {
         "psr-4": {

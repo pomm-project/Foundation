@@ -9,5 +9,6 @@ before_script:
   - psql -c 'CREATE EXTENSION hstore' -U postgres -h 127.0.0.1 pomm_test
   - psql -c 'CREATE EXTENSION ltree' -U postgres -h 127.0.0.1 pomm_test
 install: composer install --dev
-script: php vendor/atoum/atoum/bin/atoum --no-code-coverage -d sources/tests/Unit/
-
+script:
+  - ./vendor/bin/phpcs --standard=psr2 --runtime-set ignore_warnings_on_exit true --report=summary sources
+  - php vendor/atoum/atoum/bin/atoum --no-code-coverage -d sources/tests/Unit/

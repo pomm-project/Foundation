@@ -25,18 +25,16 @@ class PgTsRange extends BaseConverter
             ->variable($this->newTestedInstance()->fromPg(null, 'whatever', $session))
             ->isNull()
             ->variable($this->newTestedInstance()->fromPg('', 'whatever', $session))
-            ->isNull()
-            ;
+            ->isNull();
         $range = $this->newTestedInstance()->fromPg($text_range, 'tstzrange', $session);
         $this
             ->object($range->start_limit)
-            ->isInstanceOf('\DateTime')
-            ;
-        $range_without_double_quote = $this->newTestedInstance()->fromPg($text_range_without_double_quote, 'tstzrange', $session);
+            ->isInstanceOf('\DateTime');
+        $range_without_double_quote = $this->newTestedInstance()
+            ->fromPg($text_range_without_double_quote, 'tstzrange', $session);
         $this
             ->object($range_without_double_quote->start_limit)
-            ->isInstanceOf('\DateTime')
-        ;
+            ->isInstanceOf('\DateTime');
     }
 
     public function testToPg()
@@ -49,8 +47,7 @@ class PgTsRange extends BaseConverter
             ->string($this->newTestedInstance()->toPg($range, 'tstzrange', $session))
             ->isEqualTo(sprintf("tstzrange('%s')", $text_range))
             ->string($this->newTestedInstance()->toPg(null, 'mytsrange', $session))
-            ->isEqualTo('NULL::mytsrange')
-            ;
+            ->isEqualTo('NULL::mytsrange');
     }
 
     public function testToPgStandardFormat()
@@ -63,13 +60,11 @@ class PgTsRange extends BaseConverter
             ->string($this->newTestedInstance()->toPgStandardFormat($range, 'tstzrange', $session))
             ->isEqualTo('[""2014-08-15 15:29:24.395639+00"",""2014-10-15 15:29:24.395639+00"")')
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'mytsrange', $session))
-            ->isNull()
-            ;
+            ->isNull();
         if ($this->isPgVersionAtLeast('9.2', $session)) {
             $this
                 ->object($this->sendToPostgres($range, 'tsrange', $session))
-                ->isInstanceOf('\PommProject\Foundation\Converter\Type\TsRange')
-                ;
+                ->isInstanceOf('\PommProject\Foundation\Converter\Type\TsRange');
         } else {
             $this->skip('Skipping some PgTsRange tests because Pg version < 9.2.');
         }

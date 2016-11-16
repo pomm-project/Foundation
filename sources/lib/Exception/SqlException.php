@@ -377,7 +377,12 @@ class SqlException extends FoundationException
      */
     public function getSQLDetailedErrorMessage()
     {
-        return sprintf("«%s»\n%s\n(%s)", pg_result_error_field($this->result_resource, \PGSQL_DIAG_MESSAGE_PRIMARY), pg_result_error_field($this->result_resource, \PGSQL_DIAG_MESSAGE_DETAIL), pg_result_error_field($this->result_resource, \PGSQL_DIAG_MESSAGE_HINT));
+        return sprintf(
+            "«%s»\n%s\n(%s)",
+            pg_result_error_field($this->result_resource, \PGSQL_DIAG_MESSAGE_PRIMARY),
+            pg_result_error_field($this->result_resource, \PGSQL_DIAG_MESSAGE_DETAIL),
+            pg_result_error_field($this->result_resource, \PGSQL_DIAG_MESSAGE_HINT)
+        );
     }
 
     /**

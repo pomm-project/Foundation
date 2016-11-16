@@ -68,7 +68,6 @@ class InspectorPooler extends ClientPooler
         }
 
         return $this->createCustomClient($identifier);
-
     }
 
     /**

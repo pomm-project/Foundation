@@ -26,8 +26,8 @@ use PommProject\Foundation\Session\ResultHandler;
  */
 class ResultIterator implements ResultIteratorInterface, \JsonSerializable
 {
-    private     $position;
-    protected   $result;
+    private $position;
+    protected $result;
 
     /**
      * __construct

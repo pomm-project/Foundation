@@ -86,8 +86,8 @@ class PgArray extends ArrayTypeConverter
         $data = $this->checkArray($data);
 
         return sprintf('ARRAY[%s]::%s[]', join(',', array_map(function ($val) use ($converter, $type, $session) {
-                    return $converter->toPg($val, $type, $session);
-                }, $data)), $type);
+            return $converter->toPg($val, $type, $session);
+        }, $data)), $type);
     }
 
     /**
@@ -103,25 +103,25 @@ class PgArray extends ArrayTypeConverter
         $converter = $this->getSubtypeConverter($type, $session);
         $data = $this->checkArray($data);
 
-        return
-            sprintf('{%s}', join(',',
-                array_map(function ($val) use ($converter, $type, $session) {
-                    if ($val === null) {
-                        return 'NULL';
+        return sprintf('{%s}', join(
+            ',',
+            array_map(function ($val) use ($converter, $type, $session) {
+                if ($val === null) {
+                    return 'NULL';
+                }
+
+                $val = $converter->toPgStandardFormat($val, $type, $session);
+
+                if ($val !== '') {
+                    if (preg_match('/[,\\"\s]/', $val)) {
+                        $val = sprintf('"%s"', addcslashes($val, '"\\'));
                     }
+                } else {
+                    $val = '""';
+                }
 
-                    $val = $converter->toPgStandardFormat($val, $type, $session);
-
-                    if ($val !== '') {
-                        if (preg_match('/[,\\"\s]/', $val)) {
-                            $val = sprintf('"%s"', addcslashes($val, '"\\'));
-                        }
-                    } else {
-                        $val = '""';
-                    }
-
-                    return $val;
-                }, $data)
-            ));
+                return $val;
+            }, $data)
+        ));
     }
 }

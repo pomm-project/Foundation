@@ -42,8 +42,7 @@ class RelationInspector extends FoundationSessionAtoum
                     ->notContains('sql_parts')
                     ->contains('sql_sizing')
                 ->array($tables_info->current())
-                    ->hasKeys(['name', 'type', 'schema', 'oid', 'owner', 'size', 'comment'])
-            ;
+                    ->hasKeys(['name', 'type', 'schema', 'oid', 'owner', 'size', 'comment']);
     }
 
     public function testGetRelationsInSchema()
@@ -57,10 +56,9 @@ class RelationInspector extends FoundationSessionAtoum
             ->given(
                 $relations = $this->getInspector()
                     ->getRelationsInSchema('inspector_test', Where::create("cl.relname ~ $*", ['^with']))
-                )
-                ->array($relations->slice('name'))
-                    ->isIdenticalTo(['with_complex_pk', 'with_simple_pk'])
-            ;
+            )
+            ->array($relations->slice('name'))
+                ->isIdenticalTo(['with_complex_pk', 'with_simple_pk']);
     }
 
     public function testGetDatabaseRelations()
@@ -75,9 +73,8 @@ class RelationInspector extends FoundationSessionAtoum
                 $relations = $this->getInspector()
                     ->getDatabaseRelations(Where::create("cl.relname ~ $*", ['^with']))
             )
-                ->array($relations->slice('name'))
-                    ->isIdenticalTo(['with_complex_pk', 'with_simple_pk'])
-            ;
+            ->array($relations->slice('name'))
+                ->isIdenticalTo(['with_complex_pk', 'with_simple_pk']);
     }
 
     public function testGetTableFieldInformation()
@@ -86,25 +83,24 @@ class RelationInspector extends FoundationSessionAtoum
             ->assert("getTableFieldInformation() returns fields info upon OID.")
             ->given(
                 $relation_oid = $this
-                    ->getInspector()
-                    ->getRelationsInSchema(
-                        'inspector_test',
-                        Where::create("cl.relname = $*", ['with_simple_pk'])
-                    )
-            ->slice('oid')[0]
-        )
+                ->getInspector()
+                ->getRelationsInSchema(
+                    'inspector_test',
+                    Where::create("cl.relname = $*", ['with_simple_pk'])
+                )
+                ->slice('oid')[0]
+            )
             ->given(
                 $relation_info = $this
-                    ->getInspector()
-                    ->getTableFieldInformation($relation_oid)
-                )
-                ->object($relation_info)
-                    ->isInstanceOf(ConvertedResultIterator::class)
-                ->array($relation_info->slice('name'))
-                    ->isIdenticalTo(['with_simple_pk_id', 'a_patron', 'some_timestamps'])
-                ->array($relation_info->slice('type'))
-                    ->isIdenticalTo(['int4', 'inspector_test._someone', '_timestamptz'])
-            ;
+                ->getInspector()
+                ->getTableFieldInformation($relation_oid)
+            )
+            ->object($relation_info)
+                ->isInstanceOf(ConvertedResultIterator::class)
+            ->array($relation_info->slice('name'))
+                ->isIdenticalTo(['with_simple_pk_id', 'a_patron', 'some_timestamps'])
+            ->array($relation_info->slice('type'))
+                ->isIdenticalTo(['int4', 'inspector_test._someone', '_timestamptz']);
     }
 
     public function testGetTableFieldInformationName()
@@ -115,9 +111,8 @@ class RelationInspector extends FoundationSessionAtoum
                 $relation_info = $this
                     ->getInspector()
                     ->getTableFieldInformationName('inspector_test', 'no_pk')
-                )
-                ->array($relation_info->slice('name'))
-                    ->isIdenticalTo(['a_boolean', 'varchar_array'])
-            ;
+            )
+            ->array($relation_info->slice('name'))
+                ->isIdenticalTo(['a_boolean', 'varchar_array']);
     }
 }

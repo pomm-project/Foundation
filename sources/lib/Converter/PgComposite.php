@@ -90,7 +90,8 @@ class PgComposite extends ArrayTypeConverter
         $this->checkArray($data);
 
         return
-            sprintf("(%s)",
+            sprintf(
+                "(%s)",
                 join(',', array_map(function ($val) {
                     if ($val === null) {
                         return '';
@@ -101,8 +102,7 @@ class PgComposite extends ArrayTypeConverter
                     } else {
                         return $val;
                     }
-                }, $this->convertArray($data, $session, 'toPgStandardFormat')
-                ))
+                }, $this->convertArray($data, $session, 'toPgStandardFormat')))
             );
     }
 

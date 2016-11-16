@@ -34,18 +34,17 @@ class Connection extends Atoum
             ->object($connection->executeAnonymousQuery('select true'))
             ->isInstanceOf('\PommProject\Foundation\Session\ResultHandler')
             ->exception(function () use ($connection) {
-                    $connection->executeAnonymousQuery('bad query');
-                })
+                $connection->executeAnonymousQuery('bad query');
+            })
             ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
             ->string($this->exception->getSQLErrorState())
             ->isIdenticalTo(SqlException::SYNTAX_ERROR)
             ->array($connection->executeAnonymousQuery('select true; select false; select null'))
             ->hasSize(3)
             ->exception(function () use ($connection) {
-                    $connection->executeAnonymousQuery('select true; bad query');
-                })
-            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
-            ;
+                $connection->executeAnonymousQuery('select true; bad query');
+            })
+            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException');
     }
 
     public function testSendQueryWithParameters()
@@ -68,7 +67,6 @@ class Connection extends Atoum
             ->isIdenticalTo($parameters)
             ->and
             ->string($this->exception->getQuery())
-            ->isIdenticalTo($bad_query)
-        ;
+            ->isIdenticalTo($bad_query);
     }
 }

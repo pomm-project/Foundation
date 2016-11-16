@@ -41,21 +41,20 @@ trait InspectorTestTrait
     protected function initializeSession(Session $session)
     {
         $session
-            ->registerClient(new InspectorFixture())
-            ;
+            ->registerClient(new InspectorFixture());
     }
 
     protected function getFixture()
     {
         $fixture = $this
             ->getSession()
-            ->getClient('fixture', 'inspector')
-            ;
+            ->getClient('fixture', 'inspector');
 
         if ($fixture === null) {
             throw new FoundationException(
                 "Unable to get client 'fixture'::'inspector' from the session's client pool.
-                ");
+                "
+            );
         }
 
         return $fixture;

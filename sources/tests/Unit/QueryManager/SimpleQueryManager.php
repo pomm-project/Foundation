@@ -38,8 +38,7 @@ class SimpleQueryManager extends FoundationSessionAtoum
             ->boolean($iterator->current()['one one'])
             ->isTrue()
             ->variable($iterator->current()['TWO'])
-            ->isNull()
-            ;
+            ->isNull();
     }
 
     public function testParametrizedQuery()
@@ -67,8 +66,7 @@ SQL;
             );
         $this
             ->array($iterator->slice('id'))
-            ->isIdenticalTo([2, 3])
-            ;
+            ->isIdenticalTo([2, 3]);
         $iterator = $this
             ->getQueryManager($session)
             ->query(
@@ -80,8 +78,7 @@ SQL;
             );
         $this
             ->array($iterator->slice('id'))
-            ->isIdenticalTo([2, 3])
-            ;
+            ->isIdenticalTo([2, 3]);
     }
 
     public function testSendNotification()
@@ -89,8 +86,7 @@ SQL;
         $session = $this->buildSession('test session');
         $listener_tester = new ListenerTester();
         $session->getClientUsingPooler('listener', 'query')
-            ->attachAction([$listener_tester, 'call'])
-            ;
+            ->attachAction([$listener_tester, 'call']);
         $iterator = $this->getQueryManager($session)->query('select $*::bool as one', [true]);
         $this
             ->boolean($listener_tester->is_called)
@@ -102,8 +98,7 @@ SQL;
             ->string($listener_tester->session_stamp)
             ->isEqualTo('test session')
             ->integer($listener_tester->result_count)
-            ->isEqualTo(1)
-            ;
+            ->isEqualTo(1);
     }
 }
 

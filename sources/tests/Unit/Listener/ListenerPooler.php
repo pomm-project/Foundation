@@ -19,8 +19,7 @@ class ListenerPooler extends FoundationSessionAtoum
     {
         $session
             ->registerClient(new MockListener('pika'))
-            ->registerClient(new MockListener('chu'))
-            ;
+            ->registerClient(new MockListener('chu'));
     }
 
     public function testNotify()
@@ -34,7 +33,7 @@ class ListenerPooler extends FoundationSessionAtoum
                 $session
                     ->getPoolerForType('listener')
                     ->notify('pika', [ 'data' => 1 ])
-                )
+            )
             ->isInstanceOf('\PommProject\Foundation\Listener\ListenerPooler')
             ->mock($session->getClient('listener', 'pika'))
             ->call('notify')
@@ -72,14 +71,13 @@ class ListenerPooler extends FoundationSessionAtoum
                 $session
                     ->getPoolerForType('listener')
                     ->notify('pika:plop', [ 'data' => 1 ])
-                )
+            )
             ->isInstanceOf('\PommProject\Foundation\Listener\ListenerPooler')
             ->mock($session->getClient('listener', 'pika'))
             ->call('notify')
             ->once()
             ->mock($session->getClient('listener', 'chu'))
             ->call('notify')
-            ->never()
-            ;
+            ->never();
     }
 }

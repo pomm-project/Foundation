@@ -117,7 +117,12 @@ trait ClientPoolerTrait
     protected function getSession()
     {
         if ($this->session === null) {
-            throw new FoundationException(sprintf("Client pooler '%s' is not initialized, session not set.", get_class($this)));
+            throw new FoundationException(
+                sprintf(
+                    "Client pooler '%s' is not initialized, session not set.",
+                    get_class($this)
+                )
+            );
         }
 
         return $this->session;

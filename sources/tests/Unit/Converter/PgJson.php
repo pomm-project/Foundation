@@ -30,16 +30,14 @@ JSON;
                 )
             )
             ->isIdenticalTo(["az" => ['b' => [' c ', 'd\\":'], 'e' => ['fé' => 'gù:"pika"']], 'h' => ['\'i\'', 'j']])
-            ->variable($converter->fromPg(null, 'json', $session))
-            ;
+            ->variable($converter->fromPg(null, 'json', $session));
         $object = $this->newTestedInstance(false)->fromPg($json, 'json', $session);
         $this
             ->object($object)
             ->isInstanceOf((object) [])
             ->object($object->az)
             ->array($object->az->b)
-            ->isIdenticalTo([' c ', 'd\\":'])
-            ;
+            ->isIdenticalTo([' c ', 'd\\":']);
     }
 
     public function testToPg()
@@ -51,14 +49,13 @@ JSON;
             ->string(
                 $converter
                     ->toPg($data, 'json', $session)
-                )
+            )
             ->isEqualTo('json \'{"a":{"b":[" c ","d"],"e":"f"},"g":["h","i"]}\'')
             ->string(
                 $converter
                     ->toPg(null, 'json', $session)
-                )
-            ->isEqualTo('NULL::json')
-            ;
+            )
+            ->isEqualTo('NULL::json');
     }
 
     public function testToPgStandardFormat()
@@ -70,15 +67,14 @@ JSON;
                 $this
                     ->newTestedInstance()
                     ->toPgStandardFormat($data, 'json', $session)
-                )
+            )
             ->isEqualTo('{"a":{"b":[" c ","d"],"e":"f"},"g":["h","i"]}')
             ->variable(
                 $this
                     ->newTestedInstance()
                     ->toPgStandardFormat(null, 'json', $session)
-                )
-            ->isNull()
-            ;
+            )
+            ->isNull();
 
         if ($this->isPgVersionAtLeast('9.2', $session) === false) {
             $this->skip("Skipping JSON tests as Json type does not exist for Pg < 9.2.");
@@ -88,7 +84,6 @@ JSON;
 
         $this
             ->array($this->sendToPostgres($data, 'json', $session))
-            ->isIdenticalTo($data)
-            ;
+            ->isIdenticalTo($data);
     }
 }

@@ -32,9 +32,8 @@ class PgString implements ConverterInterface
     public function toPg($data, $type, Session $session)
     {
         return $data !== null
-            ? sprintf("%s %s",  $type, $session->getConnection()->escapeLiteral($data))
-            : sprintf("NULL::%s", $type)
-            ;
+            ? sprintf("%s %s", $type, $session->getConnection()->escapeLiteral($data))
+            : sprintf("NULL::%s", $type);
     }
 
     /**

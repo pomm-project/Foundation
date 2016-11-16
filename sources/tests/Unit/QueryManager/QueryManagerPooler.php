@@ -17,8 +17,7 @@ class QueryManagerPooler extends VanillaSessionAtoum
     protected function initializeSession(Session $session)
     {
         $session
-            ->registerClientPooler($this->newTestedInstance())
-            ;
+            ->registerClientPooler($this->newTestedInstance());
     }
 
     public function testGetClient()
@@ -29,17 +28,15 @@ class QueryManagerPooler extends VanillaSessionAtoum
                 $session
                     ->getPoolerForType('query_manager')
                     ->getClient()
-                )
+            )
             ->isInstanceOf('\PommProject\Foundation\QueryManager\SimpleQueryManager')
             ->exception(function () use ($session) {
                 return
                     $session
                         ->getPoolerForType('query_manager')
-                        ->getClient('\No\Such\Client')
-                        ;
+                        ->getClient('\No\Such\Client');
             })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
-            ->message->contains('Could not load')
-            ;
+            ->message->contains('Could not load');
     }
 }

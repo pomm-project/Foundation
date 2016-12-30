@@ -40,9 +40,9 @@ abstract class VanillaSessionAtoum extends Atoum
      * @param  string       $stamp
      * @return Session
      */
-    protected function buildSession($stamp = null)
+    protected function buildSession($stamp = 'pomm_db1')
     {
-        $session = $this->getSessionBuilder()->buildSession($stamp);
+        $session = $this->getSessionBuilder($stamp)->buildSession($stamp);
         $this->initializeSession($session);
 
         return $session;
@@ -56,13 +56,13 @@ abstract class VanillaSessionAtoum extends Atoum
      * @access protected
      * @return SessionBuilder
      */
-    private function getSessionBuilder()
+    private function getSessionBuilder($stamp)
     {
-        if ($this->session_builder === null) {
-            $this->session_builder = $this->createSessionBuilder($GLOBALS['pomm_db1']);
+        if (!isset($this->session_builder[$stamp])) {
+            $this->session_builder[$stamp] = $this->createSessionBuilder($GLOBALS[$stamp]);
         }
 
-        return $this->session_builder;
+        return $this->session_builder[$stamp];
     }
 
     /**

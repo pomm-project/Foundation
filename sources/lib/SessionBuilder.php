@@ -9,18 +9,18 @@
  */
 namespace PommProject\Foundation;
 
-use PommProject\Foundation\Session as FoundationSession;
-use PommProject\Foundation\Session\Session;
-use PommProject\Foundation\Session\Connection;
 use PommProject\Foundation\Client\ClientHolder;
-use PommProject\Foundation\Session\SessionBuilder as VanillaSessionBuilder;
-use PommProject\Foundation\Observer\ObserverPooler;
-use PommProject\Foundation\Listener\ListenerPooler;
-use PommProject\Foundation\Inspector\InspectorPooler;
-use PommProject\Foundation\Converter\ConverterPooler;
 use PommProject\Foundation\Converter\ConverterHolder;
-use PommProject\Foundation\QueryManager\QueryManagerPooler;
+use PommProject\Foundation\Converter\ConverterPooler;
+use PommProject\Foundation\Inspector\InspectorPooler;
+use PommProject\Foundation\Listener\ListenerPooler;
+use PommProject\Foundation\Observer\ObserverPooler;
 use PommProject\Foundation\PreparedQuery\PreparedQueryPooler;
+use PommProject\Foundation\QueryManager\QueryManagerPooler;
+use PommProject\Foundation\Session as FoundationSession;
+use PommProject\Foundation\Session\Connection;
+use PommProject\Foundation\Session\Session;
+use PommProject\Foundation\Session\SessionBuilder as VanillaSessionBuilder;
 
 /**
  * FoundationSessionBuilder
@@ -130,17 +130,6 @@ class SessionBuilder extends VanillaSessionBuilder
                 ],
                 false
             )
-            ->registerConverter(
-                'Timestamp',
-                new Converter\PgTimestamp(),
-                [
-                    'timestamp', 'pg_catalog.timestamp',
-                    'date', 'pg_catalog.date',
-                    'time', 'pg_catalog.time',
-                    'timestamptz', 'pg_catalog.timestamptz',
-                ],
-                false
-            )
             ->registerConverter('Interval', new Converter\PgInterval(), ['interval', 'pg_catalog.interval'], false)
             ->registerConverter('Binary', new Converter\PgBytea(), ['bytea', 'pg_catalog.bytea'], false)
             ->registerConverter('Point', new Converter\Geometry\PgPoint(), ['point', 'pg_catalog.point'], false)
@@ -166,20 +155,100 @@ class SessionBuilder extends VanillaSessionBuilder
                 ],
                 false
             )
-            ->registerConverter(
-                'TsRange',
-                new Converter\PgTsRange(),
-                [
-                    'tsrange',
-                    'pg_catalog.tsrange',
-                    'daterange',
-                    'pg_catalog.daterange',
-                    'tstzrange',
-                    'pg_catalog.tstzrange',
-                ],
-                false
-            )
             ;
+
+        if (!$this->configuration->hasParameter('date_implementation')) {
+            $dateImplementation = 'php';
+        } else {
+            $dateImplementation = $this->configuration->getParameter('date_implementation');
+        }
+
+        switch ($dateImplementation) {
+            case 'php':
+                $converter_holder
+                    ->registerConverter(
+                        'Timestamp',
+                        new Converter\PgTimestamp(),
+                        [
+                            'timestamp',
+                            'pg_catalog.timestamp',
+                            'date',
+                            'pg_catalog.date',
+                            'time',
+                            'pg_catalog.time',
+                            'timestamptz',
+                            'pg_catalog.timestamptz',
+                        ],
+                        false
+                    )
+                    ->registerConverter(
+                        'TsRange',
+                        new Converter\PgTsRange(),
+                        [
+                            'tsrange',
+                            'pg_catalog.tsrange',
+                            'daterange',
+                            'pg_catalog.daterange',
+                            'tstzrange',
+                            'pg_catalog.tstzrange',
+                        ],
+                        false
+                    )
+                ;
+                break;
+            case 'chronos':
+                $converter_holder
+                    ->registerConverter(
+                        'Timestamp',
+                        new Converter\PgTimestampChronos(),
+                        [
+                            'timestamp',
+                            'pg_catalog.timestamp',
+                            'time',
+                            'pg_catalog.time',
+                            'timestamptz',
+                            'pg_catalog.timestamptz',
+                        ],
+                        false
+                    )
+                    ->registerConverter(
+                        'TsRange',
+                        new Converter\PgTsRangeChronos(),
+                        [
+                            'tsrange',
+                            'pg_catalog.tsrange',
+                            'tstzrange',
+                            'pg_catalog.tstzrange',
+                        ],
+                        false
+                    )
+                    ->registerConverter(
+                        'Date',
+                        new Converter\PgDateChronos(),
+                        [
+                            'date',
+                            'pg_catalog.date',
+                        ],
+                        false
+                    )
+                    ->registerConverter(
+                        'DateRange',
+                        new Converter\PgDateRangeChronos(),
+                        [
+                            'daterange',
+                            'pg_catalog.daterange',
+                        ],
+                        false
+                    )
+                ;
+                break;
+            default:
+                throw new \InvalidArgumentException(
+                    sprintf('%s is not valid date implementation parameter', $dateImplementation)
+                );
+        }
+
+
 
         return $this;
     }

@@ -38,7 +38,7 @@ class TypeInspector extends FoundationSessionAtoum
             ;
         $info = $iterator->current();
         $this->array($info)
-            ->hasKeys(['name', 'schema', 'oid', 'category', 'owner', 'description'])
+            ->hasKeys(['name', 'schema', 'oid', 'category', 'enum_values', 'owner', 'description'])
             ->containsValues(['circle', 'pg_catalog', 'geometric'])
             ;
     }
@@ -55,20 +55,24 @@ class TypeInspector extends FoundationSessionAtoum
         $this
             ->assert('getTypesInSchema returns an iterator on results.')
                 ->object($iterator)
-                ->isInstanceOf(ConvertedResultIterator::class)
-                ->integer($iterator->count())
-                ->isEqualTo(4)
+                    ->isInstanceOf(ConvertedResultIterator::class)
+                    ->integer($iterator->count())
+                    ->isEqualTo(4)
             ->assert('getTypesInSchema returns the correct types.')
                 ->given($type = $iterator->get(0))
                     ->string($type['name'])
-                    ->isEqualTo('someone')
+                        ->isEqualTo('someone')
                     ->string($type['category'])
-                    ->isEqualTo('composite')
+                        ->isEqualTo('composite')
+                    ->variable($type['enum_values'])
+                        ->isNull()
                 ->given($type = $iterator->get(2))
                     ->string($type['name'])
-                    ->isEqualTo('sponsor_rating')
+                        ->isEqualTo('sponsor_rating')
                     ->string($type['category'])
-                    ->isEqualTo('enumerated')
+                        ->isEqualTo('enumerated')
+                    ->array($type['enum_values'])
+                        ->containsValues(['platinum', 'gold', 'silver', 'bronze', 'aluminium'])
             ;
     }
 }

@@ -82,6 +82,11 @@ select
     when t.typcategory = 'V' then 'bit string'
     else 'unknown'
   end as "category",
+  case
+    when t.typcategory = 'E' then
+      (select array_agg(pge.enumlabel) from pg_catalog.pg_enum pge where pge.enumtypid = t.oid)
+    else null
+  end as enum_values,
   t.typowner as "owner",
   d.description as "description"
 from

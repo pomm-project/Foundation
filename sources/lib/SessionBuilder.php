@@ -108,6 +108,7 @@ class SessionBuilder extends VanillaSessionBuilder
                     'varchar', 'pg_catalog.varchar',
                     'char', 'pg_catalog.char',
                     'text', 'pg_catalog.text',
+                    'citext', 'public.citext',
                     'uuid', 'pg_catalog.uuid',
                     'tsvector', 'pg_catalog.tsvector',
                     'xml', 'pg_catalog.xml',

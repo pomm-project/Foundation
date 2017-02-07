@@ -13,7 +13,8 @@
     },
     "require-dev": {
         "atoum/atoum" : "dev-master",
-        "squizlabs/php_codesniffer": "~2.7"
+        "squizlabs/php_codesniffer": "~2.7",
+        "cakephp/chronos": "~1.0"
     },
     "autoload": {
         "psr-4": {

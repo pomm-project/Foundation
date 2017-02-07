@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
+use Cake\Chronos\Chronos;
 use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 
 class PgArray extends BaseConverter
@@ -43,6 +44,20 @@ class PgArray extends BaseConverter
                 new \DateTime('2014-07-29 14:50:01'),
                 new \DateTime('2012-12-14 04:17:09.063948'),
             ]);
+
+        $session    = $this->buildSession('pomm_db2');
+        $converter  = $this->newTestedInstance();
+        $this
+            ->array($converter->fromPg(
+                '{"2014-09-29 18:24:54.591767","2014-07-29 14:50:01","2012-12-14 04:17:09.063948"}',
+                'timestamp',
+                $session
+            ))
+            ->isEqualTo([
+                new Chronos('2014-09-29 18:24:54.591767'),
+                new Chronos('2014-07-29 14:50:01'),
+                new Chronos('2012-12-14 04:17:09.063948'),
+            ]);
     }
 
     public function testToPg()
@@ -72,7 +87,9 @@ class PgArray extends BaseConverter
                     'timestamp',
                     $session
                 )
-            );
+            )
+            //->isEqualTo("ARRAY[timestamp '2014-09-29 18:24:54.591767',timestamp '2014-07-29 14:50:01',timestamp '2012-12-14 04:17:09.063948']::timestamp[]")
+        ;
     }
 
     public function testToPgStandardFormat()
@@ -111,5 +128,24 @@ class PgArray extends BaseConverter
                 'another one with "\\quotes\\"', null
             ], 'varchar[]', $session))
             ->isIdenticalTo([' a varchar ', 'another one with "\\quotes\\"', null]);
+
+        $session    = $this->buildSession('pomm_db2');
+        $converter  = $this->newTestedInstance();
+
+        $this
+            ->string(
+                $converter->toPgStandardFormat(
+                    [
+                        new Chronos('2014-09-29 18:24:54.591767+02:00'),
+                        new Chronos('2014-07-29 14:50:01+02:00'),
+                        new Chronos('2012-12-14 04:17:09.063948+01:00'),
+                    ],
+                    'timestamp',
+                    $session
+                )
+            )
+            ->isEqualTo('{"2014-09-29 18:24:54.591767+02:00","2014-07-29 14:50:01.000000+02:00","2012-12-14 04:17:09.063948+01:00"}')
+        ;
+
     }
 }

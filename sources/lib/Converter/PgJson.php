@@ -54,7 +54,7 @@ class PgJson implements ConverterInterface
 
         $return = json_decode($data, $this->is_array);
 
-        if ($return === false) {
+        if (JSON_ERROR_NONE !== json_last_error()) {
             throw new ConverterException(
                 sprintf(
                     "Could not convert Json to PHP %s, driver said '%s'.\n%s",

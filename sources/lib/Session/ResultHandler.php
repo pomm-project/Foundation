@@ -194,7 +194,13 @@ class ResultHandler
         $no = pg_field_num($this->handler, sprintf('"%s"', $name));
 
         if ($no ===  -1) {
-            throw new \InvalidArgumentException(sprintf("Could not find field name '%s'. Available fields are {%s}.", $name, join(', ', array_keys(pg_fetch_assoc($this->handler)))));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Could not find field name '%s'. Available fields are {%s}.",
+                    $name,
+                    join(', ', array_keys(pg_fetch_assoc($this->handler)))
+                )
+            );
         }
 
         return $no;
@@ -233,10 +239,10 @@ class ResultHandler
      *
      * Return the type oid of the given field.
      *
-     * @access public
-     * @param  string   $name
+     * @access  public
+     * @param   string   $name
      * @throws  FoundationException on error
-     * @return int|null
+     * @return  int
      */
     public function getTypeOid($name)
     {

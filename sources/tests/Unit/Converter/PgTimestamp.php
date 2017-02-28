@@ -20,19 +20,18 @@ class PgTimestamp extends BaseConverter
             ->datetime($this->newTestedInstance()->fromPg('2014-09-27 18:51:35.678406+00', 'timestamptz', $session))
             ->hasDateAndTime(2014, 9, 27, 18, 51, 35.678406)
             ->variable($this->newTestedInstance()->fromPg(null, 'timestamptz', $session))
-            ->isNull()
-            ;
+            ->isNull();
     }
 
     public function testToPg()
     {
         $session = $this->buildSession();
         $this
-            ->string($this->newTestedInstance()->toPg(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz', $session))
+            ->string($this->newTestedInstance()
+                ->toPg(new \DateTime('2014-09-27 18:51:35.678406+00'), 'timestamptz', $session))
             ->isEqualTo("timestamptz '2014-09-27 18:51:35.678406+00:00'")
             ->string($this->newTestedInstance()->toPg(null, 'timestamptz', $session))
-            ->isEqualTo("NULL::timestamptz")
-            ;
+            ->isEqualTo("NULL::timestamptz");
     }
 
     public function testToPgStandardFormat()
@@ -46,7 +45,6 @@ class PgTimestamp extends BaseConverter
             ->isNull()
             ->object($this->sendToPostgres($date_time, 'timestamptz', $session))
             ->isInstanceof('\DateTime')
-            ->isEqualTo($date_time)
-            ;
+            ->isEqualTo($date_time);
     }
 }

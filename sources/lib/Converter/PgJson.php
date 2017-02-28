@@ -75,10 +75,6 @@ class PgJson implements ConverterInterface
      */
     public function toPg($data, $type, Session $session)
     {
-        if ($data === null) {
-            return sprintf("NULL::%s", $type);
-        }
-
         return
             $data !== null
             ? sprintf("json '%s'", $this->jsonEncode($data))
@@ -117,9 +113,9 @@ class PgJson implements ConverterInterface
         if ($return === false) {
             throw new ConverterException(
                 sprintf(
-                    "Could not convert data to JSON. Driver returned '%s'.\n======\n%s\n",
-                    json_last_error(),
-                    $data
+                    "Could not convert %s data to JSON. Driver returned '%s'.",
+                    gettype($data),
+                    json_last_error()
                 )
             );
         }

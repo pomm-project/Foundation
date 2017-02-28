@@ -18,8 +18,7 @@ class ParameterHolder extends Atoum
         $parameter_holder = $this->newTestedInstance();
         $this
             ->array($parameter_holder->getIterator()->getArrayCopy())
-            ->isEmpty()
-            ;
+            ->isEmpty();
     }
 
     public function testConstructorWithParameter()
@@ -27,8 +26,7 @@ class ParameterHolder extends Atoum
         $parameter_holder = $this->newTestedInstance(['pika' => 'one']);
         $this
             ->array($parameter_holder->getIterator()->getArrayCopy())
-            ->isIdenticalTo(['pika' => 'one'])
-            ;
+            ->isIdenticalTo(['pika' => 'one']);
     }
 
     public function testSetParameter()
@@ -42,8 +40,7 @@ class ParameterHolder extends Atoum
             ->array($parameter_holder->setParameter('plop', null)->getIterator()->getArrayCopy())
             ->isIdenticalTo(['pika' => 'three', 'chu' => 'two', 'plop' => null])
             ->array($parameter_holder->setParameter('pika', null)->getIterator()->getArrayCopy())
-            ->isIdenticalTo(['pika' => null, 'chu' => 'two', 'plop' => null])
-            ;
+            ->isIdenticalTo(['pika' => null, 'chu' => 'two', 'plop' => null]);
     }
 
     public function testHasParameter()
@@ -57,8 +54,7 @@ class ParameterHolder extends Atoum
             ->boolean($parameter_holder->setParameter('chu', 'whatever')->hasParameter('chu'))
             ->isTrue()
             ->boolean($parameter_holder->setParameter('chu', null)->hasParameter('chu'))
-            ->isTrue()
-            ;
+            ->isTrue();
     }
 
     public function testGetParameter()
@@ -72,8 +68,7 @@ class ParameterHolder extends Atoum
             ->string($parameter_holder->getParameter('chu', 'two'))
             ->isEqualTo('two')
             ->variable($parameter_holder->getParameter('chu'))
-            ->isNull()
-            ;
+            ->isNull();
     }
 
     public function testMustHave()
@@ -82,12 +77,13 @@ class ParameterHolder extends Atoum
         $this
             ->object($parameter_holder->mustHave('pika'))
             ->isInstanceOf('\PommProject\Foundation\ParameterHolder')
-            ->exception(function () use ($parameter_holder) { $parameter_holder->mustHave('chu'); })
+            ->exception(function () use ($parameter_holder) {
+                $parameter_holder->mustHave('chu');
+            })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('mandatory')
             ->object($parameter_holder->setParameter('chu', 'whatever')->mustHave('chu'))
-            ->isInstanceOf('\PommProject\Foundation\ParameterHolder')
-            ;
+            ->isInstanceOf('\PommProject\Foundation\ParameterHolder');
     }
 
     public function testSetDefaultValue()
@@ -95,11 +91,12 @@ class ParameterHolder extends Atoum
         $parameter_holder = $this->newTestedInstance(['pika' => 'one']);
         $this
             ->string(
-                $parameter_holder->setDefaultValue('pika', 'two')->getParameter('pika'))
-                ->isEqualTo('one')
-                ->string($parameter_holder->setDefaultValue('chu', 'two')->getParameter('chu'))
-                ->isEqualTo('two')
-                ;
+                $parameter_holder->setDefaultValue('pika', 'two')
+                    ->getParameter('pika')
+            )
+            ->isEqualTo('one')
+            ->string($parameter_holder->setDefaultValue('chu', 'two')->getParameter('chu'))
+            ->isEqualTo('two');
     }
 
     public function testMustBeOneOf()
@@ -108,13 +105,16 @@ class ParameterHolder extends Atoum
         $this
             ->object($parameter_holder->mustBeOneOf('pika', [ 'one', 'two', 'tree']))
             ->isInstanceOf('\PommProject\Foundation\ParameterHolder')
-            ->exception(function () use ($parameter_holder) { $parameter_holder->mustBeOneOf('pika', ['four', 'five']); })
+            ->exception(function () use ($parameter_holder) {
+                $parameter_holder->mustBeOneOf('pika', ['four', 'five']);
+            })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('must be one of')
-            ->exception(function () use ($parameter_holder) { $parameter_holder->mustBeOneOf('chu', ['four', 'five']); })
+            ->exception(function () use ($parameter_holder) {
+                $parameter_holder->mustBeOneOf('chu', ['four', 'five']);
+            })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
-            ->message->contains('must be one of')
-            ;
+            ->message->contains('must be one of');
     }
 
     public function testUnsetParameter()
@@ -126,8 +126,7 @@ class ParameterHolder extends Atoum
             ->array($parameter_holder->unsetParameter('chu')->getIterator()->getArrayCopy())
             ->isEmpty()
             ->array($parameter_holder->unsetParameter('chu')->getIterator()->getArrayCopy())
-            ->isEmpty()
-            ;
+            ->isEmpty();
     }
 
     public function testArrayAccess()
@@ -141,20 +140,17 @@ class ParameterHolder extends Atoum
             ->string($parameter_holder['pika'])
             ->isEqualTo('one')
             ->boolean(isset($parameter_holder['chu']))
-            ->isFalse()
-            ;
+            ->isFalse();
         $parameter_holder['chu'] = 'two';
         $this
             ->boolean(isset($parameter_holder['chu']))
             ->isTrue()
             ->string($parameter_holder['chu'])
-            ->isEqualTo('two')
-            ;
+            ->isEqualTo('two');
         unset($parameter_holder['chu']);
         $this
             ->boolean(isset($parameter_holder['chu']))
-            ->isFalse()
-            ;
+            ->isFalse();
     }
 
     public function testCount()
@@ -166,8 +162,7 @@ class ParameterHolder extends Atoum
             ->integer($parameter_holder->count())
             ->isEqualTo(1)
             ->integer($parameter_holder->setParameter('chu', 'two')->count())
-            ->isEqualTo(2)
-            ;
+            ->isEqualTo(2);
     }
 
     public function testGetIterator()
@@ -179,7 +174,6 @@ class ParameterHolder extends Atoum
             ->array($parameter_holder->getIterator()->getArrayCopy())
             ->isIdenticalTo(['pika' => 'one'])
             ->array($parameter_holder->setParameter('chu', 'two')->getIterator()->getArrayCopy())
-            ->isIdenticalTo(['pika' => 'one', 'chu' => 'two'])
-            ;
+            ->isIdenticalTo(['pika' => 'one', 'chu' => 'two']);
     }
 }

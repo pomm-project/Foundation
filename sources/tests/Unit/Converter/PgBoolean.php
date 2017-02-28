@@ -21,12 +21,13 @@ class PgBoolean extends BaseConverter
             ->isTrue()
             ->boolean($this->newTestedInstance()->fromPg('f', 'bool', $session))
             ->isFalse()
-            ->exception(function () use ($session) { $this->newTestedInstance()->fromPg('whatever', 'bool', $session); })
+            ->exception(function () use ($session) {
+                $this->newTestedInstance()->fromPg('whatever', 'bool', $session);
+            })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
             ->message->contains('Unknown bool data')
             ->variable($this->newTestedInstance()->fromPg(null, 'bool', $session))
-            ->isNull()
-            ;
+            ->isNull();
     }
 
     public function testToPg()
@@ -38,8 +39,7 @@ class PgBoolean extends BaseConverter
             ->string($this->newTestedInstance()->toPg(false, 'bool', $session))
             ->isEqualTo("bool 'false'")
             ->string($this->newTestedInstance()->toPg(null, 'bool', $session))
-            ->isEqualTo("NULL::bool")
-            ;
+            ->isEqualTo("NULL::bool");
     }
 
     public function testToPgStandardFormat()
@@ -51,7 +51,6 @@ class PgBoolean extends BaseConverter
             ->string($this->newTestedInstance()->toPgStandardFormat(false, 'bool', $session))
             ->isEqualTo("f")
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'bool', $session))
-            ->isNull()
-            ;
+            ->isNull();
     }
 }

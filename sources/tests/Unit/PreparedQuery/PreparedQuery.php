@@ -23,14 +23,15 @@ class PreparedQuery extends FoundationSessionAtoum
     public function testConstruct()
     {
         $this
-            ->exception(function () { $this->newTestedInstance(null); })
+            ->exception(function () {
+                $this->newTestedInstance(null);
+            })
             ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
             ->message->contains('empty query')
             ->object($this->newTestedInstance('abcd'))
             ->isInstanceOf('\PommProject\Foundation\PreparedQuery\PreparedQuery')
             ->string($this->newTestedInstance('abcd')->getClientIdentifier())
-            ->isEqualTo(testedClass::getSignatureFor('abcd'))
-            ;
+            ->isEqualTo(testedClass::getSignatureFor('abcd'));
     }
 
     public function testExecute()
@@ -45,15 +46,21 @@ from (values
     (3, 'three', '2001-10-25 15:43'::timestamp, ARRAY[point(1.6, 1.4)]),
     (4, 'four', '2002-01-01 01:10'::timestamp, ARRAY[point(1.8, 2.3)])
 ) p (id, pika, a_timestamp, a_point)
-where (p.id >= $* or p.pika = ANY($*::text[])) and p.a_timestamp > $*::timestamp and $*::pg_catalog."circle" @> ANY (p.a_point)
+where (p.id >= $* or p.pika = ANY($*::text[]))
+    and p.a_timestamp > $*::timestamp
+    and $*::pg_catalog."circle" @> ANY (p.a_point)
 SQL;
         $query = $this->newTestedInstance($sql);
         $session->registerClient($query);
-        $result = $query->execute([2, ['pika, chu', 'three'], new \DateTime('2000-01-01'), new Circle('<(1.5,1.5), 0.3>')]);
+        $result = $query->execute([
+            2,
+            ['pika, chu', 'three'],
+            new \DateTime('2000-01-01'),
+            new Circle('<(1.5,1.5), 0.3>')
+        ]);
 
         $this
             ->integer($result->countRows())
-            ->isEqualTo(2)
-            ;
+            ->isEqualTo(2);
     }
 }

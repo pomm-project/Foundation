@@ -21,10 +21,11 @@ class PgInterval extends BaseConverter
             ->isNull()
             ->dateInterval($this->newTestedInstance()->fromPg('P14346DT22H47M3.138892S', 'interval', $session))
             ->isEqualTo(new \DateInterval('P14346DT22H47M3S')) // <- truncated to second precision
-            ->exception(function () use ($session) { $this->newTestedInstance()->fromPg('P-11D', 'interval', $session); })
+            ->exception(function () use ($session) {
+                $this->newTestedInstance()->fromPg('P-11D', 'interval', $session);
+            })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
-            ->message->contains('is not an ISO8601 interval representation')
-        ;
+            ->message->contains('is not an ISO8601 interval representation');
     }
 
     public function testToPg()
@@ -35,10 +36,11 @@ class PgInterval extends BaseConverter
             ->isEqualTo('NULL::interval')
             ->string($this->newTestedInstance()->toPg(new \DateInterval('P14346DT22H47M3S'), 'interval', $session))
             ->isEqualTo("interval '00 years 00 months 14346 days 22:47:03'")
-            ->exception(function () use ($session) { $this->newTestedInstance()->toPg('foo', 'interval', $session); })
+            ->exception(function () use ($session) {
+                $this->newTestedInstance()->toPg('foo', 'interval', $session);
+            })
             ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
-            ->message->contains('First argument is not a \DateInterval instance')
-            ;
+            ->message->contains('First argument is not a \DateInterval instance');
     }
 
     public function testToPgStandardFormat()
@@ -47,8 +49,8 @@ class PgInterval extends BaseConverter
         $this
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'interval', $session))
             ->isNull()
-            ->string($this->newTestedInstance()->toPgStandardFormat(new \DateInterval('P14346DT22H47M3S'), 'interval', $session))
-            ->isEqualTo('"00 years 00 months 14346 days 22:47:03"')
-            ;
+            ->string($this->newTestedInstance()
+                ->toPgStandardFormat(new \DateInterval('P14346DT22H47M3S'), 'interval', $session))
+            ->isEqualTo('"00 years 00 months 14346 days 22:47:03"');
     }
 }

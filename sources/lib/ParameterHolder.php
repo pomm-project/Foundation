@@ -133,7 +133,9 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
     public function mustBeOneOf($name, array $values)
     {
         if (!in_array($this[$name], $values)) {
-            throw new FoundationException(sprintf('The parameters "%s" must be one of [%s].', $name, implode(', ', $values)));
+            throw new FoundationException(
+                sprintf('The parameters "%s" must be one of [%s].', $name, implode(', ', $values))
+            );
         }
 
         return $this;

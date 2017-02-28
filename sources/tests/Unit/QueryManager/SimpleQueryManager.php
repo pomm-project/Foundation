@@ -38,8 +38,7 @@ class SimpleQueryManager extends FoundationSessionAtoum
             ->boolean($iterator->current()['one one'])
             ->isTrue()
             ->variable($iterator->current()['TWO'])
-            ->isNull()
-            ;
+            ->isNull();
     }
 
     public function testParametrizedQuery()
@@ -67,8 +66,7 @@ SQL;
             );
         $this
             ->array($iterator->slice('id'))
-            ->isIdenticalTo([2, 3])
-            ;
+            ->isIdenticalTo([2, 3]);
         $iterator = $this
             ->getQueryManager($session)
             ->query(
@@ -80,8 +78,7 @@ SQL;
             );
         $this
             ->array($iterator->slice('id'))
-            ->isIdenticalTo([2, 3])
-            ;
+            ->isIdenticalTo([2, 3]);
     }
 
     public function testSendNotification()
@@ -89,8 +86,7 @@ SQL;
         $session = $this->buildSession('test session');
         $listener_tester = new ListenerTester();
         $session->getClientUsingPooler('listener', 'query')
-            ->attachAction([$listener_tester, 'call'])
-            ;
+            ->attachAction([$listener_tester, 'call']);
         $iterator = $this->getQueryManager($session)->query('select $*::bool as one', [true]);
         $this
             ->boolean($listener_tester->is_called)
@@ -102,48 +98,6 @@ SQL;
             ->string($listener_tester->session_stamp)
             ->isEqualTo('test session')
             ->integer($listener_tester->result_count)
-            ->isEqualTo(1)
-            ;
-    }
-}
-
-class ListenerTester
-{
-    public $is_called = false;
-    public $sql;
-    public $parameters = [];
-    public $session_stamp;
-    public $result_count;
-    public $time_ms;
-
-    public function call($event, array $data, Session $session)
-    {
-        $this->is_called = true;
-
-        if (isset($data['sql'])) {
-            $this->sql = $data['sql'];
-        }
-        if (isset($data['parameters'])) {
-            $this->parameters = $data['parameters'];
-        }
-        if (isset($data['session_stamp'])) {
-            $this->session_stamp = $data['session_stamp'];
-        }
-        if (isset($data['result_count'])) {
-            $this->result_count = $data['result_count'];
-        }
-        if (isset($data['time_ms'])) {
-            $this->time_ms = $data['time_ms'];
-        }
-    }
-
-    public function clear()
-    {
-        $this->is_called = false;
-        $this->sql = null;
-        $this->parameters = null;
-        $this->session_stamp = null;
-        $this->session_stamp = null;
-        $this->time_ms = null;
+            ->isEqualTo(1);
     }
 }

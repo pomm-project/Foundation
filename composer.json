@@ -12,7 +12,8 @@
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "atoum/atoum" : "dev-master"
+        "atoum/atoum" : "dev-master",
+        "squizlabs/php_codesniffer": "~2.7"
     },
     "autoload": {
         "psr-4": {
@@ -24,10 +25,10 @@
             "PommProject\\Foundation\\Test\\": "sources/tests"
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0-dev"
+            "dev-master": "2.1-dev"
         }
     }
 }

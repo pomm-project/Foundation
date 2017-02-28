@@ -9,7 +9,9 @@
  */
 namespace PommProject\Foundation\Test\Unit\Inspector;
 
+use PommProject\Foundation\ResultIterator;
 use PommProject\Foundation\Session\Session;
+use PommProject\Foundation\ConvertedResultIterator;
 use PommProject\Foundation\Test\Fixture\InspectorFixture;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Tester\FoundationSessionAtoum;
@@ -17,25 +19,9 @@ use PommProject\Foundation\Tester\FoundationSessionAtoum;
 /**
  * @engine isolate
  */
-class Inspector extends FoundationSessionAtoum
+class LegacyInspector extends FoundationSessionAtoum
 {
-    protected $session;
-
-    protected function getSession()
-    {
-        if ($this->session === null) {
-            $this->session = $this->buildSession();
-        }
-
-        return $this->session;
-    }
-
-    protected function initializeSession(Session $session)
-    {
-        $session
-            ->registerClient(new InspectorFixture())
-            ;
-    }
+    use InspectorTestTrait;
 
     protected function getInspector()
     {
@@ -44,55 +30,30 @@ class Inspector extends FoundationSessionAtoum
             ->getInspector();
     }
 
-    protected function getFixture()
-    {
-        $fixture = $this
-            ->getSession()
-            ->getClient('fixture', 'inspector')
-            ;
-
-        if ($fixture === null) {
-            throw new FoundationException("Unable to get client 'fixture'::'inspector' from the session's client pool.");
-        }
-
-        return $fixture;
-    }
-
     protected function getTableOid($table_name)
     {
         return $this
             ->getInspector()
-            ->getTableOid('inspector_test', $table_name)
-            ;
-    }
-
-    public function setUp()
-    {
-        $this->getFixture()->createSchema();
-    }
-
-    public function tearDown()
-    {
-        $this->getFixture()->dropSchema();
+            ->getTableOid('inspector_test', $table_name);
     }
 
     public function beforeTestMethod($method)
     {
         switch ($method) {
-        case 'testChangePrimaryKey':
-            $this->getFixture()->renamePks('with_simple_pk', 'with_simple_pk_id', 'with_simple_pk_id_renamed');
-            $this->getFixture()->renamePks('with_complex_pk', 'another_id', 'another_id_renamed');
-            return;
+            case 'testChangePrimaryKey':
+                $this->getFixture()->renamePks('with_simple_pk', 'with_simple_pk_id', 'with_simple_pk_id_renamed');
+                $this->getFixture()->renamePks('with_complex_pk', 'another_id', 'another_id_renamed');
+                return;
         }
     }
 
     public function afterTestMethod($method)
     {
         switch ($method) {
-        case 'testChangePrimaryKey':
-            $this->getFixture()->renamePks('with_simple_pk', 'with_simple_pk_id_renamed', 'with_simple_pk_id');
-            $this->getFixture()->renamePks('with_complex_pk', 'another_id_renamed', 'another_id');
-            return;
+            case 'testChangePrimaryKey':
+                $this->getFixture()->renamePks('with_simple_pk', 'with_simple_pk_id_renamed', 'with_simple_pk_id');
+                $this->getFixture()->renamePks('with_complex_pk', 'another_id_renamed', 'another_id');
+                return;
         }
     }
 
@@ -100,10 +61,9 @@ class Inspector extends FoundationSessionAtoum
     {
         $this
             ->object($this->getInspector()->getSchemas())
-            ->isInstanceOf('\PommProject\Foundation\ResultIterator')
+            ->isInstanceOf(ConvertedResultIterator::class)
             ->array($this->getInspector()->getSchemas()->slice('name'))
-            ->contains('inspector_test')
-            ;
+            ->contains('inspector_test');
     }
 
     public function testGetTableOid()
@@ -113,13 +73,14 @@ class Inspector extends FoundationSessionAtoum
             ->variable($this->getInspector()->getTableOid('no schema', 'no table'))
             ->isNull()
             ->variable($this->getInspector()->getTableOid('inspector_test', 'no table'))
-            ->isNull()
-            ;
+            ->isNull();
     }
 
     public function testGetTableFieldInformation()
     {
-        $fields_info = $this->getInspector()->getTableFieldInformation($this->getTableOid('with_complex_pk'));
+        $fields_info = $this
+            ->getInspector()
+            ->getTableFieldInformation($this->getTableOid('with_complex_pk'));
         $this
             ->object($fields_info)
             ->isInstanceOf('\PommProject\Foundation\ResultIterator')
@@ -130,13 +91,13 @@ class Inspector extends FoundationSessionAtoum
             ->array($fields_info->slice('comment'))
             ->isIdenticalTo(['Test comment', null, null])
             ->array(array_values($fields_info->get(0)))
-            ->isIdenticalTo(['with_complex_pk_id', 'int4', null, true, 'Test comment', 1, true])
-            ;
-        $fields_info = $this->getInspector()->getTableFieldInformation($this->getTableOid('with_simple_pk'));
+            ->isIdenticalTo(['with_complex_pk_id', 'int4', null, true, 'Test comment', 1, true]);
+        $fields_info = $this
+            ->getInspector()
+            ->getTableFieldInformation($this->getTableOid('with_simple_pk'));
         $this
             ->array($fields_info->slice('type'))
-            ->isIdenticalTo(['int4', 'inspector_test._someone', '_timestamptz'])
-            ;
+            ->isIdenticalTo(['int4', 'inspector_test._someone', '_timestamptz']);
     }
 
     public function testGetPrimaryKey()
@@ -148,8 +109,7 @@ class Inspector extends FoundationSessionAtoum
             ->array($inspector->getPrimaryKey($this->getTableOid('with_simple_pk')))
             ->isIdenticalTo(['with_simple_pk_id'])
             ->array($inspector->getPrimaryKey($this->getTableOid('with_complex_pk')))
-            ->isIdenticalTo(['another_id', 'with_complex_pk_id'])
-            ;
+            ->isIdenticalTo(['another_id', 'with_complex_pk_id']);
     }
 
     public function testChangePrimaryKey()
@@ -161,8 +121,7 @@ class Inspector extends FoundationSessionAtoum
             ->array($inspector->getPrimaryKey($this->getTableOid('with_simple_pk')))
             ->isIdenticalTo(['with_simple_pk_id_renamed'])
             ->array($inspector->getPrimaryKey($this->getTableOid('with_complex_pk')))
-            ->isIdenticalTo(['another_id_renamed', 'with_complex_pk_id'])
-        ;
+            ->isIdenticalTo(['another_id_renamed', 'with_complex_pk_id']);
     }
 
     public function testGetSchemaOid()
@@ -170,18 +129,18 @@ class Inspector extends FoundationSessionAtoum
         $this
             ->integer($this->getInspector()->getSchemaOid('inspector_test'))
             ->variable($this->getInspector()->getSchemaOid('whatever'))
-            ->isNull()
-            ;
+            ->isNull();
     }
 
     public function testGetSchemaRelations()
     {
         $tables_info = $this
             ->getInspector()
-            ->getSchemaRelations($this
-            ->getInspector()
-            ->getSchemaOid('inspector_test')
-        );
+            ->getSchemaRelations(
+                $this
+                ->getInspector()
+                ->getSchemaOid('inspector_test')
+            );
 
         $this
             ->object($tables_info)
@@ -195,8 +154,7 @@ class Inspector extends FoundationSessionAtoum
             ->string($tables_info->get(0)['comment'])
             ->isEqualTo('This table has no primary key')
             ->variable($tables_info->get(1)['comment'])
-            ->isNull()
-            ;
+            ->isNull();
     }
 
     public function testGetTableComment()
@@ -205,8 +163,7 @@ class Inspector extends FoundationSessionAtoum
             ->variable($this->getInspector()->getTableComment($this->getTableOid('with_simple_pk')))
             ->isNull()
             ->string($this->getInspector()->getTableComment($this->getTableOid('no_pk')))
-            ->isEqualTo('This table has no primary key')
-            ;
+            ->isEqualTo('This table has no primary key');
     }
 
     public function getTypeCategory()
@@ -215,25 +172,24 @@ class Inspector extends FoundationSessionAtoum
 
         $this
             ->isArray($result)
-            ->hasKeys(['oid', 'category'])
-            ;
+            ->hasKeys(['oid', 'category']);
         $oid_result = $this->getInspector()->getTypeCategory($result['oid']);
 
         $this
             ->array($oid_result)
-            ->isIdenticalTo(['name' => 'inspector_test.someone', 'category' => 'C'])
-            ;
+            ->isIdenticalTo(['name' => 'inspector_test.someone', 'category' => 'C']);
     }
 
     public function testGetTypeEnumValues()
     {
-        $result = $this->getInspector()->getTypeInformation('sponsor_rating', 'inspector_test');
+        $result = $this
+            ->getInspector()
+            ->getTypeInformation('sponsor_rating', 'inspector_test');
         $this
             ->array($this->getInspector()->getTypeEnumValues($result['oid']))
             ->isIdenticalTo(['platinum', 'gold', 'silver', 'bronze', 'aluminium'])
             ->variable($this->getInspector()->getTypeEnumValues(1))
-            ->isNull()
-            ;
+            ->isNull();
     }
 
     public function testGetVersion()
@@ -242,7 +198,6 @@ class Inspector extends FoundationSessionAtoum
 
         $this
             ->boolean(version_compare($result, "9.1.0") === 1)
-            ->isTrue()
-           ;
+            ->isTrue();
     }
 }

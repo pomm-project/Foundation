@@ -62,12 +62,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/atoum/atoum.git",
-                "reference": "e9d37193dc5ef59ca5d0f00da46c73770b78d39c"
+                "reference": "d96bb2ffc75e4db8bb6a8b52f554c3739b484019"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atoum/atoum/zipball/e9d37193dc5ef59ca5d0f00da46c73770b78d39c",
-                "reference": "e9d37193dc5ef59ca5d0f00da46c73770b78d39c",
+                "url": "https://api.github.com/repos/atoum/atoum/zipball/d96bb2ffc75e4db8bb6a8b52f554c3739b484019",
+                "reference": "d96bb2ffc75e4db8bb6a8b52f554c3739b484019",
                 "shasum": ""
             },
             "require": {
@@ -76,14 +76,18 @@
                 "ext-session": "*",
                 "ext-tokenizer": "*",
                 "ext-xml": "*",
-                "php": ">=5.3.3"
+                "php": "^5.6.0 || ^7.0.0"
             },
             "replace": {
                 "mageekguy/atoum": "*"
             },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~1.12"
+            },
             "suggest": {
                 "atoum/stubs": "Provides IDE support (like autocompletion) for atoum",
-                "ext-mbstring": "Provides support for UTF-8 strings"
+                "ext-mbstring": "Provides support for UTF-8 strings",
+                "ext-xdebug": "Provides code coverage report (>= 2.3)"
             },
             "bin": [
                 "bin/atoum"
@@ -91,7 +95,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.x-dev"
+                    "dev-master": "3.x-dev"
                 }
             },
             "autoload": {
@@ -134,7 +138,7 @@
                 "test",
                 "unit testing"
             ],
-            "time": "2016-11-11 10:41:06"
+            "time": "2017-02-22 15:10:54"
         },
         {
             "name": "squizlabs/php_codesniffer",

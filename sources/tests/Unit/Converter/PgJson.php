@@ -112,7 +112,6 @@ JSON;
             )
             ->isTrue()
         ;
-
     }
 
     public function testFromPgWithNull()

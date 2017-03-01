@@ -52,7 +52,6 @@ class Box
         $this->topY = (float) $matches[2];
         $this->bottomX = (float) $matches[3];
         $this->bottomY = (float) $matches[4];
-
     }
 
     /**

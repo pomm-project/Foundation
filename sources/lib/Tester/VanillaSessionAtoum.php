@@ -2,7 +2,7 @@
 /*
  * This file is part of the PommProject/Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,11 +21,10 @@ use Atoum;
  * It is intended to be overloaded by each package to add their own poolers.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see       Atoum
- * @abstract
  */
 abstract class VanillaSessionAtoum extends Atoum
 {
@@ -36,7 +35,6 @@ abstract class VanillaSessionAtoum extends Atoum
      *
      * A short description here
      *
-     * @access protected
      * @param  string       $stamp
      * @return Session
      */
@@ -53,7 +51,6 @@ abstract class VanillaSessionAtoum extends Atoum
      *
      * Return a SessionBuilder.
      *
-     * @access protected
      * @return SessionBuilder
      */
     private function getSessionBuilder()
@@ -71,7 +68,6 @@ abstract class VanillaSessionAtoum extends Atoum
      * Instantiate a new SessionBuilder. This method is to be overloaded by
      * each package to instantiate their own SessionBuilder if any.
      *
-     * @access protected
      * @param  array $configuration
      * @return SessionBuilder
      */
@@ -86,7 +82,6 @@ abstract class VanillaSessionAtoum extends Atoum
      * If the test needs special poolers and/or client configuration, it goes
      * here.
      *
-     * @access  protected
      * @param   Session $session
      * @return  null
      */

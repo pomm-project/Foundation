@@ -29,7 +29,6 @@ class Point
      *
      * Create a point from a string description.
      *
-     * @access public
      * @param  string $description
      */
     public function __construct($description)
@@ -54,7 +53,6 @@ class Point
      *
      * Return a string representation of Point.
      *
-     * @access public
      * @return string
      */
     public function __toString()

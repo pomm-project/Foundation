@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2016 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use PommProject\Foundation\Session\ResultHandler;
  * resource.
  *
  * @package   Foundation
- * @copyright 2014 - 2016 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
    @see       ResultIteratorInterface
@@ -34,7 +34,6 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      *
      * Constructor
      *
-     * @access public
      * @param  ResultHandler $result
      */
     public function __construct(ResultHandler $result)
@@ -264,7 +263,6 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      * This actually stores all the results in PHP allocated memory.
      * THIS MAY USE A LOT OF MEMORY.
      *
-     * @access public
      * @return array
      */
     public function extract()

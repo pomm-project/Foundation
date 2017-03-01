@@ -2,7 +2,7 @@
 /*
  * This file is part of the PommProject/Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@ use PommProject\Foundation\Client\Client;
  * PreparedQuery
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT <hubert.greg@gmail.com>
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -38,8 +38,6 @@ class PreparedQuery extends Client
      *
      * Returns a hash for a given sql query.
      *
-     * @static
-     * @access public
      * @param  string $sql Sql query
      * @return string
      */
@@ -53,7 +51,6 @@ class PreparedQuery extends Client
      *
      * Build the prepared query.
      *
-     * @access public
      * @param  string $sql SQL query
      * @throws FoundationException
      */
@@ -80,7 +77,6 @@ class PreparedQuery extends Client
      *
      * Return the query identifier.
      *
-     * @access public
      * @return string Query identifier.
      */
     public function getClientIdentifier()
@@ -115,7 +111,6 @@ class PreparedQuery extends Client
      *
      * Launch the query with the given parameters.
      *
-     * @access public
      * @param  array    $values Query parameters
      * @return ResultHandler
      */
@@ -161,7 +156,6 @@ class PreparedQuery extends Client
      *
      * Send the query to be prepared by the server.
      *
-     * @access protected
      * @return PreparedQuery $this
      */
     protected function prepare()
@@ -183,7 +177,6 @@ class PreparedQuery extends Client
      *
      * Get the original SQL query
      *
-     * @access public
      * @return string SQL query
      */
     public function getSql()
@@ -196,7 +189,6 @@ class PreparedQuery extends Client
      *
      * Prepare parameters to be sent.
      *
-     * @access protected
      * @param  string   $sql
      * @param  array    $values
      * @return array    $prepared_values
@@ -221,7 +213,6 @@ class PreparedQuery extends Client
      *
      * Store converters needed for the query parameters.
      *
-     * @access protected
      * @param  string           $sql
      * @return PreparedQuery    $this
      */

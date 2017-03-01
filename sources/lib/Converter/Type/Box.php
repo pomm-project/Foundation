@@ -31,7 +31,6 @@ class Box
      *
      * Create a box from a string description.
      *
-     * @access public
      * @param  string $description
      */
     public function __construct($description)
@@ -59,7 +58,6 @@ class Box
      *
      * Return a string representation of Box.
      *
-     * @access public
      * @return string
      */
     public function __toString()

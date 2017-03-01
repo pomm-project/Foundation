@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ use PommProject\Foundation\Session\Session as VanillaSession;
  * Session with Foundation poolers API.
  *
  * @package     Foundation
- * @copyright   2014 - 2015 Grégoire HUBERT
+ * @copyright   2014 - 2017 Grégoire HUBERT
  * @author      Grégoire HUBERT
  * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see         VanillaSession
@@ -29,7 +29,6 @@ class Session extends VanillaSession
      *
      * Return the prepared query client.
      *
-     * @access  public
      * @param   string $query
      * @return  \PommProject\Foundation\PreparedQuery\PreparedQuery
      */
@@ -43,7 +42,6 @@ class Session extends VanillaSession
      *
      * Return a query manager (default to QueryManager\SimpleQueryManager)
      *
-     * @access  public
      * @param   string              $query_manager
      * @return  \PommProject\Foundation\QueryManager\QueryManagerClient
      */
@@ -57,7 +55,6 @@ class Session extends VanillaSession
      *
      * Return a converter client.
      *
-     * @access  public
      * @param   string          $name
      * @return  \PommProject\Foundation\Converter\ConverterClient
      */
@@ -71,7 +68,6 @@ class Session extends VanillaSession
      *
      * Return an observer client.
      *
-     * @access  public
      * @param   string      $name
      * @return  \PommProject\Foundation\Observer\Observer
      */
@@ -85,7 +81,6 @@ class Session extends VanillaSession
      *
      * Return the database inspector.
      *
-     * @access  public
      * @param   string $name (null)
      * @return  \PommProject\Foundation\Inspector\Inspector
      */
@@ -99,7 +94,6 @@ class Session extends VanillaSession
      *
      * A short description here
      *
-     * @access  public
      * @param   string $name
      * @return  \PommProject\Foundation\Listener\Listener
      */

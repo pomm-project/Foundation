@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ namespace PommProject\Foundation\Exception;
  * @link      http://www.postgresql.org/docs/9.0/static/errcodes-appendix.html
  * @package   Foundation
  * @uses      FoundationException
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT <hubert.greg@gmail.com>
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -77,10 +77,10 @@ class SqlException extends FoundationException
     const ERROR_IN_ASSIGNMENT = '22005';
     const ESCAPE_CHARACTER_CONFLICT = '2200B';
     const INDICATOR_OVERFLOW = '22022';
-    const INTERVAL_FIELD_OVERFLOW = '22015';
+    const INTERVAL_FIELD_OVERFLOW = '22017';
     const INVALID_ARGUMENT_FOR_LOGARITHM = '2201E';
     const INVALID_ARGUMENT_FOR_NTILE_FUNCTION = '22014';
-    const INVALID_ARGUMENT_FOR_NTH_VALUE_FUNCTION = '22016';
+    const INVALID_ARGUMENT_FOR_NTH_VALUE_FUNCTION = '22017';
     const INVALID_ARGUMENT_FOR_POWER_FUNCTION = '2201F';
     const INVALID_ARGUMENT_FOR_WIDTH_BUCKET_FUNCTION = '2201G';
     const INVALID_CHARACTER_VALUE_FOR_CAST = '22018';
@@ -305,7 +305,6 @@ class SqlException extends FoundationException
     /**
      * __construct
      *
-     * @access public
      * @param  resource   $result_resource
      * @param  string     $sql
      * @param  string     $code
@@ -334,7 +333,6 @@ class SqlException extends FoundationException
      * Returns the SQLSTATE of the last SQL error.
      *
      * @link http://www.postgresql.org/docs/9.0/interactive/errcodes-appendix.html
-     * @access public
      * @return string
      */
     public function getSQLErrorState()
@@ -347,7 +345,6 @@ class SqlException extends FoundationException
      *
      * Returns the severity level of the error.
      *
-     * @access public
      * @return string
      */
     public function getSQLErrorSeverity()
@@ -360,7 +357,6 @@ class SqlException extends FoundationException
      *
      * Returns the error message sent by the server.
      *
-     * @access public
      * @return string
      */
 
@@ -372,7 +368,6 @@ class SqlException extends FoundationException
     /**
      * getSQLDetailedErrorMessage
      *
-     * @access public
      * @return string
      */
     public function getSQLDetailedErrorMessage()
@@ -390,7 +385,6 @@ class SqlException extends FoundationException
      *
      * Return the associated query.
      *
-     * @access public
      * @return string
      */
     public function getQuery()
@@ -403,7 +397,6 @@ class SqlException extends FoundationException
      *
      * Set the query parameters sent with the query.
      *
-     * @access public
      * @param  array    $parameters
      * @return SqlException $this
      */
@@ -419,7 +412,6 @@ class SqlException extends FoundationException
      *
      * Return the query parameters sent with the query.
      *
-     * @access public
      * @return array
      */
     public function getQueryParameters()

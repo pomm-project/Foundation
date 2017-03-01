@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ use PommProject\Foundation\Exception\PommException;
  * Session clients are stored in this holder.
  *
  * @package   Pomm
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -30,7 +30,6 @@ class ClientHolder
      *
      * Add a new client or replace existing one.
      *
-     * @access public
      * @param  ClientInterface $client
      * @return ClientHolder    $this
      */
@@ -46,7 +45,6 @@ class ClientHolder
      *
      * Tell if a client is in the pool or not.
      *
-     * @access public
      * @param  string $type
      * @param  string $name
      * @return bool
@@ -61,7 +59,6 @@ class ClientHolder
      *
      * Return a client by its name or null if no client exist for that name.
      *
-     * @access public
      * @param  string          $type
      * @param  string          $name
      * @return ClientInterface
@@ -76,7 +73,6 @@ class ClientHolder
      *
      * Return all clients for a given type.
      *
-     * @access public
      * @param  string $type
      * @return array
      */
@@ -95,7 +91,6 @@ class ClientHolder
      * Call shutdown and remove a client from the pool. If the client does not
      * exist, nothing is done.
      *
-     * @access public
      * @param  string       $type
      * @param  string       $name
      * @return ClientHolder $this
@@ -119,7 +114,6 @@ class ClientHolder
      * built'in iterators hence the double foreach recursion.
      * see http://fr2.php.net/manual/en/class.recursivearrayiterator.php#106519
      *
-     * @access public
      * @return array exceptions caught during the shutdown
      */
     public function shutdown()

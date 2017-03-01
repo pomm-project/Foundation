@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use PommProject\Foundation\Session\Session;
  * holder.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT <hubert.greg@gmail.com>
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -29,7 +29,6 @@ interface ClientPoolerInterface
      *
      * Return the client type which this pooler is to be associated with.
      *
-     * @access public
      * @return string
      */
     public function getPoolerType();
@@ -42,7 +41,6 @@ interface ClientPoolerInterface
      * way not to care about this is to extends
      * \PommProject\Foundation\Client\ClientPooler.
      *
-     * @access public
      * @param  Session               $session
      * @return ClientPoolerInterface $this
      */
@@ -53,7 +51,6 @@ interface ClientPoolerInterface
      *
      * Retrieve a client from session's ClientHolder.
      *
-     * @access public
      * @param  string          $name
      * @return ClientInterface
      */

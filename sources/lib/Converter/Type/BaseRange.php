@@ -18,7 +18,6 @@ namespace PommProject\Foundation\Converter\Type;
  * @copyright 2014 Grégoire HUBERT
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
- * @abstract
  */
 abstract class BaseRange
 {
@@ -40,7 +39,6 @@ abstract class BaseRange
      * - right element
      * - right bracket style
      *
-     * @access protected
      * @return string
      */
     abstract protected function getRegexp();
@@ -50,7 +48,6 @@ abstract class BaseRange
      *
      * Return the representation for each element.
      *
-     * @access protected
      * @param  string $element
      * @return mixed
      */
@@ -62,7 +59,6 @@ abstract class BaseRange
      * Create an instance from a string definition. This string definition
      * matches PostgreSQL range definition.
      *
-     * @access public
      * @param  string $description
      * @throws \InvalidArgumentException
      */
@@ -90,7 +86,6 @@ abstract class BaseRange
      *
      * Text representation of a range.
      *
-     * @access public
      * @return string
      */
     public function __toString()

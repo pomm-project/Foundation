@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,7 +30,7 @@ use PommProject\Foundation\Session\Session;
  * Example: circle(point(1.23,2.34), 5.67), hstore('"a" => "b"')
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT <hubert.greg@gmail.com>
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -42,7 +42,6 @@ interface ConverterInterface
      * Parse the output string from PostgreSQL and returns the converted value
      * into an according PHP representation.
      *
-     * @access public
      * @param  string  $data    Input string from Pg row result.
      * @param  string  $type
      * @param  Session $session
@@ -55,7 +54,6 @@ interface ConverterInterface
      *
      * Convert a PHP representation into the according Pg formatted string.
      *
-     * @access public
      * @param  mixed   $data    PHP representation.
      * @param  string  $type
      * @param  Session $session
@@ -69,7 +67,6 @@ interface ConverterInterface
      * Convert a PHP representation into short PostgreSQL format like used in
      * COPY values list.
      *
-     * @access public
      * @param mixed     $data
      * @param string    $type
      * @param Session   $session

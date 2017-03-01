@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use PommProject\Foundation\Client\ClientPooler;
  * Pooler for listener clients.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see       ClientPooler
@@ -56,7 +56,6 @@ class ListenerPooler extends ClientPooler
      * of payload). Events sent to 'pika', 'pika:chu' will both notify client
      * 'pika'.
      *
-     * @access public
      * @param  string|array     $identifiers
      * @param  array            $data
      * @return ListenerPooler   $this
@@ -87,7 +86,6 @@ class ListenerPooler extends ClientPooler
      *
      * Notify all existing clients.
      *
-     * @access protected
      * @param  array            $data
      * @return ListenerPooler   $this
      */
@@ -107,7 +105,6 @@ class ListenerPooler extends ClientPooler
      *
      * Send a notification to the specified clients.
      *
-     * @access protected
      * @param  array            $identifiers
      * @param  array            $data
      * @return ListenerPooler   $this

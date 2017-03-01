@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2016 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use PommProject\Foundation\Session\Session as BaseSession;
  * Extends result iterator to add type conversion.
  *
  * @package   Foundation
- * @copyright 2014 - 2016 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see       ResultIterator
@@ -60,7 +60,6 @@ class ConvertedResultIterator extends ResultIterator
      *
      * Get the result types from the result handler.
      *
-     * @access protected
      * @return ResultIterator $this
      */
     protected function initTypes()
@@ -77,7 +76,6 @@ class ConvertedResultIterator extends ResultIterator
      *
      * Convert values from Pg.
      *
-     * @access protected
      * @param  array $values
      * @return mixed
      */
@@ -98,7 +96,6 @@ class ConvertedResultIterator extends ResultIterator
      *
      * Return converted value for a result field.
      *
-     * @access protected
      * @param  string $name
      * @param  string $value
      * @return mixed

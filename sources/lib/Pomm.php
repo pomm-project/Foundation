@@ -2,7 +2,7 @@
 /*
  * This file is part of the PommProject/Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@ use Psr\Log\LoggerAwareTrait;
  * The Pomm service manager.
  *
  * @package     Foundation
- * @copyright   2014 - 2015 Grégoire HUBERT
+ * @copyright   2014 - 2017 Grégoire HUBERT
  * @author      Grégoire HUBERT
  * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -43,7 +43,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * class_name   name of the DatabaseConfiguration class to instantiate.
      *
-     * @access  public
      * @param   array $configurations
      */
     public function __construct(array $configurations = [])
@@ -67,7 +66,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * Check if the given builder class is valid.
      *
-     * @access  private
      * @param   string              $builder_class
      * @throws  FoundationException if not valid
      * @return  string              $builder_class
@@ -104,7 +102,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * Set the name for the default session builder.
      *
-     * @access  public
      * @param   string  $name
      * @return  Pomm    $this
      * @throws FoundationException
@@ -130,7 +127,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * Return a session built by the default session builder.
      *
-     * @access  public
      * @return  BaseSession
      * @throws FoundationException
      */
@@ -165,7 +161,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * Add a new session builder. Override any previously existing builder with
      * the same name.
      *
-     * @access  public
      * @param   string                   $builder_name
      * @param   VanillaSessionBuilder    $builder
      * @return  Pomm                     $this
@@ -188,7 +183,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * Add a environment dependent post configuration callable that will be run
      * once after the session creation.
      *
-     * @access  public
      * @param   string   $name
      * @param   callable $callable
      * @return  Pomm     $this
@@ -208,7 +202,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * Return if true or false the given builder exists.
      *
-     * @access  public
      * @param   string $name
      * @return  bool
      */
@@ -222,7 +215,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * Remove the builder with the given name.
      *
-     * @access  public
      * @param   string   $name
      * @throws  FoundationException if name does not exist.
      * @return  Pomm     $this
@@ -242,7 +234,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * Return the given builder.
      *
-     * @access  public
      * @param   string $name
      * @return  VanillaSessionBuilder
      */
@@ -257,7 +248,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * Return a session from the pool. If no session exists, an attempt is made
      * to create one.
      *
-     * @access  public
      * @param   string  $name
      * @return  BaseSession
      */
@@ -276,7 +266,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * Create a new session using a session_builder and set it to the pool. Any
      * previous session for this name is overrided.
      *
-     * @access  public
      * @param   string  $name
      * @throws  FoundationException if builder does not exist.
      * @return  BaseSession
@@ -307,7 +296,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * Does a given session exist in the pool ?
      *
-     * @access  public
      * @param   string $name
      * @return  bool
      */
@@ -321,7 +309,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * Remove a session from the pool if it exists.
      *
-     * @access  public
      * @param   string              $name
      * @throws  FoundationException if no builders with that name exist
      * @return  Pomm                $this
@@ -341,7 +328,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * Return the builders. This is mainly done for testing
      * purposes.
      *
-     * @access  public
      * @return  array
      */
     public function getSessionBuilders()
@@ -388,7 +374,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * given, all the instantiated sessions are shutdown. Otherwise, only given
      * sessions are shutdown.
      *
-     * @access public
      * @param  array $session_names
      * @return Pomm  $this
      */
@@ -417,7 +402,6 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      *
      * Throw a FoundationException if the given builder does not exist.
      *
-     * @access  private
      * @param   string   $name
      * @throws  FoundationException
      * @return  Pomm      $this

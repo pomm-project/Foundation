@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@ namespace PommProject\Foundation\QueryManager;
  * parameters.
  *
  * @package     Foundation
- * @copyright   2014 - 2015 Grégoire HUBERT
+ * @copyright   2014 - 2017 Grégoire HUBERT
  * @author      Grégoire HUBERT
  * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -29,7 +29,6 @@ trait QueryParameterParserTrait
      *
      * Transform an ordered parameters list with $1, $2 to $* parameters.
      *
-     * @access public
      * @param  string $string
      * @return string
      */
@@ -43,7 +42,6 @@ trait QueryParameterParserTrait
      *
      * Transform an unordered parameters list $* to ordered $1, $2 parameters.
      *
-     * @access public
      * @param  string $string
      * @return string
      */
@@ -69,7 +67,6 @@ trait QueryParameterParserTrait
      * given parameter is a timestamp. Pomm uses these type hints to convert
      * PHP representation to PostgreSQL data value.
      *
-     * @access  public
      * @param   mixed $string SQL query.
      * @return  array
      */

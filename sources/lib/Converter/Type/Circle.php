@@ -29,7 +29,6 @@ class Circle
      *
      * Create a circle from a description string.
      *
-     * @access public
      * @param  string $description
      * @throws \InvalidArgumentException
      */
@@ -61,7 +60,6 @@ class Circle
      *
      * Create a point from a description.
      *
-     * @access protected
      * @param  string $description
      * @return Point
      */
@@ -76,7 +74,6 @@ class Circle
      * Create a string representation of the Circle.
      * Actually, it dumps a SQL compatible circle representation.
      *
-     * @access public
      * @return string
      */
     public function __toString()

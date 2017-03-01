@@ -69,7 +69,6 @@ class PgCircle extends TypeConverter
      *
      * Cache the point converter.
      *
-     * @access protected
      * @param  Session $session
      * @return ConverterInterface
      */

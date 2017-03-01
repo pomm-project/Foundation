@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,7 +22,7 @@ use PommProject\Foundation\Converter\ConverterHolder;
  * default configuration for session and is dedicated to be overloaded.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -40,7 +40,6 @@ class SessionBuilder
      * dsn:  connection parameters
      * name: database logical name
      *
-     * @access public
      * @param array             $configuration
      * @param ConverterHolder   $converter_holder
      */
@@ -66,7 +65,6 @@ class SessionBuilder
      *
      * Add a configuration parameter.
      *
-     * @access public
      * @param  string $name
      * @param  mixed $value
      * @return SessionBuilder $this
@@ -83,7 +81,6 @@ class SessionBuilder
      *
      * Return the converter holder.
      *
-     * @access public
      * @return ConverterHolder
      */
     public function getConverterHolder()
@@ -97,7 +94,6 @@ class SessionBuilder
      * Build a new session.
      *
      * @final
-     * @access public
      * @param  string   $stamp
      * @return Session
      */
@@ -128,7 +124,6 @@ class SessionBuilder
      * parameters are overrided by the configuration passed as parameter to
      * this builder.
      *
-     * @access protected
      * @return array
      */
     protected function getDefaultConfiguration()
@@ -152,7 +147,6 @@ class SessionBuilder
      * If any computation to the configuration must be done before each session
      * creation, it goes here.
      *
-     * @access protected
      * @return SessionBuilder $this
      */
     protected function preConfigure()
@@ -165,7 +159,6 @@ class SessionBuilder
      *
      * Connection instantiation.
      *
-     * @access protected
      * @param  string   $dsn
      * @param  string|array $connection_configuration
      * @return Connection
@@ -180,7 +173,6 @@ class SessionBuilder
      *
      * Session instantiation.
      *
-     * @access protected
      * @param  Connection   $connection
      * @param  ClientHolder $client_holder
      * @param  string|null  $stamp
@@ -198,7 +190,6 @@ class SessionBuilder
      *
      * Instantiate ClientHolder.
      *
-     * @access protected
      * @return ClientHolder
      */
     protected function createClientHolder()
@@ -212,7 +203,6 @@ class SessionBuilder
      * Session configuration once created.
      * All pooler registration stuff goes here.
      *
-     * @access protected
      * @param  Session          $session
      * @return SessionBuilder   $this
      */
@@ -227,7 +217,6 @@ class SessionBuilder
      * Converter initialization at startup.
      * If new converters are to be registered, it goes here.
      *
-     * @access protected
      * @param  ConverterHolder  $converter_holder
      * @return SessionBuilder   $this
      */

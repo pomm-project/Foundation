@@ -2,7 +2,7 @@
 /*
  * This file is part of the PommProject/Foundation package.
  *
- * (c) 2011 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2011 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ namespace PommProject\Foundation;
  * queries dynamically.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT <hubert.greg@gmail.com>
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -33,8 +33,6 @@ class Where
      *
      * A constructor you can chain from.
      *
-     * @static
-     * @access public
      * @param  string $element
      * @param  array  $values
      * @return Where
@@ -49,7 +47,6 @@ class Where
      *
      * Create an escaped IN clause.
      *
-     * @access public
      * @param  string $element
      * @param  array  $values
      * @return Where
@@ -64,7 +61,6 @@ class Where
      *
      * Create an escaped NOT IN clause.
      *
-     * @access public
      * @param  string $element
      * @param  array $values
      * @return Where
@@ -80,7 +76,6 @@ class Where
      * Create a Where instance with multiple escaped parameters. This is mainly
      * useful for IN or NOT IN clauses.
      *
-     * @access public
      * @param  string $element
      * @param  string $operation
      * @param  array  $values
@@ -104,7 +99,6 @@ class Where
      *
      * Extract values with consistent keys.
      *
-     * @access protected
      * @param  array $values
      * @return array
      */
@@ -124,7 +118,6 @@ class Where
      *
      * Create an array of escaped strings from a value set.
      *
-     * @access protected
      * @param  array $values
      * @return array
      */
@@ -147,7 +140,6 @@ class Where
     /**
      * __construct
      *
-     * @access public
      * @param string $element (optional)
      * @param array  $values  (optional)
      */
@@ -166,7 +158,6 @@ class Where
      * or something else.
      * XOR can be expressed as "A = !B"
      *
-     * @access public
      * @param  string $operator
      * @return Where
      */
@@ -182,7 +173,6 @@ class Where
      *
      * is it a fresh brand new object ?
      *
-     * @access public
      * @return boolean
      */
     public function isEmpty()
@@ -195,7 +185,6 @@ class Where
      *
      * Absorbing another Where instance.
      *
-     * @access private
      * @param  Where $where
      * @return Where $this
      */
@@ -212,7 +201,6 @@ class Where
      *
      * You can add a new WHERE clause with your own operator.
      *
-     * @access public
      * @param  mixed  $element
      * @param  array  $values
      * @param  string $operator
@@ -261,7 +249,6 @@ class Where
      *
      * Or use a ready to use AND where clause.
      *
-     * @access public
      * @param  mixed $element
      * @param  array $values
      * @return Where
@@ -274,7 +261,6 @@ class Where
     /**
      * orWhere
      *
-     * @access public
      * @param  mixed $element
      * @param  array $values
      * @return Where
@@ -287,7 +273,6 @@ class Where
     /**
      * setStack
      *
-     * @access public
      * @param  array $stack
      * @return Where
      */
@@ -303,7 +288,6 @@ class Where
      *
      * where your SQL statement is built.
      *
-     * @access public
      * @return string
      */
     public function __toString()
@@ -314,7 +298,6 @@ class Where
     /**
      * hasElement
      *
-     * @access public
      * @return boolean
      */
     public function hasElement()
@@ -325,7 +308,6 @@ class Where
     /**
      * getElement
      *
-     * @access public
      * @return string
      */
     public function getElement()
@@ -336,7 +318,6 @@ class Where
     /**
      * parse
      *
-     * @access protected
      * @return string
      */
     protected function parse()
@@ -358,7 +339,6 @@ class Where
      *
      * Get all the values back for the prepared statement.
      *
-     * @access public
      * @return array
      */
     public function getValues()

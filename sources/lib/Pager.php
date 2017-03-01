@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@ namespace PommProject\Foundation;
  * Pager
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT <hubert.greg@gmail.com>
  * @license   MIT/X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -27,7 +27,6 @@ class Pager
     /**
      * __construct
      *
-     * @access public
      * @param ResultIterator $iterator
      * @param int            $count        Total number of results.
      * @param int            $max_per_page Results per page
@@ -46,7 +45,6 @@ class Pager
      *
      * Return the Pager's iterator.
      *
-     * @access public
      * @return ResultIterator
      */
     public function getIterator()
@@ -59,7 +57,6 @@ class Pager
      *
      * Get the number of results in this page.
      *
-     * @access public
      * @return int
      */
     public function getResultCount()
@@ -72,7 +69,6 @@ class Pager
      *
      * Get the index of the first element of this page.
      *
-     * @access public
      * @return int
      */
     public function getResultMin()
@@ -85,7 +81,6 @@ class Pager
      *
      * Get the index of the last element of this page.
      *
-     * @access public
      * @return int
      */
     public function getResultMax()
@@ -98,7 +93,6 @@ class Pager
      *
      * Get the last page index.
      *
-     * @access public
      * @return int
      */
     public function getLastPage()
@@ -109,7 +103,6 @@ class Pager
     /**
      * getPage
      *
-     * @access public
      * @return int
      */
     public function getPage()
@@ -122,7 +115,6 @@ class Pager
      *
      * True if a next page exists.
      *
-     * @access public
      * @return Boolean
      */
     public function isNextPage()
@@ -135,7 +127,6 @@ class Pager
      *
      * True if a previous page exists.
      *
-     * @access public
      * @return Boolean
      */
     public function isPreviousPage()
@@ -148,7 +139,6 @@ class Pager
      *
      * Get the total number of results in all pages.
      *
-     * @access public
      * @return int
      */
     public function getCount()
@@ -161,7 +151,6 @@ class Pager
      *
      * Get maximum result per page.
      *
-     * @access public
      * @return int
      */
     public function getMaxPerPage()

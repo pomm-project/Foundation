@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@ use PommProject\Foundation\Session\Session;
  * Listen to notifications sent to the server.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see       Client
@@ -34,7 +34,6 @@ class Observer extends Client
      *
      * Constructor
      *
-     * @access public
      * @param  string $channel
      */
     public function __construct($channel)
@@ -89,7 +88,6 @@ class Observer extends Client
      * Check if a notification is pending. If so, the payload is returned.
      * Otherwise, null is returned.
      *
-     * @access public
      * @return array
      */
     public function getNotification()
@@ -108,7 +106,6 @@ class Observer extends Client
      * method but it can be unlisten if the listen command took place in a
      * transaction.
      *
-     * @access public
      * @return Observer $this
      */
     public function restartListening()
@@ -124,7 +121,6 @@ class Observer extends Client
      * NOTE: When listen is issued in a transaction it is unlisten when the
      * transaction is committed or rollback.
      *
-     * @access protected
      * @param  string    $channel
      * @return Observer $this
      */
@@ -146,7 +142,6 @@ class Observer extends Client
      *
      * Stop listening to events.
      *
-     * @access protected
      * @param  string   $channel
      * @return Observer $this
      *
@@ -168,7 +163,6 @@ class Observer extends Client
      *
      * Check if a notification is pending. If so, a NotificationException is thrown.
      *
-     * @access public
      * @throws  NotificationException
      * @return Observer $this
      */
@@ -188,7 +182,6 @@ class Observer extends Client
      *
      * Proxy for Connection::executeAnonymousQuery()
      *
-     * @access protected
      * @param  string   $sql
      * @return Observer $this
      * @see Connection
@@ -209,7 +202,6 @@ class Observer extends Client
      *
      * Proxy for Connection::escapeIdentifier()
      *
-     * @access protected
      * @param  string $string
      * @return string
      * @see Connection

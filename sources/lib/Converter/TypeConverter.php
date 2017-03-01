@@ -2,7 +2,7 @@
 /*
  * This file is part of Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,10 +20,9 @@ use PommProject\Foundation\Session\Session;
  * numrange etc.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
- * @abstract
  */
 abstract class TypeConverter implements ConverterInterface
 {
@@ -34,7 +33,6 @@ abstract class TypeConverter implements ConverterInterface
      *
      * Return the type class name
      *
-     * @access protected
      * @return string
      */
     abstract protected function getTypeClassName();
@@ -44,7 +42,6 @@ abstract class TypeConverter implements ConverterInterface
      *
      * Set the type class name.
      *
-     * @access public
      * @param  string $class_name
      */
     public function __construct($class_name = null)
@@ -106,7 +103,6 @@ abstract class TypeConverter implements ConverterInterface
      * Check if data is suitable for Pg conversion. If not an attempt is made
      * to build the object from the given definition.
      *
-     * @access public
      * @param  mixed    $data
      * @return object
      */
@@ -127,7 +123,6 @@ abstract class TypeConverter implements ConverterInterface
      * Create a range object from a given definition. If the object creation
      * fails, an exception is thrown.
      *
-     * @access protected
      * @param  mixed $data
      * @return BaseRange
      * @throws ConverterException

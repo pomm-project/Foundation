@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ use PommProject\Foundation\Session\Session;
  *  Composite type converter.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see       ArrayTypeConverter
@@ -32,7 +32,6 @@ class PgComposite extends ArrayTypeConverter
      * Takes the composite type structure as parameter.
      * The structure is $name => $type.
      *
-     * @access public
      * @param array $structure structure definition.
      */
     public function __construct(array $structure)
@@ -111,7 +110,6 @@ class PgComposite extends ArrayTypeConverter
      *
      * Convert the given array of values.
      *
-     * @access private
      * @param  array $data
      * @param  Session $session
      * @param  string $method

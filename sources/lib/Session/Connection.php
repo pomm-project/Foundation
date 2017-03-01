@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use PommProject\Foundation\Exception\SqlException;
  * Manage connection through a resource handler.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -45,7 +45,6 @@ class Connection
      *
      * Constructor. Test if the given DSN is valid.
      *
-     * @access public
      * @param  string $dsn
      * @param  array $configuration
      * @throws ConnectionException if pgsql extension is missing
@@ -70,7 +69,6 @@ ERROR;
      *
      * Close the connection if any.
      *
-     * @access public
      * @return Connection $this
      */
     public function close()
@@ -89,7 +87,6 @@ ERROR;
      *
      * Add configuration settings. If settings exist, they are overridden.
      *
-     * @access public
      * @param  array               $configuration
      * @throws  ConnectionException if connection is already up.
      * @return Connection          $this
@@ -108,7 +105,6 @@ ERROR;
      *
      * Add or override a configuration definition.
      *
-     * @access public
      * @param  string     $name
      * @param  string     $value
      * @return Connection
@@ -126,7 +122,6 @@ ERROR;
      *
      * Return the connection handler. If no connection are open, it opens one.
      *
-     * @access protected
      * @throws  ConnectionException if connection is open in a bad state.
      * @return resource
      */
@@ -154,7 +149,6 @@ ERROR;
      *
      * Tell if a handler is set or not.
      *
-     * @access protected
      * @return bool
      */
     protected function hasHandler()
@@ -167,7 +161,6 @@ ERROR;
      *
      * Return a connection status.
      *
-     * @access public
      * @return int
      */
     public function getConnectionStatus()
@@ -194,7 +187,6 @@ ERROR;
      * Return a PHP constant.
      * @see http://fr2.php.net/manual/en/function.pg-transaction-status.php
      *
-     * @access public
      * @return int
      */
     public function getTransactionStatus()
@@ -207,7 +199,6 @@ ERROR;
      *
      * Open a connection on the database.
      *
-     * @access private
      * @throws  ConnectionException if connection fails.
      * return  Connection $this
      */
@@ -243,7 +234,6 @@ ERROR;
      *
      * Send the configuration settings to the server.
      *
-     * @access protected
      * @return Connection $this
      */
     protected function sendConfiguration()
@@ -269,7 +259,6 @@ ERROR;
      *
      * Check if the handler is set and throw an Exception if yes.
      *
-     * @access private
      * @param  string     $error_message
      * @throws ConnectionException
      * @return Connection $this
@@ -292,7 +281,6 @@ ERROR;
      *
      * Performs a raw SQL query
      *
-     * @access public
      * @param  string              $sql The sql statement to execute.
      * @return ResultHandler|array
      */
@@ -315,7 +303,6 @@ ERROR;
      * Since it is possible to send several queries at a time, This method can
      * return an array of ResultHandler.
      *
-     * @access protected
      * @param  string $sql  (default null)
      * @throws ConnectionException if no response are available.
      * @throws SqlException if the result is an error.
@@ -355,7 +342,6 @@ ERROR;
      * provide a nice escaping with -- hopefully -- UTF8 support.
      *
      * @see http://www.postgresql.org/docs/current/static/sql-syntax-lexical.html
-     * @access public
      * @param  string $string The string to be escaped.
      * @return string the escaped string.
      */
@@ -369,7 +355,6 @@ ERROR;
      *
      * Escape a text value.
      *
-     * @access public
      * @param  string $string The string to be escaped
      * @return string the escaped string.
      */
@@ -383,7 +368,6 @@ ERROR;
      *
      * Wrap pg_escape_bytea
      *
-     * @access public
      * @param  string $word
      * @return string
      */
@@ -397,7 +381,6 @@ ERROR;
      *
      * Unescape PostgreSQL bytea.
      *
-     * @access public
      * @param  string $bytea
      * @return string
      */
@@ -411,11 +394,10 @@ ERROR;
      *
      * Execute a asynchronous query with parameters and send the results.
      *
-     * @access public
      * @param  string        $query
      * @param  array         $parameters
      * @throws SqlException
-     * @return ResultHandler query result wrapper
+     * @return ResultHandler|array query result wrapper
      */
     public function sendQueryWithParameters($query, array $parameters = [])
     {
@@ -440,7 +422,6 @@ ERROR;
      *
      * Send a prepare query statement to the server.
      *
-     * @access public
      * @param  string     $identifier
      * @param  string     $sql
      * @return Connection $this
@@ -463,7 +444,6 @@ ERROR;
      *
      * Factor method to test query return and summon getQueryResult().
      *
-     * @access protected
      * @param  mixed      $query_return
      * @param  string     $sql
      * @throws ConnectionException
@@ -484,11 +464,10 @@ ERROR;
      * Execute a prepared statement.
      * The optional SQL parameter is for debugging purposes only.
      *
-     * @access public
      * @param  string        $identifier
      * @param  array         $parameters
      * @param  string        $sql
-     * @return ResultHandler
+     * @return ResultHandler|array
      */
     public function sendExecuteQuery($identifier, array $parameters = [], $sql = '')
     {
@@ -505,7 +484,6 @@ ERROR;
      *
      * Return the actual client encoding.
      *
-     * @access public
      * @return string
      */
     public function getClientEncoding()
@@ -521,7 +499,6 @@ ERROR;
      *
      * Set client encoding.
      *
-     * @access public
      * @param  string     $encoding
      * @return Connection $this;
      */
@@ -541,7 +518,6 @@ ERROR;
      * returned. Otherwise an associative array containing the optional data
      * and de backend's PID is returned.
      *
-     * @access public
      * @return array|null
      */
     public function getNotification()

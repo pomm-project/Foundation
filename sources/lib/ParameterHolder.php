@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ use PommProject\Foundation\Exception\FoundationException;
  * ParameterHolder
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT <hubert.greg@gmail.com>
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -26,7 +26,6 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * __construct()
      *
-     * @access public
      * @param  array $parameters (optional)
      */
     public function __construct(array $parameters = [])
@@ -39,7 +38,6 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * Set a parameter.
      *
-     * @access public
      * @param  string          $name
      * @param  string|array    $value
      * @return ParameterHolder $this
@@ -56,7 +54,6 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * check if the given parameter exists.
      *
-     * @access public
      * @param  string $name
      * @return bool
      */
@@ -70,7 +67,6 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * Returns the parameter "name" or "default" if not set.
      *
-     * @access public
      * @param  string       $name
      * @param  string       $default Optional default value if name not set.
      * @return string|array Parameter's value or default.
@@ -85,7 +81,6 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * Throw an exception if a param is not set
      *
-     * @access public
      * @throws  FoundationException
      * @param  string          $name the parameter's name
      * @return ParameterHolder $this
@@ -104,7 +99,6 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * Sets a default value if the param $name is not set
      *
-     * @access public
      * @param  string          $name  the parameter's name
      * @param  mixed           $value the default value
      * @return ParameterHolder $this
@@ -124,7 +118,6 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * Check if the given parameter is one of the values passed as argument. If
      * not, an exception is thrown.
      *
-     * @access public
      * @throws  FoundationException
      * @param  string          $name   the parameter's name
      * @param  array           $values
@@ -144,7 +137,6 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * unsetParameter()
      *
-     * @access public
      * @param  string          $name
      * @return ParameterHolder $this
      */

@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use PommProject\Foundation\Session\Session;
  * Convert an ISO8601 interval from/to PHP.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT <hubert.greg@gmail.com>
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -73,7 +73,6 @@ class PgInterval implements ConverterInterface
      * Check if Data is a DateInterval. If not, it tries to instantiate a
      * DateInterval with the given data.
      *
-     * @access protected
      * @param  mixed $data
      * @throws ConverterException
      * @return \DateInterval $data

@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@ use PommProject\Foundation\Exception\ConnectionException;
  * are present.
  *
  * @package     Foundation
- * @copyright   2014 - 2015 Grégoire HUBERT
+ * @copyright   2014 - 2017 Grégoire HUBERT
  * @author      Grégoire HUBERT
  * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -33,7 +33,6 @@ class ConnectionConfigurator
      *
      * Initialize configuration.
      *
-     * @access public
      * @param  array $dsn
      */
     public function __construct($dsn)
@@ -52,7 +51,6 @@ class ConnectionConfigurator
      *
      * Add configuration settings. If settings exist, they are overridden.
      *
-     * @access public
      * @param  array      $configuration
      * @return Connection $this
      */
@@ -74,7 +72,6 @@ class ConnectionConfigurator
      *
      * Set a new configuration setting.
      *
-     * @access public
      * @param  string $name
      * @param  mixed $value
      * @return ConnectionConfigurator $this
@@ -99,7 +96,6 @@ class ConnectionConfigurator
      *
      * Sets the different parameters from the DSN.
      *
-     * @access private
      * @return Connection $this
      * @throws ConnectionException
      */
@@ -175,7 +171,6 @@ class ConnectionConfigurator
      *
      * Return the connection string.
      *
-     * @access public
      * @return string
      */
     public function getConnectionString()
@@ -209,7 +204,6 @@ class ConnectionConfigurator
      *
      * Standalone, default configuration.
      *
-     * @access protected
      * @return array
      */
     protected function getDefaultConfiguration()
@@ -222,7 +216,6 @@ class ConnectionConfigurator
      *
      * Return current configuration settings.
      *
-     * @access public
      * @return array
      * @throws ConnectionException
      */

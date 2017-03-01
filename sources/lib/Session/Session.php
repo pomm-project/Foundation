@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,7 +26,7 @@ use Psr\Log\LoggerInterface;
  * clients which are stored in a ClientHolder.
  *
  * @package     Foundation
- * @copyright   2014 - 2015 Grégoire HUBERT
+ * @copyright   2014 - 2017 Grégoire HUBERT
  * @author      Grégoire HUBERT
  * @license     X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see         LoggerAwareInterface
@@ -48,7 +48,6 @@ class Session implements LoggerAwareInterface
      * In order to create a physical connection to the database, it requires a
      * 'dsn' parameter from the ParameterHolder.
      *
-     * @access  public
      * @param   Connection       $connection
      * @param   ClientHolder     $client_holder
      * @param   string           $stamp
@@ -71,7 +70,6 @@ class Session implements LoggerAwareInterface
      *
      * A short description here
      *
-     * @access public
      * @return null
      */
     public function __destruct()
@@ -87,7 +85,6 @@ class Session implements LoggerAwareInterface
      * Gently shutdown all clients when the Session is getting down prior to
      * connection termination.
      *
-     * @access  public
      * @return  null
      */
     public function shutdown()
@@ -115,7 +112,6 @@ class Session implements LoggerAwareInterface
      *
      * Return the session's stamp if any
      *
-     * @access  public
      * @return  string|null
      */
     public function getStamp()
@@ -128,7 +124,6 @@ class Session implements LoggerAwareInterface
      *
      * Return the logger if any.
      *
-     * @access  public
      * @return  LoggerInterface|null
      */
     public function getLogger()
@@ -141,7 +136,6 @@ class Session implements LoggerAwareInterface
      *
      * Return true if a logger is set.
      *
-     * @access  public
      * @return  bool
      */
     public function hasLogger()
@@ -154,7 +148,6 @@ class Session implements LoggerAwareInterface
      *
      * Return the database connection.
      *
-     * @access  public
      * @return  Connection
      */
     public function getConnection()
@@ -168,7 +161,6 @@ class Session implements LoggerAwareInterface
      * Initialize a connection client with context and register it in the
      * client holder.
      *
-     * @access  public
      * @param   ClientInterface $client
      * @return  Session $this
      */
@@ -192,7 +184,6 @@ class Session implements LoggerAwareInterface
      *
      * Return a Client from its type and identifier.
      *
-     * @access  public
      * @param   string $type
      * @param   string $identifier
      * @return  Client or null if not found.
@@ -207,7 +198,6 @@ class Session implements LoggerAwareInterface
      *
      * Tell if a client exist or not.
      *
-     * @access  public
      * @param   string $type
      * @param   string $name
      * @return  bool
@@ -222,7 +212,6 @@ class Session implements LoggerAwareInterface
      *
      * Add or replace a Client pooler for the specified type.
      *
-     * @access  public
      * @param   ClientPoolerInterface $client_pooler
      * @return  Session               $this
      */
@@ -249,7 +238,6 @@ class Session implements LoggerAwareInterface
      *
      * Tell if a pooler exist or not.
      *
-     * @access  public
      * @param   string  $type
      * @return  bool
      */
@@ -263,7 +251,6 @@ class Session implements LoggerAwareInterface
      *
      * Get the registered for the given type.
      *
-     * @access  public
      * @param   string              $type
      * @throws  FoundationException if pooler does not exist
      * @return  ClientPoolerInterface
@@ -299,7 +286,6 @@ ERROR;
      *
      * Return all instances of clients for a given type.
      *
-     * @access  public
      * @param   string $type
      * @return  ClientInterface
      */
@@ -314,7 +300,6 @@ ERROR;
      * Summon a pooler to retrieve a client. If the pooler does not exist, a
      * FoundationException is thrown.
      *
-     * @access  public
      * @param   string          $type
      * @param   string          $identifier
      * @return  ClientInterface
@@ -329,7 +314,6 @@ ERROR;
      *
      * Create handy methods to access clients through a pooler.
      *
-     * @access  public
      * @param   string                   $method
      * @param   array                    $arguments
      * @throws  \BadFunctionCallException if unknown method
@@ -353,7 +337,6 @@ ERROR;
      *
      * Useful to test & debug.
      *
-     * @access  public
      * @return  array
      */
     public function getRegisterPoolersNames()

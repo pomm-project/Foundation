@@ -2,7 +2,7 @@
 /*
  * This file is part of Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,11 +18,10 @@ use PommProject\Foundation\Session\Session;
  * Array sub class for converters using a PHP array representation.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see       ConverterInterface
- * @abstract
  */
 abstract class ArrayTypeConverter implements ConverterInterface
 {
@@ -33,7 +32,6 @@ abstract class ArrayTypeConverter implements ConverterInterface
      *
      * Check if the data is an array.
      *
-     * @access protected
      * @param  mixed    $data
      * @throws ConverterException
      * @return array    $data
@@ -58,7 +56,6 @@ abstract class ArrayTypeConverter implements ConverterInterface
      * Since the arrays in PostgreSQL have the same subtype, it is useful to
      * cache it here to avoid summoning the ClientHolder all the time.
      *
-     * @access protected
      * @param  string   $type
      * @param  Session  $session
      * @return ConverterInterface

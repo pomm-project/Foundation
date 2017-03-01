@@ -2,7 +2,7 @@
 /*
  * This file is part of Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use PommProject\Foundation\Exception\ConverterException;
  * types.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -32,7 +32,6 @@ class ConverterHolder
      *
      * Declare a converter and assign types to it.
      *
-     * @access public
      * @param  string             $name
      * @param  ConverterInterface $converter
      * @param  array              $types
@@ -57,7 +56,6 @@ class ConverterHolder
      * converter for this type has already been registered, then it throws and
      * exception.
      *
-     * @access protected
      * @param  string             $name
      * @param  ConverterInterface $converter
      * @param  bool               $strict (default true)
@@ -88,7 +86,6 @@ class ConverterHolder
      *
      * Tell if the converter exists or not.
      *
-     * @access public
      * @param  string $name
      * @return bool
      */
@@ -103,7 +100,6 @@ class ConverterHolder
      * Return the converter associated with this name. If no converters found,
      * NULL is returned.
      *
-     * @access public
      * @param  string             $name
      * @return ConverterInterface
      */
@@ -117,7 +113,6 @@ class ConverterHolder
      *
      * Returns an array with the names of the registered converters.
      *
-     * @access public
      * @return array
      */
     public function getConverterNames()
@@ -131,7 +126,6 @@ class ConverterHolder
      * Make the given converter to support a new PostgreSQL type. If the given
      * type is already defined, it is overrided with the new converter.
      *
-     * @access public
      * @param  string          $name
      * @param  string          $type
      * @throws  ConverterException if $name does not exist.
@@ -159,7 +153,6 @@ class ConverterHolder
      *
      * Returns the converter instance for the given type.
      *
-     * @access public
      * @param  string             $type
      * @throws  ConverterException if there are no converters associated.
      * @return ConverterInterface
@@ -184,7 +177,6 @@ class ConverterHolder
      *
      * Does the type exist ?
      *
-     * @access public
      * @param  string $type
      * @return bool
      */
@@ -198,7 +190,6 @@ class ConverterHolder
      *
      * Return the list of handled types.
      *
-     * @access public
      * @return array
      */
     public function getTypes()
@@ -211,7 +202,6 @@ class ConverterHolder
      *
      * Return the list of types with the related converter name.
      *
-     * @access public
      * @return array
      */
     public function getTypesWithConverterName()

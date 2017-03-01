@@ -2,7 +2,7 @@
 /*
  * This file is part of Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use PommProject\Foundation\Session\Session;
  * Json converter.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see       ConverterInterface
@@ -33,7 +33,6 @@ class PgJson implements ConverterInterface
      * Configure the JSON converter to decode JSON as StdObject instances or
      * arrays (default).
      *
-     * @access public
      * @param boolean $is_array
      */
     public function __construct($is_array = null)
@@ -101,7 +100,6 @@ class PgJson implements ConverterInterface
      *
      * Encode data to Json. Throw an exception if an error occurs.
      *
-     * @access protected
      * @param  mixed $data
      * @throws  ConverterException
      * @return string

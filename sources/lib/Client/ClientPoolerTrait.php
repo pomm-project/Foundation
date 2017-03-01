@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,11 +25,10 @@ use PommProject\Foundation\Session\Session;
  * 3   The client is returned back
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see       ClientPoolerInterface
- * @abstract
  */
 trait ClientPoolerTrait
 {
@@ -47,8 +46,6 @@ trait ClientPoolerTrait
      *
      * Create a new client.
      *
-     * @abstract
-     * @access protected
      * @param  string $identifier
      * @return Client
      */
@@ -71,7 +68,6 @@ trait ClientPoolerTrait
      *
      * Basic getClient method.
      *
-     * @access public
      * @param  string $identifier
      * @return Client
      * @see    ClientInterface
@@ -93,7 +89,6 @@ trait ClientPoolerTrait
      *
      * How the pooler fetch a client from the pool.
      *
-     * @access protected
      * @param  string      $identifier
      * @return Client|null
      */
@@ -110,7 +105,6 @@ trait ClientPoolerTrait
      *
      * Check if the session is set and return it.
      *
-     * @access protected
      * @return Session
      * @throws FoundationException
      */

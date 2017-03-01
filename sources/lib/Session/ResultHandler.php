@@ -2,7 +2,7 @@
 /*
  * This file is part of the Pomm's Foundation package.
  *
- * (c) 2014 - 2015 Grégoire HUBERT <hubert.greg@gmail.com>
+ * (c) 2014 - 2017 Grégoire HUBERT <hubert.greg@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ use PommProject\Foundation\Exception\FoundationException;
  * Wrap a PostgreSQL query result resource.
  *
  * @package   Foundation
- * @copyright 2014 - 2015 Grégoire HUBERT
+ * @copyright 2014 - 2017 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
@@ -30,7 +30,6 @@ class ResultHandler
      *
      * Constructor
      *
-     * @access public
      * @param  resource $result_resource
      */
     public function __construct($result_resource)
@@ -50,7 +49,6 @@ class ResultHandler
      *
      * Call free() if handler is set.
      *
-     * @access public
      * @return void
      */
     public function __destruct()
@@ -65,7 +63,6 @@ class ResultHandler
      *
      * Free a result from memory.
      *
-     * @access public
      * @return ResultHandler $this
      */
     public function free()
@@ -81,7 +78,6 @@ class ResultHandler
      *
      * Fetch a row as associative array. Index starts from 0.
      *
-     * @access public
      * @param  int   $index
      * @throws \OutOfBoundsException if $index out of bounds.
      * @return array
@@ -102,7 +98,6 @@ class ResultHandler
      *
      * Return the number of fields of a result.
      *
-     * @access public
      * @return int long
      */
     public function countFields()
@@ -115,7 +110,6 @@ class ResultHandler
      *
      * Return the number of rows in a result.
      *
-     * @access public
      * @return int long
      */
     public function countRows()
@@ -128,7 +122,6 @@ class ResultHandler
      *
      * Return an array with the field names of a result.
      *
-     * @access public
      * @return array
      */
     public function getFieldNames()
@@ -147,7 +140,6 @@ class ResultHandler
      *
      * Return the associated type of a field.
      *
-     * @access public
      * @param  int $name
      * @return string
      */
@@ -163,7 +155,6 @@ class ResultHandler
      *
      * Return the name from a field number.
      *
-     * @access public
      * @param  int    $field_no
      * @return string
      * @throws \InvalidArgumentException
@@ -185,7 +176,6 @@ class ResultHandler
      *
      * Return the field index from its name.
      *
-     * @access protected
      * @param  string $name
      * @return int long
      */
@@ -211,7 +201,6 @@ class ResultHandler
      *
      * Fetch a column from a result.
      *
-     * @access public
      * @param  string $name
      * @return array
      */
@@ -225,7 +214,6 @@ class ResultHandler
      *
      * Check if a field exist or not.
      *
-     * @access public
      * @param  mixed $name
      * @return bool
      */
@@ -239,7 +227,6 @@ class ResultHandler
      *
      * Return the type oid of the given field.
      *
-     * @access  public
      * @param   string   $name
      * @throws  FoundationException on error
      * @return  int

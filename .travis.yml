@@ -4,10 +4,12 @@ php:
   - "5.6"
   - "7.0"
   - "7.1"
-  - nightly
+  - "nightly"
+  - "hhvm"
 matrix:
   allow_failures:
-    - php: nightly
+    - php: "nightly"
+    - php: "hhvm"
 services: postgresql
 before_script:
   - psql -c 'CREATE DATABASE pomm_test' -U postgres -h 127.0.0.1 postgres

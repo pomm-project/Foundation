@@ -146,6 +146,7 @@ class SessionBuilder extends VanillaSessionBuilder
             ->registerConverter('Binary', new Converter\PgBytea(), ['bytea', 'pg_catalog.bytea'], false)
             ->registerConverter('Point', new Converter\Geometry\PgPoint(), ['point', 'pg_catalog.point'], false)
             ->registerConverter('Circle', new Converter\Geometry\PgCircle(), ['circle', 'pg_catalog.circle'], false)
+            ->registerConverter('Box', new Converter\Geometry\PgBox(), ['box', 'pg_catalog.box'], false)
             ->registerConverter(
                 'JSON',
                 new Converter\PgJson(),

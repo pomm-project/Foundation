@@ -86,4 +86,58 @@ JSON;
             ->array($this->sendToPostgres($data, 'json', $session))
             ->isIdenticalTo($data);
     }
+
+    public function testFromPgWithBooleanPrimitive()
+    {
+        $session = $this->buildSession();
+        $converter = $this->newTestedInstance();
+        $this
+            ->boolean(
+                $converter
+                    ->fromPg(
+                        'false',
+                        'json',
+                        $session
+                    )
+            )
+            ->isFalse()
+
+            ->boolean(
+                $converter
+                    ->fromPg(
+                        'true',
+                        'json',
+                        $session
+                    )
+            )
+            ->isTrue()
+        ;
+    }
+
+    public function testFromPgWithNull()
+    {
+        $session = $this->buildSession();
+        $converter = $this->newTestedInstance();
+        $this
+            ->variable(
+                $converter
+                    ->fromPg(
+                        'null',
+                        'json',
+                        $session
+                    )
+            )
+            ->isIdenticalTo(null)
+
+            ->variable(
+                $converter
+                    ->fromPg(
+                        null,
+                        'json',
+                        $session
+                    )
+            )
+            ->isIdenticalTo(null)
+        ;
+    }
 }

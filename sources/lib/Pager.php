@@ -61,7 +61,7 @@ class Pager
      */
     public function getResultCount()
     {
-        return $this->count;
+        return $this->iterator->count();
     }
 
     /**
@@ -85,7 +85,8 @@ class Pager
      */
     public function getResultMax()
     {
-        return max(($this->getResultMin() + $this->iterator->count() - 1), 0);
+        return
+            ($this->getPage() - 1) * $this->max_per_page + $this->iterator->count();
     }
 
     /**
@@ -97,7 +98,7 @@ class Pager
      */
     public function getLastPage()
     {
-        return $this->count == 0 ? 1 : ceil($this->count / $this->max_per_page);
+        return $this->count == 0 ? 1 : (int) ceil($this->count / $this->max_per_page);
     }
 
     /**

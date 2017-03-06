@@ -41,3 +41,8 @@ This package uses [Atoum](https://github.com/atoum/atoum) as unit test framework
  * `PommProject\Foundation\Tester\FoundationSessionAtoum`
 
 Making your test class to extend one of these will grant them with a `buildSession` method that returns a newly created session. Clients of these classes must implement a `initializeSession(Session $session)` method (even a blank one). It is often a good idea to provide a fixture class as a session client, this method is the right place to register it.
+
+## Known bugs
+
+Unfortunately there is a bug we can not fix easily or without degrading performances of the whole stack:
+ * The `ConvertedResultIterator` can not recognize custom composite types when they are defined in schemas other than `public`. This is because the `pg_type` function does not return the schema the type belongs to. There are not turns around unless the schema is inspected manually by issuing a lot of queries. (see #53)

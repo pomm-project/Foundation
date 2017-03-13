@@ -11,6 +11,8 @@ matrix:
     - php: "nightly"
     - php: "hhvm"
 services: postgresql
+addons:
+    postgresql: "9.2"
 before_script:
   - psql -c 'CREATE DATABASE pomm_test' -U postgres -h 127.0.0.1 postgres
   - psql -c 'CREATE EXTENSION hstore' -U postgres -h 127.0.0.1 pomm_test

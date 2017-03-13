@@ -30,8 +30,36 @@ class DatabaseInspector extends FoundationSessionAtoum
         $result = $this->getInspector()->getVersion();
 
         $this
-            ->boolean(version_compare($result, "9.1.0") === 1)
+            ->boolean(version_compare($result, "9.2.0") === 1)
             ->isTrue()
+           ;
+    }
+
+    public function testGetSizePretty()
+    {
+        $this
+            ->assert('Checking getSizePretty returns the size in human readable format.')
+            ->given($result = $this->getInspector()->getSizePretty())
+            ->string($result)
+            ->matches('#[0-9]+\s(T|G|M|k)?B#')
+           ;
+    }
+
+    public function testGetSize()
+    {
+        $this
+            ->assert('Checking getSize returns an int.')
+            ->given($result = $this->getInspector()->getSize())
+            ->integer($result)
+           ;
+    }
+
+    public function testGetName()
+    {
+        $this
+            ->assert('Checking getName returns a string.')
+            ->given($result = $this->getInspector()->getName())
+            ->string($result)
            ;
     }
 }

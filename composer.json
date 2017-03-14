@@ -12,7 +12,7 @@
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "atoum/atoum" : "^2.8",
+        "atoum/atoum" : "^2.8 || ^3.0",
         "squizlabs/php_codesniffer": "~2.7"
     },
     "autoload": {

@@ -136,7 +136,7 @@ class SessionBuilder
                     'intervalstyle' => 'ISO_8601',
                     'datestyle'     => 'ISO',
                     'standard_conforming_strings' => 'true',
-                    'timezone'      => ini_get('date.timezone'),
+                    'timezone'      => date_default_timezone_get(),
                 ]
             ];
     }

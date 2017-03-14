@@ -29,6 +29,8 @@ Foundation provides out of the box:
 
 Pomm components are available on [packagist](https://packagist.org/packages/pomm-project/) using [composer](https://packagist.org/). To install and use Pomm's foundation, add a require line to `"pomm-project/foundation"` in your `composer.json` file.
 
+**Note:** It is important the PHP configuration file defines the correct [timezone](http://php.net/manual/en/datetime.configuration.php) setting. Pomm also sets the PostgreSQL connection to this timezone to prevent time shifts between the application and the database.
+
 ## Documentation
 
 Foundation’s documentation is available [either online](https://github.com/pomm-project/Foundation/blob/master/documentation/foundation.rst) or directly in the `documentation` folder of the project.

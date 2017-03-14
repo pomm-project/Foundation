@@ -7,12 +7,12 @@
     "license":  "MIT",
     "authors":  [ { "name": "Grégoire HUBERT", "email": "hubert.greg@gmail.com", "homepage": "http://www.coolkeums.org" } ],
     "require": {
-        "php": ">=5.4.4",
+        "php": ">=5.5.9",
         "ext-pgsql": "*",
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "atoum/atoum" : "^2.8 || ^3.0",
+        "atoum/atoum" : "^2.8",
         "squizlabs/php_codesniffer": "~2.7"
     },
     "autoload": {

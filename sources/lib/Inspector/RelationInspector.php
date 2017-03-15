@@ -211,4 +211,33 @@ SQL;
                     ->andWhere("clns.nspname = $*", [$schema])
             );
     }
+
+    /**
+     * getTableTotalSizeOnDisk
+     *
+     * Return the total size of the relation on disk. This size includes
+     * associated indexes size.
+     *
+     * @param   string $schema
+     * @param   string $name
+     * @return  string
+     */
+    public function getTableTotalSizeOnDisk($schema, $name)
+    {
+        $where = new Where(
+            '',
+            [
+                sprintf(
+                    '%s.%s',
+                    $this->getSession()->getConnection()->escapeIdentifier($schema),
+                    $this->getSession()->getConnection()->escapeIdentifier($name)
+                )]
+        );
+
+        return $this
+            ->executeSql(
+                "select pg_total_relation_size($*::regclass) as total_size",
+                $where
+            )->current()['total_size'];
+    }
 }

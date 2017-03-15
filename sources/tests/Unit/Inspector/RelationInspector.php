@@ -115,4 +115,25 @@ class RelationInspector extends FoundationSessionAtoum
             ->array($relation_info->slice('name'))
                 ->isIdenticalTo(['a_boolean', 'varchar_array']);
     }
+
+    public function testGetTableTotalSizeOnDisk()
+    {
+        $this
+            ->assert("getTableTotalSizeOnDisk() returns size of a table in bytes.")
+            ->given(
+                $size = $this
+                    ->getInspector()
+                    ->getTableTotalSizeOnDisk('inspector_test', 'with_complex_pk')
+            )
+            ->integer($size)
+            ->exception(
+                function () {
+                    return $this
+                        ->getInspector()
+                        ->getTableTotalSizeOnDisk('public', 'no_exist')
+                        ;
+                }
+            )
+                ;
+    }
 }

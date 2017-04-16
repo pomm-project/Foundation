@@ -310,6 +310,45 @@ ERROR;
     }
 
     /**
+     * Get query manager shortcut
+     *
+     * @param   string                   $identifier
+     * @throws  FoundationException      if no poolers found
+     * @return  \PommProject\Foundation\QueryManager\QueryManagerClient
+     */
+    public function getQueryManager($identifier = null)
+    {
+        return $this->getClientUsingPooler('query_manager', $identifier);
+    }
+
+    /**
+     * Get prepared query manager shortcut
+     *
+     * @param   string $identifier
+     * @throws  FoundationException      if no poolers found
+     * @return  \PommProject\Foundation\PreparedQuery\PreparedQueryManager
+     */
+    public function getPreparedQueryManager($identifier = null)
+    {
+        return $this->getClientUsingPooler('prepared_query', $identifier);
+    }
+
+    /**
+     * Get model shortcut
+     *
+     * Without the pomm-project/model-manage package or if the class name
+     * does not exist, this method raise a FoundationException.
+     *
+     * @param   string                   $className model class name
+     * @throws  FoundationException      if no poolers found
+     * @return  \PommProject\ModelManager\Model\Model
+     */
+    public function getModel($className)
+    {
+        return $this->getClientUsingPooler('model', $className);
+    }
+
+    /**
      * __call
      *
      * Create handy methods to access clients through a pooler.

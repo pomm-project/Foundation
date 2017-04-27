@@ -39,13 +39,10 @@ class TsRange extends BaseRange
     protected function getSubElement($element)
     {
         if ($element === BaseRange::INFINITY_MIN) {
-
             return BaseRange::INFINITY_MIN;
         } elseif ($element === BaseRange::INFINITY_MAX) {
-
             return BaseRange::INFINITY_MAX;
         } elseif ($element === '') {
-
             return null;
         }
 

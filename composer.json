@@ -12,7 +12,7 @@
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "atoum/atoum" : "dev-master"
+        "atoum/atoum" : "^2"
     },
     "autoload": {
         "psr-4": {

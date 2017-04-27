@@ -9,6 +9,8 @@ before_script:
   - psql -c 'CREATE DATABASE pomm_test' -U postgres -h 127.0.0.1 postgres
   - psql -c 'CREATE EXTENSION hstore' -U postgres -h 127.0.0.1 pomm_test
   - psql -c 'CREATE EXTENSION ltree' -U postgres -h 127.0.0.1 pomm_test
-install: composer install --dev
-script: php vendor/atoum/atoum/bin/atoum --no-code-coverage -d sources/tests/Unit/
+install:
+  - composer require --dev 'atoum/reports-extension:^2.0.1'
+script:
+  - vendor/bin/atoum
 

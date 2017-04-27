@@ -28,7 +28,7 @@ class TsRange extends BaseRange
      */
     protected function getRegexp()
     {
-        return '/([\[\(])"?([0-9 :+\.-]+)"?, *"?([0-9 :+\.-]+)"?([\]\)])/';
+        return '/(empty)|([\[\(])"?([0-9 :+\.-]+|-?infinity)?"?, *"?([0-9 :+\.-]+|-?infinity)?"?([\]\)])/';
     }
 
     /**
@@ -38,6 +38,17 @@ class TsRange extends BaseRange
      */
     protected function getSubElement($element)
     {
+        if ($element === BaseRange::INFINITY_MIN) {
+
+            return BaseRange::INFINITY_MIN;
+        } elseif ($element === BaseRange::INFINITY_MAX) {
+
+            return BaseRange::INFINITY_MAX;
+        } elseif ($element === '') {
+
+            return null;
+        }
+
         return new \DateTime($element);
     }
 }

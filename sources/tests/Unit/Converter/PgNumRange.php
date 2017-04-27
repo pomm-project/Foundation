@@ -52,8 +52,8 @@ class PgNumRange extends BaseConverter
                 [
                     'assert'               => 'Test with empty',
                     'text_range'           => 'empty',
-                    'expected_start_limit' => BaseRange::EMPTY,
-                    'expected_end_limit'   => BaseRange::EMPTY,
+                    'expected_start_limit' => BaseRange::EMPTY_RANGE,
+                    'expected_end_limit'   => BaseRange::EMPTY_RANGE,
                     'expected_start_incl'  => null,
                     'expected_end_incl'    => null,
                 ],

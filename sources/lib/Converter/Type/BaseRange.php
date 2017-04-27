@@ -24,7 +24,7 @@ abstract class BaseRange
 {
     const INFINITY_MAX = 'infinity';
     const INFINITY_MIN = '-infinity';
-    const EMPTY        = 'empty';
+    const EMPTY_RANGE  = 'empty';
 
     public $start_limit;
     public $end_limit;
@@ -82,8 +82,8 @@ abstract class BaseRange
         }
 
         if (count($matches) === 2) {
-            $this->start_limit = self::EMPTY;
-            $this->end_limit   = self::EMPTY;
+            $this->start_limit = self::EMPTY_RANGE;
+            $this->end_limit   = self::EMPTY_RANGE;
             $this->start_incl  = null;
             $this->end_incl    = null;
         } else {

@@ -9,11 +9,91 @@
  */
 namespace PommProject\Foundation\Test\Unit\Converter;
 
+use PommProject\Foundation\Converter\Type\BaseRange;
 use PommProject\Foundation\Test\Unit\Converter\BaseConverter;
 use PommProject\Foundation\Converter\Type\TsRange;
 
 class PgTsRange extends BaseConverter
 {
+    protected function fromPgDataProvider()
+    {
+        return [
+            [
+                [
+                    'assert'               => 'Test with infinity and null',
+                    'text_range'           => '(infinity,)',
+                    'expected_start_limit' => BaseRange::INFINITY_MAX,
+                    'expected_end_limit'   => null,
+                    'expected_start_incl'  => false,
+                    'expected_end_incl'    => false,
+                ],
+            ],
+            [
+                [
+                    'assert'               => 'Test with null and null',
+                    'text_range'           => '[,]',
+                    'expected_start_limit' => null,
+                    'expected_end_limit'   => null,
+                    'expected_start_incl'  => true,
+                    'expected_end_incl'    => true,
+                ],
+            ],
+            [
+                [
+                    'assert'               => 'Test with null and minus infinity',
+                    'text_range'           => '(, -infinity)',
+                    'expected_start_limit' => null,
+                    'expected_end_limit'   => BaseRange::INFINITY_MIN,
+                    'expected_start_incl'  => false,
+                    'expected_end_incl'    => false,
+                ],
+            ],
+            [
+                [
+                    'assert'               => 'Test with infinities',
+                    'text_range'           => '(-infinity, infinity)',
+                    'expected_start_limit' => BaseRange::INFINITY_MIN,
+                    'expected_end_limit'   => BaseRange::INFINITY_MAX,
+                    'expected_start_incl'  => false,
+                    'expected_end_incl'    => false,
+                ],
+            ],
+            [
+                [
+                    'assert'               => 'Test with empty',
+                    'text_range'           => 'empty',
+                    'expected_start_limit' => BaseRange::EMPTY_RANGE,
+                    'expected_end_limit'   => BaseRange::EMPTY_RANGE,
+                    'expected_start_incl'  => null,
+                    'expected_end_incl'    => null,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param array $data
+     * @dataProvider fromPgDataProvider
+     */
+    public function testExtraFromPg($data)
+    {
+        $session = $this->buildSession();
+        $this
+            ->assert($data['assert'])
+            ->given($instance = $this->newTestedInstance()->fromPg($data['text_range'], 'tstzrange', $session))
+            ->object($instance)
+            ->isInstanceOf('\PommProject\Foundation\Converter\Type\TsRange')
+            ->variable($instance->start_limit)
+            ->isEqualTo($data['expected_start_limit'])
+            ->variable($instance->end_limit)
+            ->isEqualTo($data['expected_end_limit'])
+            ->variable($instance->start_incl)
+            ->isEqualTo($data['expected_start_incl'])
+            ->variable($instance->end_incl)
+            ->isEqualTo($data['expected_end_incl'])
+        ;
+    }
+
     public function testFromPg()
     {
         $session = $this->buildSession();

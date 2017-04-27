@@ -22,6 +22,10 @@ namespace PommProject\Foundation\Converter\Type;
  */
 abstract class BaseRange
 {
+    const INFINITY_MAX = 'infinity';
+    const INFINITY_MIN = '-infinity';
+    const EMPTY_RANGE  = 'empty';
+
     public $start_limit;
     public $end_limit;
     public $start_incl;
@@ -66,22 +70,29 @@ abstract class BaseRange
      * @param  string $description
      * @throws \InvalidArgumentException
      */
-
     public function __construct($description)
     {
         if (!preg_match($this->getRegexp(), $description, $matches)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Could not parse NumRange description '%s'.",
+                    "Could not parse range description '%s'.",
                     $description
                 )
             );
         }
 
-        $this->start_limit = $this->getSubElement($matches[2]);
-        $this->end_limit   = $this->getSubElement($matches[3]);
-        $this->start_incl  = (bool) ($matches[1] === '[');
-        $this->end_incl    = (bool) ($matches[4] === ']');
+        if (count($matches) === 2) {
+            $this->start_limit = self::EMPTY_RANGE;
+            $this->end_limit   = self::EMPTY_RANGE;
+            $this->start_incl  = null;
+            $this->end_incl    = null;
+        } else {
+            $this->start_limit = $this->getSubElement($matches[3]);
+            $this->end_limit   = $this->getSubElement($matches[4]);
+            $this->start_incl  = (bool) ($matches[2] === '[');
+            $this->end_incl    = (bool) ($matches[5] === ']');
+        }
+
         $this->description = $description;
     }
 

@@ -28,7 +28,7 @@ class NumRange extends BaseRange
      */
     protected function getRegexp()
     {
-        return '/([\[\(])(-?[0-9\.]+), *(-?[0-9\.]+)([\]\)])/';
+        return '/(empty)|([\[\(])(-?[0-9\.]+)?, *(-?[0-9\.]+)?([\]\)])/';
     }
 
     /**
@@ -38,6 +38,6 @@ class NumRange extends BaseRange
      */
     protected function getSubElement($element)
     {
-        return $element + 0;
+        return $element !== '' ? $element + 0 : null;
     }
 }

@@ -1,3 +1,4 @@
 .ctags
 vendor/*
 sources/tests/config.php
+composer.lock

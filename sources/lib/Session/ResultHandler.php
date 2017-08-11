@@ -118,6 +118,19 @@ class ResultHandler
     }
 
     /**
+     * countAffectedRows
+     *
+     * Return the number of affected rows in a result.
+     *
+     * @access public
+     * @return int long
+     */
+    public function countAffectedRows()
+    {
+        return pg_affected_rows($this->handler);
+    }
+
+    /**
      * getFieldNames
      *
      * Return an array with the field names of a result.

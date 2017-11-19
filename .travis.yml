@@ -31,6 +31,7 @@ before_script:
 install:
   - composer install --dev
   - test "$DEPS" == "hight" || composer update --prefer-lowest
+  - test "$DEPS" == "hight" || composer update atoum/atoum
 
 script:
   - ./vendor/bin/phpcs --standard=psr2 --runtime-set ignore_warnings_on_exit true --report=summary sources

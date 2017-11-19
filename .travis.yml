@@ -1,4 +1,5 @@
 language: php
+
 php:
   - "5.5"
   - "5.6"
@@ -6,18 +7,24 @@ php:
   - "7.1"
   - "7.2"
   - "nightly"
+
 matrix:
   allow_failures:
     - php: "nightly"
     - php: "hhvm"
+
 services: postgresql
+
 addons:
     postgresql: "9.2"
+
 before_script:
   - psql -c 'CREATE DATABASE pomm_test' -U postgres -h 127.0.0.1 postgres
   - psql -c 'CREATE EXTENSION hstore' -U postgres -h 127.0.0.1 pomm_test
   - psql -c 'CREATE EXTENSION ltree' -U postgres -h 127.0.0.1 pomm_test
+
 install: composer install --dev
+
 script:
   - ./vendor/bin/phpcs --standard=psr2 --runtime-set ignore_warnings_on_exit true --report=summary sources
   - php vendor/atoum/atoum/bin/atoum --no-code-coverage -d sources/tests/Unit/

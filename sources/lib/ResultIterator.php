@@ -267,13 +267,9 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      */
     public function extract()
     {
-        $results = [];
-
         foreach ($this as $result) {
-            $results[] = $result;
+            yield $result;
         }
-
-        return $results;
     }
 
     /**
@@ -283,6 +279,12 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      */
     public function jsonSerialize()
     {
-        return $this->extract();
+        $values = [];
+
+        foreach ($this->extract() as $item) {
+            $values[] = $item;
+        }
+
+        return $values;
     }
 }

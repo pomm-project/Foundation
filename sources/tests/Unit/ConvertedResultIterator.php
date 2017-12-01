@@ -133,8 +133,13 @@ SQL;
             $this->buildSession()
         );
 
+        $arrayTmp = [];
+        foreach ($iterator->extract() as $item) {
+            $arrayTmp[] = $item;
+        }
+
         $this
-            ->array($iterator->extract())
+            ->array($arrayTmp)
             ->isIdenticalTo(
                 [
                     ['id' => 1, 'pika' => 'a', 'chu' => null],

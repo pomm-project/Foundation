@@ -168,8 +168,14 @@ SQL;
             $this->getResultResource($this->getPikaSql())
         );
 
+        $arrayTmp = [];
+
+        foreach ($iterator->extract() as $val) {
+            $arrayTmp[] = $val;
+        }
+
         $this
-            ->array($iterator->extract())
+            ->array($arrayTmp)
             ->isIdenticalTo(
                 [
                     ['id' => '1', 'pika' => 'a'],
@@ -183,8 +189,14 @@ SQL;
             $this->getResultResource('select true where false')
         );
 
+        $arrayTmp = [];
+
+        foreach ($iterator->extract() as $val) {
+            $arrayTmp[] = $val;
+        }
+
         $this
-            ->array($iterator->extract())
+            ->array($arrayTmp)
             ->isEmpty()
             ;
     }

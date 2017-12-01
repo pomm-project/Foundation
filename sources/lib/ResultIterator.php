@@ -264,8 +264,29 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      * THIS MAY USE A LOT OF MEMORY.
      *
      * @return array
+     * @deprecated
      */
     public function extract()
+    {
+        @trigger_error('The extract function is deprecated since version 2.1 and will be removed in 3.0. Use the extractGenerator method instead.', E_USER_DEPRECATED);
+
+        $results = [];
+
+        foreach ($this as $result) {
+            $results[] = $result;
+        }
+
+        return $results;
+    }
+
+    /**
+     * extractGenerator
+     *
+     * Dump an iterator
+     *
+     * @return \Generator
+     */
+    public function extractGenerator()
     {
         foreach ($this as $result) {
             yield $result;
@@ -281,7 +302,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
     {
         $values = [];
 
-        foreach ($this->extract() as $item) {
+        foreach ($this->extractGenerator() as $item) {
             $values[] = $item;
         }
 

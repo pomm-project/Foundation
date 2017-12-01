@@ -168,9 +168,36 @@ SQL;
             $this->getResultResource($this->getPikaSql())
         );
 
+        $this
+            ->array($iterator->extract())
+            ->isIdenticalTo(
+                [
+                    ['id' => '1', 'pika' => 'a'],
+                    ['id' => '2', 'pika' => 'b'],
+                    ['id' => '3', 'pika' => 'c'],
+                    ['id' => '4', 'pika' => 'd'],
+                ]
+            );
+
+        $iterator = $this->newTestedInstance(
+            $this->getResultResource('select true where false')
+        );
+
+        $this
+            ->array($iterator->extract())
+            ->isEmpty()
+            ;
+    }
+
+    public function testExtractGenerator()
+    {
+        $iterator = $this->newTestedInstance(
+            $this->getResultResource($this->getPikaSql())
+        );
+
         $arrayTmp = [];
 
-        foreach ($iterator->extract() as $val) {
+        foreach ($iterator->extractGenerator() as $val) {
             $arrayTmp[] = $val;
         }
 
@@ -191,14 +218,14 @@ SQL;
 
         $arrayTmp = [];
 
-        foreach ($iterator->extract() as $val) {
+        foreach ($iterator->extractGenerator() as $val) {
             $arrayTmp[] = $val;
         }
 
         $this
             ->array($arrayTmp)
             ->isEmpty()
-            ;
+        ;
     }
 
     public function testJsonSerializable()

@@ -96,7 +96,7 @@ class PgComposite extends ArrayTypeConverter
                         return '';
                     } elseif ($val === '') {
                         return '""';
-                    } elseif (preg_match('/[,\s]/', $val)) {
+                    } elseif (preg_match('/[,\s()]/', $val)) {
                         return sprintf('"%s"', str_replace('"', '""', $val));
                     } else {
                         return $val;

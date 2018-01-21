@@ -41,6 +41,16 @@ class SimpleQueryManager extends FoundationSessionAtoum
             ->isNull();
     }
 
+    public function testQueryWithExtraParameter()
+    {
+        $session = $this->buildSession();
+        $this
+            ->exception(function () use ($session) {
+                $iterator = $this->getQueryManager($session)->query('select true', ['extra']);
+            })
+            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException');
+    }
+
     public function testParametrizedQuery()
     {
         $session = $this->buildSession();

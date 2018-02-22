@@ -194,7 +194,7 @@ class ResultHandler
      */
     protected function getFieldNumber($name)
     {
-        $no = pg_field_num($this->handler, sprintf('"%s"', $name));
+        $no = pg_field_num($this->handler, "\"$name\"");
 
         if ($no ===  -1) {
             throw new \InvalidArgumentException(

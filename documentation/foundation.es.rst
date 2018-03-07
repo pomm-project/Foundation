@@ -1,4 +1,4 @@
-=======================
+======================
 Pomm-project Foundation
 =======================
 
@@ -7,21 +7,18 @@ Pomm-project Foundation
 Overview
 --------
 
-Foundation is a light, fast and versatile PHP PostgreSQL database framework. It can either be used on its own (to replace a DBAL for example) or to build a more complex `model manager`_. It is the first stone of `Pomm project`_ version 2.
-
+Foundation es una estructura de base de datos PHP PostgreSQL ligera, rápida y versátil. Se puede usar solo (para reemplazar un DBAL por ejemplo) o para construir un `administrador de modelos`_. más complejo. Es el primer cálculo del `proyecto Pomm`_ versión 2.
 ..  _`Pomm project`: http://www.pomm-project.org
 ..  _`model manager`: https://github.com/pomm-project/ModelManager
 
-Foundation manages relations between a database *connection* and *clients* through *sessions*. It consists of several classes to configure, open, deal with and close *sessions*.
+Foundation gestiona la relación entre una *conexión* de base de datos y *clientes* a través de *sesiones*. Consiste en varias clases para configurar, abrir, tratar y cerrar *sesiones*.
+- ``Pomm`` es la clase de servicio, registra *constructores de sesión* y *sesiones* generadas en caché..
+- ``SessionBuilder`` configura y construye *sesiones*.
+- ``Session`` mantiene *clientes* y *poolers* y la *conexión*.
+- ``Client`` clase abstracta que implementa la ``interfaz del cliente``. Las instancias son *clientes* de la *sesión*. 
+- ``ClientPooler`` clase abstracta que implementa la ``Interfaz del Cliente Pooler``. Gestionan *clientes* en *sesiones*.
 
-- ``Pomm`` is the service class, it registers *session builders* and caches spawned *sessions*.
-- ``SessionBuilder`` configures and builds *sessions*.
-- ``Session`` holds *clients* and *poolers* and the *connection*.
-- ``Client`` abstract class that implements ``ClientInterface``. Instances are *session*’s *clients*.
-- ``ClientPooler`` abstract class that implements ``ClientPoolerInterface``. They manage *clients* in *sessions*.
-
-This complexity is at first glance hidden. If one wants to open a connection, send a query and get converted results, it is as simple as:
-
+Esta complejidad a primera vista está oculta. Si se quiere abrir una conexión, enviar una consulta y obtener resultados convertidos, es tan simple como:
 .. code:: php
 
     <?php
@@ -47,30 +44,30 @@ This complexity is at first glance hidden. If one wants to open a connection, se
     }
 
 :note 1:
-    This returns a *session* using a *session builder*.
+    Esto devuelve una *sesión* utilizando un *constructor de sesión*.
 
-:note 2:
-    This returns the default ``query_manager`` *client* using the ``QueryManagerPooler``.
+:nota 2:
+    Esto devuelve el administrador de consulta predeterminado ``query_manager`` del cliente usando el ``QueryManagerPooler``.
 
-:note 3:
-    Issue the parametrized query and return a ``ConvertedResultIterator``.
+:nota 3:
+    Emita la consulta parametrizada y devuelva un ``ConvertedResultIterator``.
 
-:note 4:
-    Traverse the result as an array and fetch rows.
+:nota 4:
+    Recorre el resultado como una matriz y extrae filas.
 
-:note 5:
-    Access field result. Those results are converted to a PHP equivalent type (see `Converter pooler`_).
+:nota 5:    
+    Resultado del campo de acceso. Esos resultados son covertidos a un tipo equivalente de PHP (ver `Converter pooler`_).
 
-Pomm service
+
+Servicio Pomm
 ------------
 
-Pomm service is an interface to easily declare and build *sessions* through *session builders*.
+El servicio Pomm es una interfaz para declarar y crear *sesiones* fácilmente a través de los *constructores de sesiones*.
 
-Using session builders
+Usar constructores de sesión
 ~~~~~~~~~~~~~~~~~~~~~~
 
-It is possible to declare session builders either using ``Pomm``’s class constructor or the ``addBuilder`` method:
-
+Es posible declarar constructores de sesión utilizando el constructor de clase ``Pomm`` o el método ``addBuilder``:
 .. code:: php
 
     <?php
@@ -78,8 +75,7 @@ It is possible to declare session builders either using ``Pomm``’s class const
     $pomm = new Pomm(['first_db' => ['dsn' => 'pgsql://user:pass@host/first_db']]);
     $pomm->addBuilder('second_db', new MySessionBuilder(['dsn' => 'pgsql://user:pass@host/second_db']));
 
-It is often more practical to declare all *sessions* configuration from the constructor directly even if the builder is a custom class:
-
+A menudo es más práctico declarar la configuración de todas las *sesiones* desde el contructor directament, incluso si el constructor es una clase personalizada:
 .. code:: php
 
     <?php
@@ -99,12 +95,12 @@ It is often more practical to declare all *sessions* configuration from the cons
         ]
     );
 
-Each session builder has a name. This name is important, it represents a configuration and is not coupled with the DSN. This is particularly useful when an application has to switch from a database to another with the same configuration.
+Cada constructor de sesión tiene un nombre. Este nombre es importante, representa una configuración y no está acoplado con el DSN. Esto es particularmente útil cuando una aplicación tiene que cambiar de una base de datos a otra con la misma configuración.
 
-Spawning sessions
+Sesión de depósito
 ~~~~~~~~~~~~~~~~~
 
-The easiest way to get a session from the *service* is to use the ``ArrayAccess`` implementation:
+La manera más fácil de obtener una sesión del servicio es usar la implementación de ``ArrayAccess``:
 
 .. code:: php
 
@@ -116,13 +112,12 @@ The easiest way to get a session from the *service* is to use the ``ArrayAccess`
 
     $session = $pomm->getSession('first_db');
 
-The ``getSession($name)`` method checks if a *session* using this *session builder* has already been created. If yes, it is returned, otherwise a new one is created using the ``createSession($name)``. This last method creates a new session every time it is called. This implies a new database connection will be used.
+El método ``getSession($name)`` comprueba si una *sesión* ya ha sido creada utilizando este creador de sesión. En caso afirmativo, se retorna; de lo contrario, se crea una nueva utilizando ``createSession($name)``. Este último método crea una nueva sesión cada vez que es llamada. Esto implica que se usará una nueva conexión a la base de datos.
 
-Default sessions
+Sesiones Predeterminadas
 ~~~~~~~~~~~~~~~~
 
-Sometimes session names are not that important (especially if there is only one session), in this case it is possible to use Pomm’s default session mechanism. It will use the first first declared one:
-
+A veces los nombres de sesión no son tan importantes (especialmente si hay solo una sesión), en este caso es posible utilizar el mecanismo de sesión predeterminado de Pomm. Utilizará la primera declarada:
 .. code:: php
 
     <?php
@@ -138,25 +133,24 @@ Sometimes session names are not that important (especially if there is only one 
 
     $session = $pomm->getDefaultSession(); // return a `first_db` session
 
-This still applies when several session builders are declared. It is still possible to explicitly declare a session builder as being the default one by setting the ``pomm::default`` configuration setting to true.
+Esto se aplica aún cuando se declaran varios constructores de sesión. Todavía es posible declarar explícitamente que un constructor de sesión es el predeterminado estableciendo la configuración de  `pomm::default`` como verdadero.
 
-Context dependent configuration
+Configuración dependiente del contexto
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Session builders do configure session but in some cases, configuration options may be context dependent like development options or production options. This kind of configuration occurs directly in Pomm service passing anonymous functions:
-
+Los creadores de sesiones configuran la sesión pero en algunos casos las opciones de configuración pueden depender del contexto, como las opciones de desarrollo o de producción. Este tipo de configuración ocurre directamente en el servicio Pomm que pasa funciones anónimas:
 .. code:: php
 
     <?php
     // …
     $pomm->addPostConfiguration('first_db', function($session) { /* … */ });
 
-When the session is created, the post-configuration functions are launched and the session is returned.
+Cuando la sesión es creada, las funciones de post-configuración son iniciadas y la sesión es devuelta.
 
-Session builders management
+Administración de constructores de sesión
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Pomm provides several methods to manage session builders:
+Pomm proporciona varios métodos para administrar los constructores de sesión:
 
 - ``addBuilder($builder_name, VanillaSessionBuilder $builder)``
 - ``hasBuilder($name)``
@@ -164,11 +158,12 @@ Pomm provides several methods to manage session builders:
 - ``getBuilder($name)``
 - ``getSessionBuilders()``
 
-Session builder
+
+Constructor de Sesiones
+
 ---------------
 
-*Session builders* are meant to configure and instantiate *sessions*. It is possible to use them on their own without ``Pomm`` *service*.
-
+Los *creadores de sesión* están destinados a configurar e instanciar *sesione*s. Es posible usarlos por su cuenta sin el *servicio* ``Pomm``
 .. code:: php
 
     use PommProject\Foundation\Session\SessionBuilder;
@@ -177,8 +172,7 @@ Session builder
         ->buildSession()
         ;
 
-The session builder shown above creates blank sessions with no poolers registered. Foundation provides a functional builder with all poolers registered and a dedicated session class:
-
+El constructor de sesión mostrado arriba crea sesiones sin poolers registrados. Foundation proporciona un constructor funcional con todos los poolers registrados y una clase de sesión dedicada:
 .. code:: php
 
     use PommProject\Foundation\SessionBuilder; // ← different session builder
@@ -187,10 +181,10 @@ The session builder shown above creates blank sessions with no poolers registere
         ->buildSession()
         ;
 
-Configuration
+Configuración:
 ~~~~~~~~~~~~~
 
-There are several ways to set the configuration:
+Hay varias formas de establecer la configuración:
 
 .. code:: php
 
@@ -204,29 +198,27 @@ There are several ways to set the configuration:
     );
     $session_builder->addParameter('my_parameter', 'my_value');
 
-In a more general way, ``SessionBuilder`` class is made to be extended by a project-dedicated *session builder* class. It is then possible to overload the ``getDefaultConfiguration()`` method. It keeps the class configurable with a custom default configuration.
+De forma general, la clase ``SessionBuilder`` esta hecha para ser extendida por un clase *constructora de sesión* dedicada del proyecto. Entonces es posible sobrecargar el método ``getDefaultConfiguration()``. Esto mantiene la clase configurable como una configuración personalizada predeterminada.
 
-Configuration options
+Opciones de configuración
 ~~~~~~~~~~~~~~~~~~~~~
 
-The ``dsn`` is the only mandatory parameter expected by the builder but more parameters can be passed:
-
+El ``dsn``es el unico parametro obligatorio esperado por el constructor pero puede ser pasados más parametros:
 - ``connection:configuration`` (array)
 - ``dsn`` (string) mandatory
 - ``class:session`` (string) default:  ``\PommProject\Foundation\Session\Session``
 
-The ``connection:configuration`` parameter contains a hashmap of postgresql settings (see `postgresql documentation <http://www.postgresql.org/docs/9.1/static/runtime-config-client.html>`_). The default settings are the following:
+El parametro ``connection:configuration`` contiene un hasmap de la configuraciones de postgresql ( ver `documentación de postgresql <http://www.postgresql.org/docs/9.1/static/runtime-config-client.html>`_). La configuraciones por defecto son las siguientes:
 
 - ``bytea_output``                (string) default: ``hex``
 - ``intervalstyle``               (string) default: ``ISO_8601``
 - ``datestyle``                   (string) default: ``ISO``
 - ``standard_conforming_strings`` (string) default: ``true``
 
-**dsn** is the only mandatory parameter, it is used to connect to the Postgresql database. The syntax is the following::
-
+**dsn** es el unico parametro obligatorios, es es utilizado para conectar a la base de datos de Postgresql. La sintaxis es la siguiente::
     pgsql://user:password@host:port/db_name
 
-Examples::
+Ejemplos::
 
     pgsql://db_user/db_name
     pgsql://db_user:p4sS@192.168.1.101/db_name
@@ -234,49 +226,50 @@ Examples::
     pgsql://db_user@!/var/run/postgres!:5433/db_name
 
 
-:Note:
-    The Pgsql library is sensible to environment variables ``PGHOST`` ``PGPORT`` (see `the documentation <http://www.postgresql.org/docs/9.1/static/libpq-envars.html>`_). When using PHP from the command line (or the built-in web server), theses variables will have an impact if they are not overridden by some of the DSN’s parameters.
+:Nota:
+    La libreria de Pgsql es sensible a las variables de entorno ``PGHOST`` ``PGPORT``(ver `la documentación  <http://www.postgresql.org/docs/9.1/static/libpq-envars.html>`_).Cuando se esta usando PHP desde la linea de comando (o el built-in en el servidor web), estas variables tendran un impacto si no son anuladas por algunos de los parametros DSN.
+:Nota:
+    La parte del host necesita ser una ruta en el archivo local de sistema rodeado por el caracter ``!`. Cuando este sea el caso, el socket de Unix presente en el directorio dado es usado para conectar a la base de datos.
 
-:Note:
-    The host part may be a path on the local file system surrounded by the ``!`` character. When this is the case, the Unix socket present in the given directory is used to connect to the database.
-
-Session customization
+Personalización de sesión
 ~~~~~~~~~~~~~~~~~~~~~
 
-The ``SessionBuilder`` class is made to be extended. Foundation package incidentally proposes two *session builders*:
-
+La clase de ``constructor de sesión`` es hecha para ser extendida. EL paquete de Foundation incidentalmente propone dos *constructores de sesiones*:
 - ``PommProject\Foundation\Session\SessionBuilder`` blank session builder.
 - ``PommProject\Foundation\SessionBuilder`` builder with Foundation *clients* and *poolers* loaded and configured.
 
-It is encouraged to create a project-dedicated *session builder* that extends one of these classes. Several methods are available to change a *session builder* behavior:
+Esto es alentado para crear un proyecto-dedicado *constructor de sesión* que extiende una de estas clases. Varios metodos estan disponibles para cambiar el comportamiento de *constructor de sesión* 
 
 :``getDefaultConfiguration``:
-    Overrides default configuration. The core default configuration is the `connection:configuration` parameter. Be aware it will break the default converter system if discarded.
+    Soobrescribe por defecto la configuración. La configuración del nucleo por defecto es el parametro `connection:configuration`. Ten cuidado esto afectara el convertidor del sistema por defecto si es descartado.
 
 :``preConfigure()``:
-    Change the configuration just before a session is instantiated.
+    Cambiar la configuración solo antes de que una sesión sea instanciada.
 
 :``postConfigure($session)``:
-    Place where default *session poolers* and *clients* are registered into a brand new *session*.
+    Lugar donde *session poolers* y *clientes* son registrados en una nueva marca de la nueva *sesión*.
 
 :``createSession()``:
-    If a custom session class is to be instantiated.
+    Si una sesión de una clase personalizada es para ser instanciada.
 
 :``createClientHolder()``:
-    If a custom *session holder* is to be used from within the *session*.
+    Si una *session holder* personalizado es para ser usada dentro de la *sesión*.
+
 
 :``initializeConverterHolder()``:
-    Customize the *converter holder*. Remember all *sessions* created by the builder will have this converter holder whatever their DSN.
+    Personalice el soporte del convertidor. Recuerde todas las sesiones creadas por el constructor tendrán este soporte convertidorsea cual sea su DSN
+
 
 :``createConnection()``:
-    How to create a ``Connection`` instance based on the configuration.
+    Como crear una instancia de conexión basada en la configuración.
 
 
 
-Converter holder
+
+Soporte del convertidor
 ~~~~~~~~~~~~~~~~
 
-The *converter holder* is a special configuration setting. It holds all the converters and is cloned when passed as parameter to the `converter pooler`_. A pre-configured customized *converter holder* can be passed as parameter to the *session builder*’s constructor:
+El *soporte del convertidor* es un ajuste de configuración especial. Este soporte contiene todos los convertidores y se clona cuando se transfiere como parámetro al `convertidor pooler`_. Una preconfiguración personalizada del *soporte del convertidor* se puede transferir como parámetro al *contructor de sesión*:
 
 .. code:: php
 
@@ -287,16 +280,19 @@ The *converter holder* is a special configuration setting. It holds all the conv
         new MyConverterHolder()
         );
 
-The ``initializeConverterHolder()`` method is used internally to register default PostgreSQL types converters, use it to add your own default converters. The ``ConverterHolder`` instance is passed as reference. Remember, this converter holder will be used for **all** sessions created by the builder whatever their DSN. If a database specific converter is to be registered, the best place for it might be the ``postConfigure`` method, dealing directly with the `converter pooler`_.
+El método ``initializeConverterHolder()`` se usa internamente para registrar conversores predeterminados de tipo PostgreSQL, utilízalo para agregar tus propios conversores predeterminados. La instancia de ``ConverterHolder`` se transfiere como referencia. Recuerde, este soporte del convertidor se utilizará para *todas* las sesiones creadas por el constructor sea cual sea su DSN. Si se va a registrar un convertidor específico de la base de datos, el mejor lugar para ello podría ser el método ``postConfigure``, que trata directamente con `convertidor pooler`_.
 
-Session
+Sesión
 -------
 
-*Session* is the keystone of the Foundation package. It provides a *connection* API to *clients*. To be able to do this, *clients* must register to the *session* using the ``registerClient(ClientInterface)`` method. The *session* adds the *client* in the *client pool*. In exchange, it injects itself in the *client* using the ``initialize(Session)`` method (see `Client`_). Starting from this, the *client* can use the *connection* and other *clients*.
+La sesión es pieza clave del paquete de Foundation. Proporciona una API de *conexión* a los *clientes*. Para poder hacer esto, los *clientes* deben registrarse a la *sesión* usando el método ``registerClient(ClientInterface)``.A cambio, se inyecta en el *cliente* utilizando el método de ``initialize(Session)`` (see `Client`_). A partir de esto, el *cliente* puede usar la *conexión* y otros *clientes*.
 
-*Clients* are accessed using the ``getClient($type, $identifier)`` method. If no clients match the corresponding type and identifier, ``null`` is returned. This can be a problem because the Client must then be instantiated and registered to the Session. This is the role of the *client poolers* (aka *poolers*). *Poolers* are, in a way, *clients* manager for a given type. Not all types need a *pooler*, for example, the ``fixture`` clients type manage database test structures and data. They are here to create tables and types needed by tests on startup and to drop them on shutdown. Alternatively, the `prepared query pooler`_ takes the SQL query as client identifier. If the given query has already been performed, it is re used. Otherwise, a new statement is prepared and then executed. When the *connection* goes down, all statements are deallocated.
 
-Some *clients* may use *clients* from different types using their respective *poolers*. For example, the ``PreparedQueryManager`` *client* uses the `query manager pooler`_ and then the `converter pooler`_.
+Se accede a los *clientes* utilizando el método ``getClient($type, $identifier)``. Si ningún cliente coincide con el tipo e identificador correspondiente, se devuelve como``null`. Esto puede ser un problema porque el Cliente debe ser instanciado y registrado en la Sesión. Este es el papel de los *clientes poolers* (aka poolers). *Poolers* son, en cierto modo, administradores de *clientes* para un tipo determinado. No todos los tipos necesitan un *pooler*, por ejemplo, los clientes de tipo ``fijo` gestionan las estructuras y los datos de prueba de la base de datos. Están aquí para crear tablas y tipos necesarios para las pruebas en el inicio y para soltarlos al apagar.Alternativamente, La consulta `prepared query pooler`_  toma la consulta SQL como identificador del cliente. Si la consulta dada ya se ha realizado, se vuelve a utilizar. De lo contrario, una nueva preparación es declarada y luego ejecutada.Cuando la *conexión* se cae, todas las declaraciones son desasignadas.
+
+
+
+Algunos *clientes* pueden usar *clientes* de diferentes tipos utilizando sus respectivos *poolers. Por ejemplo, el cliente ``PreparedQueryManager`` usa el administrador de consultas pooler y luego el `convertidor pooler`_.
 
 There are several ways to access *clients* and *poolers* using the *session*:
 

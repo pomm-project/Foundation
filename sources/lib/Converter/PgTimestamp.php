@@ -78,7 +78,7 @@ class PgTimestamp implements ConverterInterface
      */
     protected function checkData($data)
     {
-        if (!$data instanceof \DateTime) {
+        if (!$data instanceof \DateTimeInterface) {
             try {
                 $data = new \DateTime($data);
             } catch (\Exception $e) {

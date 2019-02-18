@@ -28,6 +28,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
 {
     private $position;
     protected $result;
+    private $rows_count;
 
     /**
      * __construct
@@ -101,7 +102,11 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      */
     public function count()
     {
-        return $this->result->countRows();
+        if ($this->rows_count == null) {
+            $this->rows_count = $this->result->countRows();
+        }
+
+        return $this->rows_count;
     }
 
     /**
@@ -121,7 +126,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      */
     public function current()
     {
-        return !$this->isEmpty()
+        return (($this->rows_count != null && $this->rows_count > 0 ) || !$this->isEmpty())
             ? $this->get($this->position)
             : null
             ;
@@ -198,7 +203,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      */
     public function isEmpty()
     {
-        return $this->result->countRows() === 0;
+        return (($this->rows_count != null && $this->rows_count === 0 ) || $this->count() === 0);
     }
 
     /**

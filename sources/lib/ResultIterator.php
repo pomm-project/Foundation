@@ -28,6 +28,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
 {
     private $position;
     protected $result;
+    private $rows_count;
 
     /**
      * __construct
@@ -102,7 +103,11 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      */
     public function count()
     {
-        return $this->result->countRows();
+        if ($this->rows_count == null) {
+            $this->rows_count = $this->result->countRows();
+        }
+
+        return $this->rows_count;
     }
 
     /**
@@ -122,7 +127,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      */
     public function current()
     {
-        return !$this->isEmpty()
+        return (($this->rows_count != null && $this->rows_count > 0 ) || !$this->isEmpty())
             ? $this->get($this->position)
             : null
             ;
@@ -199,7 +204,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      */
     public function isEmpty()
     {
-        return $this->result->countRows() === 0;
+        return (($this->rows_count != null && $this->rows_count === 0 ) || $this->count() === 0);
     }
 
     /**

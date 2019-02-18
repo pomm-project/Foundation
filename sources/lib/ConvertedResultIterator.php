@@ -66,7 +66,17 @@ class ConvertedResultIterator extends ResultIterator
     protected function initTypes()
     {
         foreach ($this->result->getFieldNames() as $index => $name) {
-            $this->types[$index] = $this->result->getFieldType($name);
+            $type = $this->result->getFieldType($name);
+
+            if ($type === null) {
+                $type = 'text';
+            }
+
+            $this->types[$name] = $type;
+            $this->converters[$name] = $this
+                ->session
+                ->getClientUsingPooler('converter', $type)
+            ;
         }
 
         return $this;
@@ -105,22 +115,9 @@ class ConvertedResultIterator extends ResultIterator
      */
     protected function convertField($name, $value)
     {
-        $type = $this->result->getFieldType($name);
-
-        if ($type === null) {
-            $type = 'text';
-        }
-
-        if (!isset($this->converters[$type])) {
-            $this->converters[$type] = $this
-            ->session
-            ->getClientUsingPooler('converter', $type)
-            ;
-        }
-
         return $this
-            ->converters[$type]
-            ->fromPg($value, $type)
+            ->converters[$name]
+            ->fromPg($value, $this->types[$name])
             ;
     }
 

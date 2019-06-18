@@ -88,16 +88,23 @@ class SessionBuilder extends VanillaSessionBuilder
                 false
             )
             ->registerConverter(
-                'Number',
-                new Converter\PgNumber(),
+                'Integer',
+                new Converter\PgInteger(),
                 [
                     'int2', 'pg_catalog.int2',
                     'int4', 'pg_catalog.int4', 'int', 'integer',
                     'int8', 'pg_catalog.int8',
+                    'oid', 'pg_catalog.oid',
+                ],
+                false
+            )
+            ->registerConverter(
+                'Float',
+                new Converter\PgFloat(),
+                [
                     'numeric', 'pg_catalog.numeric',
                     'float4', 'pg_catalog.float4', 'float',
                     'float8', 'pg_catalog.float8',
-                    'oid', 'pg_catalog.oid',
                 ],
                 false
             )

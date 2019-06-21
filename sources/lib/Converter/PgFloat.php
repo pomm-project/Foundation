@@ -49,7 +49,7 @@ class PgFloat implements ConverterInterface
     {
         return
             $data !== null
-            ? sprintf("%s '%f'", $type, $data)
+            ? sprintf("%s '%s'", $type, $data)
             : sprintf("NULL::%s", $type)
             ;
     }
@@ -63,7 +63,7 @@ class PgFloat implements ConverterInterface
     {
         return
             $data !== null
-            ? sprintf('%f', $data)
+            ? sprintf('%s', $data)
             : null
             ;
     }

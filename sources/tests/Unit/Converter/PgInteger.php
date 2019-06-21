@@ -23,7 +23,7 @@ class PgInteger extends BaseConverter
             ->isEqualTo(0)
             ->integer($this->newTestedInstance()->fromPg('2015', 'int4', $session))
             ->isEqualTo(2015)
-            ->float($this->newTestedInstance()->fromPg('3.141596', 'int4', $session))
+            ->integer($this->newTestedInstance()->fromPg('3.141596', 'int4', $session))
             ->isEqualTo(3)
             ;
     }

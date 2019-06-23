@@ -12,7 +12,7 @@ namespace PommProject\Foundation\Converter;
 use PommProject\Foundation\Session\Session;
 
 /**
- * PgNumber
+ * PgInteger
  *
  * Converter for numbers.
  *
@@ -22,7 +22,7 @@ use PommProject\Foundation\Session\Session;
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  * @see       ConverterInterface
  */
-class PgNumber implements ConverterInterface
+class PgInteger implements ConverterInterface
 {
     /**
      * fromPg
@@ -37,7 +37,7 @@ class PgNumber implements ConverterInterface
             return null;
         }
 
-        return $data + 0;
+        return (int)$data;
     }
 
     /**
@@ -49,7 +49,7 @@ class PgNumber implements ConverterInterface
     {
         return
             $data !== null
-            ? sprintf("%s '%s'", $type, $data + 0)
+            ? sprintf("%s '%u'", $type, $data)
             : sprintf("NULL::%s", $type)
             ;
     }
@@ -63,7 +63,7 @@ class PgNumber implements ConverterInterface
     {
         return
             $data !== null
-            ? sprintf("%s", $data + 0)
+            ? sprintf('%u', $data)
             : null
             ;
     }

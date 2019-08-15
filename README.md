@@ -21,9 +21,11 @@ Foundation provides out of the box:
 
 ## Requirements
 
- * PHP 5.5
-    * mod-pgsql (not PDO)
- * Postgresql 9.2 (should be working with 9.1 but it is not tested anymore).
+This branch is tested against the following configurations:
+ * PHP 5.6, 7.0, 7.1, 7.2, 7.3 and uses mod-pgsql only (not PDO)
+ * Postgresql 9.4
+
+Pomm might work with older versions of PHP or Postgres but this is not tested and can be broken any time.
 
 ## Installation
 

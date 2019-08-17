@@ -134,7 +134,7 @@ select
         when name.nspname = 'pg_catalog' then typ.typname
         else format('%s.%s', name.nspname, typ.typname)
     end as "type",
-    def.adsrc        as "default",
+    pg_catalog.pg_get_expr(def.adbin, def.adrelid) as "default",
     att.attnotnull   as "is_notnull",
     dsc.description  as "comment",
     att.attnum       as "position",

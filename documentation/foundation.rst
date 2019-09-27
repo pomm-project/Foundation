@@ -214,6 +214,7 @@ The ``dsn`` is the only mandatory parameter expected by the builder but more par
 - ``connection:configuration`` (array)
 - ``dsn`` (string) mandatory
 - ``class:session`` (string) default:  ``\PommProject\Foundation\Session\Session``
+- ``connection:persist`` (bool)
 
 The ``connection:configuration`` parameter contains a hashmap of postgresql settings (see `postgresql documentation <http://www.postgresql.org/docs/9.1/static/runtime-config-client.html>`_). The default settings are the following:
 
@@ -221,6 +222,8 @@ The ``connection:configuration`` parameter contains a hashmap of postgresql sett
 - ``intervalstyle``               (string) default: ``ISO_8601``
 - ``datestyle``                   (string) default: ``ISO``
 - ``standard_conforming_strings`` (string) default: ``true``
+
+The ``connection:persist`` parameter allows persistent connections to the database (see `pg_connect() documentation <https://www.php.net/manual/en/function.pg-pconnect.php>`_). The default settings is to not use persistent connections.  Before enabling this setting, please be sure that you want this option turned on and know the limitations it brings.
 
 **dsn** is the only mandatory parameter, it is used to connect to the Postgresql database. The syntax is the following::
 

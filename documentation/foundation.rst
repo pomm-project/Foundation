@@ -223,7 +223,7 @@ The ``connection:configuration`` parameter contains a hashmap of postgresql sett
 - ``datestyle``                   (string) default: ``ISO``
 - ``standard_conforming_strings`` (string) default: ``true``
 
-The ``connection:persist`` parameter allows persistent connections to the database (see `pg_connect() documentation <https://www.php.net/manual/en/function.pg-pconnect.php>`_). The default settings is to not use persistent connections.  Before enabling this setting, please be sure that you want this option turned on and know the limitations it brings.
+The ``connection:persist`` parameter allows persistent connections to the database (see `pg_connect() documentation <https://www.php.net/manual/en/function.pg-pconnect.php>`_). The default setting is to not use persistent connections.  Before enabling this setting, please be sure that you want this option turned on and know the caveats it brings.
 
 **dsn** is the only mandatory parameter, it is used to connect to the Postgresql database. The syntax is the following::
 

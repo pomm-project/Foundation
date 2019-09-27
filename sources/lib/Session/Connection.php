@@ -46,10 +46,11 @@ class Connection
      * Constructor. Test if the given DSN is valid.
      *
      * @param  string $dsn
+     * @param  bool $persist
      * @param  array $configuration
      * @throws ConnectionException if pgsql extension is missing
      */
-    public function __construct($dsn, array $configuration = [])
+    public function __construct($dsn, bool $persist = false, array $configuration = [])
     {
         if (!function_exists('pg_connection_status')) {
             $message = <<<ERROR
@@ -60,7 +61,7 @@ ERROR;
             throw new ConnectionException($message);
         }
 
-        $this->configurator = new ConnectionConfigurator($dsn);
+        $this->configurator = new ConnectionConfigurator($dsn, $persist);
         $this->configurator->addConfiguration($configuration);
     }
 
@@ -208,9 +209,9 @@ ERROR;
         $persist = $this->configurator->getPersist();
 
         if ($persist) {
-            $handler = pg_connect($string, \PGSQL_CONNECT_FORCE_NEW);
-        } else {
             $handler = pg_pconnect($string);
+        } else {
+            $handler = pg_connect($string, \PGSQL_CONNECT_FORCE_NEW);
         }
 
         if ($handler === false) {

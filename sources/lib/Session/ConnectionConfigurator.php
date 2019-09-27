@@ -35,12 +35,13 @@ class ConnectionConfigurator
      *
      * @param  array $dsn
      */
-    public function __construct($dsn)
+    public function __construct($dsn, bool $persist = false)
     {
         $this->configuration = new ParameterHolder(
             [
                 'dsn' => $dsn,
                 'configuration' => $this->getDefaultConfiguration(),
+                'persist' => $persist,
             ]
         );
         $this->parseDsn();
@@ -197,6 +198,18 @@ class ConnectionConfigurator
         }
 
         return join(' ', $connect_parameters);
+    }
+
+    /**
+     * getPersist
+     *
+     * Return whether or not to persist the connection to the DB.
+     *
+     * @return bool
+     */
+    public function getPersist(): bool
+    {
+        return $this->configuration['persist'];
     }
 
     /**

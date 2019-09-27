@@ -205,7 +205,13 @@ ERROR;
     private function launch()
     {
         $string = $this->configurator->getConnectionString();
-        $handler = pg_connect($string, \PGSQL_CONNECT_FORCE_NEW);
+        $persist = $this->configurator->getPersist();
+
+        if ($persist) {
+            $handler = pg_connect($string, \PGSQL_CONNECT_FORCE_NEW);
+        } else {
+            $handler = pg_pconnect($string);
+        }
 
         if ($handler === false) {
             throw new ConnectionException(

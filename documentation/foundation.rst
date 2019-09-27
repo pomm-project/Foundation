@@ -214,7 +214,7 @@ The ``dsn`` is the only mandatory parameter expected by the builder but more par
 - ``connection:configuration`` (array)
 - ``dsn`` (string) mandatory
 - ``class:session`` (string) default:  ``\PommProject\Foundation\Session\Session``
-- ``connection:persist`` (bool)
+- ``connection:persist`` (bool) default: ``false``
 
 The ``connection:configuration`` parameter contains a hashmap of postgresql settings (see `postgresql documentation <http://www.postgresql.org/docs/9.1/static/runtime-config-client.html>`_). The default settings are the following:
 

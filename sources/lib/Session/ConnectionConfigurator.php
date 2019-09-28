@@ -207,7 +207,7 @@ class ConnectionConfigurator
      *
      * @return bool
      */
-    public function getPersist(): bool
+    public function getPersist()
     {
         return $this->configuration['persist'];
     }

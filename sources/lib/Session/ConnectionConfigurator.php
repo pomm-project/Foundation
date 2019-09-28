@@ -35,7 +35,7 @@ class ConnectionConfigurator
      *
      * @param  array $dsn
      */
-    public function __construct($dsn, bool $persist = false)
+    public function __construct($dsn, $persist = false)
     {
         $this->configuration = new ParameterHolder(
             [

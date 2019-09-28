@@ -50,7 +50,7 @@ class Connection
      * @param  array $configuration
      * @throws ConnectionException if pgsql extension is missing
      */
-    public function __construct($dsn, bool $persist = false, array $configuration = [])
+    public function __construct($dsn, $persist = false, array $configuration = [])
     {
         if (!function_exists('pg_connection_status')) {
             $message = <<<ERROR

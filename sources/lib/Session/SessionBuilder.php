@@ -170,7 +170,7 @@ class SessionBuilder
      * @param  string|array $connection_configuration
      * @return Connection
      */
-    protected function createConnection($dsn, bool $persist, $connection_configuration)
+    protected function createConnection($dsn, $persist, $connection_configuration)
     {
         return new Connection($dsn, $persist, $connection_configuration);
     }

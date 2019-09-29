@@ -107,8 +107,13 @@ class SessionBuilder
             ->mustHave('connection:configuration')
             ->getParameter('connection:configuration')
             ;
+        $persist =
+            $this->configuration
+            ->mustHave('connection:persist')
+            ->getParameter('connection:persist')
+            ;
         $session = $this->createSession(
-            $this->createConnection($dsn, $connection_configuration),
+            $this->createConnection($dsn, $persist, $connection_configuration),
             $this->createClientHolder(),
             $stamp
         );
@@ -137,7 +142,8 @@ class SessionBuilder
                     'datestyle'     => 'ISO',
                     'standard_conforming_strings' => 'true',
                     'timezone'      => date_default_timezone_get(),
-                ]
+                ],
+                'connection:persist' => false,
             ];
     }
 
@@ -160,12 +166,13 @@ class SessionBuilder
      * Connection instantiation.
      *
      * @param  string   $dsn
+     * @param  bool     $persist
      * @param  string|array $connection_configuration
      * @return Connection
      */
-    protected function createConnection($dsn, $connection_configuration)
+    protected function createConnection($dsn, $persist, $connection_configuration)
     {
-        return new Connection($dsn, $connection_configuration);
+        return new Connection($dsn, $persist, $connection_configuration);
     }
 
     /**

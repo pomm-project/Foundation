@@ -1,3 +1,7 @@
+== VERSION 2.0.4
+
+ * allow PG 12 compatibility
+
 == VERSION 2.0.3
 
  * enhance result iterator performances

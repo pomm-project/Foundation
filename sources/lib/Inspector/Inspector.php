@@ -215,7 +215,7 @@ SQL;
 
         $pk = $this->executeSql($sql, $condition)->current();
 
-        return $pk['fields'][0] === null ? [] : array_reverse($pk['fields']);
+        return ($pk['fields'] === null || $pk['fields'][0] === null) ? [] : array_reverse($pk['fields']);
     }
 
     /**

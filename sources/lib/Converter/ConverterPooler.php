@@ -53,13 +53,18 @@ class ConverterPooler extends ClientPooler
      * getClient
      *
      * @see ClientPoolerInterface
+     * @throws ConverterException
      */
     public function getClient($identifier)
     {
-        if ($identifier !== PgArray::getSubType($identifier)) {
-            return parent::getClient('array');
-        } else {
+        try {
             return parent::getClient($identifier);
+        } catch (ConverterException $e) {
+            if ($identifier !== PgArray::getSubType($identifier)) {
+                return parent::getClient('array');
+            } else {
+                throw $e;
+            }
         }
     }
 

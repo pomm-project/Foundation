@@ -14,7 +14,7 @@ namespace PommProject\Foundation\Exception;
  *
  * Errors from the rdbms with the result resource.
  *
- * @link      http://www.postgresql.org/docs/9.0/static/errcodes-appendix.html
+ * @link      https://www.postgresql.org/docs/current/errcodes-appendix.html
  * @package   Foundation
  * @uses      FoundationException
  * @copyright 2014 - 2017 Grégoire HUBERT
@@ -91,15 +91,19 @@ class SqlException extends FoundationException
     const NONSTANDARD_USE_OF_ESCAPE_CHARACTER = '22P06';
     const INVALID_INDICATOR_PARAMETER_VALUE = '22010';
     const INVALID_PARAMETER_VALUE = '22023';
+    const INVALID_PRECEDING_OR_FOLLOWING_SIZE = '22013';
     const INVALID_REGULAR_EXPRESSION = '2201B';
     const INVALID_ROW_COUNT_IN_LIMIT_CLAUSE = '2201W';
     const INVALID_ROW_COUNT_IN_RESULT_OFFSET_CLAUSE = '2201X';
+    const INVALID_TABLESAMPLE_ARGUMENT = '2202H';
+    const INVALID_TABLESAMPLE_REPEAT = '2202G';
     const INVALID_TIME_ZONE_DISPLACEMENT_VALUE = '22009';
     const INVALID_USE_OF_ESCAPE_CHARACTER = '2200C';
     const MOST_SPECIFIC_TYPE_MISMATCH = '2200G';
     const NULL_VALUE_NOT_ALLOWED = '22004';
     const NULL_VALUE_NO_INDICATOR_PARAMETER = '22002';
     const NUMERIC_VALUE_OUT_OF_RANGE = '22003';
+    const SEQUENCE_GENERATOR_LIMIT_EXCEEDED = '2200H';
     const STRING_DATA_LENGTH_MISMATCH = '22026';
     #const STRING_DATA_RIGHT_TRUNCATION = '22001';
     const SUBSTRING_ERROR = '22011';
@@ -116,6 +120,22 @@ class SqlException extends FoundationException
     const INVALID_XML_CONTENT = '2200N';
     const INVALID_XML_COMMENT = '2200S';
     const INVALID_XML_PROCESSING_INSTRUCTION = '2200T';
+    const DUPLICATE_JSON_OBJECT_KEY_VALUE = '22030';
+    const INVALID_ARGUMENT_FOR_SQL_JSON_DATETIME_FUNCTION = '22031';
+    const INVALID_JSON_TEXT = '22032';
+    const INVALID_SQL_JSON_SUBSCRIPT = '22033';
+    const MORE_THAN_ONE_SQL_JSON_ITEM = '22034';
+    const NO_SQL_JSON_ITEM = '22035';
+    const NON_NUMERIC_SQL_JSON_ITEM = '22036';
+    const NON_UNIQUE_KEYS_IN_A_JSON_OBJECT = '22037';
+    const SINGLETON_SQL_JSON_ITEM_REQUIRED = '22038';
+    const SQL_JSON_ARRAY_NOT_FOUND = '22039';
+    const SQL_JSON_MEMBER_NOT_FOUND = '2203A';
+    const SQL_JSON_NUMBER_NOT_FOUND = '2203B';
+    const SQL_JSON_OBJECT_NOT_FOUND = '2203C';
+    const TOO_MANY_JSON_ARRAY_ELEMENTS = '2203D';
+    const TOO_MANY_JSON_OBJECT_MEMBERS = '2203E';
+    const SQL_JSON_SCALAR_REQUIRED = '2203F';
     /* 23 - Integrity Constraint Violation */
     const INTEGRITY_CONSTRAINT_VIOLATION = '23000';
     const RESTRICT_VIOLATION = '23001';
@@ -138,6 +158,7 @@ class SqlException extends FoundationException
     const SCHEMA_AND_DATA_STATEMENT_MIXING_NOT_SUPPORTED = '25007';
     const NO_ACTIVE_SQL_TRANSACTION = '25P01';
     const IN_FAILED_SQL_TRANSACTION = '25P02';
+    const IDLE_IN_TRANSACTION_SESSION_TIMEOUT = '25P03';
     /* 26 - Invalid SQL Statement Name */
     const INVALID_SQL_STATEMENT_NAME = '26000';
     /* 27 - Triggered Data Change Violation */
@@ -170,6 +191,7 @@ class SqlException extends FoundationException
     #const NULL_VALUE_NOT_ALLOWED = '39004';
     const TRIGGER_PROTOCOL_VIOLATED = '39P01';
     const SRF_PROTOCOL_VIOLATED = '39P02';
+    const EVENT_TRIGGER_PROTOCOL_VIOLATED = '39P03';
     /* 3B - Savepoint Exception */
     const SAVEPOINT_EXCEPTION = '3B000';
     const INVALID_SAVEPOINT_SPECIFICATION = '3B001';
@@ -200,6 +222,7 @@ class SqlException extends FoundationException
     const COLLATION_MISMATCH = '42P21';
     const INDETERMINATE_COLLATION = '42P22';
     const WRONG_OBJECT_TYPE = '42809';
+    const GENERATED_ALWAYS = '428C9';
     const UNDEFINED_COLUMN = '42703';
     const UNDEFINED_FUNCTION = '42883';
     const UNDEFINED_TABLE = '42P01';
@@ -245,6 +268,7 @@ class SqlException extends FoundationException
     const OBJECT_IN_USE = '55006';
     const CANT_CHANGE_RUNTIME_PARAM = '55P02';
     const LOCK_NOT_AVAILABLE = '55P03';
+    const UNSAFE_NEW_ENUM_VALUE_USAGE = '55P04';
     /* 57 - Operator Intervention */
     const OPERATOR_INTERVENTION = '57000';
     const QUERY_CANCELED = '57014';
@@ -293,6 +317,7 @@ class SqlException extends FoundationException
     const RAISE_EXCEPTION = 'P0001';
     const NO_DATA_FOUND = 'P0002';
     const TOO_MANY_ROWS = 'P0003';
+    const ASSERT_FAILURE = 'P0004';
     /* XX - Internal Error */
     const INTERNAL_ERROR = 'XX000';
     const DATA_CORRUPTED = 'XX001';

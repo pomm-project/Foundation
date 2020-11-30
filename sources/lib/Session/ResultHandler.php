@@ -55,9 +55,7 @@ class ResultHandler
      */
     public function __destruct()
     {
-        if ($this->handler !== null) {
             $this->free();
-        }
     }
 
     /**
@@ -70,8 +68,10 @@ class ResultHandler
      */
     public function free()
     {
-        @pg_free_result($this->handler);
-        $this->handler = null;
+        if ($this->handler !== null) {
+	    pg_free_result($this->handler);
+            $this->handler = null;
+        }
 
         return $this;
     }

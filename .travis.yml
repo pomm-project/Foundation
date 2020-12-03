@@ -13,6 +13,6 @@ before_script:
   - php vendor/atoum/atoum/bin/atoum --version
 install:
     - composer install --dev
-    - test "$TRAVIS_PHP_VERSION" == "5.6" -o "$TRAVIS_PHP_VERSION" == "7.0" && composer update --prefer-lowest || composer update
+    - composer update
 script: php vendor/atoum/atoum/bin/atoum --no-code-coverage -d sources/tests/Unit/
 

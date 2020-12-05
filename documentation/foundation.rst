@@ -389,9 +389,17 @@ Inspector pooler
 
 :Type:  inspector
 
-This *pooler* calls the ``PommProject\Foundation\Inspector\Inspector`` *client* by default. It is possible to specify another *client* class as identifier, the *pooler* will try to instantiate it.
-
 The inspector proposes methods to get information about database structure (schemas, tables, fields etc.).
+
+This *pooler* calls the ``PommProject\Foundation\Inspector\LegacyInspector`` *client* by default. It is possible to specify another *client* class as identifier, the *pooler* will try to instantiate it.
+
+Available *clients*:
+
+ * `LegacyInspector` is the Pomm 2.0 inspector with the same methods.
+ * `DatabaseInspector` can query the version the size and names of the databases.
+ * `SchemaInspector` list schemas in a given database.
+ * `RelationInsepctor` list relations with information like size, columns etc.
+ * `TypeInspector` list system types or user defined types.
 
 Listener pooler
 ~~~~~~~~~~~~~~~

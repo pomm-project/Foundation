@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/pomm-project/foundation/v/stable)](https://packagist.org/packages/pomm-project/foundation) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/pomm-project/Foundation/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pomm-project/Foundation/?branch=master) [![Build Status](https://travis-ci.org/pomm-project/Foundation.svg?branch=master)](https://travis-ci.org/pomm-project/Foundation) [![Monthly Downloads](https://poser.pugx.org/pomm-project/foundation/d/monthly.png)](https://packagist.org/packages/pomm-project/foundation) [![License](https://poser.pugx.org/pomm-project/foundation/license.svg)](https://packagist.org/packages/pomm-project/foundation)
 
-This is the **experimental branch** of the  foundation component of [Pomm Project](http://www.pomm-project.org).
+This is the futur stable branch of the  foundation component of [Pomm Project](http://www.pomm-project.org).
 
 ## What is Foundation ?
 

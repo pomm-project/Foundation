@@ -1,92 +1,35 @@
-== VERSION 2.0.0
+ * fix GC problem when freeing resources on PHP8
+ * fix warning when no PK
+ * Add a bunch of new error codes that got added to recent versions of PostgreSQL
+ * Enhenced typehinting
+ * Allow passing an option to persist connections.
+ * Postgres12 compat: remove dependency on pg_attrdef.adsrc
+ * Have separate converters to int and float.
+ * enhance result iterator performances
+ * Change \DateTime to \DateTimeInterface in PgTimestamp converter
+ * ResultHandler->getFieldNumber optimization
+ * add countAffectedRows
+ * fix range converters for tsrange and numrange
+ * add a function to inspect relation total size
+ * use default timezone settings instead of INI value
+ * add size functions to db inspector
+ * Fix a bug where a json boolean false was not converted from a valid json string
+ * Added geometry box type
+ * add citext type to string converter. Fix #84
+ * enhance type inspector to return enum values
+ * set the PG connection time at the same time PHP is
+ * add a result iterator interface
+ * add object identifier type support
+ * update inspector tests
+ * make inspector to fetch relation size
+ * Removed unnecessary if in PgJson converter
+ * fix error in PgJson exception if data not a string
+ * add type inspector client
+ * add relation inspector
+ * Removed unnecessary if in PgJson converter
+ * propose better InspectorPooler
+ * add schema inspector
+ * add database inspector
+ * deprecate legacy inspector client
 
- *  Update documentation
- *  Make ResultIterator seekable
- *  Correct regexp in tsRange
- *  Fix type converter issue with nulls
- *  Add travis tests for PHP 5.6
- *  Make isFirst and isLast return consistent result
- *  Fix wrong transaction isolation constant
-
-== VERSION 2.0.0-RC.3
-
- *  Fix a performance bug in ArrayTypeConverter
- *  Specify exception
- *  Fix default values
- *  Remove unused parameter
- *  Fix unused imports
- *  Fix #55 - Handling missing pgsql w/ appropriate error msg
- *  Make code pass through php-cs
- *  Remove a warning due to closing an unset result
- *  fixed a typo in queryParameters
- *  add query exception setter / getter
- *  remove try catch for method sendQueryWithParameters
- *  Add Pomm::shutdown
- *  Add Session::shutdown
- *  Add a CLOSED connection status.
- *  Reset connection handler when closing
- *  Add sql error code
- *  Factorize Where code
- *  Remove unused code (close #46)
- *  Fix #43 #44 - @return annotation to constructors "not recommended"
- *  Fix #42, PHPDoc param type fixed
- *  fix #41
- *  fixing params names or types
- *  massive s/@throw /@throws /g find & replace
- *  PHPDoc improved: fixing missing tags, params & var
- *  Fix a bug in the ParameterHolder
- *  Add Session proxy methods.
-
-== VERSION 2.0.0-RC.2
-
- *  Add Pomm::removeSession() method.
- *  Fix ResultHandler constructor argument validation.
- *  Add missing Where::createWhereNotIn() method.
- *  Add Pg minimum supported version to README.
- *  Set default session builder with addBuilder().
- *  Refactor Pomm service constructor code.
- *  Handle exception in ClientHolder::shutdown better.
- *  Allow empty password in DSN.
- *  Refactor Array like converters code.
- *  Really unset unused result handlers.
- *  Add default session.
-
-== VERSION 2.0.0-RC.1
-
- *  Added default session builder (close #25).
- *  Added PgComposite converter.
- *  Refactored Query Manager (close #17).
- *  Fixing tests for Pg 9.1.
- *  Added boolean type to bool converter.
- *  update exception in interval and hstore
- *  Fixed a bug in the query for retrieving the primary key column names.
- *  Handling parameters type quoting in queries (close #20).
- *  Added Pg version control for tests.
- *  Added schema support in type definition.
- *  PgArray now caches ConverterInterface.
- *  Fixed array conversion escaping.
- *  Parametrized work with arrays.
- *  Migrated PreparedQuery to new parameters system.
- *  ConverterInterface::toPgStandardFormat().
- *  Added toCsv to ConverterInterface.
- *  Added strict parameter to registerConverter.
- *  More informative error message (close #17).
- *  Session builder needs array in SessionAtoum classes.
- *  Bug, PreparedQuery not prepared.
- *  PgJson can cast StdObject instances.
- *  Updated ParameterHolder::hasParameter().
- *  Put SQL at the end of the error msg in SqlException.
-
-== VERSION 2.0.0-beta.2
-
- * Added inspector::getVersion.
- * Inspect materialized views
- * Refactord converters.
- * fixed toPg convertion for (int)0
- * Better converter type decoupling.
- * Expanding DateTime parameters (close #8).
- * Query logger sends session stamp.
- * ResultIterator implements JsonSerializable
- * SimpleQuery bug with uppercase fields.
-
-== VERSION 2.0.0-beta1.1
+== VERSION 2.0.1

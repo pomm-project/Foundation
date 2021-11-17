@@ -61,6 +61,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      * @param  int $index
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function seek($index)
     {
         return $this->get($index);
@@ -100,6 +101,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      * @see    \Countable
      * @return integer
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         if ($this->rows_count == null) {
@@ -114,6 +116,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      *
      * @see \Iterator
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->position = 0;
@@ -124,6 +127,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      *
      * @see \Iterator
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return (($this->rows_count != null && $this->rows_count > 0 ) || !$this->isEmpty())
@@ -137,6 +141,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      *
      * @see \Iterator
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->position;
@@ -147,6 +152,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      *
      * @see \Iterator
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->position;
@@ -158,6 +164,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      * @see \Iterator
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->has($this->position);
@@ -286,6 +293,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      *
      * @see \JsonSerializable
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->extract();

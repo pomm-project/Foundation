@@ -152,6 +152,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see ArrayAccess
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($name)
     {
         return $this->hasParameter($name);
@@ -162,6 +163,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see ArrayAccess
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->getParameter($name);
@@ -172,6 +174,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see ArrayAccess
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($name, $value)
     {
         $this->setParameter($name, $value);
@@ -182,6 +185,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see ArrayAccess
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($name)
     {
         $this->unsetParameter($name);
@@ -191,6 +195,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see \Countable
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->parameters);
@@ -201,6 +206,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see \IteratorAggregate
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->parameters);

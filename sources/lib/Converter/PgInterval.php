@@ -29,6 +29,9 @@ class PgInterval implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
+        if (null === $data) {
+            return null;
+        }
         if (trim($data) === '') {
             return null;
         }

@@ -31,6 +31,9 @@ class PgInteger implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
+        if (null === $data) {
+            return null;
+        }
         $data = trim($data);
 
         if ($data === '') {

@@ -32,11 +32,11 @@ class Connection extends Atoum
         $connection = $this->getConnection($this->getDsn());
         $this
             ->object($connection->executeAnonymousQuery('select true'))
-            ->isInstanceOf('\PommProject\Foundation\Session\ResultHandler')
+            ->isInstanceOf(\PommProject\Foundation\Session\ResultHandler::class)
             ->exception(function () use ($connection) {
                     $connection->executeAnonymousQuery('bad query');
                 })
-            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\SqlException::class)
             ->string($this->exception->getSQLErrorState())
             ->isIdenticalTo(SqlException::SYNTAX_ERROR)
             ->array($connection->executeAnonymousQuery('select true; select false; select null'))
@@ -44,7 +44,7 @@ class Connection extends Atoum
             ->exception(function () use ($connection) {
                     $connection->executeAnonymousQuery('select true; bad query');
                 })
-            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\SqlException::class)
             ;
     }
 
@@ -56,11 +56,11 @@ class Connection extends Atoum
         $connection = $this->getConnection($this->getDsn());
         $this
             ->object($connection->sendQueryWithParameters('select true where true = $1', $parameters))
-            ->isInstanceOf('\PommProject\Foundation\Session\ResultHandler')
+            ->isInstanceOf(\PommProject\Foundation\Session\ResultHandler::class)
             ->exception(function () use ($connection, $bad_query, $parameters) {
                 $connection->sendQueryWithParameters($bad_query, $parameters);
             })
-            ->isInstanceOf('\PommProject\Foundation\Exception\SqlException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\SqlException::class)
             ->string($this->exception->getSQLErrorState())
             ->isIdenticalTo(SqlException::UNDEFINED_COLUMN)
             ->and

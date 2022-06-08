@@ -65,7 +65,7 @@ class PgHstore extends BaseConverter
                 )
             ->isEqualTo('hstore($hs$"a" => "b", "b" => NULL, "a b c" => "d \'é\' f"$hs$)')
             ->exception(function () use ($session, $converter) { $converter->toPg('foo', 'hstore', $session); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\ConverterException::class)
             ->message->contains('Array converter data must be an array')
             ;
     }
@@ -87,7 +87,7 @@ class PgHstore extends BaseConverter
                 )
             ->isEqualTo('"a" => "b", "b" => NULL, "a \\\\b\\\\ c" => "d \'é\' f"')
             ->exception(function () use ($session, $converter) { $converter->toPgStandardFormat('foo', 'hstore', $session); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\ConverterException::class)
             ->message->contains('Array converter data must be an array')
 
         ;

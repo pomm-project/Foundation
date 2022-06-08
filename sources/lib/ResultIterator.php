@@ -26,9 +26,8 @@ use PommProject\Foundation\Session\ResultHandler;
  */
 class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \SeekableIterator
 {
-    private $position;
-    protected $result;
-    private $rows_count;
+    private int $position = 0;
+    private ?int $rows_count = null;
 
     /**
      * __construct
@@ -38,10 +37,8 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * @access public
      * @param  ResultHandler $result
      */
-    public function __construct(ResultHandler $result)
+    public function __construct(protected ResultHandler $result)
     {
-        $this->result   = $result;
-        $this->position = 0;
     }
 
     /**
@@ -58,13 +55,10 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * seek
      *
      * Alias for get(), required to be a Seekable iterator.
-     *
-     * @param  int $index
-     * @return array
      */
-    public function seek($index)
+    public function seek(int $offset): void
     {
-        return $this->get($index);
+        $this->get($offset); // throw exception if out of bounds
     }
 
     /**
@@ -75,9 +69,9 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * errors.
      *
      * @param  integer $index
-     * @return array
+     * @return mixed
      */
-    public function get($index)
+    public function get(int $index): mixed
     {
         return $this->result->fetchRow($index);
     }
@@ -87,21 +81,20 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      *
      * Return true if the given index exists false otherwise.
      *
-     * @param  integer $index
+     * @param integer $index
      * @return boolean
      */
-    public function has($index)
+    public function has(int $index): bool
     {
-        return (bool) ($index < $this->count());
+        return $index < $this->count();
     }
 
     /**
      * count
      *
      * @see    \Countable
-     * @return integer
      */
-    public function count()
+    public function count(): int
     {
         if ($this->rows_count == null) {
             $this->rows_count = $this->result->countRows();
@@ -115,7 +108,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      *
      * @see \Iterator
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
@@ -125,7 +118,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      *
      * @see \Iterator
      */
-    public function current()
+    public function current(): mixed
     {
         return (($this->rows_count != null && $this->rows_count > 0 ) || !$this->isEmpty())
             ? $this->get($this->position)
@@ -138,7 +131,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      *
      * @see \Iterator
      */
-    public function key()
+    public function key(): int
     {
         return $this->position;
     }
@@ -148,7 +141,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      *
      * @see \Iterator
      */
-    public function next()
+    public function next(): void
     {
         ++$this->position;
     }
@@ -159,7 +152,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * @see \Iterator
      * @return boolean
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->has($this->position);
     }
@@ -168,10 +161,8 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * isFirst
      * Is the iterator on the first element ?
      * Returns null if the iterator is empty.
-     *
-     * @return boolean|null
      */
-    public function isFirst()
+    public function isFirst(): ?bool
     {
         return !$this->isEmpty()
             ? $this->position === 0
@@ -184,10 +175,8 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      *
      * Is the iterator on the last element ?
      * Returns null if the iterator is empty.
-     *
-     * @return boolean|null
      */
-    public function isLast()
+    public function isLast(): ?bool
     {
         return !$this->isEmpty()
             ? $this->position === $this->count() - 1
@@ -199,22 +188,18 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * isEmpty
      *
      * Is the collection empty (no element) ?
-     *
-     * @return boolean
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
-        return (($this->rows_count != null && $this->rows_count === 0 ) || $this->count() === 0);
+        return $this->rows_count === 0 || $this->count() === 0;
     }
 
     /**
      * isEven
      *
      * Is the iterator on an even position ?
-     *
-     * @return boolean
      */
-    public function isEven()
+    public function isEven(): bool
     {
         return ($this->position % 2) === 0;
     }
@@ -223,10 +208,8 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * isOdd
      *
      * Is the iterator on an odd position ?
-     *
-     * @return boolean
      */
-    public function isOdd()
+    public function isOdd(): bool
     {
         return ($this->position % 2) === 1;
     }
@@ -237,10 +220,8 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * Return 'odd' or 'even' depending on the element index position.
      * Useful to style list elements when printing lists to do
      * <li class="line_<?php $list->getOddEven() ?>">.
-     *
-     * @return String
      */
-    public function getOddEven()
+    public function getOddEven(): string
     {
         return $this->position % 2 === 1 ? 'odd' : 'even';
     }
@@ -249,11 +230,8 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * slice
      *
      * Extract an array of values for one column.
-     *
-     * @param  string $field
-     * @return array  values
      */
-    public function slice($field)
+    public function slice(string $field): array
     {
         if ($this->isEmpty()) {
             return [];
@@ -270,9 +248,8 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      * THIS MAY USE A LOT OF MEMORY.
      *
      * @access public
-     * @return array
      */
-    public function extract()
+    public function extract(): array
     {
         $results = [];
 
@@ -288,7 +265,7 @@ class ResultIterator implements \Iterator, \Countable, \JsonSerializable, \Seeka
      *
      * @see \JsonSerializable
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->extract();
     }

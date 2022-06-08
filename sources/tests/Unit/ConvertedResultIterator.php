@@ -49,9 +49,9 @@ SQL;
 
         $this
             ->object($iterator)
-            ->isInstanceOf('\PommProject\Foundation\ConvertedResultIterator')
-            ->isInstanceOf('\Countable')
-            ->isInstanceOf('\Iterator')
+            ->isInstanceOf(\PommProject\Foundation\ConvertedResultIterator::class)
+            ->isInstanceOf(\Countable::class)
+            ->isInstanceOf(\Iterator::class)
             ;
     }
 

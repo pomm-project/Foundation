@@ -40,7 +40,7 @@ class SessionBuilder extends VanillaSessionBuilder
      *
      * @see SessionBuilder
      */
-    protected function postConfigure(Session $session)
+    protected function postConfigure(Session $session): SessionBuilder
     {
         $session
             ->registerClientPooler(new PreparedQueryPooler)
@@ -61,11 +61,13 @@ class SessionBuilder extends VanillaSessionBuilder
      * @return  FoundationSession
      * @see     VanillaSessionBuilder
      */
-    protected function createSession(Connection $connection, ClientHolder $client_holder, $stamp)
+    protected function createSession(Connection $connection, ClientHolder $client_holder, ?string $stamp): Session
     {
-        $this->configuration->setDefaultValue('class:session', '\PommProject\Foundation\Session');
+        $this->configuration->setDefaultValue('class:session', \PommProject\Foundation\Session::class);
 
-        return parent::createSession($connection, $client_holder, $stamp);
+        /** @var \PommProject\Foundation\Session $session */
+        $session = parent::createSession($connection, $client_holder, $stamp);
+        return $session;
     }
 
     /**
@@ -73,7 +75,7 @@ class SessionBuilder extends VanillaSessionBuilder
      *
      * @see SessionBuilder
      */
-    protected function initializeConverterHolder(ConverterHolder $converter_holder)
+    protected function initializeConverterHolder(ConverterHolder $converter_holder): SessionBuilder
     {
         $converter_holder
             ->registerConverter('Array', new Converter\PgArray(), ['array'], false)

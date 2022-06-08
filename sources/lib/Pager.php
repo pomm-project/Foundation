@@ -19,26 +19,17 @@ namespace PommProject\Foundation;
  */
 class Pager
 {
-    protected $iterator;
-    protected $count;
-    protected $max_per_page;
-    protected $page;
-
     /**
      * __construct
      *
      * @access public
      * @param ResultIterator $iterator
-     * @param int            $count        Total number of results.
-     * @param int            $max_per_page Results per page
-     * @param int            $page         Page index.
+     * @param int $count        Total number of results.
+     * @param int $max_per_page Results per page
+     * @param int $page         Page index.
      */
-    public function __construct(ResultIterator $iterator, $count, $max_per_page, $page)
+    public function __construct(protected ResultIterator $iterator, protected int $count, protected int $max_per_page, protected int $page)
     {
-        $this->iterator     = $iterator;
-        $this->count        = $count;
-        $this->max_per_page = $max_per_page;
-        $this->page         = $page;
     }
 
     /**
@@ -49,7 +40,7 @@ class Pager
      * @access public
      * @return ResultIterator
      */
-    public function getIterator()
+    public function getIterator(): ResultIterator
     {
         return $this->iterator;
     }
@@ -62,7 +53,7 @@ class Pager
      * @access public
      * @return int
      */
-    public function getResultCount()
+    public function getResultCount(): int
     {
         return $this->count;
     }
@@ -75,7 +66,7 @@ class Pager
      * @access public
      * @return int
      */
-    public function getResultMin()
+    public function getResultMin(): int
     {
         return min((1 + $this->max_per_page * ($this->page - 1)), $this->count);
     }
@@ -88,7 +79,7 @@ class Pager
      * @access public
      * @return int
      */
-    public function getResultMax()
+    public function getResultMax(): int
     {
         return max(($this->getResultMin() + $this->iterator->count() - 1), 0);
     }
@@ -101,7 +92,7 @@ class Pager
      * @access public
      * @return int
      */
-    public function getLastPage()
+    public function getLastPage(): int
     {
         return $this->count == 0 ? 1 : ceil($this->count / $this->max_per_page);
     }
@@ -112,7 +103,7 @@ class Pager
      * @access public
      * @return int
      */
-    public function getPage()
+    public function getPage(): int
     {
         return $this->page;
     }
@@ -125,9 +116,9 @@ class Pager
      * @access public
      * @return Boolean
      */
-    public function isNextPage()
+    public function isNextPage(): bool
     {
-        return (bool) ($this->getPage() < $this->getLastPage());
+        return $this->getPage() < $this->getLastPage();
     }
 
     /**
@@ -138,9 +129,9 @@ class Pager
      * @access public
      * @return Boolean
      */
-    public function isPreviousPage()
+    public function isPreviousPage(): bool
     {
-        return (bool) ($this->page > 1);
+        return $this->page > 1;
     }
 
     /**
@@ -151,7 +142,7 @@ class Pager
      * @access public
      * @return int
      */
-    public function getCount()
+    public function getCount(): int
     {
         return $this->count;
     }
@@ -164,7 +155,7 @@ class Pager
      * @access public
      * @return int
      */
-    public function getMaxPerPage()
+    public function getMaxPerPage(): int
     {
         return $this->max_per_page;
     }

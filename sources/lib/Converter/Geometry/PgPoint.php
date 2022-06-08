@@ -9,8 +9,10 @@
  */
 namespace PommProject\Foundation\Converter\Geometry;
 
+use PommProject\Foundation\Converter\Type\Point;
 use PommProject\Foundation\Converter\TypeConverter;
 use PommProject\Foundation\Converter\ConverterInterface;
+use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -31,17 +33,18 @@ class PgPoint extends TypeConverter
      *
      * @see TypeConverter
      */
-    public function getTypeClassName()
+    public function getTypeClassName(): string
     {
-        return '\PommProject\Foundation\Converter\Type\Point';
+        return Point::class;
     }
 
     /**
      * toPg
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         if ($data === null) {
             return sprintf("NULL::%s", $type);

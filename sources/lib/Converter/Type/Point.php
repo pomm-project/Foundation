@@ -19,10 +19,10 @@ namespace PommProject\Foundation\Converter\Type;
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  */
-class Point
+class Point implements \Stringable
 {
-    public $x;
-    public $y;
+    public float $x;
+    public float $y;
 
     /**
      * __construct
@@ -32,7 +32,7 @@ class Point
      * @access public
      * @param  string $description
      */
-    public function __construct($description)
+    public function __construct(string $description)
     {
         $description = trim($description, ' ()');
 
@@ -57,7 +57,7 @@ class Point
      * @access public
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf(
             "(%s,%s)",

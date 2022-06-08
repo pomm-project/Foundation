@@ -100,7 +100,7 @@ class Inspector extends FoundationSessionAtoum
     {
         $this
             ->object($this->getInspector()->getSchemas())
-            ->isInstanceOf('\PommProject\Foundation\ResultIterator')
+            ->isInstanceOf(\PommProject\Foundation\ResultIterator::class)
             ->array($this->getInspector()->getSchemas()->slice('name'))
             ->contains('inspector_test')
             ;
@@ -122,7 +122,7 @@ class Inspector extends FoundationSessionAtoum
         $fields_info = $this->getInspector()->getTableFieldInformation($this->getTableOid('with_complex_pk'));
         $this
             ->object($fields_info)
-            ->isInstanceOf('\PommProject\Foundation\ResultIterator')
+            ->isInstanceOf(\PommProject\Foundation\ResultIterator::class)
             ->array($fields_info->slice('name'))
             ->isIdenticalTo(['with_complex_pk_id', 'another_id', 'created_at'])
             ->array($fields_info->slice('type'))
@@ -185,7 +185,7 @@ class Inspector extends FoundationSessionAtoum
 
         $this
             ->object($tables_info)
-            ->isInstanceOf('\PommProject\Foundation\ResultIterator')
+            ->isInstanceOf(\PommProject\Foundation\ResultIterator::class)
             ->array($tables_info->slice('name'))
             ->isIdenticalTo(['no_pk', 'with_complex_pk', 'with_simple_pk'])
             ->boolean($this->getInspector()->getSchemaRelations(null)->isEmpty())

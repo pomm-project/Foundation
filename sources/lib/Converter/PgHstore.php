@@ -26,18 +26,20 @@ use PommProject\Foundation\Session\Session;
 class PgHstore extends ArrayTypeConverter
 {
     /**
+     * @throws ConverterException
      * @see \Pomm\Converter\ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): mixed
     {
         if ($data ===  null) {
             return null;
         }
 
+        /** @var mixed $hstore */
         $hstore = null;
-        $code = @eval(sprintf("\$hstore = [%s];", $data));
+        @eval(sprintf("\$hstore = [%s];", $data));
 
-        if ($code !== null || !is_array($hstore)) {
+        if (!is_array($hstore)) {
             throw new ConverterException(sprintf("Could not parse hstore string '%s' to array.", $data));
         }
 
@@ -45,9 +47,10 @@ class PgHstore extends ArrayTypeConverter
     }
 
     /**
+     * @throws ConverterException
      * @see \Pomm\Converter\ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         if ($data === null) {
             return sprintf("NULL::%s", $type);
@@ -59,7 +62,7 @@ class PgHstore extends ArrayTypeConverter
     /**
      * @see \Pomm\Converter\ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         if ($data === null) {
             return null;
@@ -77,7 +80,7 @@ class PgHstore extends ArrayTypeConverter
      * @param  array $data
      * @return array
      */
-    protected function buildArray(array $data)
+    protected function buildArray(array $data): array
     {
         $insert_values = [];
 
@@ -102,10 +105,10 @@ class PgHstore extends ArrayTypeConverter
      * Escape a string.
      *
      * @access protected
-     * @param  string $string
+     * @param string $string
      * @return string
      */
-    protected function escape($string)
+    protected function escape(string $string): string
     {
         if (preg_match('/["\s,]/', $string) === false) {
             return addslashes($string);

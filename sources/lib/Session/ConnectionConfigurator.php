@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Session;
 
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\ParameterHolder;
 use PommProject\Foundation\Exception\ConnectionException;
 
@@ -26,7 +27,7 @@ use PommProject\Foundation\Exception\ConnectionException;
  */
 class ConnectionConfigurator
 {
-    protected $configuration;
+    protected ParameterHolder $configuration;
 
     /**
      * __construct
@@ -34,9 +35,10 @@ class ConnectionConfigurator
      * Initialize configuration.
      *
      * @access public
-     * @param  array $dsn
+     * @param string $dsn
+     * @throws ConnectionException|FoundationException
      */
-    public function __construct($dsn)
+    public function __construct(string $dsn)
     {
         $this->configuration = new ParameterHolder(
             [
@@ -54,9 +56,9 @@ class ConnectionConfigurator
      *
      * @access public
      * @param  array      $configuration
-     * @return Connection $this
+     * @return ConnectionConfigurator $this
      */
-    public function addConfiguration(array $configuration)
+    public function addConfiguration(array $configuration): ConnectionConfigurator
     {
         $this ->configuration->setParameter(
             'configuration',
@@ -75,11 +77,11 @@ class ConnectionConfigurator
      * Set a new configuration setting.
      *
      * @access public
-     * @param  string $name
+     * @param string $name
      * @param  mixed $value
      * @return ConnectionConfigurator $this
      */
-    public function set($name, $value)
+    public function set(string $name, mixed $value): ConnectionConfigurator
     {
         $configuration = $this->configuration->getParameter('configuration');
         $configuration[$name] = $value;
@@ -100,21 +102,21 @@ class ConnectionConfigurator
      * Sets the different parameters from the DSN.
      *
      * @access private
-     * @return Connection $this
-     * @throws ConnectionException
+     * @return ConnectionConfigurator $this
+     * @throws ConnectionException|FoundationException
      */
-    private function parseDsn()
+    private function parseDsn(): ConnectionConfigurator
     {
         $dsn = $this->configuration->mustHave('dsn')->getParameter('dsn');
         if (!preg_match(
             '#([a-z]+)://([^:@]+)(?::([^@]*))?(?:@([\w\.-]+|!/.+[^/]!)(?::(\w+))?)?/(.+)#',
-            $dsn,
+            (string) $dsn,
             $matches
         )) {
             throw new ConnectionException(sprintf('Could not parse DSN "%s".', $dsn));
         }
 
-        if ($matches[1] == null || $matches[1] !== 'pgsql') {
+        if ($matches[1] !== 'pgsql') {
             throw new ConnectionException(
                 sprintf(
                     "bad protocol information '%s' in dsn '%s'. Pomm does only support 'pgsql' for now.",
@@ -138,7 +140,7 @@ class ConnectionConfigurator
         $user = $matches[2];
         $pass = $matches[3];
 
-        if (preg_match('/!(.*)!/', $matches[4], $host_matches)) {
+        if (preg_match('/!(.*)!/', (string) $matches[4], $host_matches)) {
             $host = $host_matches[1];
         } else {
             $host = $matches[4];
@@ -176,9 +178,10 @@ class ConnectionConfigurator
      * Return the connection string.
      *
      * @access public
+     * @throws ConnectionException|FoundationException
      * @return string
      */
-    public function getConnectionString()
+    public function getConnectionString(): string
     {
         $this->parseDsn();
         $connect_parameters = [
@@ -212,7 +215,7 @@ class ConnectionConfigurator
      * @access protected
      * @return array
      */
-    protected function getDefaultConfiguration()
+    protected function getDefaultConfiguration(): array
     {
         return [];
     }
@@ -226,7 +229,7 @@ class ConnectionConfigurator
      * @return array
      * @throws ConnectionException
      */
-    public function getConfiguration()
+    public function getConfiguration(): array
     {
         $configuration = $this->configuration->getParameter('configuration');
 

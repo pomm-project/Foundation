@@ -10,7 +10,9 @@
 namespace PommProject\Foundation\Session;
 
 use PommProject\Foundation\Exception\ConnectionException;
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Exception\SqlException;
+use PgSql\Connection as PgSqlConnection;
 
 /**
  * Connection
@@ -24,21 +26,21 @@ use PommProject\Foundation\Exception\SqlException;
  */
 class Connection
 {
-    const CONNECTION_STATUS_NONE    = 0;
-    const CONNECTION_STATUS_GOOD    = 1;
-    const CONNECTION_STATUS_BAD     = 2;
-    const CONNECTION_STATUS_CLOSED  = 3;
-    const ISOLATION_READ_COMMITTED  = "READ COMMITTED";  // default
-    const ISOLATION_REPEATABLE_READ = "REPEATABLE READ"; // from Pg 9.1
-    const ISOLATION_SERIALIZABLE    = "SERIALIZABLE";    // changes in 9.1
-    const CONSTRAINTS_DEFERRED      = "DEFERRED";
-    const CONSTRAINTS_IMMEDIATE     = "IMMEDIATE";       // default
-    const ACCESS_MODE_READ_ONLY     = "READ ONLY";
-    const ACCESS_MODE_READ_WRITE    = "READ WRITE";      // default
+    final const CONNECTION_STATUS_NONE    = 0;
+    final const CONNECTION_STATUS_GOOD    = 1;
+    final const CONNECTION_STATUS_BAD     = 2;
+    final const CONNECTION_STATUS_CLOSED  = 3;
+    final const ISOLATION_READ_COMMITTED  = "READ COMMITTED";  // default
+    final const ISOLATION_REPEATABLE_READ = "REPEATABLE READ"; // from Pg 9.1
+    final const ISOLATION_SERIALIZABLE    = "SERIALIZABLE";    // changes in 9.1
+    final const CONSTRAINTS_DEFERRED      = "DEFERRED";
+    final const CONSTRAINTS_IMMEDIATE     = "IMMEDIATE";       // default
+    final const ACCESS_MODE_READ_ONLY     = "READ ONLY";
+    final const ACCESS_MODE_READ_WRITE    = "READ WRITE";      // default
 
-    protected $handler;
-    protected $configurator;
-    private $is_closed = false;
+    protected ?PgSqlConnection $handler = null;
+    protected ConnectionConfigurator $configurator;
+    private bool $is_closed = false;
 
     /**
      * __construct
@@ -46,11 +48,12 @@ class Connection
      * Constructor. Test if the given DSN is valid.
      *
      * @access public
-     * @param  string $dsn
-     * @param  array $configuration
+     * @param string $dsn
+     * @param array $configuration
      * @throws ConnectionException if pgsql extension is missing
+     * @throws FoundationException
      */
-    public function __construct($dsn, array $configuration = [])
+    public function __construct(string $dsn, array $configuration = [])
     {
         if (!function_exists('pg_connection_status')) {
             throw new ConnectionException("`pgsql` PHP extension's functions are unavailable in your environment, please make sure PostgreSQL support is enabled in PHP.");
@@ -68,7 +71,7 @@ class Connection
      * @access public
      * @return Connection $this
      */
-    public function close()
+    public function close(): Connection
     {
         if ($this->hasHandler()) {
             pg_close($this->handler);
@@ -89,7 +92,7 @@ class Connection
      * @throws  ConnectionException if connection is already up.
      * @return Connection          $this
      */
-    public function addConfiguration(array $configuration)
+    public function addConfiguration(array $configuration): Connection
     {
         $this
             ->checkConnectionUp("Cannot update configuration once the connection is open.")
@@ -104,11 +107,12 @@ class Connection
      * Add or override a configuration definition.
      *
      * @access public
-     * @param  string     $name
-     * @param  string     $value
+     * @param string $name
+     * @param string $value
      * @return Connection
+     * @throws ConnectionException
      */
-    public function addConfigurationSetting($name, $value)
+    public function addConfigurationSetting(string $name, string $value): Connection
     {
         $this->checkConnectionUp("Cannot set configuration once a connection is made with the server.")
             ->configurator->set($name, $value);
@@ -122,10 +126,9 @@ class Connection
      * Return the connection handler. If no connection are open, it opens one.
      *
      * @access protected
-     * @throws  ConnectionException if connection is open in a bad state.
-     * @return resource
+     * @throws  ConnectionException|FoundationException if connection is open in a bad state.
      */
-    protected function getHandler()
+    protected function getHandler(): PgSqlConnection
     {
         switch ($this->getConnectionStatus()) {
             case static::CONNECTION_STATUS_NONE:
@@ -141,6 +144,10 @@ class Connection
                 throw new ConnectionException(
                     "Connection has been closed, no further queries can be sent."
                 );
+            default:
+                throw new ConnectionException(
+                    "Connection has unexpected status."
+                );
         }
     }
 
@@ -152,9 +159,9 @@ class Connection
      * @access protected
      * @return bool
      */
-    protected function hasHandler()
+    protected function hasHandler(): bool
     {
-        return (bool) ($this->handler !== null);
+        return $this->handler !== null;
     }
 
     /**
@@ -165,7 +172,7 @@ class Connection
      * @access public
      * @return int
      */
-    public function getConnectionStatus()
+    public function getConnectionStatus(): int
     {
         if (!$this->hasHandler()) {
             if ($this->is_closed) {
@@ -192,7 +199,7 @@ class Connection
      * @access public
      * @return int
      */
-    public function getTransactionStatus()
+    public function getTransactionStatus(): int
     {
         return pg_transaction_status($this->handler);
     }
@@ -203,10 +210,10 @@ class Connection
      * Open a connection on the database.
      *
      * @access private
-     * @throws  ConnectionException if connection fails.
+     * @throws  ConnectionException|FoundationException if connection fails.
      * return  Connection $this
      */
-    private function launch()
+    private function launch(): Connection
     {
         $string = $this->configurator->getConnectionString();
         $handler = pg_connect($string, \PGSQL_CONNECT_FORCE_NEW);
@@ -240,10 +247,18 @@ class Connection
      *
      * @access protected
      * @return Connection $this
+     * @throws ConnectionException|FoundationException
      */
-    protected function sendConfiguration()
+    protected function sendConfiguration(): Connection
     {
         $sql=[];
+
+        if( $this->handler === null)
+        {
+            throw new ConnectionException(
+                "Handler must be set before sendConfiguration call."
+            );
+        }
 
         foreach ($this->configurator->getConfiguration() as $setting => $value) {
             $sql[] = sprintf("set %s = %s", pg_escape_identifier($this->handler, $setting), pg_escape_literal($this->handler, $value));
@@ -265,11 +280,11 @@ class Connection
      * Check if the handler is set and throw an Exception if yes.
      *
      * @access private
-     * @param  string     $error_message
-     * @throws ConnectionException
+     * @param string $error_message
      * @return Connection $this
+     *@throws ConnectionException
      */
-    private function checkConnectionUp($error_message = '')
+    private function checkConnectionUp(string $error_message = ''): Connection
     {
         if ($this->hasHandler()) {
             if ($error_message === '') {
@@ -288,10 +303,10 @@ class Connection
      * Performs a raw SQL query
      *
      * @access public
-     * @param  string              $sql The sql statement to execute.
-     * @return ResultHandler|array
+     * @param string $sql The sql statement to execute.
+     * @throws ConnectionException|SqlException|FoundationException
      */
-    public function executeAnonymousQuery($sql)
+    public function executeAnonymousQuery(string $sql): ResultHandler|array
     {
         $ret = pg_send_query($this->getHandler(), $sql);
 
@@ -311,12 +326,13 @@ class Connection
      * return an array of ResultHandler.
      *
      * @access protected
-     * @param  string (default null)
-     * @throws ConnectionException if no response are available.
-     * @throws SqlException if the result is an error.
+     * @param string|null $sql
      * @return ResultHandler|array
+     * @throws ConnectionException if no response are available.
+     * @throws FoundationException if the result is an error.
+     * @throws SqlException if the result is an error.
      */
-    protected function getQueryResult($sql = null)
+    protected function getQueryResult(string $sql = null): ResultHandler|array
     {
         $results = [];
 
@@ -351,12 +367,13 @@ class Connection
      *
      * @see http://www.postgresql.org/docs/current/static/sql-syntax-lexical.html
      * @access public
-     * @param  string $string The string to be escaped.
+     * @param string|null $string $string The string to be escaped.
      * @return string the escaped string.
+     * @throws ConnectionException
      */
-    public function escapeIdentifier($string)
+    public function escapeIdentifier( ?string $string): string
     {
-        return \pg_escape_identifier($this->getHandler(), $string);
+        return \pg_escape_identifier($this->getHandler(), $string ?? '');
     }
 
     /**
@@ -365,12 +382,13 @@ class Connection
      * Escape a text value.
      *
      * @access public
-     * @param  string $string The string to be escaped
+     * @param string|null $string $string The string to be escaped
      * @return string the escaped string.
+     * @throws ConnectionException
      */
-    public function escapeLiteral($string)
+    public function escapeLiteral( ?string $string): string
     {
-        return \pg_escape_literal($this->getHandler(), $string);
+        return \pg_escape_literal($this->getHandler(), $string ?? '');
     }
 
     /**
@@ -379,12 +397,13 @@ class Connection
      * Wrap pg_escape_bytea
      *
      * @access public
-     * @param  string $word
+     * @param string|null $word
      * @return string
+     * @throws ConnectionException
      */
-    public function escapeBytea($word)
+    public function escapeBytea( ?string $word): string
     {
-        return pg_escape_bytea($this->getHandler(), $word);
+        return pg_escape_bytea($this->getHandler(), $word ?? '');
     }
 
     /**
@@ -393,10 +412,10 @@ class Connection
      * Unescape PostgreSQL bytea.
      *
      * @access public
-     * @param  string $bytea
+     * @param string $bytea
      * @return string
      */
-    public function unescapeBytea($bytea)
+    public function unescapeBytea(string $bytea): string
     {
         return pg_unescape_bytea($bytea);
     }
@@ -407,12 +426,12 @@ class Connection
      * Execute a asynchronous query with parameters and send the results.
      *
      * @access public
-     * @param  string        $query
+     * @param string $query
      * @param  array         $parameters
-     * @throws SqlException
      * @return ResultHandler query result wrapper
+     *@throws SqlException|ConnectionException
      */
-    public function sendQueryWithParameters($query, array $parameters = [])
+    public function sendQueryWithParameters(string $query, array $parameters = []): ResultHandler
     {
         $res = pg_send_query_params(
             $this->getHandler(),
@@ -436,11 +455,12 @@ class Connection
      * Send a prepare query statement to the server.
      *
      * @access public
-     * @param  string     $identifier
-     * @param  string     $sql
+     * @param string $identifier
+     * @param string $sql
      * @return Connection $this
+     * @throws ConnectionException|SqlException|FoundationException
      */
-    public function sendPrepareQuery($identifier, $sql)
+    public function sendPrepareQuery(string $identifier, string $sql): Connection
     {
         $this
             ->testQuery(
@@ -460,11 +480,11 @@ class Connection
      *
      * @access protected
      * @param  mixed      $query_return
-     * @param  string     $sql
-     * @throws ConnectionException
+     * @param string $sql
      * @return Connection $this
+     *@throws ConnectionException
      */
-    protected function testQuery($query_return, $sql)
+    protected function testQuery(mixed $query_return, string $sql): Connection
     {
         if ($query_return === false) {
             throw new ConnectionException(sprintf("Query Error : '%s'.", $sql));
@@ -480,19 +500,25 @@ class Connection
      * The optional SQL parameter is for debugging purposes only.
      *
      * @access public
-     * @param  string        $identifier
-     * @param  array         $parameters
-     * @param  string        $sql
+     * @param string $identifier
+     * @param array $parameters
+     * @param string $sql
      * @return ResultHandler
+     * @throws ConnectionException
+     * @throws FoundationException
+     * @throws SqlException
      */
-    public function sendExecuteQuery($identifier, array $parameters = [], $sql = '')
+    public function sendExecuteQuery(string $identifier, array $parameters = [], string $sql = ''): ResultHandler
     {
         $ret = pg_send_execute($this->getHandler(), $identifier, $parameters);
 
-        return $this
+        /** @var ResultHandler $result */
+        $result = $this
             ->testQuery($ret, sprintf("Prepared query '%s'.", $identifier))
             ->getQueryResult(sprintf("EXECUTE ===\n%s\n ===\nparameters = {%s}", $sql, join(', ', $parameters)))
-            ;
+        ;
+
+        return $result;
     }
 
     /**
@@ -502,8 +528,9 @@ class Connection
      *
      * @access public
      * @return string
+     * @throws ConnectionException
      */
-    public function getClientEncoding()
+    public function getClientEncoding(): string
     {
         $encoding = pg_client_encoding($this->getHandler());
         $this->testQuery($encoding, 'get client encoding');
@@ -517,10 +544,11 @@ class Connection
      * Set client encoding.
      *
      * @access public
-     * @param  string     $encoding
+     * @param string $encoding
      * @return Connection $this;
+     * @throws ConnectionException
      */
-    public function setClientEncoding($encoding)
+    public function setClientEncoding(string $encoding): Connection
     {
         $result = pg_set_client_encoding($this->getHandler(), $encoding);
 
@@ -539,7 +567,7 @@ class Connection
      * @access public
      * @return array|null
      */
-    public function getNotification()
+    public function getNotification(): ?array
     {
         $data = pg_get_notify($this->handler, \PGSQL_ASSOC);
 

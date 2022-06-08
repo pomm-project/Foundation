@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -31,10 +32,10 @@ class PgArray extends ArrayTypeConverter
      *
      * @static
      * @access public
-     * @param  string $type
+     * @param string $type
      * @return string
      */
-    public static function getSubType($type)
+    public static function getSubType(string $type): string
     {
         if (preg_match('/^(.+)\[\]$/', $type, $matches) || preg_match('/^_(.+)$/', $type, $matches)) {
             return $matches[1];
@@ -46,7 +47,7 @@ class PgArray extends ArrayTypeConverter
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): ?array
     {
         if ($data === null || $data === 'NULL') {
             return null;
@@ -72,9 +73,10 @@ class PgArray extends ArrayTypeConverter
     }
 
     /**
+     * @throws FoundationException
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         $type = static::getSubType($type);
 
@@ -85,15 +87,14 @@ class PgArray extends ArrayTypeConverter
         $converter = $this->getSubtypeConverter($type, $session);
         $data = $this->checkArray($data);
 
-        return sprintf('ARRAY[%s]::%s[]', join(',', array_map(function ($val) use ($converter, $type, $session) {
-                    return $converter->toPg($val, $type, $session);
-                }, $data)), $type);
+        return sprintf('ARRAY[%s]::%s[]', join(',', array_map(fn($val) => $converter->toPg($val, $type, $session), $data)), $type);
     }
 
     /**
+     * @throws FoundationException
      * @see ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         if ($data === null) {
             return null;

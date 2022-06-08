@@ -32,7 +32,7 @@ interface ClientPoolerInterface
      * @access public
      * @return string
      */
-    public function getPoolerType();
+    public function getPoolerType(): string;
 
     /**
      * register
@@ -46,7 +46,7 @@ interface ClientPoolerInterface
      * @param  Session               $session
      * @return ClientPoolerInterface $this
      */
-    public function register(Session $session);
+    public function register(Session $session): ClientPoolerInterface;
 
     /**
      * getClient
@@ -57,5 +57,5 @@ interface ClientPoolerInterface
      * @param  string          $name
      * @return ClientInterface
      */
-    public function getClient($name);
+    public function getClient(string $name): ClientInterface;
 }

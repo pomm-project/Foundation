@@ -27,8 +27,7 @@ use PommProject\Foundation\Client\Client;
  */
 class Listener extends Client
 {
-    protected $name;
-    protected $actions = [];
+    protected array $actions = [];
 
     /**
      * __construct
@@ -38,9 +37,8 @@ class Listener extends Client
      * @access public
      * @param  string $name
      */
-    public function __construct($name)
+    public function __construct(protected string $name)
     {
-        $this->name = $name;
     }
 
     /**
@@ -48,7 +46,7 @@ class Listener extends Client
      *
      * @see ClientInterface
      */
-    public function getClientType()
+    public function getClientType(): string
     {
         return 'listener';
     }
@@ -58,7 +56,7 @@ class Listener extends Client
      *
      * @see ClientInterface
      */
-    public function getClientIdentifier()
+    public function getClientIdentifier(): string
     {
         return $this->name;
     }
@@ -70,10 +68,9 @@ class Listener extends Client
      *
      * @access public
      * @param  callable $action
-     * @throws  FoundationException if $action is not a callable.
      * @return Listener $this
      */
-    public function attachAction(callable $action)
+    public function attachAction(callable $action): Listener
     {
         $this->actions[] = $action;
 
@@ -89,11 +86,12 @@ class Listener extends Client
      * Session  $session the current session
      *
      * @access public
-     * @param  string $name
-     * @param  array $data
+     * @param string $name
+     * @param array $data
      * @return Listener $this
+     * @throws FoundationException
      */
-    public function notify($name, array $data)
+    public function notify(string $name, array $data): Listener
     {
         foreach ($this->actions as $action) {
             call_user_func($action, $name, $data, $this->getSession());

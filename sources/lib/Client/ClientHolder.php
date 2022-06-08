@@ -23,7 +23,7 @@ use PommProject\Foundation\Exception\PommException;
  */
 class ClientHolder
 {
-    protected $clients = [];
+    protected array $clients = [];
 
     /**
      * add
@@ -34,7 +34,7 @@ class ClientHolder
      * @param  ClientInterface $client
      * @return ClientHolder    $this
      */
-    public function add(ClientInterface $client)
+    public function add(ClientInterface $client): ClientHolder
     {
         $this->clients[$client->getClientType()][$client->getClientIdentifier()] = $client;
 
@@ -51,9 +51,9 @@ class ClientHolder
      * @param  string $name
      * @return bool
      */
-    public function has($type, $name)
+    public function has(string $type, string $name): bool
     {
-        return (bool) isset($this->clients[$type][$name]);
+        return isset($this->clients[$type][$name]);
     }
 
     /**
@@ -62,13 +62,13 @@ class ClientHolder
      * Return a client by its name or null if no client exist for that name.
      *
      * @access public
-     * @param  string          $type
-     * @param  string          $name
-     * @return ClientInterface
+     * @param string|null $type
+     * @param string $name
+     * @return ClientInterface|null
      */
-    public function get($type, $name)
+    public function get(?string $type, string $name): ?ClientInterface
     {
-        return isset($this->clients[$type][$name]) ? $this->clients[$type][$name] : null;
+        return $this->clients[$type][$name] ?? null;
     }
 
     /**
@@ -80,7 +80,7 @@ class ClientHolder
      * @param  string $type
      * @return array
      */
-    public function getAllFor($type)
+    public function getAllFor(string $type): array
     {
         if (!isset($this->clients[$type])) {
             return [];
@@ -100,7 +100,7 @@ class ClientHolder
      * @param  string       $name
      * @return ClientHolder $this
      */
-    public function clear($type, $name)
+    public function clear(string $type, string $name): ClientHolder
     {
         if (isset($this->clients[$type][$name])) {
             $this->clients[$type][$name]->shutdown();
@@ -122,7 +122,7 @@ class ClientHolder
      * @access public
      * @return array exceptions caught during the shutdown
      */
-    public function shutdown()
+    public function shutdown(): array
     {
         $exceptions = [];
 

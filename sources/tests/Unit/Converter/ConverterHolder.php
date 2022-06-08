@@ -29,7 +29,7 @@ class ConverterHolder extends Atoum
         ->array($converter_holder->getConverterNames())
         ->isIdenticalTo(['Dumb'])
         ->object($converter_holder->getConverterForType('public.dumb'))
-        ->isInstanceOf('\PommProject\Foundation\Test\Fixture\DumbConverter')
+        ->isInstanceOf(\PommProject\Foundation\Test\Fixture\DumbConverter::class)
         ;
     }
 
@@ -59,7 +59,7 @@ class ConverterHolder extends Atoum
                 new DumbConverter(),
                 ['schema.type', 'public.dumb']
         )->getConverter('Dumb'))
-        ->isInstanceOf('\PommProject\Foundation\Test\Fixture\DumbConverter')
+        ->isInstanceOf(\PommProject\Foundation\Test\Fixture\DumbConverter::class)
             ;
     }
 
@@ -94,7 +94,7 @@ class ConverterHolder extends Atoum
                 function () use ($converter_holder) {
                     $converter_holder->addTypeToConverter('No', 'pika.chu');
                 })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\FoundationException::class)
             ->message->contains('No such converter')
             ;
     }
@@ -108,9 +108,9 @@ class ConverterHolder extends Atoum
                 new DumbConverter(),
                 ['schema.type', 'public.dumb']
             )->getConverterForType('schema.type'))
-            ->isInstanceOf('\PommProject\Foundation\Test\Fixture\DumbConverter')
+            ->isInstanceOf(\PommProject\Foundation\Test\Fixture\DumbConverter::class)
             ->exception(function () use ($converter_holder) { $converter_holder->getConverterForType('no.type'); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\FoundationException::class)
             ->message->contains('No converters associated with type')
             ;
     }

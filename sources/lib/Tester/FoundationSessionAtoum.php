@@ -34,7 +34,7 @@ abstract class FoundationSessionAtoum extends VanillaSessionAtoum
      * @param   array $configuration
      * @return  SessionBuilder
      */
-    protected function createSessionBuilder(array $configuration)
+    protected function createSessionBuilder(array $configuration): SessionBuilder
     {
         return new SessionBuilder($configuration);
     }

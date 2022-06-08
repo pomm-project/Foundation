@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Tester;
 
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Session\SessionBuilder;
 use Atoum;
@@ -24,12 +25,11 @@ use Atoum;
  * @copyright 2014 - 2015 Grégoire HUBERT
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
- * @see       Atoum
  * @abstract
  */
 abstract class VanillaSessionAtoum extends Atoum
 {
-    private $session_builder;
+    private ?SessionBuilder $session_builder = null;
 
     /**
      * buildSession
@@ -37,10 +37,11 @@ abstract class VanillaSessionAtoum extends Atoum
      * A short description here
      *
      * @access protected
-     * @param  string       $stamp
+     * @param string|null $stamp
      * @return Session
+     * @throws FoundationException
      */
-    protected function buildSession($stamp = null)
+    protected function buildSession(?string $stamp = null): Session
     {
         $session = $this->getSessionBuilder()->buildSession($stamp);
         $this->initializeSession($session);
@@ -56,7 +57,7 @@ abstract class VanillaSessionAtoum extends Atoum
      * @access protected
      * @return SessionBuilder
      */
-    private function getSessionBuilder()
+    private function getSessionBuilder(): SessionBuilder
     {
         if ($this->session_builder === null) {
             $this->session_builder = $this->createSessionBuilder($GLOBALS['pomm_db1']);
@@ -75,7 +76,7 @@ abstract class VanillaSessionAtoum extends Atoum
      * @param  array $configuration
      * @return SessionBuilder
      */
-    protected function createSessionBuilder(array $configuration)
+    protected function createSessionBuilder(array $configuration): SessionBuilder
     {
         return new SessionBuilder($configuration);
     }

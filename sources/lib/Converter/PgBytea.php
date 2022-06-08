@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
+use PommProject\Foundation\Exception\ConnectionException;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -26,7 +27,7 @@ class PgBytea implements ConverterInterface
     /**
      * @see Pomm\Converter\ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         return $data !== null
             ? sprintf(
@@ -41,7 +42,7 @@ class PgBytea implements ConverterInterface
     /**
      * @see Pomm\Converter\ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): ?string
     {
         return $data !== null
             ? $session->getConnection()->unescapeBytea($data)
@@ -52,7 +53,7 @@ class PgBytea implements ConverterInterface
     /**
      * @see Pomm\Converter\ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         return $data !== null
             ? sprintf(
@@ -69,11 +70,12 @@ class PgBytea implements ConverterInterface
      * Escape a binary string to postgres.
      *
      * @access protected
-     * @param  mixed     $string
-     * @param  Session   $session
+     * @param Session $session
+     * @param mixed $string
      * @return string
+     * @throws ConnectionException
      */
-    protected function escapeByteString(Session $session, $string)
+    protected function escapeByteString(Session $session, mixed $string): string
     {
         return preg_replace(["/\\\\/", '/"/'], ["\\", '""'], $session->getConnection()->escapeBytea($string));
     }

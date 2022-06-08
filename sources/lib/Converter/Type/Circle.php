@@ -19,10 +19,10 @@ namespace PommProject\Foundation\Converter\Type;
  * @author Grégoire HUBERT
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  */
-class Circle
+class Circle implements \Stringable
 {
-    public $center;
-    public $radius;
+    public Point $center;
+    public float $radius;
 
     /**
      * __construct
@@ -33,7 +33,7 @@ class Circle
      * @param  string $description
      * @throws \InvalidArgumentException
      */
-    public function __construct($description)
+    public function __construct(string $description)
     {
         $description = trim($description, ' <>');
         $elts = preg_split(
@@ -43,7 +43,7 @@ class Circle
             PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
         );
 
-        if (count($elts) !== 2) {
+        if ((is_countable($elts) ? count($elts) : 0) !== 2) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "Could not parse circle description '%s'.",
@@ -65,7 +65,7 @@ class Circle
      * @param  string $description
      * @return Point
      */
-    protected function createPointFrom($description)
+    protected function createPointFrom(string $description): Point
     {
         return new Point($description);
     }
@@ -79,7 +79,7 @@ class Circle
      * @access public
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf(
             "<%s,%s>",

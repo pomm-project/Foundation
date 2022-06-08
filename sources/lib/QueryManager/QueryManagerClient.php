@@ -28,7 +28,7 @@ abstract class QueryManagerClient extends Client implements QueryManagerInterfac
      *
      * @see ClientInterface
      */
-    public function getClientType()
+    public function getClientType(): string
     {
         return 'query_manager';
     }
@@ -38,8 +38,8 @@ abstract class QueryManagerClient extends Client implements QueryManagerInterfac
      *
      * @see ClientInterface
      */
-    public function getClientIdentifier()
+    public function getClientIdentifier(): string
     {
-        return get_class($this);
+        return $this::class;
     }
 }

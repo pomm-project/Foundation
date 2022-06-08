@@ -25,18 +25,16 @@ use PommProject\Foundation\Session\Session as BaseSession;
  */
 class ConvertedResultIterator extends ResultIterator
 {
-    protected $types = [];
-    protected $session;
-    protected $converters = [];
+    protected array $types = [];
+    protected array $converters = [];
 
     /**
      * @param ResultHandler $result
      * @param BaseSession   $session
      */
-    public function __construct(ResultHandler $result, BaseSession $session)
+    public function __construct(ResultHandler $result, protected BaseSession $session)
     {
         parent::__construct($result);
-        $this->session = $session;
         $this->initTypes();
     }
 
@@ -50,7 +48,7 @@ class ConvertedResultIterator extends ResultIterator
      * @param  integer $index
      * @return array
      */
-    public function get($index)
+    public function get(int $index): array
     {
         return $this->parseRow(parent::get($index));
     }
@@ -61,11 +59,10 @@ class ConvertedResultIterator extends ResultIterator
      * Get the result types from the result handler.
      *
      * @access protected
-     * @return ResultIterator $this
      */
-    protected function initTypes()
+    protected function initTypes(): ResultIterator
     {
-        foreach ($this->result->getFieldNames() as $index => $name) {
+        foreach ($this->result->getFieldNames() as $name) {
             $type = $this->result->getFieldType($name);
 
             if ($type === null) {
@@ -88,10 +85,8 @@ class ConvertedResultIterator extends ResultIterator
      * Convert values from Pg.
      *
      * @access protected
-     * @param  array $values
-     * @return mixed
      */
-    protected function parseRow(array $values)
+    protected function parseRow(array $values): array
     {
         $output_values = [];
 
@@ -109,11 +104,8 @@ class ConvertedResultIterator extends ResultIterator
      * Return converted value for a result field.
      *
      * @access protected
-     * @param  string $name
-     * @param  string $value
-     * @return mixed
      */
-    protected function convertField($name, $value)
+    protected function convertField(string $name, ?string $value): mixed
     {
         return $this
             ->converters[$name]
@@ -126,11 +118,11 @@ class ConvertedResultIterator extends ResultIterator
      *
      * see @ResultIterator
      */
-    public function slice($name)
+    public function slice(string $field): array
     {
         $values = [];
-        foreach (parent::slice($name) as $value) {
-            $values[] = $this->convertField($name, $value);
+        foreach (parent::slice($field) as $value) {
+            $values[] = $this->convertField($field, $value);
         }
 
         return $values;

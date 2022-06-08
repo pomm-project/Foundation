@@ -45,7 +45,7 @@ class PgTimestamp extends BaseConverter
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'timestamptz', $session))
             ->isNull()
             ->object($this->sendToPostgres($date_time, 'timestamptz', $session))
-            ->isInstanceof('\DateTime')
+            ->isInstanceof(\DateTime::class)
             ->isEqualTo($date_time)
             ;
     }

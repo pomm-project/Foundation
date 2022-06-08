@@ -7,10 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace PommProject\Foundation\Listener;
 
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Client\ClientPooler;
+use PommProject\Foundation\Exception\FoundationException;
 
 /**
  * ListenerPooler
@@ -30,7 +32,7 @@ class ListenerPooler extends ClientPooler
      *
      * @see ClientPoolerInterface
      */
-    public function getPoolerType()
+    public function getPoolerType(): string
     {
         return 'listener';
     }
@@ -41,7 +43,7 @@ class ListenerPooler extends ClientPooler
      *
      * See @ClientPooler
      */
-    protected function createClient($identifier)
+    protected function createClient(string $identifier): Listener
     {
         return new Listener($identifier);
     }
@@ -57,26 +59,28 @@ class ListenerPooler extends ClientPooler
      * 'pika'.
      *
      * @access public
-     * @param  string|array     $identifiers
-     * @param  array            $data
+     * @param string|array $identifiers
+     * @param array $data
      * @return ListenerPooler   $this
+     * @throws FoundationException
      */
-    public function notify($identifiers, array $data)
+    public function notify(string|array $identifiers, array $data): ListenerPooler
     {
-        $this->getSession()->hasLogger() &&
+        if ($this->getSession()->hasLogger()) {
             $this->getSession()->getLogger()->debug(
                 "Pomm: ListenerPooler: notification received.",
                 [
                     'receivers' => $identifiers,
                 ]
             );
+        }
 
         if (is_scalar($identifiers)) {
             if ($identifiers === '*') {
                 return $this->notifyAll($data);
             }
 
-            $identifiers = [ $identifiers ];
+            $identifiers = [$identifiers];
         }
 
         return $this->notifyClients($identifiers, $data);
@@ -88,14 +92,15 @@ class ListenerPooler extends ClientPooler
      * Notify all existing clients.
      *
      * @access protected
-     * @param  array            $data
+     * @param array $data
      * @return ListenerPooler   $this
+     * @throws FoundationException
      */
-    protected function notifyAll(array $data)
+    protected function notifyAll(array $data): ListenerPooler
     {
         foreach ($this
-            ->getSession()
-            ->getAllClientForType($this->getPoolerType()) as $client) {
+                     ->getSession()
+                     ->getAllClientForType($this->getPoolerType()) as $client) {
             $client->notify('*', $data);
         }
 
@@ -108,26 +113,24 @@ class ListenerPooler extends ClientPooler
      * Send a notification to the specified clients.
      *
      * @access protected
-     * @param  array            $identifiers
-     * @param  array            $data
+     * @param array $identifiers
+     * @param array $data
      * @return ListenerPooler   $this
+     * @throws FoundationException
      */
-    protected function notifyClients(array $identifiers, array $data)
+    protected function notifyClients(array $identifiers, array $data): ListenerPooler
     {
         foreach ($identifiers as $identifier) {
-            $client_name = strpos($identifier, ':') !== false
-                ? substr($identifier, 0, strpos($identifier, ':'))
-                : $identifier
-                ;
+            $client_name = str_contains((string)$identifier, ':')
+                ? substr((string)$identifier, 0, strpos((string)$identifier, ':'))
+                : $identifier;
 
+            /** @var ?Listener $client */
             $client = $this
                 ->getSession()
-                ->getClient($this->getPoolerType(), $client_name)
-                ;
+                ->getClient($this->getPoolerType(), $client_name);
 
-            if ($client !== null) {
-                $client->notify($identifier, $data);
-            }
+            $client?->notify($identifier, $data);
         }
 
         return $this;

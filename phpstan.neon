@@ -1,0 +1,8 @@
+parameters:
+    bootstrapFiles:
+        - vendor/atoum/atoum/classes/autoloader.php
+    level : 5
+    paths:
+        - sources/lib
+    ignoreErrors:
+        - '#Parameter \#1 \$connection of function pg_[a-z_]+ expects resource, PgSql\\Connection given.#'

@@ -33,14 +33,14 @@ use PommProject\Foundation\Session\Session;
  */
 trait ClientPoolerTrait
 {
-    private $session;
+    private ?Session $session = null;
 
     /**
      * getPoolerType
      *
      * @see ClientPoolerInterface
      */
-    abstract public function getPoolerType();
+    abstract public function getPoolerType(): string;
 
     /**
      * createClient
@@ -50,16 +50,16 @@ trait ClientPoolerTrait
      * @abstract
      * @access protected
      * @param  string $identifier
-     * @return Client
+     * @return ClientInterface
      */
-    abstract protected function createClient($identifier);
+    abstract protected function createClient(string $identifier): ClientInterface;
 
     /**
      * register
      *
      * @see ClientPoolerInterface
      */
-    public function register(Session $session)
+    public function register(Session $session): ClientPoolerInterface
     {
         $this->session = $session;
 
@@ -72,11 +72,12 @@ trait ClientPoolerTrait
      * Basic getClient method.
      *
      * @access public
-     * @param  string $identifier
-     * @return Client
+     * @param string $identifier
+     * @return ClientInterface
+     * @throws FoundationException
      * @see    ClientInterface
      */
-    public function getClient($identifier)
+    public function getClient(string $identifier): ClientInterface
     {
         $client = $this->getClientFromPool($identifier);
 
@@ -94,10 +95,11 @@ trait ClientPoolerTrait
      * How the pooler fetch a client from the pool.
      *
      * @access protected
-     * @param  string      $identifier
-     * @return Client|null
+     * @param string $identifier
+     * @return ClientInterface|null
+     * @throws FoundationException
      */
-    protected function getClientFromPool($identifier)
+    protected function getClientFromPool(string $identifier): ?ClientInterface
     {
         return $this
             ->getSession()
@@ -114,10 +116,10 @@ trait ClientPoolerTrait
      * @return Session
      * @throws FoundationException
      */
-    protected function getSession()
+    protected function getSession(): Session
     {
         if ($this->session === null) {
-            throw new FoundationException(sprintf("Client pooler '%s' is not initialized, session not set.", get_class($this)));
+            throw new FoundationException(sprintf("Client pooler '%s' is not initialized, session not set.", $this::class));
         }
 
         return $this->session;

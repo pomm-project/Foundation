@@ -21,11 +21,11 @@ namespace PommProject\Foundation;
  * @author    Grégoire HUBERT <hubert.greg@gmail.com>
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
-class Where
+class Where implements \Stringable
 {
-    public $stack = [];
+    public array $stack = [];
     public $element;
-    public $values = [];
+    public array $values = [];
     public $operator;
 
     /**
@@ -35,11 +35,11 @@ class Where
      *
      * @static
      * @access public
-     * @param  string $element
+     * @param string|null $element
      * @param  array  $values
      * @return Where
      */
-    public static function create($element = null, array $values = [])
+    public static function create(string $element = null, array $values = []): Where
     {
         return new self($element, $values);
     }
@@ -50,11 +50,11 @@ class Where
      * Create an escaped IN clause.
      *
      * @access public
-     * @param  string $element
+     * @param string $element
      * @param  array  $values
      * @return Where
      */
-    public static function createWhereIn($element, array $values)
+    public static function createWhereIn(string $element, array $values): Where
     {
         return self::createGroupCondition($element, 'IN', $values);
     }
@@ -65,11 +65,11 @@ class Where
      * Create an escaped NOT IN clause.
      *
      * @access public
-     * @param  string $element
+     * @param string $element
      * @param  array $values
      * @return Where
      */
-    public static function createWhereNotIn($element, array $values)
+    public static function createWhereNotIn(string $element, array $values): Where
     {
         return self::createGroupCondition($element, 'NOT IN', $values);
     }
@@ -81,12 +81,12 @@ class Where
      * useful for IN or NOT IN clauses.
      *
      * @access public
-     * @param  string $element
-     * @param  string $operation
+     * @param string $element
+     * @param string $operation
      * @param  array  $values
      * @return Where
      */
-    public static function createGroupCondition($element, $operation, array $values)
+    public static function createGroupCondition(string $element, string $operation, array $values): Where
     {
         return new self(
             sprintf(
@@ -108,7 +108,7 @@ class Where
      * @param  array $values
      * @return array
      */
-    protected static function extractValues(array $values)
+    protected static function extractValues(array $values): array
     {
         $array = [];
 
@@ -128,7 +128,7 @@ class Where
      * @param  array $values
      * @return array
      */
-    protected static function escapeSet(array $values)
+    protected static function escapeSet(array $values): array
     {
         $escaped_values = [];
 
@@ -148,10 +148,10 @@ class Where
      * __construct
      *
      * @access public
-     * @param string $element (optional)
+     * @param string|null $element (optional)
      * @param array  $values  (optional)
      */
-    public function __construct($element = null, array $values = [])
+    public function __construct(string $element = null, array $values = [])
     {
         if ($element !== null) {
             $this->element = $element;
@@ -167,10 +167,10 @@ class Where
      * XOR can be expressed as "A = !B"
      *
      * @access public
-     * @param  string $operator
+     * @param string $operator
      * @return Where
      */
-    public function setOperator($operator)
+    public function setOperator(string $operator): Where
     {
         $this->operator = $operator;
 
@@ -185,9 +185,9 @@ class Where
      * @access public
      * @return boolean
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
-        return (bool) ($this->element === null && count($this->stack) == 0);
+        return $this->element === null && count($this->stack) == 0;
     }
 
     /**
@@ -196,10 +196,10 @@ class Where
      * Absorbing another Where instance.
      *
      * @access private
-     * @param  Where $where
-     * @return Where $this
+     * @param Where $where
+     * @return void $this
      */
-    private function transmute(Where $where)
+    private function transmute(Where $where): void
     {
         $this->stack    = $where->stack;
         $this->element  = $where->element;
@@ -215,10 +215,10 @@ class Where
      * @access public
      * @param  mixed  $element
      * @param  array  $values
-     * @param  string $operator
+     * @param string $operator
      * @return Where
      */
-    public function addWhere($element, array $values, $operator)
+    public function addWhere(mixed $element, array $values, string $operator): Where
     {
         if (!$element instanceof Where) {
             $element = new self($element, $values);
@@ -266,7 +266,7 @@ class Where
      * @param  array $values
      * @return Where
      */
-    public function andWhere($element, array $values = [])
+    public function andWhere(mixed $element, array $values = []): Where
     {
         return $this->addWhere($element, $values, 'AND');
     }
@@ -276,10 +276,9 @@ class Where
      *
      * @access public
      * @param  mixed $element
-     * @param  array $values
      * @return Where
      */
-    public function orWhere($element, array $values = [])
+    public function orWhere(mixed $element, array $values = []): Where
     {
         return $this->addWhere($element, $values, 'OR');
     }
@@ -288,10 +287,10 @@ class Where
      * setStack
      *
      * @access public
-     * @param  array $stack
+     * @param array $stack
      * @return Where
      */
-    public function setStack(array $stack)
+    public function setStack(array $stack): Where
     {
         $this->stack = $stack;
 
@@ -306,7 +305,7 @@ class Where
      * @access public
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->isEmpty() ? 'true' : $this->parse();
     }
@@ -317,7 +316,7 @@ class Where
      * @access public
      * @return boolean
      */
-    public function hasElement()
+    public function hasElement(): bool
     {
         return $this->element !== null;
     }
@@ -328,7 +327,7 @@ class Where
      * @access public
      * @return string
      */
-    public function getElement()
+    public function getElement(): string
     {
         return $this->element;
     }
@@ -339,7 +338,7 @@ class Where
      * @access protected
      * @return string
      */
-    protected function parse()
+    protected function parse(): string
     {
         if ($this->hasElement()) {
             return $this->getElement();
@@ -361,7 +360,7 @@ class Where
      * @access public
      * @return array
      */
-    public function getValues()
+    public function getValues(): array
     {
         if ($this->isEmpty()) {
             return [];

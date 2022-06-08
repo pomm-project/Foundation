@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Observer;
 
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Exception\NotificationException;
 use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Session\Session;
@@ -27,19 +28,16 @@ use PommProject\Foundation\Session\Session;
  */
 class Observer extends Client
 {
-    protected $channel;
-
     /**
      * __construct
      *
      * Constructor
      *
      * @access public
-     * @param  string $channel
+     * @param string $channel
      */
-    public function __construct($channel)
+    public function __construct(protected string $channel)
     {
-        $this->channel = $channel;
     }
 
     /**
@@ -47,7 +45,7 @@ class Observer extends Client
      *
      * @see Client
      */
-    public function getClientType()
+    public function getClientType(): string
     {
         return 'observer';
     }
@@ -57,7 +55,7 @@ class Observer extends Client
      *
      * @see Client
      */
-    public function getClientIdentifier()
+    public function getClientIdentifier(): string
     {
         return $this->channel;
     }
@@ -67,7 +65,7 @@ class Observer extends Client
      *
      * @see Client
      */
-    public function initialize(Session $session)
+    public function initialize(Session $session): void
     {
         parent::initialize($session);
         $this->restartListening();
@@ -78,7 +76,7 @@ class Observer extends Client
      *
      * @see Client
      */
-    public function shutdown()
+    public function shutdown(): void
     {
         $this->unlisten($this->channel);
     }
@@ -90,9 +88,10 @@ class Observer extends Client
      * Otherwise, null is returned.
      *
      * @access public
-     * @return array
+     * @return array|null
+     * @throws FoundationException
      */
-    public function getNotification()
+    public function getNotification(): ?array
     {
         return $this
             ->getSession()
@@ -110,8 +109,9 @@ class Observer extends Client
      *
      * @access public
      * @return Observer $this
+     * @throws FoundationException
      */
-    public function restartListening()
+    public function restartListening(): Observer
     {
         return $this->listen($this->channel);
     }
@@ -125,10 +125,11 @@ class Observer extends Client
      * transaction is committed or rollback.
      *
      * @access protected
-     * @param  string    $channel
+     * @param string $channel
      * @return Observer $this
+     * @throws FoundationException
      */
-    protected function listen($channel)
+    protected function listen(string $channel): Observer
     {
         $this
             ->executeAnonymousQuery(
@@ -147,11 +148,11 @@ class Observer extends Client
      * Stop listening to events.
      *
      * @access protected
-     * @param  string   $channel
+     * @param string $channel
      * @return Observer $this
      *
      */
-    protected function unlisten($channel)
+    protected function unlisten(string $channel): Observer
     {
         $this->executeAnonymousQuery(
             sprintf(
@@ -169,10 +170,10 @@ class Observer extends Client
      * Check if a notification is pending. If so, a NotificationException is thrown.
      *
      * @access public
-     * @throws  NotificationException
      * @return Observer $this
+     *@throws  NotificationException|FoundationException
      */
-    public function throwNotification()
+    public function throwNotification(): Observer
     {
         $notification = $this->getNotification();
 
@@ -189,11 +190,12 @@ class Observer extends Client
      * Proxy for Connection::executeAnonymousQuery()
      *
      * @access protected
-     * @param  string   $sql
+     * @param string $sql
      * @return Observer $this
+     * @throws FoundationException
      * @see Connection
      */
-    protected function executeAnonymousQuery($sql)
+    protected function executeAnonymousQuery(string $sql): Observer
     {
         $this
             ->getSession()
@@ -210,11 +212,12 @@ class Observer extends Client
      * Proxy for Connection::escapeIdentifier()
      *
      * @access protected
-     * @param  string $string
+     * @param string $string
      * @return string
+     * @throws FoundationException
      * @see Connection
      */
-    protected function escapeIdentifier($string)
+    protected function escapeIdentifier(string $string): string
     {
         return $this
             ->getSession()

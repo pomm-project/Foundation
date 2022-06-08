@@ -21,17 +21,14 @@ use PommProject\Foundation\Exception\FoundationException;
  */
 class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
 {
-    protected $parameters;
-
     /**
      * __construct()
      *
      * @access public
      * @param  array $parameters (optional)
      */
-    public function __construct(array $parameters = [])
+    public function __construct(protected array $parameters = [])
     {
-        $this->parameters = $parameters;
     }
 
     /**
@@ -40,11 +37,11 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * Set a parameter.
      *
      * @access public
-     * @param  string          $name
-     * @param  string|array    $value
+     * @param string $name
+     * @param bool|string|array|null $value
      * @return ParameterHolder $this
      */
-    public function setParameter($name, $value)
+    public function setParameter(string $name, bool|string|array|null $value): ParameterHolder
     {
         $this->parameters[$name] = $value;
 
@@ -60,7 +57,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param  string $name
      * @return bool
      */
-    public function hasParameter($name)
+    public function hasParameter(string $name): bool
     {
         return isset($this->parameters[$name]) || array_key_exists($name, $this->parameters);
     }
@@ -72,10 +69,10 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @access public
      * @param  string       $name
-     * @param  string       $default Optional default value if name not set.
-     * @return string|array Parameter's value or default.
+     * @param  bool|string|array|null $default Optional default value if name not set.
+     * @return bool|string|array|null Parameter's value or default.
      */
-    public function getParameter($name, $default = null)
+    public function getParameter(string $name, bool|string|array|null $default = null): bool|string|array|null
     {
         return $this->hasParameter($name) ? $this->parameters[$name] : $default;
     }
@@ -90,7 +87,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param  string          $name the parameter's name
      * @return ParameterHolder $this
      */
-    public function mustHave($name)
+    public function mustHave(string $name): ParameterHolder
     {
         if (!$this->hasParameter($name)) {
             throw new FoundationException(sprintf('The parameter "%s" is mandatory.', $name));
@@ -109,7 +106,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param  mixed           $value the default value
      * @return ParameterHolder $this
      */
-    public function setDefaultValue($name, $value)
+    public function setDefaultValue(string $name, mixed $value): ParameterHolder
     {
         if (!$this->hasParameter($name)) {
             $this->setParameter($name, $value);
@@ -130,7 +127,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param  array           $values
      * @return ParameterHolder $this
      */
-    public function mustBeOneOf($name, array $values)
+    public function mustBeOneOf(string $name, array $values): ParameterHolder
     {
         if (!in_array($this[$name], $values)) {
             throw new FoundationException(sprintf('The parameters "%s" must be one of [%s].', $name, implode(', ', $values)));
@@ -146,7 +143,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param  string          $name
      * @return ParameterHolder $this
      */
-    public function unsetParameter($name)
+    public function unsetParameter(string $name): ParameterHolder
     {
         unset($this->parameters[$name]);
 
@@ -158,9 +155,9 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see ArrayAccess
      */
-    public function offsetExists($name)
+    public function offsetExists(mixed $offset): bool
     {
-        return $this->hasParameter($name);
+        return $this->hasParameter($offset);
     }
 
     /**
@@ -168,9 +165,9 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see ArrayAccess
      */
-    public function offsetGet($name)
+    public function offsetGet(mixed $offset): array|string|null
     {
-        return $this->getParameter($name);
+        return $this->getParameter($offset);
     }
 
     /**
@@ -178,9 +175,9 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see ArrayAccess
      */
-    public function offsetSet($name, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
-        $this->setParameter($name, $value);
+        $this->setParameter($offset, $value);
     }
 
     /**
@@ -188,16 +185,16 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see ArrayAccess
      */
-    public function offsetUnset($name)
+    public function offsetUnset(mixed $offset): void
     {
-        $this->unsetParameter($name);
+        $this->unsetParameter($offset);
     }
 
     /**
      *
      * @see \Countable
      */
-    public function count()
+    public function count(): int
     {
         return count($this->parameters);
     }
@@ -207,7 +204,7 @@ class ParameterHolder implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @see \IteratorAggregate
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->parameters);
     }

@@ -47,9 +47,9 @@ SQL;
 
         $this
             ->object($iterator)
-            ->isInstanceOf('\PommProject\Foundation\ResultIterator')
-            ->isInstanceOf('\Countable')
-            ->isInstanceOf('\Iterator')
+            ->isInstanceOf(\PommProject\Foundation\ResultIterator::class)
+            ->isInstanceOf(\Countable::class)
+            ->isInstanceOf(\Iterator::class)
             ;
     }
 
@@ -67,8 +67,8 @@ SQL;
             ->isIdenticalTo(['id' => '3', 'pika' => 'c'])
             ->array($iterator->get(1))
             ->isIdenticalTo(['id' => '2', 'pika' => 'b'])
-            ->exception(function () use ($iterator) { return $iterator->get(5); })
-            ->isInstanceOf('\OutOfBoundsException')
+            ->exception(fn() => $iterator->get(5))
+            ->isInstanceOf(\OutOfBoundsException::class)
             ->message->contains('Cannot jump to non existing row')
             ;
     }
@@ -152,8 +152,8 @@ SQL;
             ->isIdenticalTo(['a', 'b', 'c', 'd'])
             ->array($iterator->slice('id'))
             ->isIdenticalTo(['1', '2', '3', '4'])
-            ->exception(function () use ($iterator) { return $iterator->slice('no_such_key'); })
-            ->isInstanceOf('\InvalidArgumentException')
+            ->exception(fn() => $iterator->slice('no_such_key'))
+            ->isInstanceOf(\InvalidArgumentException::class)
             ->message->contains('Could not find field')
             ;
     }
@@ -191,7 +191,7 @@ SQL;
             $this->getResultResource($this->getPikaSql())
         );
 
-        $json = json_encode($iterator);
+        $json = json_encode($iterator, JSON_THROW_ON_ERROR);
         $this
             ->string($json)
             ->isIdenticalTo('[{"id":"1","pika":"a"},{"id":"2","pika":"b"},{"id":"3","pika":"c"},{"id":"4","pika":"d"}]');

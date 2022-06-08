@@ -9,6 +9,9 @@
  */
 namespace PommProject\Foundation\Listener;
 
+use PommProject\Foundation\Exception\FoundationException;
+use PommProject\Foundation\Session\Session;
+
 /**
  * SendNotificationTrait
  *
@@ -26,7 +29,7 @@ trait SendNotificationTrait
      *
      * sendNotification needs to access the session.
      */
-    abstract protected function getSession();
+    abstract protected function getSession(): Session;
 
     /**
      * sendNotification
@@ -34,17 +37,19 @@ trait SendNotificationTrait
      * Send notification to the listener pooler.
      *
      * @access protected
-     * @param  string $name
-     * @param  array $data
-     * @return mixed $this
+     * @param string $name
+     * @param array $data
+     * @return mixed
+     * @throws FoundationException
      */
-    protected function sendNotification($name, array $data)
+    protected function sendNotification(string $name, array $data): mixed
     {
-        $this
+        /** @var Listener $listener */
+        $listener = $this
             ->getSession()
-            ->getPoolerForType('listener')
-            ->notify($name, $data)
-            ;
+            ->getPoolerForType('listener');
+
+        $listener->notify($name, $data);
 
         return $this;
     }

@@ -9,6 +9,8 @@
  */
 namespace PommProject\Foundation\Converter;
 
+use PommProject\Foundation\Exception\ConverterException;
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -24,8 +26,6 @@ use PommProject\Foundation\Session\Session;
  */
 class PgComposite extends ArrayTypeConverter
 {
-    protected $structure;
-
     /**
      * __construct
      *
@@ -35,9 +35,8 @@ class PgComposite extends ArrayTypeConverter
      * @access public
      * @param array $structure structure definition.
      */
-    public function __construct(array $structure)
+    public function __construct(protected array $structure)
     {
-        $this->structure = $structure;
     }
 
     /**
@@ -45,7 +44,7 @@ class PgComposite extends ArrayTypeConverter
      *
      * @see ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): ?array
     {
         if ($data === null) {
             return null;
@@ -59,9 +58,10 @@ class PgComposite extends ArrayTypeConverter
     /**
      * toPg
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         if ($data === null) {
             return sprintf("NULL::%s", $type);
@@ -79,9 +79,10 @@ class PgComposite extends ArrayTypeConverter
     /**
      * toPgStandardFormat
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         if ($data === null) {
             return null;
@@ -112,12 +113,13 @@ class PgComposite extends ArrayTypeConverter
      * Convert the given array of values.
      *
      * @access private
-     * @param  array $data
-     * @param  Session $session
-     * @param  string $method
+     * @param array $data
+     * @param Session $session
+     * @param string $method
      * @return array
+     * @throws FoundationException
      */
-    private function convertArray(array $data, Session $session, $method)
+    private function convertArray(array $data, Session $session, string $method): array
     {
         $values = [];
 

@@ -24,8 +24,8 @@ use PommProject\Foundation\Exception\ConverterException;
  */
 class ConverterHolder
 {
-    protected $converters = [];
-    protected $types = [];
+    protected array $converters = [];
+    protected array $types = [];
 
     /**
      * registerConverter
@@ -33,13 +33,14 @@ class ConverterHolder
      * Declare a converter and assign types to it.
      *
      * @access public
-     * @param  string             $name
-     * @param  ConverterInterface $converter
-     * @param  array              $types
-     * @param  bool               $strict
+     * @param string $name
+     * @param ConverterInterface $converter
+     * @param array $types
+     * @param bool|null $strict
      * @return ConverterHolder    $this
+     * @throws ConverterException
      */
-    public function registerConverter($name, ConverterInterface $converter, array $types, $strict = null)
+    public function registerConverter(string $name, ConverterInterface $converter, array $types, bool $strict = null): ConverterHolder
     {
         $this->addConverter($name, $converter, $strict);
 
@@ -58,15 +59,15 @@ class ConverterHolder
      * exception.
      *
      * @access protected
-     * @param  string             $name
+     * @param string $name
      * @param  ConverterInterface $converter
-     * @param  bool               $strict (default true)
-     * @throws ConverterException if $name already exists and strict.
+     * @param bool|null $strict (default true)
      * @return ConverterHolder    $this
+     *@throws ConverterException if $name already exists and strict.
      */
-    protected function addConverter($name, ConverterInterface $converter, $strict = null)
+    protected function addConverter(string $name, ConverterInterface $converter, bool $strict = null): ConverterHolder
     {
-        $strict = $strict === null ? true : (bool) $strict;
+        $strict = $strict === null || $strict;
 
         if ($strict && $this->hasConverterName($name)) {
             throw new ConverterException(
@@ -89,12 +90,12 @@ class ConverterHolder
      * Tell if the converter exists or not.
      *
      * @access public
-     * @param  string $name
+     * @param string $name
      * @return bool
      */
-    public function hasConverterName($name)
+    public function hasConverterName(string $name): bool
     {
-        return (bool) isset($this->converters[$name]);
+        return isset($this->converters[$name]);
     }
 
     /**
@@ -104,10 +105,10 @@ class ConverterHolder
      * NULL is returned.
      *
      * @access public
-     * @param  string             $name
-     * @return ConverterInterface
+     * @param string $name
+     * @return ConverterInterface|null
      */
-    public function getConverter($name)
+    public function getConverter(string $name): ?ConverterInterface
     {
         return $this->hasConverterName($name) ? $this->converters[$name] : null;
     }
@@ -120,7 +121,7 @@ class ConverterHolder
      * @access public
      * @return array
      */
-    public function getConverterNames()
+    public function getConverterNames(): array
     {
         return array_keys($this->converters);
     }
@@ -132,12 +133,12 @@ class ConverterHolder
      * type is already defined, it is overrided with the new converter.
      *
      * @access public
-     * @param  string          $name
-     * @param  string          $type
-     * @throws  ConverterException if $name does not exist.
+     * @param string $name
+     * @param string $type
      * @return ConverterHolder $this
+     *@throws  ConverterException if $name does not exist.
      */
-    public function addTypeToConverter($name, $type)
+    public function addTypeToConverter(string $name, string $type): ConverterHolder
     {
         if (!$this->hasConverterName($name)) {
             throw new ConverterException(
@@ -160,11 +161,11 @@ class ConverterHolder
      * Returns the converter instance for the given type.
      *
      * @access public
-     * @param  string             $type
-     * @throws  ConverterException if there are no converters associated.
+     * @param string $type
      * @return ConverterInterface
+     *@throws  ConverterException if there are no converters associated.
      */
-    public function getConverterForType($type)
+    public function getConverterForType(string $type): ConverterInterface
     {
         if (!$this->hasType($type)) {
             throw new ConverterException(
@@ -185,12 +186,12 @@ class ConverterHolder
      * Does the type exist ?
      *
      * @access public
-     * @param  string $type
+     * @param string $type
      * @return bool
      */
-    public function hasType($type)
+    public function hasType(string $type): bool
     {
-        return (bool) isset($this->types[$type]);
+        return isset($this->types[$type]);
     }
 
     /**
@@ -201,7 +202,7 @@ class ConverterHolder
      * @access public
      * @return array
      */
-    public function getTypes()
+    public function getTypes(): array
     {
         return array_keys($this->types);
     }
@@ -214,7 +215,7 @@ class ConverterHolder
      * @access public
      * @return array
      */
-    public function getTypesWithConverterName()
+    public function getTypesWithConverterName(): array
     {
         return $this->types;
     }

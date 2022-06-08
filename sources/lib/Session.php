@@ -9,6 +9,12 @@
  */
 namespace PommProject\Foundation;
 
+use PommProject\Foundation\Converter\ConverterClient;
+use PommProject\Foundation\Inspector\Inspector;
+use PommProject\Foundation\Listener\Listener;
+use PommProject\Foundation\Observer\Observer;
+use PommProject\Foundation\PreparedQuery\PreparedQuery;
+use PommProject\Foundation\QueryManager\QueryManagerClient;
 use PommProject\Foundation\Session\Session as VanillaSession;
 
 /**
@@ -30,12 +36,15 @@ class Session extends VanillaSession
      * Return the prepared query client.
      *
      * @access  public
-     * @param   string $query
-     * @return  \PommProject\Foundation\PreparedQuery\PreparedQuery
+     * @param string $query
+     * @return  PreparedQuery
+     * @throws Exception\FoundationException
      */
-    public function getPreparedQuery($query)
+    public function getPreparedQuery(string $query): PreparedQuery
     {
-        return $this->getClientUsingPooler('prepared_query', $query);
+        /** @var PreparedQuery $preparedQuery */
+        $preparedQuery = $this->getClientUsingPooler('prepared_query', $query);
+        return $preparedQuery;
     }
 
     /**
@@ -44,12 +53,15 @@ class Session extends VanillaSession
      * Return a query manager (default to QueryManager\SimpleQueryManager)
      *
      * @access  public
-     * @param   string              $query_manager
-     * @return  \PommProject\Foundation\QueryManager\QueryManagerClient
+     * @param string|null $query_manager
+     * @return  QueryManagerClient
+     * @throws Exception\FoundationException
      */
-    public function getQueryManager($query_manager = null)
+    public function getQueryManager(?string $query_manager = null): QueryManagerClient
     {
-        return $this->getClientUsingPooler('query_manager', $query_manager);
+        /** @var QueryManagerClient $queryManagerClient */
+        $queryManagerClient = $this->getClientUsingPooler('query_manager', $query_manager);
+        return $queryManagerClient;
     }
 
     /**
@@ -58,12 +70,15 @@ class Session extends VanillaSession
      * Return a converter client.
      *
      * @access  public
-     * @param   string          $name
-     * @return  \PommProject\Foundation\Converter\ConverterClient
+     * @param string $name
+     * @return  ConverterClient
+     * @throws Exception\FoundationException
      */
-    public function getConverter($name)
+    public function getConverter(string $name): ConverterClient
     {
-        return $this->getClientUsingPooler('converter', $name);
+        /** @var ConverterClient $converterClient */
+        $converterClient = $this->getClientUsingPooler('converter', $name);
+        return $converterClient;
     }
 
     /**
@@ -72,12 +87,15 @@ class Session extends VanillaSession
      * Return an observer client.
      *
      * @access  public
-     * @param   string      $name
-     * @return  \PommProject\Foundation\Observer\Observer
+     * @param string $name
+     * @return  Observer
+     * @throws Exception\FoundationException
      */
-    public function getObserver($name)
+    public function getObserver(string $name): Observer
     {
-        return $this->getClientUsingPooler('observer', $name);
+        /** @var Observer $observer */
+        $observer = $this->getClientUsingPooler('observer', $name);
+        return $observer;
     }
 
     /**
@@ -86,12 +104,15 @@ class Session extends VanillaSession
      * Return the database inspector.
      *
      * @access  public
-     * @param   string $name (null)
-     * @return  \PommProject\Foundation\Inspector\Inspector
+     * @param string|null $name (null)
+     * @return Inspector
+     * @throws Exception\FoundationException
      */
-    public function getInspector($name = null)
+    public function getInspector(?string $name = null): Inspector
     {
-        return $this->getClientUsingPooler('inspector', $name);
+        /** @var Inspector $inspector */
+        $inspector = $this->getClientUsingPooler('inspector', $name);
+        return $inspector;
     }
 
     /**
@@ -100,11 +121,14 @@ class Session extends VanillaSession
      * A short description here
      *
      * @access  public
-     * @param   string $name
-     * @return  \PommProject\Foundation\Listener\Listener
+     * @param string $name
+     * @return  Listener
+     * @throws Exception\FoundationException
      */
-    public function getListener($name)
+    public function getListener(string $name): Listener
     {
-        return $this->getClientUsingPooler('listener', $name);
+        /** @var Listener $listener */
+        $listener = $this->getClientUsingPooler('listener', $name);
+        return $listener;
     }
 }

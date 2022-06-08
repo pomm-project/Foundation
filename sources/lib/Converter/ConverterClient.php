@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Client\Client;
+use PommProject\Foundation\Exception\FoundationException;
 
 /**
  * ConverterClient
@@ -24,9 +25,6 @@ use PommProject\Foundation\Client\Client;
  */
 class ConverterClient extends Client
 {
-    protected $converter;
-    protected $name;
-
     /**
      * __construct
      *
@@ -36,10 +34,8 @@ class ConverterClient extends Client
      * @param  string    $name
      * @param  ConverterInterface $converter
      */
-    public function __construct($name, ConverterInterface $converter)
+    public function __construct(protected string $name, protected ConverterInterface $converter)
     {
-        $this->name      = $name;
-        $this->converter = $converter;
     }
 
     /**
@@ -47,7 +43,7 @@ class ConverterClient extends Client
      *
      * @see ClientInterface
      */
-    public function getClientType()
+    public function getClientType(): string
     {
         return 'converter';
     }
@@ -57,7 +53,7 @@ class ConverterClient extends Client
      *
      * @see ClientInterface
      */
-    public function getClientIdentifier()
+    public function getClientIdentifier(): string
     {
         return $this->name;
     }
@@ -68,16 +64,17 @@ class ConverterClient extends Client
      * Trigger converter's toPg conversion method.
      *
      * @access public
-     * @param  mixed  $value
-     * @param  string $type
+     * @param mixed $value
+     * @param string|null $type
      * @return string
+     * @throws FoundationException
      * @see ConverterInterface
      */
-    public function toPg($value, $type = null)
+    public function toPg(mixed $value, ?string $type = null): string
     {
         return $this->converter->toPg(
             $value,
-            $type === null ? $this->getClientIdentifier() : $type,
+            $type ?? $this->getClientIdentifier(),
             $this->getSession()
         );
     }
@@ -88,16 +85,17 @@ class ConverterClient extends Client
      * Trigger converter's fromPg conversion method.
      *
      * @access public
-     * @param  mixed  $value
-     * @param  string $type
+     * @param mixed $value
+     * @param string|null $type
      * @return mixed
+     * @throws FoundationException
      * @see ConverterInterface
      */
-    public function fromPg($value, $type = null)
+    public function fromPg(mixed $value, ?string $type = null): mixed
     {
         return $this->converter->fromPg(
             $value,
-            $type === null ? $this->getClientIdentifier() : $type,
+            $type ?? $this->getClientIdentifier(),
             $this->getSession()
         );
     }
@@ -108,16 +106,17 @@ class ConverterClient extends Client
      * Export data as CSV representation
      *
      * @access public
-     * @param  mixed    $value
-     * @param  string   $type
+     * @param mixed $value
+     * @param string|null $type
      * @return string
+     * @throws FoundationException
      * @see ConverterInterface
      */
-    public function toPgStandardFormat($value, $type = null)
+    public function toPgStandardFormat(mixed $value, ?string $type = null): string
     {
         return $this->converter->toPgStandardFormat(
             $value,
-            $type === null ? $this->getClientIdentifier() : $type,
+            $type ?? $this->getClientIdentifier(),
             $this->getSession()
         );
     }
@@ -130,7 +129,7 @@ class ConverterClient extends Client
      * @access public
      * @return ConverterInterface
      */
-    public function getConverter()
+    public function getConverter(): ConverterInterface
     {
         return $this->converter;
     }

@@ -81,12 +81,12 @@ class ParameterHolder extends Atoum
         $parameter_holder = $this->newTestedInstance(['pika' => 'one']);
         $this
             ->object($parameter_holder->mustHave('pika'))
-            ->isInstanceOf('\PommProject\Foundation\ParameterHolder')
+            ->isInstanceOf(\PommProject\Foundation\ParameterHolder::class)
             ->exception(function () use ($parameter_holder) { $parameter_holder->mustHave('chu'); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\FoundationException::class)
             ->message->contains('mandatory')
             ->object($parameter_holder->setParameter('chu', 'whatever')->mustHave('chu'))
-            ->isInstanceOf('\PommProject\Foundation\ParameterHolder')
+            ->isInstanceOf(\PommProject\Foundation\ParameterHolder::class)
             ;
     }
 
@@ -107,12 +107,12 @@ class ParameterHolder extends Atoum
         $parameter_holder = $this->newTestedInstance(['pika' => 'one', 'chu' => 'two']);
         $this
             ->object($parameter_holder->mustBeOneOf('pika', [ 'one', 'two', 'tree']))
-            ->isInstanceOf('\PommProject\Foundation\ParameterHolder')
+            ->isInstanceOf(\PommProject\Foundation\ParameterHolder::class)
             ->exception(function () use ($parameter_holder) { $parameter_holder->mustBeOneOf('pika', ['four', 'five']); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\FoundationException::class)
             ->message->contains('must be one of')
             ->exception(function () use ($parameter_holder) { $parameter_holder->mustBeOneOf('chu', ['four', 'five']); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\FoundationException::class)
             ->message->contains('must be one of')
             ;
     }
@@ -135,7 +135,7 @@ class ParameterHolder extends Atoum
         $parameter_holder = $this->newTestedInstance(['pika' => 'one']);
         $this
             ->object($parameter_holder)
-            ->isInstanceOf('\ArrayAccess')
+            ->isInstanceOf(\ArrayAccess::class)
             ->boolean(isset($parameter_holder['pika']))
             ->isTrue()
             ->string($parameter_holder['pika'])
@@ -162,7 +162,7 @@ class ParameterHolder extends Atoum
         $parameter_holder = $this->newTestedInstance(['pika' => 'one']);
         $this
             ->object($parameter_holder)
-            ->isInstanceOf('\Countable')
+            ->isInstanceOf(\Countable::class)
             ->integer($parameter_holder->count())
             ->isEqualTo(1)
             ->integer($parameter_holder->setParameter('chu', 'two')->count())
@@ -175,7 +175,7 @@ class ParameterHolder extends Atoum
         $parameter_holder = $this->newTestedInstance(['pika' => 'one']);
         $this
             ->object($parameter_holder)
-            ->isInstanceOf('\IteratorAggregate')
+            ->isInstanceOf(\IteratorAggregate::class)
             ->array($parameter_holder->getIterator()->getArrayCopy())
             ->isIdenticalTo(['pika' => 'one'])
             ->array($parameter_holder->setParameter('chu', 'two')->getIterator()->getArrayCopy())

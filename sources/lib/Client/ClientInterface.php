@@ -33,7 +33,7 @@ interface ClientInterface
      * @param  Session $session
      * @return void
      */
-    public function initialize(Session $session);
+    public function initialize(Session $session): void;
 
     /**
      * shutdown
@@ -45,7 +45,7 @@ interface ClientInterface
      * @access public
      * @return void
      */
-    public function shutdown();
+    public function shutdown(): void;
 
     /**
      * getClientType
@@ -56,7 +56,7 @@ interface ClientInterface
      * @access public
      * @return string
      */
-    public function getClientType();
+    public function getClientType(): string;
 
     /**
      * getClientIdentifier
@@ -67,5 +67,5 @@ interface ClientInterface
      * @access public
      * @return string
      */
-    public function getClientIdentifier();
+    public function getClientIdentifier(): string;
 }

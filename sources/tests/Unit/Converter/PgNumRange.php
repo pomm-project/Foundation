@@ -72,7 +72,7 @@ class PgNumRange extends BaseConverter
             ->assert($data['assert'])
             ->given($instance = $this->newTestedInstance()->fromPg($data['text_range'], 'tstzrange', $session))
             ->object($instance)
-            ->isInstanceOf('\PommProject\Foundation\Converter\Type\NumRange')
+            ->isInstanceOf(\PommProject\Foundation\Converter\Type\NumRange::class)
             ->variable($instance->start_limit)
             ->isEqualTo($data['expected_start_limit'])
             ->variable($instance->end_limit)
@@ -89,7 +89,7 @@ class PgNumRange extends BaseConverter
         $session = $this->buildSession();
         $this
             ->object($this->newTestedInstance()->fromPg('[1,3)', 'int4range', $session))
-            ->isInstanceOf('PommProject\Foundation\Converter\Type\NumRange')
+            ->isInstanceOf(\PommProject\Foundation\Converter\Type\NumRange::class)
             ->variable($this->newTestedInstance()->fromPg(null, 'point', $session))
             ->isNull()
             ;

@@ -55,7 +55,7 @@ class Session extends VanillaSessionAtoum
 
         $this
             ->object($session->getConnection())
-            ->isInstanceOf('\PommProject\Foundation\Session\Connection')
+            ->isInstanceOf(\PommProject\Foundation\Session\Connection::class)
             ;
     }
 
@@ -85,7 +85,7 @@ class Session extends VanillaSessionAtoum
             ->variable($session->getClient('test', 'one'))
             ->isNull()
             ->object($session->registerClient($client_mock))
-            ->isInstanceOf('\PommProject\Foundation\Session\Session')
+            ->isInstanceOf(\PommProject\Foundation\Session\Session::class)
             ->mock($client_mock)
             ->call('getClientIdentifier')
             ->once()
@@ -108,7 +108,7 @@ class Session extends VanillaSessionAtoum
             ->isFalse()
             ->assert('Testing client pooler registration.')
             ->object($session->registerClientPooler($client_pooler_mock))
-            ->isInstanceOf('\PommProject\Foundation\Session\Session')
+            ->isInstanceOf(\PommProject\Foundation\Session\Session::class)
             ->boolean($session->hasPoolerForType('test'))
             ->isTrue()
             ->mock($client_pooler_mock)
@@ -126,7 +126,7 @@ class Session extends VanillaSessionAtoum
 
         $this
             ->exception(function () use ($session) { $session->getPoolerForType('test'); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\FoundationException::class)
             ->message->contains('No pooler registered for type')
             ->object($session
                 ->registerClientPooler($client_pooler_mock)
@@ -143,9 +143,9 @@ class Session extends VanillaSessionAtoum
 
         $this
             ->object($session->getClientUsingPooler('test', 'ok'))
-            ->isInstanceOf('\PommProject\Foundation\Client\ClientInterface')
+            ->isInstanceOf(\PommProject\Foundation\Client\ClientInterface::class)
             ->exception(function () use ($session) {$session->getClientUsingPooler('whatever', 'ok');})
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\FoundationException::class)
             ->message->contains('No pooler registered for type')
             ;
     }
@@ -157,13 +157,13 @@ class Session extends VanillaSessionAtoum
 
         $this
             ->exception(function () use ($session) { $session->azerty('ok', 'what'); })
-            ->isInstanceOf('\BadFunctionCallException')
+            ->isInstanceOf(\BadFunctionCallException::class)
             ->message->contains('Unknown method')
             ->exception(function () use ($session) { $session->getPika('ok'); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\FoundationException::class)
             ->message->contains('No pooler registered for type')
             ->object($session->getTest('ok'))
-            ->isInstanceOf('\PommProject\Foundation\Client\ClientInterface')
+            ->isInstanceOf(\PommProject\Foundation\Client\ClientInterface::class)
             ->mock($client_pooler_mock)
             ->call('getClient')
             ->withArguments('ok')
@@ -178,8 +178,8 @@ class Session extends VanillaSessionAtoum
         $session->shutdown();
 
         $this
-            ->exception(function () use ($session) { return $session->getTest('ok'); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->exception(fn() => $session->getTest('ok'))
+            ->isInstanceOf(\PommProject\Foundation\Exception\FoundationException::class)
             ->message->contains('is shutdown')
             ->integer($session->getConnection()->getConnectionStatus())
             ->isEqualTo(FoundationConnection::CONNECTION_STATUS_NONE)

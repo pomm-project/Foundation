@@ -20,18 +20,18 @@ namespace PommProject\Foundation\Converter\Type;
  * @license X11 {@link http://opensource.org/licenses/mit-license.php}
  * @abstract
  */
-abstract class BaseRange
+abstract class BaseRange implements \Stringable
 {
-    const INFINITY_MAX = 'infinity';
-    const INFINITY_MIN = '-infinity';
-    const EMPTY_RANGE  = 'empty';
+    final const INFINITY_MAX = 'infinity';
+    final const INFINITY_MIN = '-infinity';
+    final const EMPTY_RANGE  = 'empty';
 
-    public $start_limit;
-    public $end_limit;
-    public $start_incl;
-    public $end_incl;
+    public mixed $start_limit;
+    public mixed $end_limit;
+    public ?bool $start_incl;
+    public ?bool $end_incl;
 
-    protected $description;
+    protected string $description;
 
     /**
      * getRegexp
@@ -47,7 +47,7 @@ abstract class BaseRange
      * @access protected
      * @return string
      */
-    abstract protected function getRegexp();
+    abstract protected function getRegexp(): string;
 
     /**
      * getSubElement
@@ -58,7 +58,7 @@ abstract class BaseRange
      * @param  string $element
      * @return mixed
      */
-    abstract protected function getSubElement($element);
+    abstract protected function getSubElement(string $element): mixed;
 
     /**
      * __construct
@@ -70,7 +70,7 @@ abstract class BaseRange
      * @param  string $description
      * @throws \InvalidArgumentException
      */
-    public function __construct($description)
+    public function __construct(string $description)
     {
         if (!preg_match($this->getRegexp(), $description, $matches)) {
             throw new \InvalidArgumentException(
@@ -104,7 +104,7 @@ abstract class BaseRange
      * @access public
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->description;
     }

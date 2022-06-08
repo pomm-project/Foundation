@@ -9,10 +9,12 @@
  */
 namespace PommProject\Foundation\PreparedQuery;
 
+use PommProject\Foundation\Converter\ConverterClient;
 use PommProject\Foundation\QueryManager\QueryParameterParserTrait;
 use PommProject\Foundation\Listener\SendNotificationTrait;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Client\Client;
+use PommProject\Foundation\Session\ResultHandler;
 
 /**
  * PreparedQuery
@@ -27,10 +29,10 @@ class PreparedQuery extends Client
     use QueryParameterParserTrait;
     use SendNotificationTrait;
 
-    protected $sql;
-    private $is_prepared = false;
-    private $identifier;
-    private $converters;
+    protected string $sql;
+    private bool $is_prepared = false;
+    private string $identifier;
+    private ?array $converters = null;
 
     /**
      * getSignatureFor
@@ -39,10 +41,10 @@ class PreparedQuery extends Client
      *
      * @static
      * @access public
-     * @param  string $sql Sql query
+     * @param string $sql Sql query
      * @return string
      */
-    public static function getSignatureFor($sql)
+    public static function getSignatureFor(string $sql): string
     {
         return md5($sql);
     }
@@ -53,10 +55,10 @@ class PreparedQuery extends Client
      * Build the prepared query.
      *
      * @access public
-     * @param  string $sql SQL query
+     * @param string|null $sql SQL query
      * @throws FoundationException
      */
-    public function __construct($sql)
+    public function __construct(?string $sql)
     {
         if (empty($sql)) {
             throw new FoundationException("Can not prepare an empty query.");
@@ -69,7 +71,7 @@ class PreparedQuery extends Client
     /**
      * @see ClientPoolerInterface
      */
-    public function getClientType()
+    public function getClientType(): string
     {
         return 'prepared_query';
     }
@@ -82,7 +84,7 @@ class PreparedQuery extends Client
      * @access public
      * @return string Query identifier.
      */
-    public function getClientIdentifier()
+    public function getClientIdentifier(): string
     {
         return $this->identifier;
     }
@@ -92,9 +94,10 @@ class PreparedQuery extends Client
      *
      * Deallocate the statement in the database.
      *
+     * @throws FoundationException
      * @see ClientInterface
      */
-    public function shutdown()
+    public function shutdown(): void
     {
         if ($this->is_prepared === true) {
             $this
@@ -115,10 +118,11 @@ class PreparedQuery extends Client
      * Launch the query with the given parameters.
      *
      * @access public
-     * @param  array    $values Query parameters
-     * @return Resource
+     * @param array $values Query parameters
+     * @return ResultHandler
+     * @throws FoundationException
      */
-    public function execute(array $values = [])
+    public function execute(array $values = []): ResultHandler
     {
         if ($this->is_prepared === false) {
             $this->prepare();
@@ -135,7 +139,7 @@ class PreparedQuery extends Client
         );
 
         $start    = microtime(true);
-        $resource = $this
+        $result = $this
             ->getSession()
             ->getConnection()
             ->sendExecuteQuery(
@@ -147,12 +151,12 @@ class PreparedQuery extends Client
         $this->sendNotification(
             'query:post',
             [
-                'result_count' => $resource->countRows(),
+                'result_count' => $result->countRows(),
                 'time_ms'      => sprintf("%03.1f", ($end - $start) * 1000),
             ]
         );
 
-        return $resource;
+        return $result;
     }
 
     /**
@@ -162,8 +166,9 @@ class PreparedQuery extends Client
      *
      * @access protected
      * @return PreparedQuery $this
+     * @throws FoundationException
      */
-    protected function prepare()
+    protected function prepare(): PreparedQuery
     {
         $this
             ->getSession()
@@ -185,7 +190,7 @@ class PreparedQuery extends Client
      * @access public
      * @return string SQL query
      */
-    public function getSql()
+    public function getSql(): string
     {
         return $this->sql;
     }
@@ -196,11 +201,12 @@ class PreparedQuery extends Client
      * Prepare parameters to be sent.
      *
      * @access protected
-     * @param  mixed    $sql
-     * @param  array    $values
+     * @param mixed $sql
+     * @param array $values
      * @return array    $prepared_values
+     * @throws FoundationException
      */
-    protected function prepareValues($sql, array $values)
+    protected function prepareValues(mixed $sql, array $values): array
     {
         if ($this->converters === null) {
             $this->prepareConverters($sql);
@@ -221,24 +227,24 @@ class PreparedQuery extends Client
      * Store converters needed for the query parameters.
      *
      * @access protected
-     * @param mixed             $sql
+     * @param mixed $sql
      * @return PreparedQuery    $this
+     * @throws FoundationException
      */
-    protected function prepareConverters($sql)
+    protected function prepareConverters(mixed $sql): PreparedQuery
     {
         foreach ($this->getParametersType($sql) as $index => $type) {
             if ($type === '') {
                 $this->converters[$index] = null;
             } else {
-                $converter = $this
+                /** @var ConverterClient $converterClient */
+                $converterClient = $this
                     ->getSession()
-                    ->getClientUsingPooler('converter', $type)
-                    ->getConverter()
-                    ;
+                    ->getClientUsingPooler('converter', $type);
 
-                $this->converters[$index] = function ($value) use ($converter, $type) {
-                    return $converter->toPgStandardFormat($value, $type, $this->getSession());
-                };
+                $converter = $converterClient->getConverter();
+
+                $this->converters[$index] = fn($value) => $converter->toPgStandardFormat($value, $type, $this->getSession());
             }
         }
 

@@ -26,10 +26,14 @@ use PommProject\Foundation\Session\Session;
 class PgBoolean implements ConverterInterface
 {
     /**
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): ?bool
     {
+        if (null === $data) {
+            return null;
+        }
         $data = trim($data);
 
         if (!preg_match('/^(t|f)$/', $data)) {
@@ -40,13 +44,13 @@ class PgBoolean implements ConverterInterface
             throw new ConverterException(sprintf("Unknown %s data '%s'.", $type, $data));
         }
 
-        return (bool) ($data === 't');
+        return $data === 't';
     }
 
     /**
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         if ($data === null) {
             return sprintf("NULL::%s", $type);
@@ -58,7 +62,7 @@ class PgBoolean implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         if ($data !== null) {
             return $data === true ? 't' : 'f';

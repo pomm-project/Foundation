@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace PommProject\Foundation\Session;
 
 use PommProject\Foundation\Inflector;
@@ -33,11 +34,9 @@ use Psr\Log\LoggerInterface;
  */
 class Session implements LoggerAwareInterface
 {
-    protected $connection;
-    protected $client_holder;
-    protected $client_poolers = [];
-    protected $stamp;
-    protected $is_shutdown = false;
+    protected ClientHolder $client_holder;
+    protected array $client_poolers = [];
+    protected bool $is_shutdown = false;
 
     use LoggerAwareTrait;
 
@@ -49,21 +48,16 @@ class Session implements LoggerAwareInterface
      * 'dsn' parameter from the ParameterHolder.
      *
      * @access  public
-     * @param   Connection       $connection
-     * @param   ClientHolder     $client_holder
-     * @param   string           $stamp
+     * @param Connection $connection
+     * @param ClientHolder|null $client_holder
+     * @param string|null $stamp
      */
     public function __construct(
-        Connection      $connection,
-        ClientHolder    $client_holder = null,
-        $stamp = null
+        protected Connection $connection,
+        ?ClientHolder $client_holder = null,
+        protected ?string $stamp = null
     ) {
-        $this->connection    = $connection;
-        $this->client_holder = $client_holder === null
-            ? new ClientHolder
-            : $client_holder
-            ;
-        $this->stamp = $stamp;
+        $this->client_holder = $client_holder ?? new ClientHolder;
     }
 
     /**
@@ -88,9 +82,9 @@ class Session implements LoggerAwareInterface
      * connection termination.
      *
      * @access  public
-     * @return  null
+     * @return void
      */
-    public function shutdown()
+    public function shutdown(): void
     {
         $exceptions = $this->client_holder->shutdown();
 
@@ -98,7 +92,7 @@ class Session implements LoggerAwareInterface
             foreach ($exceptions as $exception) {
                 printf(
                     "Exception caught during shutdown: %s\n",
-                    (string) $exception
+                    (string)$exception
                 );
             }
 
@@ -118,9 +112,9 @@ class Session implements LoggerAwareInterface
      * @access  public
      * @return  string|null
      */
-    public function getStamp()
+    public function getStamp(): ?string
     {
-        return $this->stamp === null ? null : (string) $this->stamp;
+        return $this->stamp === null ? null : (string)$this->stamp;
     }
 
     /**
@@ -131,7 +125,7 @@ class Session implements LoggerAwareInterface
      * @access  public
      * @return  LoggerInterface|null
      */
-    public function getLogger()
+    public function getLogger(): ?LoggerInterface
     {
         return $this->logger;
     }
@@ -144,9 +138,9 @@ class Session implements LoggerAwareInterface
      * @access  public
      * @return  bool
      */
-    public function hasLogger()
+    public function hasLogger(): bool
     {
-        return (bool) ($this->logger !== null);
+        return $this->logger !== null;
     }
 
     /**
@@ -157,7 +151,7 @@ class Session implements LoggerAwareInterface
      * @access  public
      * @return  Connection
      */
-    public function getConnection()
+    public function getConnection(): Connection
     {
         return $this->connection;
     }
@@ -169,20 +163,24 @@ class Session implements LoggerAwareInterface
      * client holder.
      *
      * @access  public
-     * @param   ClientInterface $client
+     * @param ClientInterface $client
      * @return  Session $this
      */
-    public function registerClient(ClientInterface $client)
+    public function registerClient(ClientInterface $client): Session
     {
         $client->initialize($this);
         $this->client_holder->add($client);
-        $this->hasLogger() && $this->getLogger()->debug(
-            "Pomm: Registering new client",
-            [
-                'type' => $client->getClientType(),
-                'identifier' => $client->getClientIdentifier(),
-            ]
-        );
+
+        if ($this->hasLogger()) {
+            $this->getLogger()->debug(
+                "Pomm: Registering new client",
+                [
+                    'type' => $client->getClientType(),
+                    'identifier' => $client->getClientIdentifier(),
+                ]
+            );
+        }
+
 
         return $this;
     }
@@ -193,11 +191,11 @@ class Session implements LoggerAwareInterface
      * Return a Client from its type and identifier.
      *
      * @access  public
-     * @param   string $type
-     * @param   string $identifier
-     * @return  Client or null if not found.
+     * @param string|null $type
+     * @param string $identifier
+     * @return ClientInterface|null or null if not found.
      */
-    public function getClient($type, $identifier)
+    public function getClient(?string $type, string $identifier): ?ClientInterface
     {
         return $this->client_holder->get($type, $identifier);
     }
@@ -208,11 +206,11 @@ class Session implements LoggerAwareInterface
      * Tell if a client exist or not.
      *
      * @access  public
-     * @param   string $type
-     * @param   string $name
+     * @param string $type
+     * @param string $name
      * @return  bool
      */
-    public function hasClient($type, $name)
+    public function hasClient(string $type, string $name): bool
     {
         return $this->client_holder->has($type, $name);
     }
@@ -223,10 +221,10 @@ class Session implements LoggerAwareInterface
      * Add or replace a Client pooler for the specified type.
      *
      * @access  public
-     * @param   ClientPoolerInterface $client_pooler
+     * @param ClientPoolerInterface $client_pooler
      * @return  Session               $this
      */
-    public function registerClientPooler(ClientPoolerInterface $client_pooler)
+    public function registerClientPooler(ClientPoolerInterface $client_pooler): Session
     {
         if ($client_pooler->getPoolerType() == null) {
             throw new \InvalidArgumentException("Can not register a pooler for the empty type.");
@@ -234,12 +232,14 @@ class Session implements LoggerAwareInterface
 
         $client_pooler->register($this);
         $this->client_poolers[$client_pooler->getPoolerType()] = $client_pooler;
-        $this->hasLogger()
-            && $this->getLogger()
-            ->debug(
-                "Pomm: Registering new client pooler.",
-                ['type' => $client_pooler->getPoolerType()]
-            );
+
+        if ($this->hasLogger()) {
+            $this->getLogger()
+                ->debug(
+                    "Pomm: Registering new client pooler.",
+                    ['type' => $client_pooler->getPoolerType()]
+                );
+        }
 
         return $this;
     }
@@ -250,12 +250,12 @@ class Session implements LoggerAwareInterface
      * Tell if a pooler exist or not.
      *
      * @access  public
-     * @param   string  $type
+     * @param string $type
      * @return  bool
      */
-    public function hasPoolerForType($type)
+    public function hasPoolerForType(string $type): bool
     {
-        return (bool) (isset($this->client_poolers[$type]));
+        return isset($this->client_poolers[$type]);
     }
 
     /**
@@ -264,11 +264,11 @@ class Session implements LoggerAwareInterface
      * Get the registered for the given type.
      *
      * @access  public
-     * @param   string              $type
-     * @throws  FoundationException if pooler does not exist
+     * @param string $type
      * @return  ClientPoolerInterface
+     * @throws  FoundationException if pooler does not exist
      */
-    public function getPoolerForType($type)
+    public function getPoolerForType(string $type): ClientPoolerInterface
     {
         if (!$this->hasPoolerForType($type)) {
             $error_message = <<<ERROR
@@ -300,10 +300,10 @@ ERROR;
      * Return all instances of clients for a given type.
      *
      * @access  public
-     * @param   string $type
-     * @return  ClientInterface
+     * @param string $type
+     * @return  array
      */
-    public function getAllClientForType($type)
+    public function getAllClientForType(string $type): array
     {
         return $this->client_holder->getAllFor($type);
     }
@@ -315,11 +315,12 @@ ERROR;
      * FoundationException is thrown.
      *
      * @access  public
-     * @param   string          $type
-     * @param   string          $identifier
+     * @param string $type
+     * @param string|null $identifier
      * @return  ClientInterface
+     * @throws FoundationException
      */
-    public function getClientUsingPooler($type, $identifier)
+    public function getClientUsingPooler(string $type, ?string $identifier): ClientInterface
     {
         return $this->getPoolerForType($type)->getClient($identifier);
     }
@@ -330,13 +331,13 @@ ERROR;
      * Create handy methods to access clients through a pooler.
      *
      * @access  public
-     * @param   string                   $method
-     * @param   array                    $arguments
-     * @throws  \BadFunctionCallException if unknown method
-     * @throws  FoundationException      if no poolers found
+     * @param string $method
+     * @param array $arguments
      * @return  ClientInterface
+     * @throws  FoundationException      if no poolers found
+     * @throws  \BadFunctionCallException if unknown method
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments)
     {
         if (!preg_match('/get([A-Z][A-Za-z]+)/', $method, $matches)) {
             throw new \BadFunctionCallException(sprintf("Unknown method 'Session::%s()'.", $method));
@@ -356,7 +357,7 @@ ERROR;
      * @access  public
      * @return  array
      */
-    public function getRegisterPoolersNames()
+    public function getRegisterPoolersNames(): array
     {
         return array_keys($this->client_poolers);
     }

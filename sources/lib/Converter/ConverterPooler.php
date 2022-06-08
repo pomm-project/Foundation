@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
+use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Exception\ConverterException;
 
@@ -25,8 +26,6 @@ use PommProject\Foundation\Exception\ConverterException;
  */
 class ConverterPooler extends ClientPooler
 {
-    protected $converter_holder;
-
     /**
      * __construct
      *
@@ -35,9 +34,8 @@ class ConverterPooler extends ClientPooler
      * @access public
      * @param  ConverterHolder $converter_holder
      */
-    public function __construct(ConverterHolder $converter_holder)
+    public function __construct(protected ConverterHolder $converter_holder)
     {
-        $this->converter_holder = $converter_holder;
     }
 
     /**
@@ -45,7 +43,7 @@ class ConverterPooler extends ClientPooler
      *
      * @see ClientPoolerInterface
      */
-    public function getPoolerType()
+    public function getPoolerType(): string
     {
         return 'converter';
     }
@@ -55,7 +53,7 @@ class ConverterPooler extends ClientPooler
      *
      * @see ClientPoolerInterface
      */
-    public function getClient($identifier)
+    public function getClient($identifier): ClientInterface
     {
         if ($identifier !== PgArray::getSubType($identifier)) {
             return parent::getClient('array');
@@ -73,7 +71,7 @@ class ConverterPooler extends ClientPooler
      * @see   ClientPooler
      * @throws ConverterException
      */
-    public function createClient($identifier)
+    public function createClient(string $identifier): ConverterClient
     {
         if (!$this->converter_holder->hasType($identifier)) {
             throw new ConverterException(
@@ -98,7 +96,7 @@ class ConverterPooler extends ClientPooler
      * @access public
      * @return ConverterHolder
      */
-    public function getConverterHolder()
+    public function getConverterHolder(): ConverterHolder
     {
         return $this->converter_holder;
     }

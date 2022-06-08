@@ -26,12 +26,12 @@ use PommProject\Foundation\Exception\FoundationException;
  */
 trait ClientTrait
 {
-    private $session;
+    private ?Session $session = null;
 
     /**
      * @see ClientInterface
      */
-    public function initialize(Session $session)
+    public function initialize(Session $session): void
     {
         $this->session = $session;
     }
@@ -40,7 +40,7 @@ trait ClientTrait
      * Most of the time, there is nothing to be done at shutdown.
      * @see ClientInterface
      */
-    public function shutdown()
+    public function shutdown(): void
     {
     }
 
@@ -53,13 +53,13 @@ trait ClientTrait
      * @throws  FoundationException if Session is not set.
      * @return Session
      */
-    protected function getSession()
+    protected function getSession(): Session
     {
         if ($this->session === null) {
             throw new FoundationException(
                 sprintf(
                     "Client '%s' is not initialized hence does not have a session.",
-                    get_class($this)
+                    $this::class
                 )
             );
         }

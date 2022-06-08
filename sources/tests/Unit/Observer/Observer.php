@@ -72,14 +72,14 @@ class Observer extends VanillaSessionAtoum
             ;
         $this
             ->object($session->getObserver('an identifier')->throwNotification())
-            ->isInstanceOf('\PommProject\Foundation\Observer\Observer')
+            ->isInstanceOf(\PommProject\Foundation\Observer\Observer::class)
             ;
         $this->notify('an identifier', 'some data');
         $this
             ->exception(function () use ($session) { $session->getObserver('an identifier')->throwNotification(); })
             ->message->contains('some data')
             ->object($session->getObserver('an identifier')->throwNotification())
-            ->isInstanceOf('\PommProject\Foundation\Observer\Observer')
+            ->isInstanceOf(\PommProject\Foundation\Observer\Observer::class)
             ;
     }
 }

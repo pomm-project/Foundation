@@ -29,14 +29,18 @@ class PgNumber implements ConverterInterface
      *
      * @see ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): float|int|null
     {
+        if (null === $data) {
+            return null;
+        }
         $data = trim($data);
 
         if ($data === '') {
             return null;
         }
 
+        /** @phpstan-ignore-next-line */
         return $data + 0;
     }
 
@@ -45,7 +49,7 @@ class PgNumber implements ConverterInterface
      *
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         return
             $data !== null
@@ -59,7 +63,7 @@ class PgNumber implements ConverterInterface
      *
      * @see ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         return
             $data !== null

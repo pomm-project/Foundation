@@ -22,7 +22,7 @@ class PgInterval extends BaseConverter
             ->dateInterval($this->newTestedInstance()->fromPg('P14346DT22H47M3.138892S', 'interval', $session))
             ->isEqualTo(new \DateInterval('P14346DT22H47M3S')) // <- truncated to second precision
             ->exception(function () use ($session) { $this->newTestedInstance()->fromPg('P-11D', 'interval', $session); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\ConverterException::class)
             ->message->contains('is not an ISO8601 interval representation')
         ;
     }
@@ -36,7 +36,7 @@ class PgInterval extends BaseConverter
             ->string($this->newTestedInstance()->toPg(new \DateInterval('P14346DT22H47M3S'), 'interval', $session))
             ->isEqualTo("interval '00 years 00 months 14346 days 22:47:03'")
             ->exception(function () use ($session) { $this->newTestedInstance()->toPg('foo', 'interval', $session); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\ConverterException::class)
             ->message->contains('First argument is not a \DateInterval instance')
             ;
     }

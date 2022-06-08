@@ -9,6 +9,8 @@
  */
 namespace PommProject\Foundation\Converter;
 
+use PommProject\Foundation\Converter\Type\NumRange;
+
 /**
  * PgNumRange
  *
@@ -27,8 +29,8 @@ class PgNumRange extends TypeConverter
      *
      * @see TypeConverter
      */
-    public function getTypeClassName()
+    public function getTypeClassName(): string
     {
-        return '\PommProject\Foundation\Converter\Type\NumRange';
+        return NumRange::class;
     }
 }

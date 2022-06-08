@@ -9,7 +9,8 @@
  */
 namespace PommProject\Foundation\Session;
 
-use PommProject\Foundation\Converter;
+use PommProject\Foundation\Exception\ConnectionException;
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\ParameterHolder;
 use PommProject\Foundation\Client\ClientHolder;
 use PommProject\Foundation\Converter\ConverterHolder;
@@ -28,8 +29,8 @@ use PommProject\Foundation\Converter\ConverterHolder;
  */
 class SessionBuilder
 {
-    protected $configuration;
-    protected $converter_holder;
+    protected ParameterHolder $configuration;
+    protected ConverterHolder $converter_holder;
 
     /**
      * __construct
@@ -41,8 +42,8 @@ class SessionBuilder
      * name: database logical name
      *
      * @access public
-     * @param array             $configuration
-     * @param ConverterHolder   $converter_holder
+     * @param array $configuration
+     * @param ConverterHolder|null $converter_holder
      */
     public function __construct(array $configuration, ConverterHolder $converter_holder = null)
     {
@@ -52,9 +53,7 @@ class SessionBuilder
                 $configuration
             )
         );
-        $converter_holder = $converter_holder === null
-            ? new ConverterHolder
-            : $converter_holder
+        $converter_holder ??= new ConverterHolder
             ;
 
         $this->initializeConverterHolder($converter_holder);
@@ -67,11 +66,11 @@ class SessionBuilder
      * Add a configuration parameter.
      *
      * @access public
-     * @param  string $name
+     * @param string $name
      * @param  mixed $value
      * @return SessionBuilder $this
      */
-    public function addParameter($name, $value)
+    public function addParameter(string $name, mixed $value): SessionBuilder
     {
         $this->configuration->setParameter($name, $value);
 
@@ -86,7 +85,7 @@ class SessionBuilder
      * @access public
      * @return ConverterHolder
      */
-    public function getConverterHolder()
+    public function getConverterHolder(): ConverterHolder
     {
         return $this->converter_holder;
     }
@@ -98,10 +97,11 @@ class SessionBuilder
      *
      * @final
      * @access public
-     * @param  string   $stamp
+     * @param string|null $stamp
      * @return Session
+     * @throws FoundationException
      */
-    final public function buildSession($stamp = null)
+    final public function buildSession(string $stamp = null): Session
     {
         $this->preConfigure();
         $dsn = $this
@@ -131,7 +131,7 @@ class SessionBuilder
      * @access protected
      * @return array
      */
-    protected function getDefaultConfiguration()
+    protected function getDefaultConfiguration(): array
     {
         return
             [
@@ -154,7 +154,7 @@ class SessionBuilder
      * @access protected
      * @return SessionBuilder $this
      */
-    protected function preConfigure()
+    protected function preConfigure(): SessionBuilder
     {
         return $this;
     }
@@ -165,11 +165,12 @@ class SessionBuilder
      * Connection instantiation.
      *
      * @access protected
-     * @param  string   $dsn
-     * @param  string|array $connection_configuration
+     * @param string $dsn
+     * @param string|array $connection_configuration
      * @return Connection
+     * @throws ConnectionException
      */
-    protected function createConnection($dsn, $connection_configuration)
+    protected function createConnection(string $dsn, string|array $connection_configuration): Connection
     {
         return new Connection($dsn, $connection_configuration);
     }
@@ -182,12 +183,12 @@ class SessionBuilder
      * @access protected
      * @param  Connection   $connection
      * @param  ClientHolder $client_holder
-     * @param  string|null  $stamp
+     * @param string|null $stamp
      * @return Session
      */
-    protected function createSession(Connection $connection, ClientHolder $client_holder, $stamp)
+    protected function createSession(Connection $connection, ClientHolder $client_holder, ?string $stamp): Session
     {
-        $session_class = $this->configuration->getParameter('class:session', '\PommProject\Foundation\Session\Session');
+        $session_class = $this->configuration->getParameter('class:session', \PommProject\Foundation\Session\Session::class);
 
         return new $session_class($connection, $client_holder, $stamp);
     }
@@ -200,7 +201,7 @@ class SessionBuilder
      * @access protected
      * @return ClientHolder
      */
-    protected function createClientHolder()
+    protected function createClientHolder(): ClientHolder
     {
         return new ClientHolder();
     }
@@ -215,7 +216,7 @@ class SessionBuilder
      * @param  Session          $session
      * @return SessionBuilder   $this
      */
-    protected function postConfigure(Session $session)
+    protected function postConfigure(Session $session): SessionBuilder
     {
         return $this;
     }
@@ -230,7 +231,7 @@ class SessionBuilder
      * @param  ConverterHolder  $converter_holder
      * @return SessionBuilder   $this
      */
-    protected function initializeConverterHolder(ConverterHolder $converter_holder)
+    protected function initializeConverterHolder(ConverterHolder $converter_holder): SessionBuilder
     {
         return $this;
     }

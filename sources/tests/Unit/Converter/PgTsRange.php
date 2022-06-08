@@ -82,7 +82,7 @@ class PgTsRange extends BaseConverter
             ->assert($data['assert'])
             ->given($instance = $this->newTestedInstance()->fromPg($data['text_range'], 'tstzrange', $session))
             ->object($instance)
-            ->isInstanceOf('\PommProject\Foundation\Converter\Type\TsRange')
+            ->isInstanceOf(\PommProject\Foundation\Converter\Type\TsRange::class)
             ->variable($instance->start_limit)
             ->isEqualTo($data['expected_start_limit'])
             ->variable($instance->end_limit)
@@ -101,7 +101,7 @@ class PgTsRange extends BaseConverter
         $text_range_without_double_quote = '[2014-08-15 15:29:24.395639+00,2014-10-15 15:29:24.395639+00)';
         $this
             ->object($this->newTestedInstance()->fromPg($text_range, 'tstzrange', $session))
-            ->isInstanceOf('\PommProject\Foundation\Converter\Type\TsRange')
+            ->isInstanceOf(\PommProject\Foundation\Converter\Type\TsRange::class)
             ->variable($this->newTestedInstance()->fromPg(null, 'whatever', $session))
             ->isNull()
             ->variable($this->newTestedInstance()->fromPg('', 'whatever', $session))
@@ -110,12 +110,12 @@ class PgTsRange extends BaseConverter
         $range = $this->newTestedInstance()->fromPg($text_range, 'tstzrange', $session);
         $this
             ->object($range->start_limit)
-            ->isInstanceOf('\DateTime')
+            ->isInstanceOf(\DateTime::class)
             ;
         $range_without_double_quote = $this->newTestedInstance()->fromPg($text_range_without_double_quote, 'tstzrange', $session);
         $this
             ->object($range_without_double_quote->start_limit)
-            ->isInstanceOf('\DateTime')
+            ->isInstanceOf(\DateTime::class)
         ;
     }
 
@@ -148,7 +148,7 @@ class PgTsRange extends BaseConverter
         if ($this->isPgVersionAtLeast('9.2', $session)) {
             $this
                 ->object($this->sendToPostgres($range, 'tsrange', $session))
-                ->isInstanceOf('\PommProject\Foundation\Converter\Type\TsRange')
+                ->isInstanceOf(\PommProject\Foundation\Converter\Type\TsRange::class)
                 ;
         } else {
             $this->skip('Skipping some PgTsRange tests because Pg version < 9.2.');

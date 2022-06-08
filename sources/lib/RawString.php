@@ -22,21 +22,18 @@ namespace PommProject\Foundation;
  * @author    Grégoire HUBERT
  * @license   X11 {@link http://opensource.org/licenses/mit-license.php}
  */
-class RawString
+class RawString implements \Stringable
 {
-    protected $expression;
-
     /**
      * __construct
      *
      * Create a RawString.
      *
      * @access public
-     * @param  string $expression
+     * @param string $expression
      */
-    public function __construct($expression)
+    public function __construct(protected string $expression)
     {
-        $this->expression = $expression;
     }
 
     /**
@@ -47,7 +44,7 @@ class RawString
      * @access public
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->expression;
     }

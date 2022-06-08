@@ -26,7 +26,7 @@ class NumRange extends BaseRange
      *
      * @see BaseRange
      */
-    protected function getRegexp()
+    protected function getRegexp(): string
     {
         return '/(empty)|([\[\(])(-?[0-9\.]+)?, *(-?[0-9\.]+)?([\]\)])/';
     }
@@ -36,8 +36,9 @@ class NumRange extends BaseRange
      *
      * @see BaseRange
      */
-    protected function getSubElement($element)
+    protected function getSubElement(string $element): float|int|null
     {
+        /** @phpstan-ignore-next-line */
         return $element !== '' ? $element + 0 : null;
     }
 }

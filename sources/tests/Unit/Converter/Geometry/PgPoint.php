@@ -19,7 +19,7 @@ class PgPoint extends BaseConverter
         $session = $this->buildSession();
         $this
             ->object($this->newTestedInstance()->fromPg('(1.2345,-9.87654)', 'point', $session))
-            ->isInstanceOf('PommProject\Foundation\Converter\Type\Point')
+            ->isInstanceOf(\PommProject\Foundation\Converter\Type\Point::class)
             ->variable($this->newTestedInstance()->fromPg(null, 'point', $session))
             ->isNull()
             ;
@@ -41,10 +41,8 @@ class PgPoint extends BaseConverter
             ->isEqualTo('point(1.2345,-9.87654)')
             ->string($this->newTestedInstance()->toPg('(1.2345,-9.87654)', 'point', $session))
             ->isEqualTo('point(1.2345,-9.87654)')
-            ->exception(function () use ($session) {
-                return $this->newTestedInstance()->toPg('azsdf', 'point', $session);
-            })
-            ->isInstanceOf('\PommProject\Foundation\Exception\ConverterException')
+            ->exception(fn() => $this->newTestedInstance()->toPg('azsdf', 'point', $session))
+            ->isInstanceOf(\PommProject\Foundation\Exception\ConverterException::class)
             ->string($this->newTestedInstance()->toPg(null, 'subpoint', $session))
             ->isEqualTo('NULL::subpoint')
             ;
@@ -59,10 +57,8 @@ class PgPoint extends BaseConverter
             ->isEqualTo('(1.2345,-9.87654)')
             ->string($this->newTestedInstance()->toPgStandardFormat('(1.2345,-9.87654)', 'point', $session))
             ->isEqualTo('(1.2345,-9.87654)')
-            ->exception(function () use ($session) {
-                return $this->newTestedInstance()->toPgStandardFormat('azsdf', 'point', $session);
-            })
-            ->isInstanceOf('PommProject\Foundation\Exception\ConverterException')
+            ->exception(fn() => $this->newTestedInstance()->toPgStandardFormat('azsdf', 'point', $session))
+            ->isInstanceOf(\PommProject\Foundation\Exception\ConverterException::class)
             ->variable($this->newTestedInstance()->toPgStandardFormat(null, 'subpoint', $session))
             ->isNull()
             ;

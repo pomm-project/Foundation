@@ -25,7 +25,7 @@ use PommProject\Foundation\Session\Session;
  */
 class PgJson implements ConverterInterface
 {
-    protected $is_array;
+    protected bool $is_array;
 
     /**
      * __construct
@@ -34,20 +34,24 @@ class PgJson implements ConverterInterface
      * arrays (default).
      *
      * @access public
-     * @param boolean $is_array
+     * @param boolean|null $is_array
      */
-    public function __construct($is_array = null)
+    public function __construct(bool $is_array = null)
     {
-        $this->is_array = $is_array === null ? true : $is_array;
+        $this->is_array = $is_array ?? true;
     }
 
     /**
      * fromPg
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): mixed
     {
+        if (null === $data) {
+            return null;
+        }
         if (trim($data) === '') {
             return null;
         }
@@ -71,9 +75,10 @@ class PgJson implements ConverterInterface
     /**
      * toPg
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         return
             $data !== null
@@ -85,9 +90,10 @@ class PgJson implements ConverterInterface
     /**
      * toPgStandardFormat
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         return
             $data !== null
@@ -106,7 +112,7 @@ class PgJson implements ConverterInterface
      * @throws  ConverterException
      * @return string
      */
-    protected function jsonEncode($data)
+    protected function jsonEncode(mixed $data): string
     {
         $return = json_encode($data);
 

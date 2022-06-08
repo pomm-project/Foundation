@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
+use PommProject\Foundation\Exception\ConverterException;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -29,8 +30,11 @@ class PgLtree extends ArrayTypeConverter
      *
      * @see ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): array|bool|null
     {
+        if (null === $data) {
+            return null;
+        }
         $data = trim($data);
 
         if ($data === '') {
@@ -43,9 +47,10 @@ class PgLtree extends ArrayTypeConverter
     /**
      * toPg
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         return
             $data !== null
@@ -58,9 +63,10 @@ class PgLtree extends ArrayTypeConverter
     /**
      * toPgStandardFormat
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         return
             $data !== null

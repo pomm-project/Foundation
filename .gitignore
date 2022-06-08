@@ -2,3 +2,6 @@
 vendor/*
 sources/tests/config.php
 composer.lock
+
+# IDE - PhpStorm
+.idea

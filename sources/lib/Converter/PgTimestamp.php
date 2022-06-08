@@ -25,15 +25,18 @@ use PommProject\Foundation\Exception\ConverterException;
  */
 class PgTimestamp implements ConverterInterface
 {
-    const TS_FORMAT = 'Y-m-d H:i:s.uP';
+    final const TS_FORMAT = 'Y-m-d H:i:s.uP';
 
     /**
      * fromPg
      *
      * @see ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): ?\DateTime
     {
+        if (null === $data) {
+            return null;
+        }
         $data = trim($data);
 
         return $data !== '' ? new \DateTime($data) : null;
@@ -42,9 +45,10 @@ class PgTimestamp implements ConverterInterface
     /**
      * toPg
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         return
             $data !== null
@@ -56,9 +60,10 @@ class PgTimestamp implements ConverterInterface
     /**
      * toPgStandardFormat
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         return
             $data !== null
@@ -77,7 +82,7 @@ class PgTimestamp implements ConverterInterface
      * @throws ConverterException
      * @return \DateTime
      */
-    protected function checkData($data)
+    protected function checkData(mixed $data): \DateTime
     {
         if (!$data instanceof \DateTime) {
             try {
@@ -88,7 +93,7 @@ class PgTimestamp implements ConverterInterface
                         "Cannot convert data from invalid datetime representation '%s'.",
                         $data
                     ),
-                    null,
+                    0,
                     $e
                 );
             }

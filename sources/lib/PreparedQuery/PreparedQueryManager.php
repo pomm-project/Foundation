@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\PreparedQuery;
 
 use PommProject\Foundation\ConvertedResultIterator;
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\QueryManager\QueryManagerClient;
 
 /**
@@ -28,15 +29,17 @@ class PreparedQueryManager extends QueryManagerClient
     /**
      * query
      *
+     * @throws FoundationException
      * @see QueryManagerInterface
      */
-    public function query($sql, array $parameters = [])
+    public function query(string $sql, array $parameters = []): ConvertedResultIterator
     {
-        $resource = $this
+        /** @var PreparedQuery $prepareQuery */
+        $prepareQuery = $this
             ->getSession()
-            ->getClientUsingPooler('prepared_query', $sql)
-            ->execute($parameters)
-            ;
+            ->getClientUsingPooler('prepared_query', $sql);
+
+        $resource = $prepareQuery->execute($parameters);
 
         return new ConvertedResultIterator(
             $resource,

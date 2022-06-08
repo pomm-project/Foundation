@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Converter;
 
 use PommProject\Foundation\Exception\ConverterException;
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -26,7 +27,7 @@ use PommProject\Foundation\Session\Session;
  */
 abstract class ArrayTypeConverter implements ConverterInterface
 {
-    protected $converters = [];
+    protected array $converters = [];
 
     /**
      * checkArray
@@ -38,7 +39,7 @@ abstract class ArrayTypeConverter implements ConverterInterface
      * @throws ConverterException
      * @return array    $data
      */
-    protected function checkArray($data)
+    protected function checkArray(mixed $data): array
     {
         if (!is_array($data)) {
             throw new ConverterException(
@@ -59,17 +60,17 @@ abstract class ArrayTypeConverter implements ConverterInterface
      * cache it here to avoid summoning the ClientHolder all the time.
      *
      * @access protected
-     * @param  string   $type
-     * @param  Session  $session
+     * @param string $type
+     * @param Session $session
      * @return ConverterInterface
+     * @throws FoundationException
      */
-    protected function getSubtypeConverter($type, Session $session)
+    protected function getSubtypeConverter(string $type, Session $session): ConverterInterface
     {
         if (!isset($this->converters[$type])) {
-            $this->converters[$type] = $session
-                ->getClientUsingPooler('converter', $type)
-                ->getConverter()
-                ;
+            /** @var ConverterClient $converterClient */
+            $converterClient = $session->getClientUsingPooler('converter', $type);
+            $this->converters[$type] = $converterClient->getConverter();
         }
 
         return $this->converters[$type];

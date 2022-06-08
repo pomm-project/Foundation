@@ -9,7 +9,9 @@
  */
 namespace PommProject\Foundation\PreparedQuery;
 
+use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Client\ClientPooler;
+use PommProject\Foundation\Exception\FoundationException;
 
 /**
  * PreparedQueryPooler
@@ -29,7 +31,7 @@ class PreparedQueryPooler extends ClientPooler
      *
      * @see ClientPoolerInterface
      */
-    public function getPoolerType()
+    public function getPoolerType(): string
     {
         return 'prepared_query';
     }
@@ -37,17 +39,18 @@ class PreparedQueryPooler extends ClientPooler
     /**
      * getClientFromPool
      *
+     * @param string $identifier
+     * @return ClientInterface|null
+     * @throws FoundationException
      * @see    ClientPooler
-     * @param  string             $sql
-     * @return PreparedQuery|null
      */
-    protected function getClientFromPool($sql)
+    protected function getClientFromPool(string $identifier): ?ClientInterface
     {
         return $this
             ->getSession()
             ->getClient(
                 $this->getPoolerType(),
-                PreparedQuery::getSignatureFor($sql)
+                PreparedQuery::getSignatureFor($identifier)
             )
         ;
     }
@@ -55,12 +58,13 @@ class PreparedQueryPooler extends ClientPooler
     /**
      * createClient
      *
-     * @see    ClientPooler
-     * @param  string $sql SQL query
+     * @param string $identifier SQL query
      * @return PreparedQuery
+     * @throws FoundationException
+     * @see    ClientPooler
      */
-    public function createClient($sql)
+    public function createClient(string $identifier): PreparedQuery
     {
-        return new PreparedQuery($sql);
+        return new PreparedQuery($identifier);
     }
 }

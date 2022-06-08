@@ -9,10 +9,11 @@
  */
 namespace PommProject\Foundation\Test\Unit\PreparedQuery;
 
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Session\Session;
 use PommProject\Foundation\Converter\Type\Circle;
 use PommProject\Foundation\Tester\FoundationSessionAtoum;
-use PommProject\Foundation\PreparedQuery\PreparedQuery as testedClass;
+use PommProject\Foundation\PreparedQuery\PreparedQuery as TestedPreparedQuery;
 
 class PreparedQuery extends FoundationSessionAtoum
 {
@@ -24,12 +25,12 @@ class PreparedQuery extends FoundationSessionAtoum
     {
         $this
             ->exception(function () { $this->newTestedInstance(null); })
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->isInstanceOf(FoundationException::class)
             ->message->contains('empty query')
             ->object($this->newTestedInstance('abcd'))
-            ->isInstanceOf('\PommProject\Foundation\PreparedQuery\PreparedQuery')
+            ->isInstanceOf(TestedPreparedQuery::class)
             ->string($this->newTestedInstance('abcd')->getClientIdentifier())
-            ->isEqualTo(testedClass::getSignatureFor('abcd'))
+            ->isEqualTo(TestedPreparedQuery::getSignatureFor('abcd'))
             ;
     }
 

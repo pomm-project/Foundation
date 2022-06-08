@@ -27,7 +27,7 @@ use PommProject\Foundation\Session\Session;
  */
 abstract class TypeConverter implements ConverterInterface
 {
-    protected $class_name;
+    protected string $class_name;
 
     /**
      * getTypeClassName
@@ -37,7 +37,7 @@ abstract class TypeConverter implements ConverterInterface
      * @access protected
      * @return string
      */
-    abstract protected function getTypeClassName();
+    abstract protected function getTypeClassName(): string;
 
     /**
      * __construct
@@ -45,24 +45,26 @@ abstract class TypeConverter implements ConverterInterface
      * Set the type class name.
      *
      * @access public
-     * @param  string $class_name
+     * @param string|null $class_name
      */
-    public function __construct($class_name = null)
+    public function __construct( ?string $class_name = null)
     {
         $this->class_name =
-            $class_name === null
-            ? $this->getTypeClassName()
-            : $class_name
+            $class_name ?? $this->getTypeClassName()
             ;
     }
 
     /**
      * fromPg
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): ?object
     {
+        if (null === $data) {
+            return null;
+        }
         $data = trim($data);
 
         return
@@ -75,23 +77,36 @@ abstract class TypeConverter implements ConverterInterface
     /**
      * toPg
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
-        return
-            $data !== null
-            ? sprintf("%s('%s')", $type, $this->checkData($data))
-            : sprintf("NULL::%s", $type)
-            ;
+        if($data === null)
+        {
+            return sprintf("NULL::%s", $type);
+        }else{
+            $dataObject = $this->checkData($data);
+
+            if( $dataObject instanceof \Stringable )
+            {
+                return sprintf("%s('%s')", $type, $dataObject);
+            }else{
+                throw new ConverterException(
+                    sprintf("Unable to transform a '%s' instance to string.", get_class($dataObject)),
+                    0
+                );
+            }
+        }
     }
 
     /**
      * toPgStandardFormat
      *
+     * @throws ConverterException
      * @see ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         return
             $data !== null
@@ -107,10 +122,11 @@ abstract class TypeConverter implements ConverterInterface
      * to build the object from the given definition.
      *
      * @access public
-     * @param  mixed    $data
+     * @param mixed $data
      * @return object
+     * @throws ConverterException
      */
-    public function checkData($data)
+    public function checkData(mixed $data): object
     {
         $class_name = $this->getTypeClassName();
 
@@ -132,7 +148,7 @@ abstract class TypeConverter implements ConverterInterface
      * @return BaseRange
      * @throws ConverterException
      */
-    protected function createObjectFrom($data)
+    protected function createObjectFrom(mixed $data): object
     {
         $class_name = $this->class_name;
 
@@ -141,7 +157,7 @@ abstract class TypeConverter implements ConverterInterface
         } catch (\InvalidArgumentException $e) {
             throw new ConverterException(
                 sprintf("Unable to create a '%s' instance.", $class_name),
-                null,
+                0,
                 $e
             );
         }

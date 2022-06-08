@@ -31,7 +31,7 @@ class PreparedQueryPooler extends VanillaSessionAtoum
                     ;
         $this
             ->object($query)
-            ->isInstanceOf('\PommProject\Foundation\PreparedQuery\PreparedQuery')
+            ->isInstanceOf(\PommProject\Foundation\PreparedQuery\PreparedQuery::class)
             ->string($query->getSql())
             ->isEqualTo($sql)
             ->object($session->getClientUsingPooler('prepared_query', $sql))

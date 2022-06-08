@@ -9,8 +9,11 @@
  */
 namespace PommProject\Foundation\Inspector;
 
+use PommProject\Foundation\ConvertedResultIterator;
 use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Client\Client;
+use PommProject\Foundation\PreparedQuery\PreparedQueryManager;
+use PommProject\Foundation\QueryManager\QueryManagerClient;
 use PommProject\Foundation\Where;
 
 /**
@@ -31,7 +34,7 @@ class Inspector extends Client
      *
      * @see ClientInterface
      */
-    public function getClientType()
+    public function getClientType(): string
     {
         return 'inspector';
     }
@@ -41,9 +44,9 @@ class Inspector extends Client
      *
      * @see ClientInterface
      */
-    public function getClientIdentifier()
+    public function getClientIdentifier(): string
     {
-        return get_class($this);
+        return $this::class;
     }
 
     /**
@@ -52,9 +55,10 @@ class Inspector extends Client
      * Return a list of available schemas in the current database.
      *
      * @access public
-     * @return \PommProject\Foundation\ConvertedResultIterator
+     * @return ConvertedResultIterator
+     * @throws FoundationException
      */
-    public function getSchemas()
+    public function getSchemas(): ConvertedResultIterator
     {
         $sql = <<<SQL
 select
@@ -82,11 +86,12 @@ SQL;
      * is returned.
      *
      * @access public
-     * @param  string   $schema
-     * @param  string   $table
+     * @param string $schema
+     * @param string $table
      * @return int|null
+     * @throws FoundationException
      */
-    public function getTableOid($schema, $table)
+    public function getTableOid(string $schema, string $table): ?int
     {
         $sql = <<<SQL
 select
@@ -114,10 +119,11 @@ SQL;
      * returned.
      *
      * @access public
-     * @param  int                 $oid
-     * @return \PommProject\Foundation\ConvertedResultIterator|null
+     * @param int $oid
+     * @return ConvertedResultIterator|null
+     * @throws FoundationException
      */
-    public function getTableFieldInformation($oid)
+    public function getTableFieldInformation(int $oid): ?ConvertedResultIterator
     {
         $sql = <<<SQL
 select
@@ -158,11 +164,12 @@ SQL;
      * Return the given schema oid, null if the schema is not found.
      *
      * @access public
-     * @param  string   $schema
-     * @param  Where    $where optional where clause.
+     * @param string $schema
+     * @param Where|null $where optional where clause.
      * @return int|null
+     * @throws FoundationException
      */
-    public function getSchemaOid($schema, Where $where = null)
+    public function getSchemaOid(string $schema, Where $where = null): ?int
     {
         $condition =
             Where::create("s.nspname = $*", [$schema])
@@ -188,10 +195,11 @@ SQL;
      * Get relation's primary key if any.
      *
      * @access public
-     * @param  int        $table_oid
+     * @param int $table_oid
      * @return array|null
+     * @throws FoundationException
      */
-    public function getPrimaryKey($table_oid)
+    public function getPrimaryKey(int $table_oid): ?array
     {
         $sql = <<<SQL
 with
@@ -225,11 +233,12 @@ SQL;
      * condition can be passed to filter against other criteria.
      *
      * @access public
-     * @param  int                     $schema_oid
-     * @param  Where                   $where
-     * @return \PommProject\Foundation\ConvertedResultIterator
+     * @param int|null $schema_oid
+     * @param Where|null $where
+     * @return ConvertedResultIterator
+     * @throws FoundationException
      */
-    public function getSchemaRelations($schema_oid, Where $where = null)
+    public function getSchemaRelations(?int $schema_oid, Where $where = null): ConvertedResultIterator
     {
         $condition = Where::create('relnamespace = $*', [$schema_oid])
             ->andWhere(Where::createWhereIn('relkind', ['r', 'v', 'm', 'f']))
@@ -265,10 +274,11 @@ SQL;
      * Return the comment on a table if set. Null otherwise.
      *
      * @access public
-     * @param  int         $table_oid
+     * @param int $table_oid
      * @return string|null
+     * @throws FoundationException
      */
-    public function getTableComment($table_oid)
+    public function getTableComment(int $table_oid): ?string
     {
         $sql      = <<<SQL
 select description from pg_catalog.pg_description where :condition
@@ -287,11 +297,12 @@ SQL;
      * It Additionally returns the type category.
      *
      * @access public
-     * @param  string     $type_name
-     * @param  string     $type_schema
+     * @param string $type_name
+     * @param string|null $type_schema
      * @return array|null
+     * @throws FoundationException
      */
-    public function getTypeInformation($type_name, $type_schema = null)
+    public function getTypeInformation(string $type_name, string $type_schema = null): ?array
     {
         $condition = Where::create("t.typname = $*", [$type_name]);
         $sql = <<<SQL
@@ -322,10 +333,11 @@ SQL;
      * Get type category.
      *
      * @access public
-     * @param  int        $oid
+     * @param int $oid
      * @return array|null
+     * @throws FoundationException
      */
-    public function getTypeCategory($oid)
+    public function getTypeCategory(int $oid): ?array
     {
         $sql = <<<SQL
 select
@@ -351,10 +363,11 @@ SQL;
      * Return all possible values from an enumerated type in its natural order.
      *
      * @access public
-     * @param  int        $oid
+     * @param int $oid
      * @return array|null
+     * @throws FoundationException
      */
-    public function getTypeEnumValues($oid)
+    public function getTypeEnumValues(int $oid): ?array
     {
         $sql = <<<SQL
 with
@@ -383,10 +396,11 @@ SQL;
      * Return the structure of a composite row.
      *
      * @access public
-     * @param  int                     $oid
-     * @return \PommProject\Foundation\ConvertedResultIterator
+     * @param int $oid
+     * @return ConvertedResultIterator
+     * @throws FoundationException
      */
-    public function getCompositeInformation($oid)
+    public function getCompositeInformation(int $oid): ConvertedResultIterator
     {
         $sql = <<<SQL
 select
@@ -410,10 +424,10 @@ SQL;
      * Return server version.
      *
      * @access public
-     * @throws  FoundationException if invalid string.
      * @return string
+     * @throws FoundationException
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         $row = $this
             ->executeSql("show server_version")
@@ -429,19 +443,21 @@ SQL;
      * Launch query execution.
      *
      * @access protected
-     * @param  string         $sql
-     * @param  Where          $condition
-     * @return \PommProject\Foundation\ConvertedResultIterator
+     * @param string $sql
+     * @param Where|null $condition
+     * @return ConvertedResultIterator
+     * @throws FoundationException
      */
-    protected function executeSql($sql, Where $condition = null)
+    protected function executeSql(string $sql, Where $condition = null): ConvertedResultIterator
     {
         $condition = (new Where())->andWhere($condition);
         $sql = strtr($sql, [':condition' => $condition]);
 
-        return $this
+        /** @var PreparedQueryManager $queryManager */
+        $queryManager = $this
             ->getSession()
-            ->getClientUsingPooler('query_manager', '\PommProject\Foundation\PreparedQuery\PreparedQueryManager')
-            ->query($sql, $condition->getValues())
-            ;
+            ->getClientUsingPooler('query_manager', PreparedQueryManager::class);
+
+        return $queryManager->query($sql, $condition->getValues());
     }
 }

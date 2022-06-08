@@ -26,7 +26,7 @@ class TsRange extends BaseRange
      *
      * @see BaseRange
      */
-    protected function getRegexp()
+    protected function getRegexp(): string
     {
         return '/(empty)|([\[\(])"?([0-9 :+\.-]+|-?infinity)?"?, *"?([0-9 :+\.-]+|-?infinity)?"?([\]\)])/';
     }
@@ -36,7 +36,7 @@ class TsRange extends BaseRange
      *
      * @see BaseRange
      */
-    protected function getSubElement($element)
+    protected function getSubElement(string $element): string|\DateTime|null
     {
         if ($element === BaseRange::INFINITY_MIN) {
 

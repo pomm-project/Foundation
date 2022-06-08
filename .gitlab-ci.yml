@@ -1,0 +1,49 @@
+image: php:8.1-fpm-alpine
+
+services:
+  - postgres
+
+variables:
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: 12345
+  POSTGRES_HOST_AUTH_METHOD: trust
+
+cache:
+  paths:
+    - vendor/
+
+stages:
+  - build
+  - test
+
+before_script:
+  - apk update
+  - apk add zip unzip libpq-dev
+  - apk add postgresql postgresql-client
+  - apk add postgresql-contrib
+  - docker-php-ext-install pdo_pgsql pgsql
+  - mkdir /run/postgresql
+  - chown postgres:postgres /run/postgresql/
+  - su postgres -c"initdb -D /var/lib/postgresql/data"
+  - echo "host all all 0.0.0.0/0 md5" >> /var/lib/postgresql/data/pg_hba.conf
+  - echo "listen_addresses='*'" >> /var/lib/postgresql/data/postgresql.conf
+  - su postgres -c"pg_ctl start -D /var/lib/postgresql/data"
+
+build:
+  stage: build
+  script:
+    # install and launch composer
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php');"
+    - php composer.phar install --dev
+
+test:
+  stage: test
+  script:
+    - su postgres -c"psql -c 'CREATE DATABASE pomm_test' -U ${POSTGRES_USER} -h 127.0.0.1 ${POSTGRES_DB}"
+    - su postgres -c"psql -c 'CREATE EXTENSION hstore' -U ${POSTGRES_USER} -h 127.0.0.1 pomm_test"
+    - su postgres -c"psql -c 'CREATE EXTENSION ltree' -U ${POSTGRES_USER} -h 127.0.0.1 pomm_test"
+    - php vendor/atoum/atoum/bin/atoum --version
+    - php vendor/atoum/atoum/bin/atoum --no-code-coverage -d sources/tests/Unit/

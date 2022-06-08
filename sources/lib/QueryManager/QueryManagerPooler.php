@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\QueryManager;
 
+use PommProject\Foundation\Client\Client;
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Exception\FoundationException;
@@ -26,13 +27,13 @@ use PommProject\Foundation\Exception\FoundationException;
  */
 class QueryManagerPooler extends ClientPooler
 {
-    protected $listeners = [];
+    protected array $listeners = [];
     /**
      * getPoolerType
      *
      * @see ClientPoolerInterface
      */
-    public function getPoolerType()
+    public function getPoolerType(): string
     {
         return 'query_manager';
     }
@@ -40,51 +41,55 @@ class QueryManagerPooler extends ClientPooler
     /**
      * getClientFromPool
      *
+     * @param string $identifier
+     * @return ClientInterface|null
+     * @throws FoundationException
      * @see    ClientPooler
-     * @return ClientInterface
      */
-    protected function getClientFromPool($client)
+    protected function getClientFromPool(string $identifier): ?ClientInterface
     {
         return $this
             ->getSession()
-            ->getClient($this->getPoolerType(), trim($client, "\\"))
+            ->getClient($this->getPoolerType(), trim($identifier, "\\"))
             ;
     }
 
     /**
      * createClient
      *
-     * @see    ClientPooler
-     * @param  string $client Client class name
-     * @throws  FoundationException
+     * @param string $identifier
      * @return ClientInterface
+     * @throws FoundationException
+     * @see    ClientPooler
      */
-    protected function createClient($client)
+    protected function createClient(string $identifier): ClientInterface
     {
         try {
-            new \ReflectionClass($client);
+            new \ReflectionClass($identifier);
         } catch (\ReflectionException $e) {
-            throw new FoundationException(sprintf("Could not load class '%s'.", $client), null, $e);
+            throw new FoundationException(sprintf("Could not load class '%s'.", $identifier), 0, $e);
         }
 
-        $client_instance = new $client();
-
-        return $client_instance;
+        return new $identifier();
     }
 
     /**
      * getPoolerType
      *
+     * @param null|string $identifier
+     * @return Client
+     * @throws FoundationException
      * @see ClientPooler
-     * @param null|string $client
-     * @return \PommProject\Foundation\Client\Client
      */
-    public function getClient($client = null)
+    public function getClient($identifier = null): Client
     {
-        if ($client === null) {
-            $client = '\PommProject\Foundation\QueryManager\SimpleQueryManager';
+        if ($identifier === null) {
+            $identifier = SimpleQueryManager::class;
         }
 
-        return parent::getClient($client);
+        /** @var Client $client */
+        $client = parent::getClient($identifier);
+
+        return $client;
     }
 }

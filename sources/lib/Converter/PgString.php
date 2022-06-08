@@ -9,6 +9,7 @@
  */
 namespace PommProject\Foundation\Converter;
 
+use PommProject\Foundation\Exception\ConnectionException;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -27,9 +28,10 @@ class PgString implements ConverterInterface
     /**
      * toPg
      *
+     * @throws ConnectionException
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         return $data !== null
             ? sprintf("%s %s",  $type, $session->getConnection()->escapeLiteral($data))
@@ -42,7 +44,7 @@ class PgString implements ConverterInterface
      *
      * @see ConverterInterface
      */
-    public function toPgStandardFormat($data, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
         return $data;
     }
@@ -50,8 +52,8 @@ class PgString implements ConverterInterface
     /**
      * @see ConverterInterface
      */
-    public function fromPg($data, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): ?string
     {
-        return $data !== null ? (string) $data : null;
+        return $data !== null ? $data : null;
     }
 }

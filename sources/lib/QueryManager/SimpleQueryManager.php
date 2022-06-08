@@ -10,8 +10,10 @@
 namespace PommProject\Foundation\QueryManager;
 
 use PommProject\Foundation\ConvertedResultIterator;
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Listener\SendNotificationTrait;
 use PommProject\Foundation\Session\ResultHandler;
+use PommProject\Foundation\Converter\ConverterClient;
 
 /**
  * SimpleQueryManager
@@ -34,11 +36,12 @@ class SimpleQueryManager extends QueryManagerClient
      * Perform a simple escaped query and return converted result iterator.
      *
      * @access public
-     * @param  string $sql
-     * @param  array $parameters
+     * @param string $sql
+     * @param array $parameters
      * @return ConvertedResultIterator
+     * @throws FoundationException
      */
-    public function query($sql, array $parameters = [])
+    public function query(string $sql, array $parameters = []): ConvertedResultIterator
     {
         $parameters = $this->prepareArguments($sql, $parameters);
         $this->sendNotification(
@@ -74,11 +77,12 @@ class SimpleQueryManager extends QueryManagerClient
      * Perform the query
      *
      * @access protected
-     * @param  string $sql
-     * @param  array $parameters
+     * @param string $sql
+     * @param array $parameters
      * @return ResultHandler
+     * @throws FoundationException
      */
-    protected function doQuery($sql, array $parameters)
+    protected function doQuery(string $sql, array $parameters): ResultHandler
     {
         return $this
             ->getSession()
@@ -96,21 +100,23 @@ class SimpleQueryManager extends QueryManagerClient
      * Prepare and convert $parameters if needed.
      *
      * @access protected
-     * @param  string   $sql
-     * @param  array    $parameters
+     * @param string $sql
+     * @param array $parameters
      * @return array    $parameters
+     * @throws FoundationException
      */
-    protected function prepareArguments($sql, array $parameters)
+    protected function prepareArguments(string $sql, array $parameters): array
     {
         $types = $this->getParametersType($sql);
 
         foreach ($parameters as $index => $value) {
             if ($types[$index] !== '') {
-                $parameters[$index] = $this
+                /** @var ConverterClient $converterClient */
+                $converterClient = $this
                     ->getSession()
-                    ->getClientUsingPooler('converter', $types[$index])
-                    ->toPgStandardFormat($value, $types[$index])
-                    ;
+                    ->getClientUsingPooler('converter', $types[$index]);
+
+                $parameters[$index] = $converterClient->toPgStandardFormat($value, $types[$index]);
             }
         }
 

@@ -10,11 +10,18 @@
 namespace PommProject\Foundation\Test\Fixture;
 
 use PommProject\Foundation\Client\Client;
+use PommProject\Foundation\Exception\ConnectionException;
+use PommProject\Foundation\Exception\FoundationException;
+use PommProject\Foundation\Exception\SqlException;
+use PommProject\Foundation\Session\ResultHandler;
 use PommProject\Foundation\Session\Session;
 
 class InspectorFixture extends Client
 {
-    protected function executeAnonymousQuery($sql)
+    /**
+     * @throws SqlException|FoundationException|ConnectionException
+     */
+    protected function executeAnonymousQuery(string $sql): ResultHandler|array
     {
         return $this
             ->getSession()
@@ -22,17 +29,20 @@ class InspectorFixture extends Client
             ->executeAnonymousQuery($sql);
     }
 
-    public function getClientType()
+    public function getClientType(): string
     {
         return 'fixture';
     }
 
-    public function getClientIdentifier()
+    public function getClientIdentifier(): string
     {
         return 'inspector';
     }
 
-    public function createSchema()
+    /**
+     * @throws SqlException|FoundationException|ConnectionException
+     */
+    public function createSchema(): void
     {
         $this->dropSchema();
         $sql = [
@@ -51,6 +61,9 @@ class InspectorFixture extends Client
         $this->executeAnonymousQuery(join('; ', $sql));
     }
 
+    /**
+     * @throws SqlException|FoundationException|ConnectionException
+     */
     public function renamePks($table, $old_pk, $new_pk)
     {
         $sql = sprintf(
@@ -63,6 +76,9 @@ class InspectorFixture extends Client
         $this->executeAnonymousQuery($sql);
     }
 
+    /**
+     * @throws SqlException|FoundationException|ConnectionException
+     */
     public function dropSchema()
     {
         $sql = "drop schema if exists inspector_test cascade";

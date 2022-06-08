@@ -26,17 +26,18 @@ class PommTestSessionBuilder extends SessionBuilder
      * @see SessionBuilder
      * @return PommTestSession
      */
-    protected function createSession(Connection $connection, ClientHolder $client_holder, $stamp)
+    protected function createSession(Connection $connection, ClientHolder $client_holder, ?string $stamp): Session
     {
         return new PommTestSession($connection, $client_holder, $stamp);
     }
 
-    protected function postConfigure(Session $session)
+    protected function postConfigure(Session $session): static
     {
         parent::postConfigure($session);
 
         $session
             ->registerClientPooler(new ListenerPooler)
             ;
+        return $this;
     }
 }

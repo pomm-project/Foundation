@@ -43,12 +43,12 @@ interface ConverterInterface
      * into an according PHP representation.
      *
      * @access public
-     * @param  string  $data    Input string from Pg row result.
-     * @param  string  $type
-     * @param  Session $session
+     * @param string|null $data Input string from Pg row result.
+     * @param string $type
+     * @param Session $session
      * @return mixed   PHP representation of the data.
      */
-    public function fromPg($data, $type, Session $session);
+    public function fromPg(?string $data, string $type, Session $session): mixed;
 
     /**
      * toPg
@@ -61,7 +61,7 @@ interface ConverterInterface
      * @param  Session $session
      * @return string  Pg converted string for input.
      */
-    public function toPg($data, $type, Session $session);
+    public function toPg(mixed $data, string $type, Session $session): string;
 
     /**
      * toPgStandardFormat
@@ -70,10 +70,10 @@ interface ConverterInterface
      * COPY values list.
      *
      * @access public
-     * @param mixed     $data
-     * @param string    $type
-     * @param Session   $session
-     * @return string   PostgreSQL standard representation.
+     * @param mixed $data
+     * @param string $type
+     * @param Session $session
+     * @return string|null PostgreSQL standard representation.
      */
-    public function toPgStandardFormat($data, $type, Session $session);
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string;
 }

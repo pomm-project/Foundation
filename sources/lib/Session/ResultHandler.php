@@ -10,6 +10,7 @@
 namespace PommProject\Foundation\Session;
 
 use PommProject\Foundation\Exception\FoundationException;
+use PgSql\Result as PgSqlResult;
 
 /**
  * ResultHandler
@@ -23,7 +24,7 @@ use PommProject\Foundation\Exception\FoundationException;
  */
 class ResultHandler
 {
-    protected $handler;
+    protected ?PgSqlResult $handler;
 
     /**
      * __construct
@@ -31,17 +32,9 @@ class ResultHandler
      * Constructor
      *
      * @access public
-     * @param  resource $result_resource
      */
-    public function __construct($result_resource)
+    public function __construct(PgSqlResult $result_resource)
     {
-        if (!is_resource($result_resource) || get_resource_type($result_resource) !== 'pgsql result') {
-            throw new \InvalidArgumentException(sprintf(
-                "Given handler is not a resource of a pgsql result ('%s' given).",
-                gettype($result_resource)
-            ));
-        }
-
         $this->handler = $result_resource;
     }
 
@@ -66,7 +59,7 @@ class ResultHandler
      * @access public
      * @return ResultHandler $this
      */
-    public function free()
+    public function free(): ResultHandler
     {
         if ($this->handler !== null) {
 	    pg_free_result($this->handler);
@@ -82,11 +75,11 @@ class ResultHandler
      * Fetch a row as associative array. Index starts from 0.
      *
      * @access public
-     * @param  int   $index
-     * @throws \OutOfBoundsException if $index out of bounds.
+     * @param int $index
      * @return array
+     * @throws \OutOfBoundsException if $index out of bounds.
      */
-    public function fetchRow($index)
+    public function fetchRow(int $index): array
     {
         $values = @pg_fetch_assoc($this->handler, $index);
 
@@ -105,7 +98,7 @@ class ResultHandler
      * @access public
      * @return int long
      */
-    public function countFields()
+    public function countFields(): int
     {
         return pg_num_fields($this->handler);
     }
@@ -118,7 +111,7 @@ class ResultHandler
      * @access public
      * @return int long
      */
-    public function countRows()
+    public function countRows(): int
     {
         return pg_num_rows($this->handler);
     }
@@ -131,7 +124,7 @@ class ResultHandler
      * @access public
      * @return array
      */
-    public function getFieldNames()
+    public function getFieldNames(): array
     {
         $names = [];
 
@@ -148,10 +141,10 @@ class ResultHandler
      * Return the associated type of a field.
      *
      * @access public
-     * @param  int $name
-     * @return string
+     * @param string $name
+     * @return string|null
      */
-    public function getFieldType($name)
+    public function getFieldType(string $name): ?string
     {
         $type = pg_field_type($this->handler, $this->getFieldNumber($name));
 
@@ -164,19 +157,12 @@ class ResultHandler
      * Return the name from a field number.
      *
      * @access public
-     * @param  int    $field_no
+     * @param int $field_no
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getFieldName($field_no)
+    public function getFieldName(int $field_no): string
     {
-        if (!is_int($field_no)) {
-            throw new \InvalidArgumentException(sprintf(
-                "getFieldType::field_no = '%s' is not an integer.\n",
-                $field_no
-            ));
-        }
-
         return pg_field_name($this->handler, $field_no);
     }
 
@@ -186,10 +172,10 @@ class ResultHandler
      * Return the field index from its name.
      *
      * @access protected
-     * @param  string $name
+     * @param string $name
      * @return int long
      */
-    protected function getFieldNumber($name)
+    protected function getFieldNumber(string $name): int
     {
         $no = pg_field_num($this->handler, sprintf('"%s"', $name));
 
@@ -206,10 +192,10 @@ class ResultHandler
      * Fetch a column from a result.
      *
      * @access public
-     * @param  string $name
+     * @param string $name
      * @return array
      */
-    public function fetchColumn($name)
+    public function fetchColumn(string $name): array
     {
         return pg_fetch_all_columns($this->handler, $this->getFieldNumber($name));
     }
@@ -223,9 +209,9 @@ class ResultHandler
      * @param  mixed $name
      * @return bool
      */
-    public function fieldExist($name)
+    public function fieldExist(mixed $name): bool
     {
-        return (bool) (pg_field_num($this->handler, $name) > -1);
+        return pg_field_num($this->handler, $name) > -1;
     }
 
     /**
@@ -234,23 +220,11 @@ class ResultHandler
      * Return the type oid of the given field.
      *
      * @access public
-     * @param  string   $name
-     * @throws  FoundationException on error
+     * @param int $field
      * @return int|null
      */
-    public function getTypeOid($name)
+    public function getTypeOid(int $field): ?int
     {
-        $ret = pg_field_type_oid($this->handler, $name);
-
-        if ($ret === false) {
-            throw new FoundationException(
-                sprintf(
-                    "Error while fetching type oid for field '%s'.",
-                    $name
-                )
-            );
-        }
-
-        return $ret;
+        return  pg_field_type_oid($this->handler, $field);
     }
 }

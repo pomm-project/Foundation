@@ -22,8 +22,8 @@ namespace PommProject\Foundation\Exception;
  */
 class NotificationException extends FoundationException
 {
-    protected $channel;
-    protected $pid;
+    protected string $channel;
+    protected string $pid;
 
     /**
      * __construct
@@ -35,6 +35,7 @@ class NotificationException extends FoundationException
      */
     public function __construct(array $notification)
     {
+        parent::__construct();
         $this->channel = $notification['message'];
         $this->pid     = $notification['pid'];
         $this->message = $notification['payload'];
@@ -48,7 +49,7 @@ class NotificationException extends FoundationException
      * @access public
      * @return string
      */
-    public function getChannel()
+    public function getChannel(): string
     {
         return $this->channel;
     }
@@ -61,7 +62,7 @@ class NotificationException extends FoundationException
      * @access public
      * @return string
      */
-    public function getPid()
+    public function getPid(): string
     {
         return $this->pid;
     }

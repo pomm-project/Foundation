@@ -65,7 +65,7 @@ class ClientHolder extends Atoum
                 ->add($client_2)
                 ->clear('test', 'one')
             )
-            ->isInstanceOf('\PommProject\Foundation\Client\ClientHolder')
+            ->isInstanceOf(\PommProject\Foundation\Client\ClientHolder::class)
             ->boolean($client_holder->has('test', 'one'))
             ->isFalse()
             ->mock($client_1)
@@ -81,7 +81,7 @@ class ClientHolder extends Atoum
         $client_1 = $this->getClientMock('one');
         $client_2 = $this->getClientMock('two');
         $client_3 = $this->getClientMock('three');
-        $this->calling($client_3)->shutdown = function () { throw new FoundationException("plop"); };
+        $this->calling($client_3)->shutdown = function (): never { throw new FoundationException("plop"); };
         $client_holder = $this->getClientHolder()
             ->add($client_3)
             ->add($client_1)
@@ -89,7 +89,7 @@ class ClientHolder extends Atoum
             ;
         $this
             ->object($exception = ($client_holder->shutdown()[0]))
-            ->isInstanceOf('\PommProject\Foundation\Exception\FoundationException')
+            ->isInstanceOf(\PommProject\Foundation\Exception\FoundationException::class)
             ->string($exception->getMessage())->contains('plop')
             ->mock($client_1)
             ->call('shutdown')

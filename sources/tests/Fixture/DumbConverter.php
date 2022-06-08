@@ -14,18 +14,18 @@ use PommProject\Foundation\Session\Session;
 
 class DumbConverter implements ConverterInterface
 {
-    public function toPg($value, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
-        return $value;
+        return $data;
     }
 
-    public function fromPg($value, $type, Session $session)
+    public function fromPg(?string $data, string $type, Session $session): ?string
     {
-        return $value;
+        return $data;
     }
 
-    public function toPgStandardFormat($value, $type, Session $session)
+    public function toPgStandardFormat(mixed $data, string $type, Session $session): ?string
     {
-        return $value;
+        return $data;
     }
 }

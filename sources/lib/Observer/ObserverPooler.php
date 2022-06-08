@@ -30,7 +30,7 @@ class ObserverPooler extends ClientPooler
      *
      * @see ClientPoolerInterface
      */
-    public function getPoolerType()
+    public function getPoolerType(): string
     {
         return 'observer';
     }
@@ -38,12 +38,12 @@ class ObserverPooler extends ClientPooler
     /**
      * createClient
      *
-     * @see    ClientPooler
-     * @param  string   $channel
+     * @param  string   $identifier
      * @return Observer
+     *@see    ClientPooler
      */
-    protected function createClient($channel)
+    protected function createClient(string $identifier): Observer
     {
-        return new Observer($channel);
+        return new Observer($identifier);
     }
 }

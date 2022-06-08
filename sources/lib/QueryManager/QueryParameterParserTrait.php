@@ -9,6 +9,8 @@
  */
 namespace PommProject\Foundation\QueryManager;
 
+use PommProject\Foundation\Session\Session;
+
 /**
  * QueryParameterParserTrait
  *
@@ -22,7 +24,7 @@ namespace PommProject\Foundation\QueryManager;
  */
 trait QueryParameterParserTrait
 {
-    abstract protected function getSession();
+    abstract protected function getSession(): Session;
 
     /**
      * unorderParameters
@@ -30,10 +32,10 @@ trait QueryParameterParserTrait
      * Transform an ordered parameters list with $1, $2 to $* parameters.
      *
      * @access public
-     * @param  string $string
+     * @param string $string
      * @return string
      */
-    public function unorderParameters($string)
+    public function unorderParameters(string $string): string
     {
         return preg_replace('/\$[0-9]+/', '$*', $string);
     }
@@ -44,10 +46,10 @@ trait QueryParameterParserTrait
      * Transform an unordered parameters list $* to ordered $1, $2 parameters.
      *
      * @access public
-     * @param  string $string
+     * @param string $string
      * @return string
      */
-    public function orderParameters($string)
+    public function orderParameters(string $string): string
     {
         return preg_replace_callback(
             '/\$\*/',
@@ -73,9 +75,9 @@ trait QueryParameterParserTrait
      * @param   mixed $string SQL query.
      * @return  array
      */
-    public function getParametersType($string)
+    public function getParametersType(mixed $string): array
     {
-        preg_match_all('/\$\*(?:::([\w\."]+(?:\[\])?))?/', $string, $matches);
+        preg_match_all('/\$\*(?:::([\w\."]+(?:\[\])?))?/', (string) $string, $matches);
 
         return str_replace('"', '', $matches[1]);
     }

@@ -9,6 +9,8 @@
  */
 namespace PommProject\Foundation\Inspector;
 
+use PommProject\Foundation\Client\Client;
+use PommProject\Foundation\Client\ClientInterface;
 use PommProject\Foundation\Client\ClientPooler;
 use PommProject\Foundation\Client\ClientPoolerInterface;
 use PommProject\Foundation\Exception\FoundationException;
@@ -31,7 +33,7 @@ class InspectorPooler extends ClientPooler
      *
      * @see ClientPoolerInterface
      */
-    public function getPoolerType()
+    public function getPoolerType(): string
     {
         return 'inspector';
     }
@@ -39,14 +41,15 @@ class InspectorPooler extends ClientPooler
     /**
      * getClient
      *
-     * @see     ClientPooler
      * @param null|string $identifier
-     * @return Inspector
+     * @return ClientInterface
+     * @throws FoundationException
+     * @see     ClientPooler
      */
-    public function getClient($identifier = null)
+    public function getClient(?string $identifier = null): ClientInterface
     {
         if ($identifier === null) {
-            $identifier = '\PommProject\Foundation\Inspector\Inspector';
+            $identifier = Inspector::class;
         }
 
         return parent::getClient($identifier);
@@ -55,15 +58,16 @@ class InspectorPooler extends ClientPooler
     /**
      * createClient
      *
-     * @see    ClientPooler
-     * @return Inspector
+     * @param string $identifier
+     * @return Client
      * @throws FoundationException
+     * @see    ClientPooler
      */
-    protected function createClient($identifier)
+    protected function createClient(string $identifier): Client
     {
         try {
             new \ReflectionClass($identifier);
-        } catch (\ReflectionException $e) {
+        } catch (\ReflectionException) {
             throw new FoundationException(
                 sprintf(
                     "Unable to load inspector '%s'.",

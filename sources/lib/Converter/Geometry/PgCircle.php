@@ -9,8 +9,12 @@
  */
 namespace PommProject\Foundation\Converter\Geometry;
 
+use PommProject\Foundation\Client\ClientInterface;
+use PommProject\Foundation\Converter\ConverterClient;
+use PommProject\Foundation\Converter\Type\Circle;
 use PommProject\Foundation\Converter\TypeConverter;
 use PommProject\Foundation\Converter\ConverterInterface;
+use PommProject\Foundation\Exception\FoundationException;
 use PommProject\Foundation\Session\Session;
 
 /**
@@ -26,7 +30,7 @@ use PommProject\Foundation\Session\Session;
  */
 class PgCircle extends TypeConverter
 {
-    protected $point_converter;
+    protected ?ConverterClient $point_converter = null;
 
     /**
      * getTypeClassName
@@ -35,17 +39,18 @@ class PgCircle extends TypeConverter
      *
      * @see TypeConverter
      */
-    protected function getTypeClassName()
+    protected function getTypeClassName(): string
     {
-        return '\PommProject\Foundation\Converter\Type\Circle';
+        return Circle::class;
     }
 
     /**
      * toPg
      *
+     * @throws FoundationException
      * @see ConverterInterface
      */
-    public function toPg($data, $type, Session $session)
+    public function toPg(mixed $data, string $type, Session $session): string
     {
         if ($data === null) {
             return sprintf("NULL::%s", $type);
@@ -59,7 +64,7 @@ class PgCircle extends TypeConverter
                 $type,
                 $this
                     ->getPointConverter($session)
-                    ->toPg($data->center, 'point', $session),
+                    ->toPg($data->center, 'point'),
                 $data->radius
             );
     }
@@ -70,14 +75,16 @@ class PgCircle extends TypeConverter
      * Cache the point converter.
      *
      * @access protected
-     * @param  Session $session
-     * @return ConverterInterface
+     * @param Session $session
+     * @return ConverterClient
+     * @throws FoundationException
      */
-    protected function getPointConverter(Session $session)
+    protected function getPointConverter(Session $session): ConverterClient
     {
         if ($this->point_converter === null) {
-            $this->point_converter = $session
-                ->getClientUsingPooler('converter', 'point');
+            /** @var ConverterClient $converterClient */
+            $converterClient = $session->getClientUsingPooler('converter', 'point');
+            $this->point_converter = $converterClient;
         }
 
         return $this->point_converter;

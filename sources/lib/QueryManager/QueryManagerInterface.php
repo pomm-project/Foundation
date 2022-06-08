@@ -32,5 +32,5 @@ interface QueryManagerInterface
      * @param  array    $parameters
      * @return \Iterator
      */
-    public function query($sql, array $parameters = []);
+    public function query(string $sql, array $parameters = []): \Iterator;
 }

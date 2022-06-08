@@ -26,10 +26,10 @@ class Inflector
      *
      * @static
      * @access public
-     * @param  string $string
-     * @return string
+     * @param string|null $string
+     * @return string|null
      */
-    public static function studlyCaps($string = null)
+    public static function studlyCaps(?string $string = null): ?string
     {
         if ($string === null) {
             return null;
@@ -37,9 +37,7 @@ class Inflector
 
         return preg_replace_callback(
             '/_([a-z])/',
-            function ($v) {
-                return strtoupper($v[1]);
-            },
+            fn($v) => strtoupper((string) $v[1]),
             ucfirst(strtolower($string))
         );
     }
@@ -49,15 +47,15 @@ class Inflector
      *
      * @static
      * @access public
-     * @param  string $string
-     * @return string
+     * @param string|null $string
+     * @return string|null
      */
-    public static function underscore($string = null)
+    public static function underscore(string $string = null): ?string
     {
         if ($string === null) {
             return null;
         }
 
-        return strtolower(preg_replace('/([A-Z])/', '_\1', lcfirst($string)));
+        return strtolower((string) preg_replace('/([A-Z])/', '_\1', lcfirst($string)));
     }
 }

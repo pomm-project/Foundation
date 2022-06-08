@@ -18,9 +18,9 @@ class Where extends Atoum
     {
         $this
             ->object(PommWhere::create())
-            ->isInstanceOf('\PommProject\Foundation\Where')
+            ->isInstanceOf(\PommProject\Foundation\Where::class)
             ->object(PommWhere::create('a = pika($*, $*)', [1, 2]))
-            ->isInstanceOf('\PommProject\Foundation\Where')
+            ->isInstanceOf(\PommProject\Foundation\Where::class)
             ;
     }
 
@@ -30,7 +30,7 @@ class Where extends Atoum
         $where2 = PommWhere::createWhereIn('(a, b)', [[1, 2], [3, 4]]);
         $this
             ->object($where1)
-            ->isInstanceOf('\PommProject\Foundation\Where')
+            ->isInstanceOf(\PommProject\Foundation\Where::class)
             ->string($where1->__toString())
             ->isEqualTo('b IN ($*, $*, $*, $*)')
             ->string($where2->__toString())
@@ -43,7 +43,7 @@ class Where extends Atoum
         $where = PommWhere::createWhereNotIn('(a, b)', [[1, 2], [3, 4]]);
         $this
             ->object($where)
-            ->isInstanceOf('\PommProject\Foundation\Where')
+            ->isInstanceOf(\PommProject\Foundation\Where::class)
             ->string($where->__toString())
             ->isEqualTo('(a, b) NOT IN (($*, $*), ($*, $*))')
             ;

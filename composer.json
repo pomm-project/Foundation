@@ -7,7 +7,7 @@
     "license":  "MIT",
     "authors":  [ { "name": "Grégoire HUBERT", "email": "hubert.greg@gmail.com", "homepage": "http://www.coolkeums.org" } ],
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=8.0",
         "ext-pgsql": "*",
         "psr/log": "~1.0"
     },
@@ -25,10 +25,5 @@
             "PommProject\\Foundation\\Test\\": "sources/tests"
         }
     },
-    "minimum-stability": "stable",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.1-dev"
-        }
-    }
+    "minimum-stability": "stable"
 }

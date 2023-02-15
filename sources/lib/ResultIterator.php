@@ -294,7 +294,7 @@ class ResultIterator implements ResultIteratorInterface, \JsonSerializable
      * @see \JsonSerializable
      */
     #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->extract();
     }

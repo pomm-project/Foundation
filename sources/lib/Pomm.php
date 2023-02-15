@@ -339,7 +339,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * @see ArrayAccess
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->getSession($offset);
     }
@@ -348,7 +348,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * @see ArrayAccess
      */
     #[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->addBuilder($offset, $value);
     }
@@ -357,7 +357,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * @see ArrayAccess
      */
     #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $this->removeBuilder($offset);
     }
@@ -366,7 +366,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
      * @see ArrayAccess
      */
     #[\ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->hasBuilder($offset);
     }

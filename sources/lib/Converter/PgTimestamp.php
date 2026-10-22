@@ -90,7 +90,7 @@ class PgTimestamp implements ConverterInterface
                         "Cannot convert data from invalid datetime representation '%s'.",
                         $data
                     ),
-                    null,
+                    0,
                     $e
                 );
             }

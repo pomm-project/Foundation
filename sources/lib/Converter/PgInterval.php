@@ -41,7 +41,7 @@ class PgInterval implements ConverterInterface
         } catch (\Exception $e) {
             throw new ConverterException(
                 sprintf("Data '%s' is not an ISO8601 interval representation.", $data),
-                null,
+                0,
                 $e
             );
         }
@@ -86,7 +86,7 @@ class PgInterval implements ConverterInterface
             try {
                 $data = new \DateInterval($data);
             } catch (\Exception $e) {
-                throw new ConverterException("First argument is not a \DateInterval instance.", null, $e);
+                throw new ConverterException("First argument is not a \DateInterval instance.", 0, $e);
             }
         }
 

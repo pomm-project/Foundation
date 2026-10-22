@@ -89,7 +89,7 @@ class Pomm implements \ArrayAccess, LoggerAwareInterface
                     "Could not instantiate class '%s'.",
                     $builder_class
                 ),
-                null,
+                0,
                 $e
             );
         }

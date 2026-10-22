@@ -60,6 +60,9 @@ abstract class TypeConverter implements ConverterInterface
      */
     public function fromPg($data, $type, Session $session)
     {
+        if (null === $data) {
+            return null;
+        }
         $data = trim($data);
 
         return
@@ -136,7 +139,7 @@ abstract class TypeConverter implements ConverterInterface
         } catch (\InvalidArgumentException $e) {
             throw new ConverterException(
                 sprintf("Unable to create a '%s' instance.", $class_name),
-                null,
+                0,
                 $e
             );
         }

@@ -129,7 +129,7 @@ class InspectorPooler extends ClientPooler
                     "Cannot find inspector class '%s'.",
                     $identifier
                 ),
-                null,
+                0,
                 $e
             );
         }

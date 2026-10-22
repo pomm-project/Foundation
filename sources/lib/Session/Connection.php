@@ -367,7 +367,7 @@ ERROR;
      */
     public function escapeLiteral($string)
     {
-        return \pg_escape_literal($this->getHandler(), $string);
+        return \pg_escape_literal($this->getHandler(), (string) $string);
     }
 
     /**
